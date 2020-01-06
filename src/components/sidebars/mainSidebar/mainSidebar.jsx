@@ -4,13 +4,13 @@ import NavSection from './components/navSection';
 
 class MainSidebar extends Component {
     state = {
-        activeNavLinkId: ""
+        activeNavLinkKey: ""
     }
 
-    setActiveNavLinkId = (id) => {
+    setActiveNavLinkKey = (key) => {
         this.setState(
             {
-                activeNavLinkId: id
+                activeNavLinkKey: key
             },
             () => {
                 this.raiseState();
@@ -19,13 +19,17 @@ class MainSidebar extends Component {
     }
 
     raiseState = () => {
+        /*
+            Inform the App component that a link in the main sidebar has been clicked (any link) by raising
+            the main sidebar's state.
+        */
         const { onMainSidebarClick } = this.props;
 
         onMainSidebarClick(this.state);
     }
 
     renderNavSection = (title, links) => {
-        return <NavSection title={title} links={links} onNavClick={(navLinkId) => this.setActiveNavLinkId(navLinkId)} />;
+        return <NavSection title={title} links={links} onNavClick={(navLinkKey) => this.setActiveNavLinkKey(navLinkKey)} />;
     }
 
     componentDidMount = () => {
@@ -34,9 +38,8 @@ class MainSidebar extends Component {
 
     render = () => {
         const testSectionLinks = [
-            { label: "Dashboard", path: "/dashboard" },
-            { label: "Calendar", path: "/calendar" },
-            { label: "Leafeon", path: "/calendar" }
+            { label: "Dashboard", path: "/dashboard", key: 1 },
+            { label: "Calendar", path: "/calendar", key: 2 }
         ]
 
         return (

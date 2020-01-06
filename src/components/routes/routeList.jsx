@@ -20,10 +20,6 @@ class RouteList extends Component {
             </Switch>
         );
     }
-
-    constructor(props){
-        super(props);
-    }
 }
 
 export default RouteList;

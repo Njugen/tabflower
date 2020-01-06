@@ -4,47 +4,54 @@ class FullWidthLoadbar extends Component {
     state = {
         fillerWidth: 0,
         loadbarIsFilled: false,
-        transitionCompleted: false
-    }
-
-    componentWillReceiveProps = (newProps) => {
-        this.setState({
-            fillerWidth: 0,
-            loadbarIsFilled: false,
-            transitionCompleted: false
-        });
-
-        this.increaseFillerWidth();
+        transitionCompleted: false,
+        refreshFactor: this.props.refreshFactor
     }
 
     componentDidMount = () => {
         this.increaseFillerWidth();
     }
     
-    componentDidUpdate = () => {
-        
+    componentDidUpdate = (prevProps, prevState) => {
+        if(this.props.refreshFactor !== prevState.refreshFactor){
+            this.increaseFillerWidth();
+        }
     }
 
+
     increaseFillerWidth = () => {
-       let fillerWidth = 0;
+        // Fill the loadbar by resetting the component's state, and then loop a percentage value using an interval
+        let fillerWidth = 0;
        
-        const interval = setInterval(
-           () => {
-                if(fillerWidth < 100){
-                    fillerWidth++;
-                    this.setState({
-                        fillerWidth: fillerWidth
-                    });
-                } else {
-                    this.setState({
-                        fillerWidth: 0,
-                        loadbarIsFilled: true
-                    });
-                    clearInterval(interval);
-                }
-           },
-           1
-       );
+        this.setState(
+            {
+                fillerWidth: 0,
+                loadbarIsFilled: false,
+                transitionCompleted: false,
+                refreshFactor: this.props.refreshFactor
+            },
+            () => {
+                const interval = setInterval(
+                    () => {
+                         if(fillerWidth < 100){
+                             fillerWidth++;
+                             this.setState({
+                                 fillerWidth: fillerWidth
+                             });
+                         } else {
+                             this.setState({
+                                 fillerWidth: 0,
+                                 loadbarIsFilled: true
+                             });
+                             clearInterval(interval);
+                         }
+                    },
+                    1
+                );
+            }
+        )
+
+        
     }
 
     
@@ -75,9 +82,6 @@ class FullWidthLoadbar extends Component {
         );
     }
 
-    constructor(props){
-        super(props);
-    }
 }
 
 export default FullWidthLoadbar;

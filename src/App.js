@@ -19,23 +19,37 @@ import './styles/tabeon/style.css';
 class App extends Component{
   state = {
     currentView: {},
-    mainSidebar: {}
+    mainSidebar: {},
+    refreshFactor: 0
   };
 
+ 
+
   handleNavigation = (viewProps) => {
+    let refreshFactor = this.state.refreshFactor;
+    refreshFactor++;
     this.setState(
       {
-          currentView: viewProps
+          currentView: viewProps,
+          refreshFactor: refreshFactor
       }
     )
   }
 
   handleMainSidebarClick = (sidebarProps) => {
+    let refreshFactor = this.state.refreshFactor;
+    refreshFactor++;
     this.setState(
       {
-        mainSidebar: sidebarProps
+        mainSidebar: sidebarProps,
+        refreshFactor: refreshFactor
       }
     )
+  }
+
+  componentDidUpdate = (test) => {
+    
+    
   }
 
   render = () => {
@@ -49,7 +63,7 @@ class App extends Component{
             </div>
           </div>
         </div>
-        <FullWidthLoadbar />
+        <FullWidthLoadbar refreshFactor={this.state.refreshFactor} />
       </Fragment>
     );
   }

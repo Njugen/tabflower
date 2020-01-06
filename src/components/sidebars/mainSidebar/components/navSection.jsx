@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 
 class NavSection extends Component {
-    renderNavLink = (label, path, handleClick) => {
+    renderNavLink = (label, path, key, handleClick) => {
         return (
-            <NavLink onClick={(e) => handleClick(e.target.id)} to={path} className="tabeon-nav-link">
+            <NavLink key={key} onClick={() => handleClick(key)} to={path} className="tabeon-nav-link">
                 {label}
             </NavLink>
         )
@@ -13,7 +13,7 @@ class NavSection extends Component {
     mapLinks = (links, callback) => {
         return links.map(
             (link) => {
-                return this.renderNavLink(link.label, link.path, callback)
+                return this.renderNavLink(link.label, link.path, link.key, callback)
             }
         )
     }

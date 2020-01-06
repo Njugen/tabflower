@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 
 class View extends Component {
     state = {
@@ -19,10 +19,6 @@ class View extends Component {
 
     componentDidMount = () => {
         this.handleViewMount();
-    }
-
-    constructor(props){
-        super(props);
     }
 }
 
