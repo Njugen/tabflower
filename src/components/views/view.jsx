@@ -56,6 +56,10 @@ class View extends Component {
     componentDidUpdate = (prevProps, prevState) => {
         if(this.state !== prevState){
             const { kickedModuleId, draggedModuleId } = this.state;
+            
+            if(prevState && this.state.kickedModuleId === prevState.kickedModuleId){
+                return;
+            }
 
             if(kickedModuleId && draggedModuleId){
                 this.tradeModulePositions(draggedModuleId, kickedModuleId);
