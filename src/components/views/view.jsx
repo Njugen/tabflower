@@ -17,6 +17,10 @@ class View extends Component {
         onViewMount(this.state);
     }
 
+    handleRenderedModules = (numberOfModules) => {
+        this.setState({ renderedModules: numberOfModules });
+    }
+
     componentDidMount = () => {
         this.handleViewMount();
     }

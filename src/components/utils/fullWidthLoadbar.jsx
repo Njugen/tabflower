@@ -17,7 +17,6 @@ class FullWidthLoadbar extends Component {
     }
     
     componentDidUpdate = (prevProps, prevState) => {
-        console.log("");
         if(this.props.refreshFactor !== prevState.refreshFactor){
             this.origin.refreshFactor = this.props.refreshFactor;
 

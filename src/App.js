@@ -70,7 +70,7 @@ class App extends Component{
         <div className="container-fluid">
           <div className="row">
             <MainSidebar onMainSidebarClick={(raisedProps) => this.handleMainSidebarClick(raisedProps)} />
-            <div className="col-10">
+            <div className="col-10" id="tabeon-view-container">
                <RouteList onNavigation={(raisedProps) => this.handleNavigation(raisedProps)} />
             </div>
           </div>
