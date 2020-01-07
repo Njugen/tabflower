@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 
 class FullWidthLoadbar extends Component {
-    state = {
+    origin = {
         fillerWidth: 0,
         loadbarIsFilled: false,
         transitionCompleted: false,
         refreshFactor: this.props.refreshFactor
+    }
+
+    state = {
+        ...this.origin
     }
 
     componentDidMount = () => {
@@ -13,28 +17,33 @@ class FullWidthLoadbar extends Component {
     }
     
     componentDidUpdate = (prevProps, prevState) => {
+        console.log("");
         if(this.props.refreshFactor !== prevState.refreshFactor){
+            this.origin.refreshFactor = this.props.refreshFactor;
+
             this.increaseFillerWidth();
         }
     }
 
+    resetState = (callback) => {
+        const newState = {
+            ...this.origin
+        };
+        
+        this.setState(newState, callback);
+    }
 
     increaseFillerWidth = () => {
         // Fill the loadbar by resetting the component's state, and then loop a percentage value using an interval
         let fillerWidth = 0;
        
-        this.setState(
-            {
-                fillerWidth: 0,
-                loadbarIsFilled: false,
-                transitionCompleted: false,
-                refreshFactor: this.props.refreshFactor
-            },
+        this.resetState(
             () => {
                 const interval = setInterval(
                     () => {
                          if(fillerWidth < 100){
                              fillerWidth++;
+
                              this.setState({
                                  fillerWidth: fillerWidth
                              });
@@ -43,13 +52,14 @@ class FullWidthLoadbar extends Component {
                                  fillerWidth: 0,
                                  loadbarIsFilled: true
                              });
+
                              clearInterval(interval);
                          }
                     },
                     1
                 );
             }
-        )
+        );
 
         
     }

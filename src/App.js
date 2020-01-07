@@ -24,32 +24,39 @@ class App extends Component{
   };
 
  
+  updateState = (newProps, showLoadbar) => {
+    let newState = {
+      ...newProps
+    }
 
+    if(showLoadbar && showLoadbar === true){
+      let { refreshFactor } = this.state;
+      refreshFactor++;
+
+      newState.refreshFactor = refreshFactor;
+    }
+
+    this.setState(newState)
+  }
+  
   handleNavigation = (viewProps) => {
-    let refreshFactor = this.state.refreshFactor;
-    refreshFactor++;
-    this.setState(
+
+    this.updateState(
       {
-          currentView: viewProps,
-          refreshFactor: refreshFactor
-      }
+        currentView: viewProps
+      },
+      true
     )
   }
 
   handleMainSidebarClick = (sidebarProps) => {
-    let refreshFactor = this.state.refreshFactor;
-    refreshFactor++;
-    this.setState(
+    this.updateState(
       {
         mainSidebar: sidebarProps,
-        refreshFactor: refreshFactor
-      }
+      
+      },
+      false
     )
-  }
-
-  componentDidUpdate = (test) => {
-    
-    
   }
 
   render = () => {
