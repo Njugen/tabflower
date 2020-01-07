@@ -24,7 +24,12 @@ class App extends Component{
   };
 
  
-  updateState = (newProps, showLoadbar) => {
+  updateState = (newProps, showLoadbar, callback) => {
+    /* 
+      Used to update the App state itself. This function works the same way as this.setState(), 
+      but also increases the refreshFactor (the FullWidthLoadbar uses this to determine whether to launch the loadbar
+        or not)
+    */
     let newState = {
       ...newProps
     }
@@ -36,7 +41,7 @@ class App extends Component{
       newState.refreshFactor = refreshFactor;
     }
 
-    this.setState(newState)
+    this.setState(newState, callback);
   }
   
   handleNavigation = (viewProps) => {
