@@ -2,7 +2,8 @@ import { Component } from 'react';
 
 class View extends Component {
     state = {
-
+        draggedModuleId: "",
+        kickedModuleId: ""
     };
 
     handleViewMount = () => {
@@ -19,6 +20,47 @@ class View extends Component {
 
     handleRenderedModules = (numberOfModules) => {
         this.setState({ renderedModules: numberOfModules });
+    }
+
+    handleDragStart = (moduleId) => {
+        this.setState(
+            {
+                draggedModuleId: moduleId
+            }
+        )
+    }
+
+    handleDragOver = (moduleId) => {
+
+        this.setState(
+            {
+                kickedModuleId: moduleId
+            }
+        )
+    }
+
+    tradeModulePositions(firstModuleId, secondModuleId){
+        const firstModuleParent = document.getElementById(firstModuleId).parentElement;
+        const secondModuleParent = document.getElementById(secondModuleId).parentElement;
+
+        const firstModule = document.getElementById(firstModuleId);
+        const secondModule = document.getElementById(secondModuleId);
+
+
+        firstModuleParent.appendChild(secondModule);
+        secondModuleParent.appendChild(firstModule);
+       
+        
+    }
+
+    componentDidUpdate = (prevProps, prevState) => {
+        if(this.state !== prevState){
+            const { kickedModuleId, draggedModuleId } = this.state;
+
+            if(kickedModuleId && draggedModuleId){
+                this.tradeModulePositions(draggedModuleId, kickedModuleId);
+            }
+        }
     }
 
     componentDidMount = () => {
