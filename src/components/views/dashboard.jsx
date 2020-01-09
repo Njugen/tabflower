@@ -1,24 +1,35 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import View from './view';
 
-import ModuleRow from './../modules/moduleRow';
+import Moduleon from "../utils/moduleon/moduleon";
+import ModuleColumn from '../utils/moduleon/moduleColumn';
 import TestModule from './../modules/testModule';
 import TestModule2 from './../modules/testModule2';
 import TestModule3 from './../modules/testModule3';
 import TestModule4 from './../modules/testModule4';
 
 class DashboardView extends View {
-    state = {
-        title: "Dashboard"
-    }
-
     render = () => {
         return(
-            <ModuleRow onRenderedModules={(numberOfModules) => this.handleRenderedModules(numberOfModules)}>
-                <TestModule cols="4" id="a" onDragStart={(e) => this.handleDragStart(e)} onDragOver={(e) => this.handleDragOver(e)}></TestModule>
-                <TestModule2 cols="4" id="b" onDragStart={(e) => this.handleDragStart(e)} onDragOver={(e) => this.handleDragOver(e)}></TestModule2>
-                <TestModule3 cols="4" id="c" onDragStart={(e) => this.handleDragStart(e)} onDragOver={(e) => this.handleDragOver(e)}></TestModule3>
-            </ModuleRow>
+            <Fragment>
+                <div className="row">
+                    <div className="col-12">
+                        <h1>Dashboard</h1>
+                    </div>
+                </div>
+                <div className="row">
+                    <Moduleon>
+                        <ModuleColumn colspan="8">
+                            <TestModule id="a"></TestModule>
+                            <TestModule2 id="b"></TestModule2>
+                        </ModuleColumn>
+                        <ModuleColumn colspan="4">
+                            <TestModule id="d2"></TestModule>
+                            <TestModule2 id="d9d"></TestModule2>
+                        </ModuleColumn>
+                    </Moduleon>
+                </div>
+            </Fragment>
         );
     }
 }

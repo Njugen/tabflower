@@ -1,30 +1,29 @@
-import React from "react";
-import Module from './module';
+import React, { Fragment } from "react";
+import Module from '../utils/moduleon/module';
 
 class TestModule extends Module {
-    render = () => {
-        const { cols } = this.state;
-
+    renderHeader = () => {
         return (
-            <div id={Date.now().toString()} droppable="true" onDragEnter={(e) => this.handleDragOver(e)} onDrop={(e) => this.handleDrop(e)} className={"tabeon-module-container"  + ( cols && " col-" + cols )}>
-                <div id={this.props.id} draggable="true" onDragStart={(e) => this.handleDragStart(e)} className={"tabeon-module"}>
-                    <div className="row tabeon-module-header">
-                        <div className="col-12">
-                            Thai
-                        </div>
-                    </div>
-                    <div className="row tabeon-module-body">
-                        <div className="col-12">
-                            
-                        </div>
-                    </div>
-                    <div className="row tabeon-module-footer">
-                        <div className="col-12">
-                            M
-                        </div>
-                    </div>
+            <Fragment>
+                <div className="float-left">
+                     <h3>Iron Man</h3>
                 </div>
-            </div>    
+                <div className="float-right">
+                     testar
+                </div> 
+            </Fragment>
+        );
+    }
+
+    renderBody = () => {
+        return (
+            <strong>I am Iron Man</strong>
+        );
+    }
+
+    renderFooter = () => {
+        return (
+            <button className="btn btn-tabeon">Save</button>
         );
     }
 }

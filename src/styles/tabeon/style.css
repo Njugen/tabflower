@@ -91,15 +91,42 @@ div.container-fluid > .row > div[class^="col-"] {
 */
 
 .tabeon-module-container {
-    
+    position: relative;
     padding: 20px;
 }
 
 .tabeon-module-container .tabeon-module {
-    background: #d2d2d2;
+    border: 1px solid #d2d2d2;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
     height: 100%
 }
 
 .tabeon-module-container .tabeon-module * {
     pointer-events: none;
+}
+
+/* App Footer */
+
+#app-footer {
+    position: absolute; 
+    width: 100%;
+    text-align: right;
+    bottom: 0;
+    z-index:1000;
+    font-size: 0.8rem;
+    font-style: italic;
+    color: #787878;
+}
+
+#app-footer > .col-12 {
+    
+}
+
+/* Utils */
+
+.btn-tabeon {
+    color: #ffffff;
+    background: #7a1d8c;
+    border-color: #7a1d8c;
 }
