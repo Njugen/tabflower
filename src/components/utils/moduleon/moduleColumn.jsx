@@ -30,12 +30,13 @@ class ModuleColumn extends Component {
     }
 
     cloneChildren = (newProps) => {
-        const { onDragStart, onDragOver } = this.props
+        const { onDragStart, onDragOver, onDrop } = this.props
 
         const clonedChildren = Children.map(newProps.children, (child) => {
             return cloneElement(child, {
                 onDragStart: onDragStart,
-                onDragOver: onDragOver
+                onDragOver: onDragOver,
+                onDrop: onDrop
             });
         }) 
 

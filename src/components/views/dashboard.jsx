@@ -19,13 +19,23 @@ class DashboardView extends View {
                 </div>
                 <div className="row">
                     <Moduleon>
-                        <ModuleColumn colspan="8">
+                        <ModuleColumn colspan="9">
                             <TestModule id="a"></TestModule>
                             <TestModule2 id="b"></TestModule2>
+                            <TestModule id="dsa2"></TestModule>
+                            <TestModule2 id="dss9d"></TestModule2>
+                            <TestModule id="ddaaasd2"></TestModule>
+                            <TestModule2 id="d9ddasdd"></TestModule2>
                         </ModuleColumn>
-                        <ModuleColumn colspan="4">
+                        <ModuleColumn colspan="3">
                             <TestModule id="d2"></TestModule>
                             <TestModule2 id="d9d"></TestModule2>
+                            <TestModule id="ddasd2"></TestModule>
+                            <TestModule2 id="d9asdd"></TestModule2>
+                            <TestModule id="dasd2"></TestModule>
+                            <TestModule2 id="dw9d"></TestModule2>
+                            <TestModule id="dw2"></TestModule>
+                            <TestModule2 id="dw9d"></TestModule2>
                         </ModuleColumn>
                     </Moduleon>
                 </div>

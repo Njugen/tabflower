@@ -31,7 +31,11 @@ class Moduleon extends Component {
     }
 
 
-    handleDragStart = (moduleId) => {
+    handleDragStart = (element) => {
+        console.log(element);
+        const moduleId = element.parentElement.id;
+
+        this.highlightModule(moduleId);
         this.setState(
             {
                 draggedModuleId: moduleId
@@ -46,6 +50,24 @@ class Moduleon extends Component {
                 kickedModuleId: moduleId
             }
         )
+    }
+
+    handleDrop = () => {
+        const { draggedModuleId } = this.state;
+        
+        this.removeModuleHighlight(draggedModuleId);
+    }
+
+    highlightModule = (moduleId) => {
+        const module = document.getElementById(moduleId);
+        module.style.border = "1px solid #7a1d8c";
+        module.style.boxShadow = "0px 0px 10px #7a1d8c";
+    }
+
+    removeModuleHighlight = (moduleId) => {
+        const module = document.getElementById(moduleId);
+        module.style.border = "1px solid #d2d2d2";
+        module.style.boxShadow = "0px 0px 10px #ffffff";
     }
 
     tradeModulePositions(firstModuleId, secondModuleId){
@@ -79,7 +101,8 @@ class Moduleon extends Component {
             return cloneElement(child, {
                 onRenderedModules: this.handleRenderedModules,
                 onDragStart: this.handleDragStart,
-                onDragOver: this.handleDragOver
+                onDragOver: this.handleDragOver,
+                onDrop: this.handleDrop
             });
         }) 
 

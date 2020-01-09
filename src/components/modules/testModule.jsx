@@ -17,7 +17,7 @@ class TestModule extends Module {
 
     renderBody = () => {
         return (
-            <strong>I am Iron Man</strong>
+            ""
         );
     }
 

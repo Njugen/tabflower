@@ -26,7 +26,12 @@ class Module extends Component {
 
     handleDrop = (componentEvent) => {
         componentEvent.preventDefault();
-        console.log("DROP");
+        
+        //Prevent from targetting the container itself
+
+            this.props.onDrop(componentEvent.target.parentElement);
+     
+        
         const { draggedOverModuleId, moduleBeingDraggedId } = this.state.dropDownGrid;
    //     console.log(draggedOverModuleId, moduleBeingDraggedId);
         if( draggedOverModuleId && moduleBeingDraggedId ){
@@ -35,8 +40,8 @@ class Module extends Component {
     }
 
     handleDragStart = (componentEvent) => {
-        console.log(componentEvent.target.id);
-        this.props.onDragStart(componentEvent.target.id)
+        console.log(componentEvent.target);
+        this.props.onDragStart(componentEvent.target)
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -61,18 +66,18 @@ class Module extends Component {
     render = () => {
         return (
             <div id={"tabeon-module-container-id" + this.props.id} droppable="true" onDragOver={(e) => this.handleDragOver(e)} onDrop={(e) => this.handleDrop(e)} className={"tabeon-module-container col-12"}>
-                <div id={"tabeon-module-id-" + this.props.id} draggable="true" onDragStart={(e) => this.handleDragStart(e)} className={"tabeon-module"}>
-                    <div className="row tabeon-module-header">
+                <div id={"tabeon-module-id-" + this.props.id} className={"tabeon-module"}>
+                    <div className="row tabeon-module-header" draggable="true" onDragStart={(e) => this.handleDragStart(e)}>
                         <div className="col-12">
                             {this.renderHeader()}
                         </div>
                     </div>
-                    <div className="row tabeon-module-body">
+                    <div className="row tabeon-module-body" draggable="false">
                         <div className="col-12">
                             {this.renderBody()};
                         </div>
                     </div>
-                    <div className="row tabeon-module-footer">
+                    <div className="row tabeon-module-footer" draggable="false">
                         <div className="col-12">
                             {this.renderFooter()}
                         </div>

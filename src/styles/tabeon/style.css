@@ -97,16 +97,43 @@ div.container-fluid > .row > div[class^="col-"] {
 
 .tabeon-module-container .tabeon-module {
     border: 1px solid #d2d2d2;
-    padding: 1.5rem;
     border-radius: 0.5rem;
     height: 100%
 }
 
-.tabeon-module-container .tabeon-module * {
+.tabeon-module .tabeon-module-header {
+    padding: 1rem 1rem 0.25rem 1rem;
+    
+}
+
+
+.tabeon-module .tabeon-module-header > .col-12 {
+    border-bottom: 1px solid #d2d2d2;
+}
+
+.tabeon-module .tabeon-module-body {
+    padding: 1.5rem 1rem 0.25rem 1rem;
+}
+
+.tabeon-module .tabeon-module-footer > .col-12 {
+    padding-top: 1rem;
+    border-top: 1px solid #d2d2d2;
+}
+
+
+.tabeon-module .tabeon-module-footer {
+    padding: 1.5rem 1rem 1.5rem 1rem;
+}
+
+.tabeon-module-container .tabeon-module-header * {
     pointer-events: none;
 }
 
 /* App Footer */
+
+#app-footer-adjuster {
+    margin-top: 2rem;
+}
 
 #app-footer {
     position: absolute; 
@@ -115,8 +142,8 @@ div.container-fluid > .row > div[class^="col-"] {
     bottom: 0;
     z-index:1000;
     font-size: 0.8rem;
-    font-style: italic;
     color: #787878;
+    padding-top: 1rem;
 }
 
 #app-footer > .col-12 {
