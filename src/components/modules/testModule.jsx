@@ -6,11 +6,8 @@ class TestModule extends Module {
         return (
             <Fragment>
                 <div className="float-left">
-                     <h3>Iron Man</h3>
+                     <h4>Iron Man</h4>
                 </div>
-                <div className="float-right">
-                     testar
-                </div> 
             </Fragment>
         );
     }
@@ -23,7 +20,10 @@ class TestModule extends Module {
 
     renderFooter = () => {
         return (
-            <button className="btn btn-tabeon">Save</button>
+            <Fragment>
+                <button className="btn btn-tabeon">Save</button>
+                <button className="btn btn-tabeon btn-tabeon-cancel">Reset</button>
+            </Fragment>
         );
     }
 }

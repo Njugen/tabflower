@@ -6,19 +6,14 @@ class TestModule2 extends Module {
         return (
             <Fragment>
                 <div className="float-left">
-                     <h3>Test Module</h3>
+                     <h4>Test Module</h4>
                 </div>
-                <div className="float-right">
-                     abc
-                </div> 
             </Fragment>
         );
     }
 
     renderBody = () => {
-        return (
-            <strong>I am Iron Man</strong>
-        );
+        
     }
 
     renderFooter = () => {

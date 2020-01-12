@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import DashboardView from './../views/dashboard';
 import CalendarView from './../views/calendar';
+import { ReactDOM } from 'react-dom';
 
 class RouteList extends Component {
     handleViewMount = (routeProps) => {

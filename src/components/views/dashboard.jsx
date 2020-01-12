@@ -10,6 +10,7 @@ import TestModule4 from './../modules/testModule4';
 
 class DashboardView extends View {
     render = () => {
+        console.log("blablabla", this.props)
         return(
             <Fragment>
                 <div className="row">
@@ -19,7 +20,7 @@ class DashboardView extends View {
                 </div>
                 <div className="row">
                     <Moduleon>
-                        <ModuleColumn colspan="9">
+                        <ModuleColumn colspan="8">
                             <TestModule id="a"></TestModule>
                             <TestModule2 id="b"></TestModule2>
                             <TestModule id="dsa2"></TestModule>
@@ -27,7 +28,7 @@ class DashboardView extends View {
                             <TestModule id="ddaaasd2"></TestModule>
                             <TestModule2 id="d9ddasdd"></TestModule2>
                         </ModuleColumn>
-                        <ModuleColumn colspan="3">
+                        <ModuleColumn colspan="4">
                             <TestModule id="d2"></TestModule>
                             <TestModule2 id="d9d"></TestModule2>
                             <TestModule id="ddasd2"></TestModule>

@@ -103,12 +103,40 @@ div.container-fluid > .row > div[class^="col-"] {
 
 .tabeon-module .tabeon-module-header {
     padding: 1rem 1rem 0.25rem 1rem;
+}
+
+.tabeon-module .tabeon-module-header-column-wrapper {
+    border-bottom: 1px solid #d2d2d2;
+}
+
+.tabeon-module .tabeon-module-header-control {
+
+}
+
+.tabeon-module .tabeon-module-header > .col-10 {
     
 }
 
+.tabeon-module-header-control {
+    text-align: right;
+}
 
-.tabeon-module .tabeon-module-header > .col-12 {
-    border-bottom: 1px solid #d2d2d2;
+.tabeon-module-header-control-button {
+    border: 0px;
+    pointer-events: initial !important;
+    white-space: nowrap;
+    transition: initial !important;
+    border: 0px !important;
+}
+
+.tabeon-module-header-control-button:active {
+    margin: 0px;
+}
+
+.tabeon-module-header-control-button:hover span, .tabeon-module-header-control-button:active span {
+    cursor: pointer;
+    color: #c95cdf;
+
 }
 
 .tabeon-module .tabeon-module-body {
@@ -122,7 +150,11 @@ div.container-fluid > .row > div[class^="col-"] {
 
 
 .tabeon-module .tabeon-module-footer {
-    padding: 1.5rem 1rem 1.5rem 1rem;
+    padding: 1.5rem 1rem 1.0rem 1rem;
+}
+
+.tabeon-module .tabeon-module-footer > .col-12 {
+    text-align: right;
 }
 
 .tabeon-module-container .tabeon-module-header * {
@@ -146,9 +178,6 @@ div.container-fluid > .row > div[class^="col-"] {
     padding-top: 1rem;
 }
 
-#app-footer > .col-12 {
-    
-}
 
 /* Utils */
 
@@ -156,4 +185,40 @@ div.container-fluid > .row > div[class^="col-"] {
     color: #ffffff;
     background: #7a1d8c;
     border-color: #7a1d8c;
+    white-space: no-wrap;
+}
+
+.btn-tabeon:last-child {
+    margin-left: 0.5rem;
+}
+
+.btn-tabeon-cancel {
+    color: #7a1d8c;
+    background: #ffffff;
+    border-color: #7a1d8c;
+    white-space: no-wrap;
+}
+
+.btn-tabeon:hover {
+    color: #ffffff;
+    background: #c95cdf;
+    border-color: #c95cdf;
+}
+
+.btn-tabeon-cancel:hover {
+    background: #e2e2e2;
+    border-color: #e2e2e2;
+    color: #444444;
+}
+
+.tabeon-hidden {
+    display: none !important;
+}
+
+.tabeon-inline-block {
+    display: flex !important;
+}
+
+.tabeon-no-border {
+    border-bottom: 0px !important;
 }
