@@ -104,7 +104,7 @@ class Module extends Component {
                     </div>
                     <div className={this.state.settings.minimized === true ? "row tabeon-module-body tabeon-hidden" : "row tabeon-module-body tabeon-inline-block"} draggable="false">
                         <div className="col-12">
-                            {this.renderBody()};
+                            {this.renderBody()}
                         </div>
                     </div>
                     <div className={this.state.settings.minimized === true ? "row tabeon-module-footer tabeon-hidden" : "row tabeon-module-footer  tabeon-inline-block"} draggable="false">

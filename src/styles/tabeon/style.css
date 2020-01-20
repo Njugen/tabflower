@@ -123,6 +123,7 @@ div.container-fluid > .row > div[class^="col-"] {
 
 .tabeon-module-header-control-button {
     border: 0px;
+    color: #585858;
     pointer-events: initial !important;
     white-space: nowrap;
     transition: initial !important;
@@ -178,6 +179,28 @@ div.container-fluid > .row > div[class^="col-"] {
     padding-top: 1rem;
 }
 
+/* calendar module */
+
+#tabeon-calendar {
+    width: 100%
+}
+
+#tabeon-calendar thead th {
+    text-align: center;
+}
+
+#tabeon-calendar tbody td {
+    text-align: right;
+    font-weight: bold;
+    font-size: 0.75rem;
+    color: #989898;
+}
+
+#tabeon-calendar tbody td {
+    width: 14.2%;
+    border: 1px solid #a0a0a0;
+    padding: 0.5rem 0.5rem 3rem 3rem;
+}
 
 /* Utils */
 

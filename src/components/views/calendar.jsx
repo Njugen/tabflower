@@ -1,6 +1,8 @@
 import React from 'react';
 import View from './view';
 
+import CalendarModule from '../modules/calendarModule/main';
+
 class CalendarView extends View {
     state = {
         title: "Calendar"
@@ -8,26 +10,7 @@ class CalendarView extends View {
 
     render = () => {
         return(
-            <div className="row">
-                <div className="col-2">
-                    abc
-                </div>
-                <div className="col-2">
-                    abc
-                </div>
-                <div className="col-2">
-                    abc
-                </div>
-                <div className="col-2">
-                    abc
-                </div>
-                <div className="col-2">
-                    abc
-                </div>
-                <div className="col-2">
-                    abc
-                </div>
-            </div>
+            <CalendarModule></CalendarModule>
         );
     }
 }
