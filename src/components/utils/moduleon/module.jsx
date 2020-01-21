@@ -2,13 +2,26 @@ import React, { Component } from "react";
 require("../../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
 
 class Module extends Component {
+    /*
+        Module State
+        - dropDownGrid 
+        information about what module is being dragged over and what module is currently dragged,
+        this information is used by moduleon utility to drag and drop modules
+
+        - moduleData
+        Contains possible data that is generated for use by the module itself or its view/sibling modules
+        (can be empty if the module does not generate necessary data)
+
+        - settings
+        Contains preset information needed for the module features to work
+
+    */
     state = {
         dropDownGrid: {
             draggedOverModuleId: "",
             moduleBeingDraggedId: ""
         },
         moduleData: {
-            title: ""
             
         },
         settings: {
@@ -50,19 +63,51 @@ class Module extends Component {
     }
 
     handleUpButton = () => {
-        this.setState({
+      /*  this.setState({
             settings: {
                 minimized: true
             }
-        })
+        }) */
+
+        this.changeStateSettings({
+            minimized: true
+        });
     }
 
     handleDownButton = () => {
-        this.setState({
+      /*  this.setState({
             settings: {
                 minimized: false
             }
-        })
+        }) */
+
+        this.changeStateSettings({
+            minimized: false
+        });
+    }
+
+    changeStateSettings = (parameters) => {
+        if(typeof parameters === "object"){
+            const settings = {
+                ...this.state.settings, ...parameters
+            }
+
+            this.setState({
+                settings
+            });
+        }
+    }
+
+    changeStateModuleData = (parameters) => {
+        if(typeof parameters === "object"){
+            const moduleData = {
+                ...this.state.moduleData, ...parameters
+            }
+
+            this.setState({
+                moduleData
+            });
+        }
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -81,7 +126,7 @@ class Module extends Component {
     }
 
     renderFooter = () => {
-
+        
     }
 
     render = () => {
@@ -92,7 +137,9 @@ class Module extends Component {
                         <div className="col-12">
                             <div className={this.state.settings.minimized === true ? "row tabeon-module-header-column-wrapper tabeon-no-border" : "row tabeon-module-header-column-wrapper" }>
                                 <div className="col-8">
-                                    {this.renderHeader()}
+                                    <div className="float-left">
+                                        <h4>{this.state.settings.moduleTitle}</h4>
+                                    </div>
                                 </div>
                                 <div className="col-4 tabeon-module-header-control">
                                     <button onClick={(e) => this.state.settings.minimized === true ? this.handleDownButton(e) : this.handleUpButton(e) } className="btn shadow-none tabeon-module-header-control-button">

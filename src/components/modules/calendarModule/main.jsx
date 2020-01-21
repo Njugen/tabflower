@@ -1,35 +1,12 @@
 import React, { Fragment } from "react";
 import Module from '../../utils/moduleon/module';
+import "bootstrap.native";
+import { ReactDOM } from 'react-dom';
+
 
 class CalendarModule extends Module {
-
-    getTimeNow = (timeZoneOffset) => {
-        /*
-            This function gets the current clock hour.
-
-
-            As reminder
-            getDate() returns time in the local timezone while getUTCDate returns time in
-            UTC/GMT timezone. Here we want to use getDate() in order to adjust the app to offer correct time
-            in the user's local time zone.
-
-        */
-        const dateObject = new Date();
-        timeZoneOffset = (timeZoneOffset ? -timeZoneOffset * 60 * 60 * 1000  : dateObject.getTimezoneOffset() * 60 * 1000);
-
-        const currentDate = dateObject.getDate();
-        const currentMonth = dateObject.getMonth();
-        const currentYear = dateObject.getFullYear();
-
-        const monthsAsText = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "Decemper"]
-
-        const dateLastMidnightAsLocalTime = new Date(monthsAsText[currentMonth] + " " + currentDate + ", " + currentYear + " 00:00:00");
-
-        const timeAtMidnightInMilliSeconds = Date.parse(dateLastMidnightAsLocalTime)
-        const timeNowInMilliseconds = Date.now();
-        const currentTimeInMilliseconds = (timeNowInMilliseconds - timeAtMidnightInMilliSeconds) + timeZoneOffset;
-
-        return currentTimeInMilliseconds;
+    settings = {
+        moduleTitle: "Scheduler"
     }
 
     getMonthAsText = (number) => {
@@ -41,9 +18,7 @@ class CalendarModule extends Module {
     getDatesOfMonth = (year, month) => {
         let startOfSelectedMonth = Date.parse(new Date(this.getMonthAsText(month) + " 01, " + year + " 00:00:00")); // Start of selected Month in milliseconds
         const dayLengthInMilliseconds = 24 * 60 * 60 * 1000;
-        let padding = 0;
 
-        let paddingDates = {};
         var dates = {};
 
 
@@ -81,55 +56,96 @@ class CalendarModule extends Module {
         return dates;
     }
 
+    getDaysPadding = (dateObj) => {
+        const { weekday } = dateObj;
+        let padding = 0;
+
+        if(weekday === "Monday"){ padding = 0; }
+        else if(weekday === "Tuesday"){ padding = 1; }
+        else if(weekday === "Wednesday"){ padding = 2; }
+        else if(weekday === "Thursday"){ padding = 3; }
+        else if(weekday === "Friday"){ padding = 4; }
+        else if(weekday === "Saturday"){ padding = 5; }
+        else if(weekday === "Sunday"){ padding = 6; }
+
+        return padding;
+    }
+
+    renderMonthTableHeader = () => {
+        return(
+            <tr>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+                <th>Sunday</th>
+            </tr>
+        );
+    }
+
+
     renderMonthTable = (year, month) => {
+        const currentDate = (new Date()).getDate().toString();
+        const currentMonth = ((new Date()).getMonth()+1).toString();
+        const currentYear = (new Date()).getFullYear().toString();
+
         const dates = this.getDatesOfMonth(year, month);
+
         let rowsJSX = [];
         let dateJSX = [];
         let padding = 0;
 
+        function storeRowJSX(jsxToPush){
+            rowsJSX.push(jsxToPush);
+            dateJSX = [];
+        }
+    
+        function storeDateJSX(jsxToPush){
+            dateJSX.push(jsxToPush);
+        }
+
         if(dates[year] && dates[year][month]){
             let dateCounter = 1;
-            console.log(dates[year][month]);
+
             while(dateCounter < 40){
                 const dateAsKey = dateCounter.toString();
                
                 if(typeof dates[year][month][dateAsKey] === "undefined"){
-                    rowsJSX.push((<tr>
+                    storeRowJSX((
+                        <tr key={year + "-" + month + "-week-" + Math.random()}>
                         {dateJSX}
-                    </tr>));
-                    dateJSX = [];
+                        </tr>
+                    ));
                     break;
                 } else {
                    
-                    if(dateCounter === 1){
-                        const { weekday } = dates[year][month][dateCounter];
 
-                        if(weekday === "Monday"){ padding = 0; }
-                        else if(weekday === "Tuesday"){ padding = 1; }
-                        else if(weekday === "Wednesday"){ padding = 2; }
-                        else if(weekday === "Thursday"){ padding = 3; }
-                        else if(weekday === "Friday"){ padding = 4; }
-                        else if(weekday === "Saturday"){ padding = 5; }
-                        else if(weekday === "Sunday"){ padding = 6; }
+                    if(dateCounter === 1){
+                        padding = this.getDaysPadding(dates[year][month][dateCounter])
                     } else {
                         padding = 0;
                     }
 
                     if(dates[year][month][dateAsKey].weekday){
-                        for(let paddingRunner = 1; paddingRunner <= padding; paddingRunner++){
-                            dateJSX.push((<td></td>));
+                        for(var paddingRunner = 1; paddingRunner <= padding; paddingRunner++){
+                            storeDateJSX((<td key={year + "-" + month + "-padding-" + paddingRunner}></td>));
+                            
                         }
-
-                        dateJSX.push((<td>{dateCounter}</td>));
-                        dateCounter += padding;
+                        console.log(month, currentMonth);
+                        storeDateJSX((<td className={dateAsKey === currentDate && month === currentMonth && year === currentYear ? "activeDate" : ""} key={year + "-" + month + "-" + dateAsKey}>{dateCounter}</td>));
                     }
-
-                    if(dateCounter % 7 === 0){
-                        rowsJSX.push((<tr>
+               
+                    
+                    if(dates[year][month][dateAsKey].weekday === "Sunday"){
+                        storeRowJSX((
+                            <tr key={year + "-" + month + "-week-" + Math.random()}>
                             {dateJSX}
-                        </tr>));
-                        dateJSX = [];
-                    } 
+                            </tr>
+                        ));
+                    }
+                    
                     
                 }
                 dateCounter++;
@@ -140,30 +156,12 @@ class CalendarModule extends Module {
         return (
             <Fragment>
                 <thead>
-                    <tr>
-                        <th>Monday</th>
-                        <th>Tuesday</th>
-                        <th>Wednesday</th>
-                        <th>Thursday</th>
-                        <th>Friday</th>
-                        <th>Saturday</th>
-                        <th>Sunday</th>
-                    </tr>
+                    {this.renderMonthTableHeader()}
                 </thead>
                 <tbody>
                     {rowsJSX}
                 </tbody>
             </Fragment>    
-        );
-    }
-    
-    renderHeader = () => {
-        return (
-            <Fragment>
-                <div className="float-left">
-                     <h4>Calendar</h4>
-                </div>
-            </Fragment>
         );
     }
 
@@ -178,13 +176,19 @@ class CalendarModule extends Module {
     }
 
     renderFooter = () => {
+       
         return (
             <Fragment>
                 <button className="btn btn-tabeon">Save</button>
                 <button className="btn btn-tabeon btn-tabeon-cancel">Reset</button>
+                <button type="button" className="btn btn-primary">
+                    Launch demo modal
+                </button>
             </Fragment>
         );
     }
+
+
 
     setSelectedDate = (newDateInfo) => {
         const { date, month, year } = this.state.moduleData;
@@ -208,19 +212,26 @@ class CalendarModule extends Module {
             }
         }
 
-        this.setState(
-            {
-                moduleData: data
-            }
-        );
+        this.changeStateModuleData(data);
+    }
+
+
+    componentDidUpdate = (prevProps, prevState) => {
+        if(prevProps.selectedDate !== this.props.selectedDate){
+            const { date, month, year } = this.props.selectedDate;
+
+            this.setSelectedDate({
+                date: date,
+                month: month,
+                year: year
+            }); 
+
+        }
     }
 
     componentDidMount = () => {
-        this.setSelectedDate({
-            date: "20",
-            month: "2",
-            year: "2020"
-        });
+        this.changeStateSettings(this.settings); 
+
     }
 }
 

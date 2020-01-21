@@ -10,7 +10,7 @@ import TestModule4 from './../modules/testModule4';
 
 class DashboardView extends View {
     render = () => {
-        console.log("blablabla", this.props)
+     
         return(
             <Fragment>
                 <div className="row">

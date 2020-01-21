@@ -16,6 +16,7 @@ class RouteList extends Component {
         return (
             <Switch>
                 <Route path="/dashboard" render={(props) => <DashboardView onViewMount={(raisedProps) => this.handleViewMount(raisedProps)} {...props} />} />
+                <Route path="/calendar/:year/:month/:date" render={(props) => <CalendarView onViewMount={(raisedProps) => this.handleViewMount(raisedProps)} {...props} />} />
                 <Route path="/calendar" render={(props) => <CalendarView onViewMount={(raisedProps) => this.handleViewMount(raisedProps)} {...props} />} />
                 <Redirect from="/" to="/dashboard" />
             </Switch>

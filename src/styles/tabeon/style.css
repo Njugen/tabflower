@@ -202,6 +202,29 @@ div.container-fluid > .row > div[class^="col-"] {
     padding: 0.5rem 0.5rem 3rem 3rem;
 }
 
+#tabeon-calendar tbody td:hover {
+    background: #c27fcf;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+#tabeon-calendar td.activeDate {
+    background: #7a1d8c;
+    color: #ffffff;
+}
+
+/* Modal */
+
+#exampleModal {
+    display: block;
+    background: rgba(0,0,0,0.5);
+    opacity: 0;
+     transition: visibility 0s, opacity 0.5s linear;
+    position: absolute;
+    z-index: 0;
+}
+
+
 /* Utils */
 
 .btn-tabeon {

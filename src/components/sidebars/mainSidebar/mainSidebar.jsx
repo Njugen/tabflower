@@ -39,7 +39,7 @@ class MainSidebar extends Component {
     render = () => {
         const testSectionLinks = [
             { label: "Dashboard", path: "/dashboard", key: 1 },
-            { label: "Calendar", path: "/calendar", key: 2 }
+            { label: "Scheduler", path: "/calendar", key: 2 }
         ]
 
         return (
