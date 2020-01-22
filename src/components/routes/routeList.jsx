@@ -10,14 +10,20 @@ class RouteList extends Component {
 
         onNavigation(routeProps);
     }
+r
+    raiseToModal = (data) => {
+        // Send this to modal component, located in <App> (the root component)
+        const { onRaiseToModal } = this.props;
 
+        onRaiseToModal(data);
+    }
 
     render = () => {
         return (
             <Switch>
-                <Route path="/dashboard" render={(props) => <DashboardView onViewMount={(raisedProps) => this.handleViewMount(raisedProps)} {...props} />} />
-                <Route path="/calendar/:year/:month/:date" render={(props) => <CalendarView onViewMount={(raisedProps) => this.handleViewMount(raisedProps)} {...props} />} />
-                <Route path="/calendar" render={(props) => <CalendarView onViewMount={(raisedProps) => this.handleViewMount(raisedProps)} {...props} />} />
+                <Route path="/dashboard" render={(props) => <DashboardView onRaiseToModal={(data) => this.raiseToModal(data)} onViewMount={(raisedProps) => this.handleViewMount(raisedProps)} {...props} />} />
+                <Route path="/calendar/:year/:month/:date" render={(props) => <CalendarView onRaiseToModal={(data) => this.raiseToModal(data)} onViewMount={(raisedProps) => this.handleViewMount(raisedProps)} {...props} />} />
+                <Route path="/calendar" render={(props) => <CalendarView onRaiseToModal={(data) => this.raiseToModal(data)} onViewMount={(raisedProps) => this.handleViewMount(raisedProps)} {...props} />} />
                 <Redirect from="/" to="/dashboard" />
             </Switch>
         );

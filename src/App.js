@@ -31,6 +31,7 @@ import { ReactDOM } from 'react-dom';
 class App extends Component{
   state = {
     currentView: {},
+    modal: {},
     mainSidebar: {},
     refreshFactor: 0
   };
@@ -76,16 +77,32 @@ class App extends Component{
     )
   }
 
+  launchModal = (data) => {
+    const modal = {
+      launched: true,
+      ...data
+    }
+
+    this.setState({ modal });
+  }
+
+  componentDidMount = () => {
+
+  }
+
   render = () => {
+    const { launched: modalLaunched } = this.state.modal;
+    
     return (
       <Fragment>
        
         <div className="container-fluid">
-        <Modal></Modal>
+        
+        {modalLaunched && <Modal data={() => this.state.modal} onSave={() => ""}></Modal>}
           <div className="row">
             <MainSidebar onMainSidebarClick={(raisedProps) => this.handleMainSidebarClick(raisedProps)} />
             <div className="col-10 py-2" id="tabeon-view-container">
-                <RouteList onNavigation={(raisedProps) => this.handleNavigation(raisedProps)} />
+                <RouteList onRaiseToModal={(data) => this.launchModal(data)} onNavigation={(raisedProps) => this.handleNavigation(raisedProps)} />
                 <ViewFooter />
             </div>
           </div>

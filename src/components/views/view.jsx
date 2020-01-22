@@ -22,9 +22,18 @@ class View extends Component {
         onViewMount(this.state);
     }
 
+    raiseToModal = (data) => {
+        const { onRaiseToModal } = this.props;
+
+        onRaiseToModal(data);
+    }
 
     componentDidMount = () => {
         this.handleViewMount();
+
+        if(typeof this.childComponentDidMount === "function"){
+            this.childComponentDidMount();
+        }
     }
 
     render = () => {

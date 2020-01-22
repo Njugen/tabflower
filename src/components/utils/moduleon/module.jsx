@@ -22,7 +22,7 @@ class Module extends Component {
             moduleBeingDraggedId: ""
         },
         moduleData: {
-            
+            selectedDate: {}
         },
         settings: {
             minimized: false
@@ -110,11 +110,36 @@ class Module extends Component {
         }
     }
 
+    createStateModuleDataSection = (sectionName) => {
+
+        if(typeof sectionName === "string"){
+            if(!this.state.moduleData[sectionName]){
+                let data = {
+                };
+                
+                data[sectionName] = {};
+                this.changeStateModuleData(data);
+            }
+        }
+    }
+
     componentDidUpdate = (prevProps, prevState) => {
 
     }
 
     componentDidMount = () => {
+        this.changeStateSettings(this.settings); 
+
+        if(typeof this.childComponentDidMount === "function"){
+            this.childComponentDidMount();
+        }
+    }
+
+    raiseToModal = (data) => {
+        // Send this to modal component, located in <App> (the root component)
+        const { onRaiseToModal } = this.props;
+
+        onRaiseToModal(data);
     }
 
     renderHeader = () => {
@@ -127,6 +152,11 @@ class Module extends Component {
 
     renderFooter = () => {
         
+    }
+
+    constructor(props){
+        super(props);
+     
     }
 
     render = () => {

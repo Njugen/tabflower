@@ -2,6 +2,10 @@ import React, { Fragment } from "react";
 import Module from '../utils/moduleon/module';
 
 class TestModule extends Module {
+    settings = {
+        moduleTitle: "Test Module"
+    }
+
     renderHeader = () => {
         return (
             <Fragment>

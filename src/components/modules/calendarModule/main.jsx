@@ -10,7 +10,7 @@ class CalendarModule extends Module {
     }
 
     getMonthAsText = (number) => {
-        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "Decemper"];
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
         return months[number-1];
     }
@@ -134,7 +134,9 @@ class CalendarModule extends Module {
                             
                         }
                         console.log(month, currentMonth);
-                        storeDateJSX((<td className={dateAsKey === currentDate && month === currentMonth && year === currentYear ? "activeDate" : ""} key={year + "-" + month + "-" + dateAsKey}>{dateCounter}</td>));
+                        storeDateJSX((<td onClick={() => {this.raiseToModal({
+                            test: Math.random()
+                        })}} className={dateAsKey === currentDate && month === currentMonth && year === currentYear ? "activeDate" : ""} key={year + "-" + month + "-" + dateAsKey}>{dateCounter}</td>));
                     }
                
                     
@@ -165,13 +167,77 @@ class CalendarModule extends Module {
         );
     }
 
+    browseMonth = (newMonth, newYear) => {
+        const { month: currentMonth, year: currentYear } = this.state.moduleData.selectedDate;
+
+        if(typeof newMonth === "string"){
+            if(newMonth === "next"){
+                if(currentMonth === "12"){
+                    newMonth = "1";
+                    newYear = parseInt(currentYear) + 1;
+                    newYear = newYear.toString();
+                } else {
+                    newMonth = parseInt(currentMonth)+1;
+                    newMonth = newMonth.toString();
+
+                    newYear = currentYear;
+                }
+            } else if(newMonth === "previous"){
+                if(currentMonth === "1"){
+                    newMonth = "12";
+                    newYear = parseInt(currentYear) - 1;
+                    newYear = newYear.toString();
+                } else {
+                    newMonth = parseInt(currentMonth) - 1;
+                    newMonth = newMonth.toString();
+
+                    newYear = currentYear;
+                }
+            }
+        } else if(typeof newMonth === "number"){
+            if(typeof newYear !== "number"){
+                newYear = currentYear;
+            }
+
+            if(newMonth > 12){
+                newMonth = "12";
+            } else if(newMonth < 1){
+                newMonth = "1";
+            }
+        } else {
+            newMonth = currentMonth;
+            newYear = currentYear;
+        }
+
+
+        this.setSelectedDate({
+            month: newMonth,
+            year: newYear
+        })
+    }
+
+    renderMonthNavigation = () => {
+        const { year, month } = this.state.moduleData.selectedDate;
+
+        return(
+            <Fragment>
+            <a href="#" className="fas fa-chevron-left" onClick={() => this.browseMonth("previous")}></a> 
+            <h1>{this.getMonthAsText(month) + " " + year}</h1>
+            <a href="#" className="fas fa-chevron-right" onClick={() => this.browseMonth("next")}></a> 
+            </Fragment>
+        )
+    }
+
     renderBody = () => {
-        const { year, month } = this.state.moduleData;
+        const { year, month } = this.state.moduleData.selectedDate;
 
         return (
-            <table id="tabeon-calendar">
-                {this.renderMonthTable(year, month)}
-            </table>
+            <Fragment>
+                {this.renderMonthNavigation()}
+                <table id="tabeon-calendar">
+                    {this.renderMonthTable(year, month)}
+                </table>
+            </Fragment>
         );
     }
 
@@ -181,9 +247,6 @@ class CalendarModule extends Module {
             <Fragment>
                 <button className="btn btn-tabeon">Save</button>
                 <button className="btn btn-tabeon btn-tabeon-cancel">Reset</button>
-                <button type="button" className="btn btn-primary">
-                    Launch demo modal
-                </button>
             </Fragment>
         );
     }
@@ -191,23 +254,29 @@ class CalendarModule extends Module {
 
 
     setSelectedDate = (newDateInfo) => {
-        const { date, month, year } = this.state.moduleData;
+
+        const { date, month, year } = this.state.moduleData.selectedDate;
+
         let data = {}
 
         if(newDateInfo){
             data = {
-                date: newDateInfo.date,
-                month: newDateInfo.month,
-                year: newDateInfo.year
+                selectedDate: {
+                    date: newDateInfo.date,
+                    month: newDateInfo.month,
+                    year: newDateInfo.year
+                }
             }
         } else { 
             if(!date || !month || !year){
                 const selectedTime = new Date();
 
                 data = {
-                    date: selectedTime.getDate().toString(),
-                    month: (selectedTime.getMonth() + 1).toString(),
-                    year: selectedTime.getFullYear().toString()
+                    selectedDate: {
+                        date: selectedTime.getDate().toString(),
+                        month: (selectedTime.getMonth() + 1).toString(),
+                        year: selectedTime.getFullYear().toString()
+                    }
                 }
             }
         }
@@ -217,8 +286,8 @@ class CalendarModule extends Module {
 
 
     componentDidUpdate = (prevProps, prevState) => {
-        if(prevProps.selectedDate !== this.props.selectedDate){
-            const { date, month, year } = this.props.selectedDate;
+        if(prevProps.currentDate !== this.props.currentDate){
+            const { date, month, year } = this.props.currentDate;
 
             this.setSelectedDate({
                 date: date,
@@ -229,10 +298,12 @@ class CalendarModule extends Module {
         }
     }
 
-    componentDidMount = () => {
-        this.changeStateSettings(this.settings); 
-
+    childComponentDidMount = () => {
+        this.createStateModuleDataSection("selectedDate");
+        this.createStateModuleDataSection("dailyData");
     }
+
+    
 }
 
 export default CalendarModule;
