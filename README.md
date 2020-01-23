@@ -49,7 +49,7 @@ their own modules (containers). The idea is to keep the features categorized, an
 
 ... Under construction
 
-### The use of React Components and State
+### The use of React Components and State in Tabeon
 
 Since the Tabeon extension uses React for UI management, I've decided to separate each pageview and each feature into their own components (stored in separate files, and imported as necessary). The advantage of this, from a technical standpoint, is that each feature becomes isolated from each other, and can be implemented more freely wherever they are needed without needing to worry about code relationships. Both pages and features
 are managed by their own code, and receive data from other components when needed.
@@ -66,8 +66,7 @@ In Tabeon, React components are located in /tabeon/src/components. A component m
 For example, a tab listing module - for use in Tabeon - may be created in the following manner:
 
 
-``
-    // This module would be located in this file: /tabeon/src/components/modules/tabManagementModule.jsx
+``// This module would be located in this file: /tabeon/src/components/modules/tabManagementModule.jsx
 
     import React, {Fragment} from 'react';
     import Module from './module';
@@ -88,7 +87,7 @@ For example, a tab listing module - for use in Tabeon - may be created in the fo
         componentDidMount = () => {
             // A component has been mounted to the DOM:
             // Get the tabs and set it to the component's state object.
-            // For each state change, for any reason, the component's render() function will reruns, re-rendering
+            // For each state change, for any reason, the component's render() function will reruns, re-rendering UI
             // using the updated data retrieved.
 
             this.getTabs((data) => {
@@ -100,7 +99,7 @@ For example, a tab listing module - for use in Tabeon - may be created in the fo
         }
 
         render = () => {
-            const { tabs } = this.state
+            const { tabs } = this.state;
 
             return (
                 <div>{ tabs }</div>
@@ -108,13 +107,11 @@ For example, a tab listing module - for use in Tabeon - may be created in the fo
         }
     }
 
-    export default TabManagementView
-``
+    export default TabManagementView``
 
 and rendered by any pageview like this:
 
-``
-    // This module would be located in this file: /tabeon/src/components/modules/tabManagementModule.jsx
+``// This module view be located in this file: /tabeon/src/components/views/tabsView.jsx
 
     import React, {Fragment} from 'react';
     import TabManagementModule from '../modules/tabManagementModule';
@@ -131,12 +128,11 @@ and rendered by any pageview like this:
         }
     }
 
-    export default TabsView 
-``
+    export default TabsView``
 
-The parent classes of __TabManagementModule__ and __TabsView__ (__Module__ and __View__ respectively) are components themselves. Creating parent classes for components are seldom necessary. In Tabeon however, there will be many modules, views and modals components which use common features stored in the parents.
+The parent classes of __TabManagementModule__ and __TabsView__ (__Module__ and __View__ respectively) are components themselves. Creating parent classes for components are seldom necessary in React. In the Tabeon user interface however, there will be many modules, views and modals components which use common features stored in the parent classes.
 
-Creating a basic single component in React, with no regards to Tabeon, is explained here: https://reactjs.org/docs/components-and-props.html 
+Creating a basic single, independent component in React, with no regards to common features in other components, is explained here: https://reactjs.org/docs/components-and-props.html 
 
 #### Important files
 
