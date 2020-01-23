@@ -54,14 +54,13 @@ their own modules (containers). The idea is to keep the features categorized, an
 Since the Tabeon extension uses React for UI management, I've decided to separate each pageview and each feature into their own components (stored in separate files, and imported as necessary). The advantage of this, from a technical standpoint, is that each feature becomes isolated from each other, and can be implemented more freely wherever they are needed without needing to worry about code relationships. Both pages and features
 are managed by their own code, and receive data from other components when needed.
 
-Thanks to React re-rendering the user interface at state changing, updating components without cross sending data becomes much easier and makes more manageable. Check out the following image explaining
-Tabeon's use of component and state:
+Thanks to React re-rendering the user interface at state changing, updating components becomes much easier and makes more manageable. Check out the following image explaining. Tabeon's data management using components and state:
 
 [ IMAGE UNDER WORK ]
 
 #### Creating a component
 
-In Tabeon, React components are located in /tabeon/src/components. A component may be a pageview, a module, a modal or anything else which isolates a feature for use by other features. A component may contain programming logic to execute tasks, and can be rendered by React using an extended JavaScript syntax called JSX (more about that: https://reactjs.org/docs/introducing-jsx.html)
+In Tabeon, React components are located in /tabeon/src/components. A component may be a pageview, a module, a modal or anything else which isolates a feature for use by other features. A component may contain programming logic to execute tasks, and its contents can be rendered by React using an extended JavaScript syntax called JSX (more about that: https://reactjs.org/docs/introducing-jsx.html)
 
 For example, a tab listing module - for use in Tabeon - may be created in the following manner:
 
@@ -87,7 +86,7 @@ For example, a tab listing module - for use in Tabeon - may be created in the fo
         componentDidMount = () => {
             // A component has been mounted to the DOM:
             // Get the tabs and set it to the component's state object.
-            // For each state change, for any reason, the component's render() function will reruns, re-rendering UI
+            // For each state change, for any reason, the component's render() function will rerun, re-rendering UI
             // using the updated data retrieved.
 
             this.getTabs((data) => {
@@ -136,18 +135,20 @@ A basic single, independent component in React - with no regards to common featu
 
 ``class FootballStandings extends Component``
 
-More about that here: https://reactjs.org/docs/components-and-props.html 
+More about React components here: https://reactjs.org/docs/components-and-props.html 
 
 #### Important files
 
-##### index.js: Start rendering the user interface with React
+__src/index.js: Start rendering the user interface with React__
 
 located in /tabeon/src/index.js
 
-The first UI js file to load when React launches. This file renders the project's user interface component, ``<App />``, into the #root element of index.html, using the following snippet
+The first UI js file to load when React launches in index.html. This file renders the project's user interface component, ``<App />``, into the #root element of index.html, using the following snippet
 
 ``ReactDOM.render(<BrowserRouter><App /></BrowserRouter>, document.getElementById('root'));``
 
-``<BrowserRouter>`` is part of the 'react-router-dom' library, which encapsulates the <App /> component. This is required in order to implement navigation through address bar. More about this in routeList.jsx below.
+``<BrowserRouter>`` is part of the 'react-router-dom' library, which encapsulates the <App /> component. This is required in order to implement navigation rendering through address bar. More about this in routeList.jsx below.
 
-##### App.js: The root component
+__src/App.js: The root component__
+
+This file
