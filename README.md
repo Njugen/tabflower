@@ -83,7 +83,7 @@ For example, a tab listing module may be created in the following manner:
     export default TabManagementView
 ``
 
-and imported into any pageview like this:
+and used by any pageview like this:
 
 ``
     // This module would be located in this file: /tabeon/src/components/modules/tabManagementModule.jsx
@@ -106,6 +106,7 @@ and imported into any pageview like this:
     export default TabsView 
 ``
 
+The parent classes of __TabManagementModule__ and __TabsView__ (__Module__ and __View__ respectively) are components themselves and make use of the class __Component__ in order to utilize React's component feature.
 
 #### Important files
 
