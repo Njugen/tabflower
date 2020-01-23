@@ -41,3 +41,17 @@ https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_o
 ... Under construction
 
 ## Option's Page UI
+
+The options page for Tabeon assembles all the necessary features in separate pages. Furthermore, in some pages, these features are separated from each other into
+their own modules (containers). The idea is to keep the features categorized, and make it easier for the user to find what he is looking for.
+
+### The use of React Components and State
+
+Since the Tabeon extension uses React for UI management, I've decided to separate each page and each feature into their own components (stored in separate files, and imported as necessary). The advantage of this, from a technical standpoint,
+is that each feature becomes isolated from each other, and can be implemented more freely wherever they are needed without needing to worry about code relationships. Both pages and features
+are managed by their own code, and receive data from other components when needed.
+
+Thanks to React re-rendering the user interface at state changing, updating components without cross sending data becomes much easier and makes more manageable. Check out the following image explaining
+Tabeon's use of component and state:
+
+[ IMAGE UNDER WORK ]
