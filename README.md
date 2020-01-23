@@ -63,7 +63,7 @@ Tabeon's use of component and state:
 
 In Tabeon, React components are located in /tabeon/src/components. A component may be a pageview, a module, a modal or anything else which isolates a feature for use by other features. A component may contain programming logic to execute tasks, and can be rendered by React using an extended JavaScript syntax called JSX (more about that: https://reactjs.org/docs/introducing-jsx.html)
 
-For example, a tab listing module may be created in the following manner:
+For example, a tab listing module - for use in Tabeon - may be created in the following manner:
 
 
 ``
@@ -134,7 +134,9 @@ and rendered by any pageview like this:
     export default TabsView 
 ``
 
-The parent classes of __TabManagementModule__ and __TabsView__ (__Module__ and __View__ respectively) are components themselves and make use of the class __Component__ in order to utilize React's component feature.
+The parent classes of __TabManagementModule__ and __TabsView__ (__Module__ and __View__ respectively) are components themselves. Creating parent classes for components are seldom necessary. In Tabeon however, there will be many modules, views and modals components which use common features stored in the parents.
+
+Creating a basic single component in React, with no regards to Tabeon, is explained here: https://reactjs.org/docs/components-and-props.html 
 
 #### Important files
 
