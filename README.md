@@ -1,4 +1,4 @@
-# Tabeon
+# Tabeon - The Ultimate Tab Manager
 
 Tabeon is a webextension for managing browser window, tabs and history - as well as related history, sessions and media that the user stores while browsing the web. This extension
 is meant to help the user manage information stored in the browser, and in that manner cut and schedule information as needed, be it for lighter use of resources or more organized browsing
@@ -8,8 +8,9 @@ Currently, this extension is in development for Google Chrome, Mozilla Firefox a
 
 ## Libraries and frameworks used in Tabeon
 
-- React, to manage the user interface of the options page
-- Bootstrap, to make the user interface responsive
+- React - to manage the user interface of the options page
+- Bootstrap - to make the user interface responsive
+- Webextension API - to communicate with web browsers as well as using browser features in user interfaces
 
 ## Extension Structure
 
@@ -38,3 +39,5 @@ https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_o
 #### The extension's manifest
 
 ... Under construction
+
+## Option's Page UI
