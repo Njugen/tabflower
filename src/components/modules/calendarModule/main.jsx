@@ -134,9 +134,7 @@ class CalendarModule extends Module {
                             
                         }
                         console.log(month, currentMonth);
-                        storeDateJSX((<td onClick={() => {this.raiseToModal({
-                            test: Math.random()
-                        })}} className={dateAsKey === currentDate && month === currentMonth && year === currentYear ? "activeDate" : ""} key={year + "-" + month + "-" + dateAsKey}>{dateCounter}</td>));
+                        storeDateJSX((<td onClick={() => {this.raiseToModal({ id: "date-settings" })}} className={dateAsKey === currentDate && month === currentMonth && year === currentYear ? "activeDate" : ""} key={year + "-" + month + "-" + dateAsKey}>{dateCounter}</td>));
                     }
                
                     
@@ -241,11 +239,15 @@ class CalendarModule extends Module {
         );
     }
 
+    saveModalData = () => {
+        console.log("jajaj");
+    }
+
     renderFooter = () => {
        
         return (
             <Fragment>
-                <button className="btn btn-tabeon">Save</button>
+                <button className="btn btn-tabeon" onClick={() => {this.raiseToModal({ id: "confirm-action", action: this.saveModalData.bind(this) })}}>Save</button>
                 <button className="btn btn-tabeon btn-tabeon-cancel">Reset</button>
             </Fragment>
         );

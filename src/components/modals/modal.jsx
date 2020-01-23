@@ -2,27 +2,14 @@ import React, { Component, createRef } from "react";
 
 class Modal extends Component {
     state = {
-        data: {"hej": "ohja"},
-        visibility: "hidden"
+        data: {}
     }
-
-    setVisibility = (state) => {
-        const visibility = state;
-
-        this.setState({
-            ...this.state, visibility
-        })
-    }
-
-    
 
     fadeIn = () => {
         let modal = this.modalRef.current;
 
         modal.style.opacity = 1;
         modal.style.zIndex = 10000;
-
-      
     }
 
     fadeOut = () => {
@@ -32,12 +19,9 @@ class Modal extends Component {
         setTimeout(() => {
             modal.style.zIndex = 0;
         }, 500)
-        
-        
-        this.setVisibility("hidden");
     }
 
-    cleanModalData = (callback) => {
+    clearModalData = (callback) => {
         /*
             This function removes all data from the data section of
             the modal state. 
@@ -45,20 +29,23 @@ class Modal extends Component {
             This function also resets the modal UI, to make it ready for next use. Run this function
             when dismissing/saving the modal
         */
-        this.setState({ data: {} }, () => {
-            this.setVisibility("hidden");
+       console.log("MDM");
+        this.setState({ data: { } }, () => {
             callback();
         });
     }
 
     dismissModalHandler = () => {
-        this.cleanModalData(() => {
+        const { onDismiss: onDismissModal } = this.props;
+
+        this.clearModalData(() => {
             this.fadeOut();
+            onDismissModal();
         })
         
     }
 
-    saveDataHandler = () => {
+    saveDataHandler = (callback) => {
         /*
             Save data function. We have three options:
             - Save data to modal by setting state (not recommended. Modal is washed cleaned at dismissal)
@@ -67,8 +54,15 @@ class Modal extends Component {
             - Save data directly to backend or document by using service API/bridge
         */
 
-        this.cleanModalData(() => {
+       const { onDismiss: onDismissModal } = this.props;
+
+        this.clearModalData(() => {
             this.fadeOut();
+            onDismissModal();
+
+            if(typeof callback === "function"){
+                callback();
+            }
         })
     }
 
@@ -77,40 +71,38 @@ class Modal extends Component {
         setTimeout(() => {
             this.fadeIn();
         }, 100)
+
     };
 
     componentDidUpdate = (prevProps, prevState) => {
         if(prevProps !== this.props){
+            
             setTimeout(() => {
                 this.fadeIn();
             }, 100)
         }
     }
 
-    
+    executePropsAction = () => {
+        /*
+            Raising data to a modal from other components (these components may be other modals, modules or views) is
+            necessary only if showing a modal is necessary. After raising data to a modal, we might want that modal
+            to execute e.g. data saving features (or other types of features) located outside of the modal itself (most likely these features are located
+            in the caller components themselves).
+
+            Those features are passed to the modal via the this.props.data.action function. If there are features passed to this 
+            modal via this props, then execute it. If there are none, then do nothing when this function runss.
+
+        */
+       if(this.props && this.props.data && typeof this.props.data.action == "function"){
+            this.props.data.action();
+        }
+    }
+
+
     render = () => {
-        
-        return(
-            <div ref={this.modalRef} className="modal fade" id="tabeonModal" tabIndex="-1" role="dialog" aria-labelledby="tabeonModalLabel" aria-hidden="true">
-                <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title" id="tabeonModalLabel">Modal title</h5>
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={() => this.dismissModalHandler()}>
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div className="modal-body">
-                            ...
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={() => this.dismissModalHandler()}>Close</button>
-                            <button type="button" className="btn btn-primary" onClick={() => this.saveDataHandler()}>Save changes</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
+
+        return null;
     }
 
     constructor(props){

@@ -1,9 +1,10 @@
 import React, { Fragment, Component } from 'react';
 
 
-/* Import Modal */
+/* Import Modals */
 
-import Modal from "./components/utils/modal";
+import CalendarDateSettingsModal from "./components/modals/calendarDateSettingsModal";
+import ConfirmationModal from "./components/modals/confirmationModal";
 
 /* Import Routes */
 import RouteList from './components/routes/routeList';
@@ -77,13 +78,33 @@ class App extends Component{
     )
   }
 
+  modalHandler = (data) => {
+    console.log(data);
+    if(data.clear && data.clear === true){
+      this.clearModal();
+    } else {
+      this.launchModal(data);
+    }
+  }
+
   launchModal = (data) => {
     const modal = {
       launched: true,
       ...data
     }
 
-    this.setState({ modal });
+    this.setState({
+      modal
+    });
+  }
+
+  clearModal = () => {
+    const modal = {};
+
+    setTimeout(() => {
+      this.setState({ modal }); 
+    }, 500)
+    
   }
 
   componentDidMount = () => {
@@ -91,18 +112,18 @@ class App extends Component{
   }
 
   render = () => {
-    const { launched: modalLaunched } = this.state.modal;
+    const { launched: modalLaunched, id: modalId } = this.state.modal;
     
     return (
       <Fragment>
        
         <div className="container-fluid">
-        
-        {modalLaunched && <Modal data={() => this.state.modal} onSave={() => ""}></Modal>}
+          {(modalLaunched && modalId === "confirm-action") && <ConfirmationModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></ConfirmationModal>}
+          {(modalLaunched && modalId === "date-settings") && <CalendarDateSettingsModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></CalendarDateSettingsModal>}
           <div className="row">
             <MainSidebar onMainSidebarClick={(raisedProps) => this.handleMainSidebarClick(raisedProps)} />
             <div className="col-10 py-2" id="tabeon-view-container">
-                <RouteList onRaiseToModal={(data) => this.launchModal(data)} onNavigation={(raisedProps) => this.handleNavigation(raisedProps)} />
+                <RouteList onRaiseToModal={(data) => this.modalHandler(data)} onNavigation={(raisedProps) => this.handleNavigation(raisedProps)} />
                 <ViewFooter />
             </div>
           </div>
