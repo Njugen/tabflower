@@ -51,8 +51,7 @@ their own modules (containers). The idea is to keep the features categorized, an
 
 ### The use of React Components and State
 
-Since the Tabeon extension uses React for UI management, I've decided to separate each pageview and each feature into their own components (stored in separate files, and imported as necessary). The advantage of this, from a technical standpoint,
-is that each feature becomes isolated from each other, and can be implemented more freely wherever they are needed without needing to worry about code relationships. Both pages and features
+Since the Tabeon extension uses React for UI management, I've decided to separate each pageview and each feature into their own components (stored in separate files, and imported as necessary). The advantage of this, from a technical standpoint, is that each feature becomes isolated from each other, and can be implemented more freely wherever they are needed without needing to worry about code relationships. Both pages and features
 are managed by their own code, and receive data from other components when needed.
 
 Thanks to React re-rendering the user interface at state changing, updating components without cross sending data becomes much easier and makes more manageable. Check out the following image explaining
@@ -60,6 +59,38 @@ Tabeon's use of component and state:
 
 [ IMAGE UNDER WORK ]
 
-#### The view component
+#### Creating a component
 
-located in /tabeon/src/components/views/view.jsx
+In Tabeon, React components are located in /tabeon/src/components. A component may be a pageview, a module, a modal or anything else which isolates a feature for use by other features.
+
+For example, a pageview about tab management may be created in the following manner:
+
+tabmanagement.jsx
+
+``
+    import React, {Fragment} from 'react';
+    import View from './view';
+
+    class tabManagementView extends view {
+        render = () => {
+            return (
+                <div>Contents</div>
+            )
+        }
+    }
+``
+
+
+#### Important files
+
+##### index.js: Start rendering the user interface with React
+
+located in /tabeon/src/index.js
+
+The first UI js file to load when React launches. This file renders the project's user interface component, <App />, into the #root element of index.html, using the following snippet
+
+``ReactDOM.render(<BrowserRouter><App /></BrowserRouter>, document.getElementById('root'));``
+
+<BrowserRouter> is part of the 'react-router-dom' library, which encapsulates the <App /> component. This is required in order to implement navigation through address bar. More about this in routeList.jsx below.
+
+##### App.js: The root component
