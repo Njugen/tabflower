@@ -61,7 +61,7 @@ Tabeon's use of component and state:
 
 #### Creating a component
 
-In Tabeon, React components are located in /tabeon/src/components. A component may be a pageview, a module, a modal or anything else which isolates a feature for use by other features.
+In Tabeon, React components are located in /tabeon/src/components. A component may be a pageview, a module, a modal or anything else which isolates a feature for use by other features. A component may contain programming logic to execute tasks, and can be rendered by React using an extended JavaScript syntax called JSX (more about that: https://reactjs.org/docs/introducing-jsx.html)
 
 For example, a tab listing module may be created in the following manner:
 
@@ -73,9 +73,37 @@ For example, a tab listing module may be created in the following manner:
     import Module from './module';
 
     class TabManagementModule extends Module {
+        state = {
+            tabs: {}
+        };
+
+        getTabs = (callback) => {
+            // Get tabs from browser background using Webextension API
+            
+            browser.sendToBackground("blablabla", (response) => {
+                callback(response);
+            })
+        };
+
+        componentDidMount = () => {
+            // A component has been mounted to the DOM:
+            // Get the tabs and set it to the component's state object.
+            // For each state change, for any reason, the component's render() function will reruns, re-rendering
+            // using the updated data retrieved.
+
+            this.getTabs((data) => {
+                this.setState({
+                    tabs: data
+                })
+            })
+            
+        }
+
         render = () => {
+            const { tabs } = this.state
+
             return (
-                <div>Lists of tabs...</div>
+                <div>{ tabs }</div>
             )
         }
     }
@@ -83,7 +111,7 @@ For example, a tab listing module may be created in the following manner:
     export default TabManagementView
 ``
 
-and used by any pageview like this:
+and rendered by any pageview like this:
 
 ``
     // This module would be located in this file: /tabeon/src/components/modules/tabManagementModule.jsx
