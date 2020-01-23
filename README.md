@@ -63,21 +63,47 @@ Tabeon's use of component and state:
 
 In Tabeon, React components are located in /tabeon/src/components. A component may be a pageview, a module, a modal or anything else which isolates a feature for use by other features.
 
-For example, a pageview about tab management may be created in the following manner:
+For example, a tab listing module may be created in the following manner:
 
-tabmanagement.jsx
 
 ``
-    import React, {Fragment} from 'react';
-    import View from './view';
+    // This module would be located in this file: /tabeon/src/components/modules/tabManagementModule.jsx
 
-    class tabManagementView extends view {
+    import React, {Fragment} from 'react';
+    import Module from './module';
+
+    class TabManagementModule extends Module {
         render = () => {
             return (
-                <div>Contents</div>
+                <div>Lists of tabs...</div>
             )
         }
     }
+
+    export default TabManagementView
+``
+
+and imported into any pageview like this:
+
+``
+    // This module would be located in this file: /tabeon/src/components/modules/tabManagementModule.jsx
+
+    import React, {Fragment} from 'react';
+    import TabManagementModule from '../modules/tabManagementModule';
+    import View from './view';
+
+    class TabsView extends View {
+        render = () => {
+            return (
+                <Fragment>
+                    <span>List of tab related options:</span>
+                    <TabManagementModule />
+                </Fragment>
+            )
+        }
+    }
+
+    export default TabsView 
 ``
 
 
@@ -87,10 +113,10 @@ tabmanagement.jsx
 
 located in /tabeon/src/index.js
 
-The first UI js file to load when React launches. This file renders the project's user interface component, <App />, into the #root element of index.html, using the following snippet
+The first UI js file to load when React launches. This file renders the project's user interface component, ``<App />``, into the #root element of index.html, using the following snippet
 
 ``ReactDOM.render(<BrowserRouter><App /></BrowserRouter>, document.getElementById('root'));``
 
-<BrowserRouter> is part of the 'react-router-dom' library, which encapsulates the <App /> component. This is required in order to implement navigation through address bar. More about this in routeList.jsx below.
+``<BrowserRouter>`` is part of the 'react-router-dom' library, which encapsulates the <App /> component. This is required in order to implement navigation through address bar. More about this in routeList.jsx below.
 
 ##### App.js: The root component
