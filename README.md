@@ -132,7 +132,11 @@ and rendered by any pageview like this:
 
 The parent classes of __TabManagementModule__ and __TabsView__ (__Module__ and __View__ respectively) are components themselves. Creating parent classes for components are seldom necessary in React. In the Tabeon user interface however, there will be many modules, views and modals components which use common features stored in the parent classes.
 
-Creating a basic single, independent component in React, with no regards to common features in other components, is explained here: https://reactjs.org/docs/components-and-props.html 
+A basic single, independent component in React - with no regards to common features in other components - can be accomplished like this:
+
+``class FootballStandings extends Component``
+
+More about that here: https://reactjs.org/docs/components-and-props.html 
 
 #### Important files
 
