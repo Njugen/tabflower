@@ -47,16 +47,11 @@ their own modules (containers). The idea is to keep the features categorized, an
 
 ### Folder Structure
 
-+-- src
-    +-- components
-    +-- services
-    +-- styles
-    +-- App.js
-    +-- Index.js 
+... Under construction
 
 ### The use of React Components and State
 
-Since the Tabeon extension uses React for UI management, I've decided to separate each page and each feature into their own components (stored in separate files, and imported as necessary). The advantage of this, from a technical standpoint,
+Since the Tabeon extension uses React for UI management, I've decided to separate each pageview and each feature into their own components (stored in separate files, and imported as necessary). The advantage of this, from a technical standpoint,
 is that each feature becomes isolated from each other, and can be implemented more freely wherever they are needed without needing to worry about code relationships. Both pages and features
 are managed by their own code, and receive data from other components when needed.
 
@@ -65,3 +60,6 @@ Tabeon's use of component and state:
 
 [ IMAGE UNDER WORK ]
 
+#### The view component
+
+located in /tabeon/src/components/views/view.jsx
