@@ -181,37 +181,61 @@ div.container-fluid > .row > div[class^="col-"] {
 
 /* calendar module */
 
-#tabeon-calendar {
+.tabeon-calendar {
     width: 100%
 }
 
-#tabeon-calendar thead th {
+.tabeon-calendar thead th {
     text-align: center;
 }
 
-#tabeon-calendar tbody td {
+.tabeon-calendar tbody td {
     text-align: right;
     font-weight: bold;
     font-size: 0.75rem;
     color: #989898;
 }
 
-#tabeon-calendar tbody td {
+.tabeon-calendar tbody td {
     width: 14.2%;
     border: 1px solid #a0a0a0;
     padding: 0.5rem 0.5rem 3rem 3rem;
 }
 
-#tabeon-calendar tbody td:hover {
+.tabeon-calendar tbody td:hover {
     background: #c27fcf;
     color: #ffffff;
     cursor: pointer;
 }
 
-#tabeon-calendar td.activeDate {
+.tabeon-calendar td.activeDate {
     background: #7a1d8c;
     color: #ffffff;
 }
+
+.tabeon-calendar-navigation-section {
+    text-align: center;
+}
+
+.tabeon-calendar-nav-arrow {
+    display: inline-block;
+    font-size: 1.5rem;
+    color: #7a1d8c;
+    padding: 0rem 0rem 0rem 0rem;
+}
+
+.tabeon-calendar-nav-arrow:hover {
+    text-decoration: none;
+    color: #585858;
+}
+
+
+.tabeon-calendar-title {
+    display: inline-block;
+    margin: 0rem 1.5rem;
+    padding: 1rem 0rem 2rem 0rem;
+}
+
 
 /* Modal */
 

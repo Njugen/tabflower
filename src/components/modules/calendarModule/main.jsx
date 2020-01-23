@@ -133,7 +133,7 @@ class CalendarModule extends Module {
                             storeDateJSX((<td key={year + "-" + month + "-padding-" + paddingRunner}></td>));
                             
                         }
-                        console.log(month, currentMonth);
+                        
                         storeDateJSX((<td onClick={() => {this.raiseToModal({ id: "date-settings" })}} className={dateAsKey === currentDate && month === currentMonth && year === currentYear ? "activeDate" : ""} key={year + "-" + month + "-" + dateAsKey}>{dateCounter}</td>));
                     }
                
@@ -218,11 +218,12 @@ class CalendarModule extends Module {
         const { year, month } = this.state.moduleData.selectedDate;
 
         return(
-            <Fragment>
-            <a href="#" className="fas fa-chevron-left" onClick={() => this.browseMonth("previous")}></a> 
-            <h1>{this.getMonthAsText(month) + " " + year}</h1>
-            <a href="#" className="fas fa-chevron-right" onClick={() => this.browseMonth("next")}></a> 
-            </Fragment>
+            <div class="tabeon-calendar-navigation-section">
+                <a href="#" className="tabeon-calendar-nav-arrow tabeon-calendar-left-nav fas fa-chevron-left" onClick={() => this.browseMonth("previous")}></a> 
+                <h2 className="tabeon-calendar-title">{this.getMonthAsText(month) + " " + year}</h2>
+                <a href="#" className="tabeon-calendar-nav-arrow tabeon-calendar-right-nav fas fa-chevron-right" onClick={() => this.browseMonth("next")}></a> 
+            </div>
+
         )
     }
 
@@ -232,7 +233,7 @@ class CalendarModule extends Module {
         return (
             <Fragment>
                 {this.renderMonthNavigation()}
-                <table id="tabeon-calendar">
+                <table className="tabeon-calendar">
                     {this.renderMonthTable(year, month)}
                 </table>
             </Fragment>

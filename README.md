@@ -1,73 +1,36 @@
-<<<<<<< HEAD
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Tabeon
 
-## Available Scripts
+Tabeon is a webextension for managing browser window, tabs and history - as well as related history, sessions and media that the user stores while browsing the web. This extension
+is meant to help the user manage information stored in the browser, and in that manner cut and schedule information as needed, be it for lighter use of resources or more organized browsing
+for different tasks required by different situations (hobby, work etc)
 
-In the project directory, you can run:
+Currently, this extension is in development for Google Chrome, Mozilla Firefox and Microsoft Edge, as a hobby/learning project.
 
-### `npm start`
+## Libraries and frameworks used in Tabeon
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- React, to manage the user interface of the options page
+- Bootstrap, to make the user interface responsive
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+# Structure
 
-### `npm test`
+Webextensions consists of multiple sections (all of them are most likely not used in every extension). Lets consider the following:
+A webextension may use one or more of the following features available in the web browser:
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### User interface script - what the user sees or what is running on the user interface
 
-### `npm run build`
+- Popup (UI that shows up when clicking the extension icon in the browser tray)
+- Sidebar (UI that shows up at the side of a web page, when triggering certain functionalities. E.g. history sidebar listing all visited pages)
+- Options page (UI that shows up in either new tab or window, when launching a web extension's settings management)
+- Content Scripts (Front-end scripts running on pages choses by the webextension. The user may, or may not, see what the script does, but it is running)
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Read more about these here:
+https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension#Sidebars_popups_options_pages 
+https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension#Content_scripts
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+### Background 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Aside from UI scripts, where a user may control one or more features through the user interface (input fields, checkboxes etc), data about the user's choices needs to be stored in the extension. Sometimes, the UI also needs
+data about the browser - as well as user activities stored in the browser itself. Data can be stored, and retrieved, from the extension's background for usage in the user interface. The extension background may act like a bridge between
+the user and the browser in order to fully make use of the features provided by this extension (e.g. managing browser window and tabs).
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
-=======
-# tabeon
-A workflow scheduler and tab manager created to assist in daily surfing.
->>>>>>> 5f0a26c8c76d08101e514023f7242bdc2331fb5b
+https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension#Background_scripts
