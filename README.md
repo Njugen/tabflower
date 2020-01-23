@@ -66,7 +66,7 @@ In Tabeon, React components are located in /tabeon/src/components. A component m
 For example, a tab listing module - for use in Tabeon - may be created in the following manner:
 
 
-``<!-- This module would be located in this file: /tabeon/src/components/modules/tabManagementModule.jsx -->
+``This module would be located in this file: /tabeon/src/components/modules/tabManagementModule.jsx
 
     import React, {Fragment} from 'react';
     import Module from './module';
@@ -111,7 +111,7 @@ For example, a tab listing module - for use in Tabeon - may be created in the fo
 
 and rendered by any pageview like this:
 
-``<!-- This module view be located in this file: /tabeon/src/components/views/tabsView.jsx -->
+``This module view be located in this file: /tabeon/src/components/views/tabsView.jsx
 
     import React, {Fragment} from 'react';
     import TabManagementModule from '../modules/tabManagementModule';
