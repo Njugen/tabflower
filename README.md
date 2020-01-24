@@ -155,16 +155,27 @@ located in /tabeon/src/App.js
 
 This file holds the App component, which acts as Tabeon's root component. This component is used solely in index.js mentioned above, and renders the groundwork JSX of the app's graphical user interface into the DOM. 
 
-The rendered user interface contains the following notable components and data passed to them (data are passed as props, defined below in parenthesis):
+The rendered user interface contains the following notable components and data passed to them (data are passed as props, defined below):
 
 - Any Modal Component
     These components render popup, using Bootstrap's CSS modal (graphical features such as fadein and fadeout powered by jQuery are not included). Which modal is launched depends on what data is set in <App /> component state by ``modalHandler()``
 
-    - __onSave__: Props acting as callback function. Meant for use when the modal wants to pass data to the <App /> component (optional)
-    - __onDismiss__: Props acting as callback function. MEant for use when the modal is dismissed and cleanup work needs to be done in <App />. (mandatory)
+    - __onSave__: Props acting as a function. Meant for use when the modal wants to pass data to the <App /> component (optional)
+    - __onDismiss__: Props acting as a function. MEant for use when the modal is dismissed and cleanup work needs to be done in <App />. (mandatory)
 
 
 - MainSidebar
+    Component rendering the sidebar, listing all main views
+
+    - __onMainSidebarClick__: Props acting as a function. This gets called by the sidebar when the user clicks any navigation link listed (mandatory)
+
 - RouteList
+    Component containing all views available to the user. This component also mounts views by the path set in the addressbar, using the react-router-dom library. For example: _/dashboard_ mounts ``<DashboardView>`` component, _/calendar_ mounts ``<CalendarView>``.
+
+    - __onRaiseModal__: Props acting as a function. Triggered when a view listed wants to trigger a modal
+    - __onNavigation__: Props acting as a function. Triggered by a view when it has been mounted
+
 - ViewFooter
+    Component containing the footer of the whole graphical user interface
+
 - FullWidthLoadbar
