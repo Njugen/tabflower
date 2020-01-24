@@ -191,7 +191,8 @@ Example:
 
 - The layout of view.jsx, as a React component:
 
-``import { Component } from 'react';
+``
+import { Component } from 'react';
 
 class View extends Component {
     state = {
@@ -234,11 +235,13 @@ class View extends Component {
     }
 }
 
-export default View;``
+export default View;
+``
 
 - A Tabeon page view, inheriting from View:
 
-``class MyView extends View {
+``
+class MyView extends View {
     render = () => {
      
         return(
@@ -247,6 +250,7 @@ export default View;``
     }
 }
 
-export default DashboardView;``
+export default DashboardView;
+``
 
 
