@@ -21,7 +21,7 @@ class CalendarModule extends Module {
 
         var dates = {};
 
-
+        
         while(startOfSelectedMonth){
             const currentTimeObject = new Date(startOfSelectedMonth);
             const weekday = new Intl.DateTimeFormat("en-US", {
@@ -30,9 +30,9 @@ class CalendarModule extends Module {
             const currentYear = currentTimeObject.getFullYear().toString();
             const currentMonth = (currentTimeObject.getMonth() + 1).toString();
             const currentDate = currentTimeObject.getDate().toString();
-
+            console.log("wish", currentYear, currentMonth, year.toString(), month.toString());
             if(currentYear === year.toString() && currentMonth === month.toString()){
-                
+                console.log("vitsi");
                 if(!dates[currentYear]){
                     dates[currentYear] = {};
                 }
@@ -48,6 +48,7 @@ class CalendarModule extends Module {
                 }   
                
             } else {
+                console.log("bah");
                 break;
             }
             startOfSelectedMonth += dayLengthInMilliseconds;
@@ -87,9 +88,8 @@ class CalendarModule extends Module {
 
 
     renderMonthTable = (year, month) => {
-        const currentDate = (new Date()).getDate().toString();
-        const currentMonth = ((new Date()).getMonth()+1).toString();
-        const currentYear = (new Date()).getFullYear().toString();
+
+        const { date: currentDate, month: currentMonth, year: currentYear } = this.props.currentDate;
 
         const dates = this.getDatesOfMonth(year, month);
 
@@ -105,7 +105,7 @@ class CalendarModule extends Module {
         function storeDateJSX(jsxToPush){
             dateJSX.push(jsxToPush);
         }
-
+        
         if(dates[year] && dates[year][month]){
             let dateCounter = 1;
 
@@ -137,7 +137,7 @@ class CalendarModule extends Module {
                         storeDateJSX((<td onClick={() => {this.raiseToModal({ id: "date-settings" })}} className={dateAsKey === currentDate && month === currentMonth && year === currentYear ? "activeDate" : ""} key={year + "-" + month + "-" + dateAsKey}>{dateCounter}</td>));
                     }
                
-                    
+                    console.log("ABC");
                     if(dates[year][month][dateAsKey].weekday === "Sunday"){
                         storeRowJSX((
                             <tr key={year + "-" + month + "-week-" + Math.random()}>
@@ -218,7 +218,7 @@ class CalendarModule extends Module {
         const { year, month } = this.state.moduleData.selectedDate;
 
         return(
-            <div class="tabeon-calendar-navigation-section">
+            <div className="tabeon-calendar-navigation-section">
                 <a href="#" className="tabeon-calendar-nav-arrow tabeon-calendar-left-nav fas fa-chevron-left" onClick={() => this.browseMonth("previous")}></a> 
                 <h2 className="tabeon-calendar-title">{this.getMonthAsText(month) + " " + year}</h2>
                 <a href="#" className="tabeon-calendar-nav-arrow tabeon-calendar-right-nav fas fa-chevron-right" onClick={() => this.browseMonth("next")}></a> 
@@ -229,12 +229,14 @@ class CalendarModule extends Module {
 
     renderBody = () => {
         const { year, month } = this.state.moduleData.selectedDate;
+        
+        const parsedMonth = parseInt(month);
 
         return (
             <Fragment>
                 {this.renderMonthNavigation()}
                 <table className="tabeon-calendar">
-                    {this.renderMonthTable(year, month)}
+                    {this.renderMonthTable(year, parsedMonth)}
                 </table>
             </Fragment>
         );
@@ -302,10 +304,13 @@ class CalendarModule extends Module {
     }
 
     childComponentDidMount = () => {
-        this.createStateModuleDataSection("selectedDate");
-        this.createStateModuleDataSection("dailyData");
+
     }
 
+    childComponentWillMount = () => {
+        this.createStateModuleDataSection("dailyData");
+        this.createStateModuleDataSection("selectedDate");
+    }
     
 }
 

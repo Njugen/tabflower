@@ -143,7 +143,7 @@ __src/index.js: Start rendering the user interface with React__
 
 located in /tabeon/src/index.js
 
-The first UI js file to load when React launches in index.html. This file renders the project's user interface component, ``<App />``, into the #root element of index.html, using the following snippet
+The first UI js file to load when React launches in index.html. This file renders the project's user interface component (from here on "App component"), ``<App />``, into the #root element of index.html, using the following snippet
 
 ``ReactDOM.render(<BrowserRouter><App /></BrowserRouter>, document.getElementById('root'));``
 
@@ -151,4 +151,20 @@ The first UI js file to load when React launches in index.html. This file render
 
 __src/App.js: The root component__
 
-This file
+located in /tabeon/src/App.js
+
+This file holds the App component, which acts as Tabeon's root component. This component is used solely in index.js mentioned above, and renders the groundwork JSX of the app's graphical user interface into the DOM. 
+
+The rendered user interface contains the following notable components and data passed to them (data are passed as props, defined below in parenthesis):
+
+- Any Modal Component
+    These components render popup, using Bootstrap's CSS modal (graphical features such as fadein and fadeout powered by jQuery are not included). Which modal is launched depends on what data is set in <App /> component state by ``modalHandler()``
+
+    - __onSave__: Props acting as callback function. Meant for use when the modal wants to pass data to the <App /> component (optional)
+    - __onDismiss__: Props acting as callback function. MEant for use when the modal is dismissed and cleanup work needs to be done in <App />. (mandatory)
+
+
+- MainSidebar
+- RouteList
+- ViewFooter
+- FullWidthLoadbar

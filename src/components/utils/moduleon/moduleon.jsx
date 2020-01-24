@@ -2,10 +2,10 @@ import React, { Component, cloneElement, Children } from 'react';
 
 class Moduleon extends Component {
     state = {
-        dragDropModules: {
+       
             draggedModuleId: "",
             kickedModuleId: ""
-        }
+        
     }
 
     temp = { 
@@ -76,7 +76,6 @@ class Moduleon extends Component {
 
         const firstModule = document.getElementById(firstModuleId);
         const secondModule = document.getElementById(secondModuleId);
-
 
         firstModuleParent.appendChild(secondModule);
         secondModuleParent.appendChild(firstModule);   

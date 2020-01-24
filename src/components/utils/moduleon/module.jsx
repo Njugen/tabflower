@@ -22,7 +22,7 @@ class Module extends Component {
             moduleBeingDraggedId: ""
         },
         moduleData: {
-            selectedDate: {}
+            
         },
         settings: {
             minimized: false
@@ -58,7 +58,7 @@ class Module extends Component {
     }
 
     handleDragStart = (componentEvent) => {
-        console.log(componentEvent.target);
+     //   console.log(componentEvent.target);
         this.props.onDragStart(componentEvent.target);
     }
 
@@ -132,6 +132,12 @@ class Module extends Component {
 
         if(typeof this.childComponentDidMount === "function"){
             this.childComponentDidMount();
+        }
+    }
+
+    componentWillMount = () => {
+        if(typeof this.childComponentWillMount === "function"){
+            this.childComponentWillMount();
         }
     }
 

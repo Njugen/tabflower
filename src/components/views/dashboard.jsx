@@ -5,8 +5,6 @@ import Moduleon from "../utils/moduleon/moduleon";
 import ModuleColumn from '../utils/moduleon/moduleColumn';
 import TestModule from './../modules/testModule';
 import TestModule2 from './../modules/testModule2';
-import TestModule3 from './../modules/testModule3';
-import TestModule4 from './../modules/testModule4';
 
 class DashboardView extends View {
     render = () => {
