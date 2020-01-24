@@ -74,6 +74,10 @@ class Modal extends Component {
 
     };
 
+    componentWillMount = () => {
+        this.modalRef = createRef();
+    }
+
     componentDidUpdate = (prevProps, prevState) => {
         if(prevProps !== this.props){
             
@@ -105,10 +109,7 @@ class Modal extends Component {
         return null;
     }
 
-    constructor(props){
-        super(props);
-        this.modalRef = createRef();
-    }
+
     
 }
 

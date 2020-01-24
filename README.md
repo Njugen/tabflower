@@ -58,86 +58,16 @@ Thanks to React re-rendering the user interface at state changing, updating comp
 
 [ IMAGE UNDER WORK ]
 
-#### Creating a component
 
 In Tabeon, React components are located in /tabeon/src/components. A component may be a pageview, a module, a modal or anything else which isolates a feature for use by other features. A component may contain programming logic to execute tasks, and its contents can be rendered by React using an extended JavaScript syntax called JSX (more about that: https://reactjs.org/docs/introducing-jsx.html)
-
-For example, a tab listing module - for use in Tabeon - may be created in the following manner:
-
-
-``This module would be located in this file: /tabeon/src/components/modules/tabManagementModule.jsx
-
-    import React, {Fragment} from 'react';
-    import Module from './module';
-
-    class TabManagementModule extends Module {
-        state = {
-            tabs: {}
-        };
-
-        getTabs = (callback) => {
-            // Get tabs from browser background using Webextension API
-            
-            browser.sendToBackground("blablabla", (response) => {
-                callback(response);
-            })
-        };
-
-        componentDidMount = () => {
-            // A component has been mounted to the DOM:
-            // Get the tabs and set it to the component's state object.
-            // For each state change, for any reason, the component's render() function will rerun, re-rendering UI
-            // using the updated data retrieved.
-
-            this.getTabs((data) => {
-                this.setState({
-                    tabs: data
-                })
-            })
-            
-        }
-
-        render = () => {
-            const { tabs } = this.state;
-
-            return (
-                <div>{ tabs }</div>
-            )
-        }
-    }
-
-    export default TabManagementView``
-
-and rendered by any pageview like this:
-
-``This module view be located in this file: /tabeon/src/components/views/tabsView.jsx
-
-    import React, {Fragment} from 'react';
-    import TabManagementModule from '../modules/tabManagementModule';
-    import View from './view';
-
-    class TabsView extends View {
-        render = () => {
-            return (
-                <Fragment>
-                    <span>List of tab related options:</span>
-                    <TabManagementModule />
-                </Fragment>
-            )
-        }
-    }
-
-    export default TabsView``
-
-The parent classes of __TabManagementModule__ and __TabsView__ (__Module__ and __View__ respectively) are components themselves. Creating parent classes for components are seldom necessary in React. In the Tabeon user interface however, there will be many modules, views and modals components which use common features stored in the parent classes.
 
 A basic single, independent component in React - with no regards to common features in other components - can be accomplished like this:
 
 ``class FootballStandings extends Component``
 
-More about React components here: https://reactjs.org/docs/components-and-props.html 
+More about React components here: https://reactjs.org/docs/components-and-props.html. More examples on how components are used to create modals, page views and modules used in Tabeon can be found below.
 
-#### Important files
+#### Important files and locations
 
 __src/index.js: Start rendering the user interface with React__
 
@@ -153,7 +83,7 @@ __src/App.js: The root component__
 
 located in /tabeon/src/App.js
 
-This file holds the App component, which acts as Tabeon's root component. This component is used solely in index.js mentioned above, and renders the groundwork JSX of the app's graphical user interface into the DOM. 
+This file holds the App component, which acts as Tabeon's root component. This component is used solely in index.js mentioned above, and renders the groundwork JSX of the app's graphical user interface into the DOM. It also holds state data and retrieved updated state data necessary to render correct information in the user interface as a whole.
 
 The rendered user interface contains the following notable components and data passed to them (data are passed as props, defined below):
 
@@ -181,11 +111,11 @@ The rendered user interface contains the following notable components and data p
 - FullWidthLoadbar
     Component containing and animating a loadbar on top of the DOM. Animation triggers each time the refreshfactor in the App component state is increased.
 
-__src/components/views/view.jsx: The view component__
+__src/components/views: The view component and its child components__
 
-located in /tabeon/src/components/views/view.jsx
+located in /tabeon/src/components/views
 
-The view component acts as a parent component for all pageviews in Tabeon. This component contains all common features for a pageview, such as calling the modal handler located in the app component, or informing the app component about the currently mounted view. This component does not render anything, but its child components do.
+This folder holds all page view components, including view.jsx, which is the parent component for all pageviews in Tabeon. This component contains all common features for a pageview, such as calling the modal handler located in the app component, or automatically informing the app component whenever a view has been mounted. This component does not render anything, but its child components do.
 
 Example:
 
@@ -238,19 +168,96 @@ class View extends Component {
 export default View;
 ```
 
-- A Tabeon page view, inheriting from View:
+- A Tabeon page view component, inheriting features from View. This component also contain its own isolated features not available to other components, and renders its own UI into the DOM. Its location would be /tabeon/src/components/views under a filename representing it, e.g. myView.jsx.
+
 
 ```
+import React, {Fragment} from 'react';
+import View from './view';
+
 class MyView extends View {
     render = () => {
      
         return(
-            <h1>My Page</h1>
+            <Fragment>
+                <h1>My Page</h1>
+                <MyModule></MyModule>
+            </Fragment>
         );
     }
 }
 
-export default DashboardView;
+export default MyView;
 ```
 
+A pageview may receive data from - and send data to - the App component via the RouteList component.
 
+__src/components/modules: The module component and its child components__
+
+located in /tabeon/src/components/modules
+
+Each page view does not necessarily host only one single feature, but many. In order to keep the pageviews' code from getting convoluted, each feature is divided into their own components (called "modules"). For the same reason as in pageview's case, modules are also set into a parent-child relation. However, the rendering flow is handled slightly differently.
+
+The parent module, from which all child modules inherit common features, handles the rendering of a module's user interface by using the render() method inherited from React's Component class. Check the simplified example below:
+
+```
+import React, { Component, Fragment, CreateRef } from "react";
+
+class Module extends Component {
+    renderHeader = () => {}
+    renderBody = () => {}
+    renderFooter = () => {}
+
+    render = () => {
+        return (
+            <div className="module-container">
+                <div className="header-section">
+                    {this.renderHeader()}
+                </div>
+                <div className="contents-section">
+                    {this.renderBody()}
+                </div>
+                <div className="button-section">
+                    {this.renderFooter()}
+                </div>
+            </div>
+        );
+    }
+}
+```
+
+This means all modules look the same to the structure, except in the renderHeader(), renderBody(), renderFooter() where feature specific code (logic, as well as JSX) is executed. Check the example below:
+
+```
+class CalendarModule extends Module {
+    state = {
+        
+    }
+
+    renderHeader = () => {
+        return (
+            "<h1>Calendar</h1>"
+        )
+    }
+
+    renderBody = () => {
+        // Call necessary functions and features to build the calendar
+        
+        return (
+            // ... Render the calendar
+        );
+    }
+
+    renderFooter = () => {
+        return (
+            <Fragment>
+                <button className="btn btn-primary" onClick={() => saveData(this.state)}>Close<button>
+            </Fragment>
+        )
+    }
+
+    saveData = (data) => {
+        // Call a service or whatever providing storage for my data
+    }
+}
+```
