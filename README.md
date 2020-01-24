@@ -191,7 +191,7 @@ Example:
 
 - The layout of view.jsx, as a React component:
 
-``
+´´
 import { Component } from 'react';
 
 class View extends Component {
@@ -236,11 +236,11 @@ class View extends Component {
 }
 
 export default View;
-``
+´´
 
 - A Tabeon page view, inheriting from View:
 
-``
+´´
 class MyView extends View {
     render = () => {
      
@@ -251,6 +251,6 @@ class MyView extends View {
 }
 
 export default DashboardView;
-``
+´´
 
 
