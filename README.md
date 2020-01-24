@@ -179,3 +179,4 @@ The rendered user interface contains the following notable components and data p
     Component containing the footer of the whole graphical user interface
 
 - FullWidthLoadbar
+    Component containing and animating a loadbar on top of the DOM. Animation triggers each time the refreshfactor in the App component state is increased.
