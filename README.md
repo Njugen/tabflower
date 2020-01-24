@@ -261,3 +261,5 @@ class CalendarModule extends Module {
     }
 }
 ```
+
+A module may pass data to its pageview component, which in turn can pass the data to the App component via the RouteList component. Data may also be passed to the module starting anywhere in the parent chains e.g. App > RouteList > Pageview > Module.
