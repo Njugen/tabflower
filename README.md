@@ -180,3 +180,73 @@ The rendered user interface contains the following notable components and data p
 
 - FullWidthLoadbar
     Component containing and animating a loadbar on top of the DOM. Animation triggers each time the refreshfactor in the App component state is increased.
+
+__src/components/views/view.jsx: The view component__
+
+located in /tabeon/src/components/views/view.jsx
+
+The view component acts as a parent component for all pageviews in Tabeon. This component contains all common features for a pageview, such as calling the modal handler located in the app component, or informing the app component about the currently mounted view. This component does not render anything, but its child components do.
+
+Example:
+
+- The layout of view.jsx, as a React component:
+
+``import { Component } from 'react';
+
+class View extends Component {
+    state = {
+        viewData: {
+            
+        },
+        metaData: {
+        
+        }
+    };
+
+    handleViewMount = () => {
+        /*
+            Inform the App component that any view (this view) has been mounted, by raising its current state.
+            The state will travel through the following components:
+
+            View (any view) > RouteList > App
+        */
+        const { onViewMount } = this.props;
+
+        onViewMount(this.state);
+    }
+
+    raiseToModal = (data) => {
+        const { onRaiseToModal } = this.props;
+
+        onRaiseToModal(data);
+    }
+
+    componentDidMount = () => {
+        this.handleViewMount();
+
+        if(typeof this.childComponentDidMount === "function"){
+            this.childComponentDidMount();
+        }
+    }
+
+    render = () => {
+        return null;
+    }
+}
+
+export default View;``
+
+- A Tabeon page view, inheriting from View:
+
+``class MyView extends View {
+    render = () => {
+     
+        return(
+            <h1>My Page</h1>
+        );
+    }
+}
+
+export default DashboardView;``
+
+
