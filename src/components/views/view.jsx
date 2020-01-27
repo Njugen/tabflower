@@ -12,15 +12,6 @@ import { Component } from 'react';
 */
 
 class View extends Component {
-    state = {
-        viewData: {
-            
-        },
-        metaData: {
-        
-        }
-    };
-
     handleViewMount = () => {
         /*
             Parameters: none
