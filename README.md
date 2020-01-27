@@ -8,34 +8,45 @@ Currently, this extension is in development for Google Chrome, Mozilla Firefox a
 
 ## Libraries and frameworks used in Tabeon
 
-- React - to manage the user interface of the options page
-- Bootstrap - to make the user interface responsive
+- React - UI library to manage user interfaces shown to the user
+- Bootstrap - Toolkit to make the user interface responsive. In this project, jQuery is skipped and stick to HTML, CSS and Javascript.
 - Webextension API - to communicate with web browsers as well as using browser features in user interfaces
+
+## Extension Structure
+
+Tabeon webextension consists of the following sections (all of them are most likely not used in every extension). Lets consider the following:
+
+- Popup (UI that shows up when clicking the extension icon in the browser tray)
+- Sidebar (UI that shows up at the side of a web page, when triggering certain functionalities. E.g. history sidebar listing all visited pages)
+- Options page (UI that shows up in either new tab or window, when launching the extension's settings management)
+- Content Scripts (Front-end scripts running on pages set in the extension's manifest. The user may, or may not, see what the script does, but it is running)
+- Background section (part of webextensions from where long terms data are retrieved and where long term operations are run independently from other sections)
+
+Read more about these here:
+- https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/ 
+- Anatomy_of_a_WebExtension#Sidebars_popups_options_pages 
+https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension#Content_scripts
+-https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension#Background_scripts
 
 #### The extension's manifest
 
 ... Under construction
 
-## Option's Page UI
-
-The options page for Tabeon assembles all the necessary features in separate pages. Furthermore, in some pages, these features are separated from each other into
-their own modules (containers). The idea is to keep the features categorized, and make it easier for the user to find what he is looking for.
-
 ### Folder Structure
 
 ... Under construction
 
-### The use of React Components and State in Tabeon
+### React Components and State in Tabeon
 
-Since the Tabeon extension uses React for UI management, I've decided to separate each pageview and each feature into their own components (stored in separate files, and imported as necessary). The advantage of this, from a technical standpoint, is that each feature becomes isolated from each other, and can be implemented more freely wherever they are needed without needing to worry about code relationships. Both pages and features
-are managed by their own code, and receive data from other components when needed.
+Since the Tabeon extension uses React to build UI, I've decided to separate each pageview and each feature into their own components (stored in separate files, and imported as necessary). This way, each feature becomes isolated from each other, and can be implemented more freely wherever they are needed. Pages and features
+are managed by their own code, and receive data/info from other components as needed.
 
-Thanks to React re-rendering the user interface at state changing, updating components becomes much easier and makes more manageable. Check out the following image explaining. Tabeon's data management using components and state:
+Thanks to React re-rendering the user interface changes at state changing, updating components becomes much easier and  more manageable. Check out the following image for explanation:
 
 [ IMAGE UNDER WORK ]
 
 
-In Tabeon, React components are located in /tabeon/src/components. A component may be a pageview, a module, a modal or anything else which isolates a feature for use by other features. A component may contain programming logic to execute tasks, and its contents can be rendered by React using an extended JavaScript syntax called JSX (more about that: https://reactjs.org/docs/introducing-jsx.html)
+In Tabeon, React components are located in /tabeon/src/components.  A component may contain programming logic to execute tasks, and its contents can be rendered by React using an extended JavaScript syntax called JSX (more about that: https://reactjs.org/docs/introducing-jsx.html)
 
 A basic single, independent component in React - with no regards to common features in other components - can be accomplished like this:
 

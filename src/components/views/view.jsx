@@ -15,7 +15,7 @@ class View extends Component {
             Inform the App component that any view (this view) has been mounted, by raising its current state.
             The state will travel through the following components:
 
-            View (any view) > RouteList > App
+            View (any view: this view) > RouteList > App
         */
         const { onViewMount } = this.props;
 
