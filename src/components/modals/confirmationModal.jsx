@@ -2,31 +2,31 @@ import React from "react";
 import Modal from './modal';
 
 class ConfirmationModal extends Modal {
-    
-    render = () => {
-        
-        return (
-            <div ref={this.modalRef} className="modal fade" id="tabeonModal" tabIndex="-1" role="dialog" aria-labelledby="tabeonModalLabel" aria-hidden="true">
-                <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                        <h5 className="modal-title" id="tabeonModalLabel">Confirm action</h5>
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={() => this.dismissModalHandler()}>
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div className="modal-body">
-                            You are about to [ BLABLABLA ]. This action may cause [ BLABLABLA ]. Are you sure you want to proceed?
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={() => this.dismissModalHandler()}>No</button>
-                            <button type="button" className="btn btn-primary" onClick={() => this.saveDataHandler(() => { this.executePropsAction()})}>Yes, proceed</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
+
+    saveDataHandler = (callback) => {
+        /*
+            Save data function. We have three options:
+            - Save data to modal by setting state (not recommended. Modal is washed cleaned at dismissal)
+            - Save data to module by using props (not recommended. Module and state are reset at view switch)
+            - Save data to view by using multilevel props (not recommended, code gets spaghettified, and view state are resetted at view switch)
+            - Save data directly to backend or document by using service API/bridge
+        */
+
+        this.clearModalData(callback);
     }
+
+    dismissModalHandler = () => {
+        this.clearModalData();
+    }
+
+    /*
+        Return either string or JSX/HTML, which will be rendered
+        in the modal
+    */
+    modalContents(){
+        return "abc2";    
+    }
+    
 }
 
 export default ConfirmationModal;

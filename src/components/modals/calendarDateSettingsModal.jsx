@@ -11,19 +11,23 @@ class CalendarDateSettingsModal extends Modal {
             - Save data directly to backend or document by using service API/bridge
         */
 
-        const { onDismiss: onDismissModal } = this.props;
-
-        this.clearModalData(() => {
-            this.fadeOut();
-            onDismissModal();
-
-            if(typeof callback === "function"){
-                callback();
-            }
-        })
+        this.clearModalData(callback);
     }
+
+    dismissModalHandler = () => {
+        /*
+            This function dismisses the modal in the user interface and removes any state data.
+        */
+
+        this.clearModalData();
+    }
+
     
     modalContents(){
+        /*
+            Return either string or JSX/HTML, which will be rendered
+            in the modal's content section
+        */
         return "abc";    
     }
 }

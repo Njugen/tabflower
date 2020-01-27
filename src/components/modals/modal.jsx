@@ -3,7 +3,26 @@ import React, { Component, createRef } from "react";
 /*
     The Modal component
 
-    This class represents the Modal (also known as popup) and works 
+    This class represents the Modal (also known as popup) and renders its JSX/HTML
+    into the DOM at mount. It also consists of - and triggers - basic features such as fadein/fadeout as well
+    as execution of bound functions (if any) from the component which calls the modal.
+
+    The contents of this class is empty. To use a modal with inserted contents, create a child class inheriting from this
+    component, then import it into src/App.js. The new classes will inherit all the basics written in Modal class, including
+    its rendered user interface. Example:
+
+    modalForAPurpose.jsx:
+    class ModalForAPurpose extends Modal {
+        
+    }
+
+    modalForAnotherPurpose.jsx:
+    class ModalForAnotherPurpose extends Modal {
+        
+    }
+
+
+    Per default (at page launch), the Modal component - and all components inheriting from it - are hidden by CSS opacity set to 0.
 */
 
 class Modal extends Component {
@@ -12,6 +31,11 @@ class Modal extends Component {
     }
 
     fadeIn = () => {
+        /*
+            Fading in the modal by accessing its tag by react ref (https://reactjs.org/docs/refs-and-the-dom.html).
+            Check the CSS set in src/styles/tabeon/style.css
+        */
+
         let modal = this.modalRef.current;
 
         modal.style.opacity = 1;
@@ -19,6 +43,11 @@ class Modal extends Component {
     }
 
     fadeOut = () => {
+        /*
+            Fading out the modal by accessing its tag by react ref (https://reactjs.org/docs/refs-and-the-dom.html).
+            Check the CSS set under #tabeonModal in src/styles/tabeon/style.css
+        */
+
         let modal = this.modalRef.current;
 
         modal.style.opacity = 0;
@@ -29,21 +58,22 @@ class Modal extends Component {
 
     clearModalData = (callback) => {
         /*
-            This function removes all data from the data section of
-            the modal state. 
-
-            This function also resets the modal UI, to make it ready for next use. Run this function
-            when dismissing/saving the modal
+            This function removes all data from the modal's state.
+            
+            Parameter:
+            - callback (function, optional: can be used to execute more functions after the modal has faded out and dismissed)
         */
-       console.log("MDM");
+       const { onDismiss: onDismissModal } = this.props;
+
         this.setState({ data: { } }, () => {
-            callback();
+            this.fadeOut();
+            onDismissModal();
+
+            if(typeof callback === "function"){
+                callback();
+            }
         });
     }
-
-    
-
-    
 
     componentDidMount = () => {
         
@@ -66,44 +96,79 @@ class Modal extends Component {
         }
     }
 
-    executePropsAction = () => {
+    executePropsAction = (data) => {
         /*
-            Raising data to a modal from other components (these components may be other modals, modules or views) is
-            necessary only if showing a modal is necessary. After raising data to a modal, we might want that modal
-            to execute e.g. data saving features (or other types of features) located outside of the modal itself (most likely these features are located
-            in the caller components themselves).
+            The executePropsAction function
 
-            Those features are passed to the modal via the this.props.data.action function. If there are features passed to this 
-            modal via this props, then execute it. If there are none, then do nothing when this function runss.
+            This function is automatically triggered when the user clicks the #modal-save button. This function
+            triggers this.props.data.action, which is a props variable with a bound function raised by an outside component calling
+            the modal.
 
+            The point is to give the caller component the opportunity to execute its internal functions based on what
+            the user does in the modal. This is useful if the user needs to confirm e.g. data saving, money transaction, identity verification etc.
+
+            Parameters:
+            - data (optional, any datatype: data passed from the modal to the caller component)
         */
-       if(this.props && this.props.data && typeof this.props.data.action == "function"){
-            this.props.data.action();
+
+        data = data || null;
+
+        if(this.props && this.props.data && typeof this.props.data.action == "function"){
+            this.props.data.action(data);
         }
+
+        /*
+            If there is no function in the this.props.data.action, nothing will happen beyond this point.
+        */
     }
 
 
     render = () => {
+        /*
+            Rendering of the modal's user interface
+
+            This render is a copy-paste of Bootstrap's modal feature, exluding jQuery.
+            The fadein/fadeout feature is instead replaced with relevant code written
+            in this class.
+
+            Main methods/functions to be aware of: 
+
+            - modalHeadline()
+            - modalContents()
+            - dismissModalHandler()
+            - saveDataHandler()
+
+            These functions add contents to the modal's user interface. Add these to the Modal child classes
+            to give them necessary feature and contents.
+        */
 
         return (
-            <div ref={this.modalRef} className="modal fade" id="tabeonModal" tabIndex="-1" role="dialog" aria-labelledby="tabeonModalLabel" aria-hidden="true">
+            <div ref={this.modalRef} className="modal" id="tabeonModal">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                        <h5 className="modal-title" id="tabeonModalLabel">Manage Date: XX-YY-ZZZZ</h5>
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={() => this.dismissModalHandler()}>
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <h5 className="modal-title" id="tabeonModalLabel">
+                                {typeof this.modalHeadline === "function" &&
+                                    this.modalHeadline()
+                                }
+                            </h5>
+                            {typeof this.dismissModalHandler === "function" &&
+                                <button type="button" className="close" onClick={() => this.dismissModalHandler()}>
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            }   
                         </div>
                         <div className="modal-body">
-                            {this.modalContents()}
+                            {typeof this.modalContents === "function" &&
+                                this.modalContents()
+                            }
                         </div>
                         <div className="modal-footer">
                             {typeof this.dismissModalHandler === "function" &&
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={() => this.dismissModalHandler()}>Close</button>
+                                <button type="button" id="modal-dismiss" className="btn btn-secondary" onClick={() => this.dismissModalHandler()}>Close</button>
                             }
                             {typeof this.saveDataHandler === "function" &&
-                                <button type="button" className="btn btn-primary"  onClick={() => this.saveDataHandler(() => { this.executePropsAction()})}>Save changes</button>
+                                <button type="button" id="modal-save" className="btn btn-primary"  onClick={() => this.saveDataHandler(() => { this.executePropsAction()})}>Save changes</button>
                             }
                         </div>
                     </div>

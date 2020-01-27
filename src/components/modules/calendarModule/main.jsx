@@ -242,8 +242,8 @@ class CalendarModule extends Module {
         );
     }
 
-    saveModalData = () => {
-        console.log("jajaj");
+    saveModalData = (bla) => {
+        console.log("MISGUIDED", "jajaj", bla);
     }
 
     renderFooter = () => {

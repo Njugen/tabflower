@@ -79,7 +79,7 @@ class App extends Component{
   }
 
   modalHandler = (data) => {
-    console.log(data);
+    console.log("BATMAN", data);
     if(data.clear && data.clear === true){
       this.clearModal();
     } else {
