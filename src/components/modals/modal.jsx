@@ -1,5 +1,11 @@
 import React, { Component, createRef } from "react";
 
+/*
+    The Modal component
+
+    This class represents the Modal (also known as popup) and works 
+*/
+
 class Modal extends Component {
     state = {
         data: {}
@@ -35,36 +41,9 @@ class Modal extends Component {
         });
     }
 
-    dismissModalHandler = () => {
-        const { onDismiss: onDismissModal } = this.props;
+    
 
-        this.clearModalData(() => {
-            this.fadeOut();
-            onDismissModal();
-        })
-        
-    }
-
-    saveDataHandler = (callback) => {
-        /*
-            Save data function. We have three options:
-            - Save data to modal by setting state (not recommended. Modal is washed cleaned at dismissal)
-            - Save data to module by using props (not recommended. Module and state are reset at view switch)
-            - Save data to view by using multilevel props (not recommended, code gets spaghettified, and view state are resetted at view switch)
-            - Save data directly to backend or document by using service API/bridge
-        */
-
-       const { onDismiss: onDismissModal } = this.props;
-
-        this.clearModalData(() => {
-            this.fadeOut();
-            onDismissModal();
-
-            if(typeof callback === "function"){
-                callback();
-            }
-        })
-    }
+    
 
     componentDidMount = () => {
         
@@ -106,7 +85,31 @@ class Modal extends Component {
 
     render = () => {
 
-        return null;
+        return (
+            <div ref={this.modalRef} className="modal fade" id="tabeonModal" tabIndex="-1" role="dialog" aria-labelledby="tabeonModalLabel" aria-hidden="true">
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                        <h5 className="modal-title" id="tabeonModalLabel">Manage Date: XX-YY-ZZZZ</h5>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={() => this.dismissModalHandler()}>
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            {this.modalContents()}
+                        </div>
+                        <div className="modal-footer">
+                            {typeof this.dismissModalHandler === "function" &&
+                                <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={() => this.dismissModalHandler()}>Close</button>
+                            }
+                            {typeof this.saveDataHandler === "function" &&
+                                <button type="button" className="btn btn-primary"  onClick={() => this.saveDataHandler(() => { this.executePropsAction()})}>Save changes</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
 

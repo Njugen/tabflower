@@ -9,7 +9,9 @@ import { ReactDOM } from 'react-dom';
 
 class CalendarView extends View {
     state = {
-        title: "Calendar",
+        viewData: {
+            title: "Calendar",
+        },
         currentDate: {
             date: "",
             month: "",

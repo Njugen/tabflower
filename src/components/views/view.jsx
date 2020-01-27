@@ -12,6 +12,26 @@ import { Component } from 'react';
 */
 
 class View extends Component {
+    /*
+        The default structure of the View state (the same goes for the inheritors/child classes):
+        
+        state = {
+            viewData: {},
+            metaData: {}
+        }
+
+        - viewData: Information about the view
+        - metaData: Calculation or background information about the view
+
+        None of these are necessity, but whenever data state is needed in any view, stick to using either 
+        of these two objects to avoid convoluted code.
+    */
+
+    state = {
+        viewData: {},
+        metaData: {}
+    }
+
     handleViewMount = () => {
         /*
             Parameters: none
@@ -19,7 +39,9 @@ class View extends Component {
             Inform the App component that any view (this view) has been mounted, by raising its current state.
             The state will travel through the following components:
 
-            View (any view: this view) > RouteList > App
+                View (any view: this view) > RouteList > App
+
+            All components in this chain will have access to the information raised.
         */
         const { onViewMount } = this.props;
 
@@ -34,8 +56,9 @@ class View extends Component {
             Inform the App component to launch a modal (popup), by raising the data provided
             in this function's parameter. The data parameter will travel through the following components:
 
-            View (any view: this view) > RouteList > App
+                View (any view: this view) > RouteList > App
 
+            All components in this chain will have access to the information raised.
         */
 
         const { onRaiseToModal } = this.props;
@@ -65,7 +88,8 @@ class View extends Component {
     render = () => {
         /*
             JSX is returned and inserted to the DOM by react using this function.abs
-            This class does not render anything. That is a task for its child classes.
+            This class does not render anything. That is a task for its child classes, which
+            may render ANYTHING .
         */
         return null;
     }

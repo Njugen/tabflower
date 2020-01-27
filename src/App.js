@@ -121,9 +121,9 @@ class App extends Component{
           {(modalLaunched && modalId === "confirm-action") && <ConfirmationModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></ConfirmationModal>}
           {(modalLaunched && modalId === "date-settings") && <CalendarDateSettingsModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></CalendarDateSettingsModal>}
           <div className="row">
-            <MainSidebar onMainSidebarClick={(raisedProps) => this.handleMainSidebarClick(raisedProps)} />
+            <MainSidebar onMainSidebarClick={(data) => this.handleMainSidebarClick(data)} />
             <div className="col-10 py-2" id="tabeon-view-container">
-                <RouteList onRaiseToModal={(data) => this.modalHandler(data)} onNavigation={(raisedProps) => this.handleNavigation(raisedProps)} />
+                <RouteList onRaiseToModal={(data) => this.modalHandler(data)} onNavigation={(data) => this.handleNavigation(data)} />
                 <ViewFooter />
             </div>
           </div>
