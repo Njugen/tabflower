@@ -36,7 +36,7 @@ https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_o
 
 ... Under construction
 
-### React Components and State in Tabeon
+## React Components and State in Tabeon
 
 Since the Tabeon extension uses React to build UI, I've decided to separate each pageview and each feature into their own components (stored in separate files, and imported as necessary). This way, each feature becomes isolated from each other, and can be implemented more freely wherever they are needed. Pages and features
 are managed by their own code, and receive data/info from other components as needed.
@@ -54,11 +54,9 @@ A basic single, independent component in React - with no regards to common featu
 
 More about React components here: https://reactjs.org/docs/components-and-props.html. More examples on how components are used to create modals, page views and modules used in Tabeon can be found below.
 
-#### Important files and locations
+### Important files and locations
 
 __src/index.js: Start rendering the user interface with React__
-
-located in /tabeon/src/index.js
 
 The first UI js file to load when React launches in index.html. This file renders the project's user interface component (from here on "App component"), ``<App />``, into the #root element of index.html, using the following snippet
 
@@ -67,8 +65,6 @@ The first UI js file to load when React launches in index.html. This file render
 ``<BrowserRouter>`` is part of the 'react-router-dom' library, which encapsulates the <App /> component. This is required in order to implement navigation rendering through address bar. More about this in routeList.jsx below.
 
 __src/App.js: The root component__
-
-located in /tabeon/src/App.js
 
 This file holds the App component, which acts as Tabeon's root component. This component is used solely in index.js mentioned above, and renders the groundwork JSX of the app's graphical user interface into the DOM. It also holds state data and retrieved updated state data necessary to render correct information in the user interface as a whole.
 
@@ -99,8 +95,6 @@ The rendered user interface contains the following notable components and data p
     Component containing and animating a loadbar on top of the DOM. Animation triggers each time the refreshfactor in the App component state is increased.
 
 __src/components/views: The view component and its child components__
-
-located in /tabeon/src/components/views
 
 This folder holds all page view components, including view.jsx, which is the parent component for all pageviews in Tabeon. This component contains all common features for a pageview, such as calling the modal handler located in the app component, or automatically informing the app component whenever a view has been mounted. This component does not render anything, but its child components do.
 
