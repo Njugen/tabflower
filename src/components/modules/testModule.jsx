@@ -22,10 +22,14 @@ class TestModule extends Module {
         );
     }
 
+    blablabla = () => {
+        console.log("This is for test module");
+    }
+
     renderFooter = () => {
         return (
             <Fragment>
-                <button className="btn btn-tabeon">Save</button>
+                <button className="btn btn-tabeon" onClick={() => this.raiseToModal({ id: "date-settings", action: this.blablabla.bind(this)})}>Save</button>
                 <button className="btn btn-tabeon btn-tabeon-cancel">Reset</button>
             </Fragment>
         );

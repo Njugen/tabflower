@@ -30,9 +30,9 @@ class CalendarModule extends Module {
             const currentYear = currentTimeObject.getFullYear().toString();
             const currentMonth = (currentTimeObject.getMonth() + 1).toString();
             const currentDate = currentTimeObject.getDate().toString();
-            console.log("wish", currentYear, currentMonth, year.toString(), month.toString());
+
             if(currentYear === year.toString() && currentMonth === month.toString()){
-                console.log("vitsi");
+             
                 if(!dates[currentYear]){
                     dates[currentYear] = {};
                 }
@@ -137,7 +137,6 @@ class CalendarModule extends Module {
                         storeDateJSX((<td onClick={() => {this.raiseToModal({ id: "date-settings" })}} className={dateAsKey === currentDate && month === currentMonth && year === currentYear ? "activeDate" : ""} key={year + "-" + month + "-" + dateAsKey}>{dateCounter}</td>));
                     }
                
-                    console.log("ABC");
                     if(dates[year][month][dateAsKey].weekday === "Sunday"){
                         storeRowJSX((
                             <tr key={year + "-" + month + "-week-" + Math.random()}>

@@ -69,8 +69,13 @@ r
                 } 
             />
 
-            Remember: The further up in the child list of <Switch> the route is placed, the higher priority its
+            Remember: 
+            - The further up in the child list of <Switch> the route is placed, the higher priority its
             path parameter has, when react-router-dom decides what to trigger.
+            - If the view requires access to any modal, or if any of the view's modules require access to any modal,
+            the onRaiseToModal parameter need to be set as a tag parameter when rendering the view.
+
+            onRaiseToModal={(data) => this.raiseToModal(data)
         */
 
         return (

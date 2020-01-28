@@ -17,8 +17,8 @@ div.container-fluid > .row > div[class^="col-"] {
 
 /* Main Navigation Column */
 #tabeon-main-nav-column {
-    background: #f8f8f8;
-    box-shadow: 5px 0px 0px 0px #e4e4e4;
+    background: #7a1d8c;;
+    box-shadow: 5px 0px 0px 0px #ffffff;
 }
 
 
@@ -33,33 +33,36 @@ div.container-fluid > .row > div[class^="col-"] {
 
     .tabeon-nav-section-title {
         border-bottom: 1px solid #7a1d8c;
-        color: #282828;
+        color: #ffffff;
         text-align: center;
     }
 
 .tabeon-nav-link {
     display: block;
-    padding: 0.3rem 1.5rem;
+    padding: 0.6rem 1.5rem;
     text-align: center;
-    color: #686868;
-    box-shadow: 5px 0px 0px 0px #e4e4e4;
+    margin: 0.3rem 0rem;
+    color: #ffffff;
+    box-shadow: 5px 0px 0px 0px #ffffff;
 }
 
     .tabeon-nav-link.active {
         font-weight: bold;
-        color: #c95cdf;
-        box-shadow: 5px 0px 0px 0px #c95cdf;
+        color: #ffffff;
+        background: #bf21df;
     }
 
     .tabeon-nav-link.active:hover {
         text-decoration: none;
+
     }
 
     .tabeon-nav-link:not(.active):hover {
-        color: #686868;
+        color: #ffffff;
         text-decoration: none;
         font-weight: bold;
-        box-shadow: 5px 0px 0px 0px #b0b0b0;
+        box-shadow: 5px 0px 0px 0px #ffffff;
+        background: #bf21df;
     }
 
 /* Full Width Load Bar */

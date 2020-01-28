@@ -48,7 +48,7 @@ class DashboardView extends View {
                 <div className="row">
                     <Moduleon>
                         <ModuleColumn colspan="8">
-                            <TestModule id="a"></TestModule>
+                            <TestModule id="a" onRaiseToModal={(data) => this.raiseToModal(data)}></TestModule>
                             <TestModule2 id="b"></TestModule2>
                             <TestModule id="dsa2"></TestModule>
                             <TestModule2 id="dss9d"></TestModule2>
