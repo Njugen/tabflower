@@ -127,7 +127,7 @@ class App extends Component{
           <div className="row">
             <MainSidebar routes={this.state.routes} onMainSidebarClick={(data) => this.handleMainSidebarClick(data)} />
             <div className="col-10 py-2" id="tabeon-view-container">
-                <RouteList views={this.state.views} onRaisedRoutesInfo={(data) => this.handleRouteListReady(data)} onRaiseToModal={(data) => this.modalHandler(data)} onNavigation={(data) => this.handleNavigation(data)} />
+                <RouteList onRaisedRoutesInfo={(data) => this.handleRouteListReady(data)} onRaiseToModal={(data) => this.modalHandler(data)} onNavigation={(data) => this.handleNavigation(data)} />
                 <ViewFooter />
             </div>
           </div>

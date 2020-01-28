@@ -6,9 +6,11 @@ import CalendarView from './../views/calendar';
 /*
     The RouteList component
 
-    This component executes other components based on the string provided in the browser's
-    addressbar. As this component is also part of the raising chains, it
-    also acts like a forwarder of data gained from the views props (onViewMount and onRaiseToModal).
+    This component sets up a list of routes in an array, consisting of labels, paths and views. Based on this list,
+    the component automatically sets up multiple routes which execute view components based on paths given in the 
+    addressbar. At launch, the RouteList component also shares its information with the App component and the MainSidebar component,
+    keeping them in sync with each other for the rest of the session (e.g. showing correct page listing in the sidebar,
+    which correctly redirects the user to the routes set by this component).
     
     For example: 
     The /calendar path will execute the CalendarView component, which means that the calendar view
@@ -18,6 +20,26 @@ import CalendarView from './../views/calendar';
 */
 
 class RouteList extends Component {
+    /*
+        The Routes Array
+
+        This variable is the core of all navigation in Tabeon. It is also shared with
+        the App component and the MainSidebar component to keep them up to date when rendering 
+        navigation lists etc. To add anotheraccessible path and view to the app, simply add 
+        another object to the array:
+
+        - label (string): Label of the view (used by e.g. the sidebar's navigation menu)
+        - path (string): starts with an slash ( / ). To add a parameter to the path, add another slash
+        followed by :parameter. e.g. /myview/:param1/:param2/:param3 etc
+        - component (a react component): A react component. Can be whatever, but in this case, a view
+        component which renders content is preferred. 
+
+        Good to know:
+        - The lower down the list, the higher the priority
+        - All view mounted based on the information in this list have the ability to inform App component
+        about being mounted, and can also call the Modal component
+    */
+
     routes = [
         { 
             label: "Dashboard", 
@@ -73,6 +95,17 @@ r
     }
 
     renderRoutes = () => {
+        /*
+            This function loops through every object set up in the 
+            routes array of this component, and builds route components based
+            on the array's information. The <Route> component sets up a path, which renders
+            a component if its path matches the path in the user's addressbar. E.g. if the user
+            visits /calendar, then the <CalendarView> component will be rendered and so forth.
+
+            Good to know about these props:
+            - onRaiseToModal: this props forwards info to the App component, triggering a modal based on forwarded info
+            - handleViewMount: once the view is mounted, it forwards that info to App component.
+        */
         const views = this.routes;
 
         return views.map(
@@ -94,6 +127,13 @@ r
     }
 
     getRoutesPathAndLabel = () => {
+        /*
+            Build and return a route list array, without the component keys. This information
+            is raised to the App component where it is set in state. Once
+            the App's state is updated, this information will be sent down to MainSidebar
+            component and other components that might need it.
+        */
+
         const routes = this.routes;
         const output = [];
         
@@ -115,40 +155,33 @@ r
     }
 
     raiseRoutesInfo = () => {
-        const { onRaisedRoutesInfo } = this.props;
+        /*
+            Raise information to App component
+        */
 
-        onRaisedRoutesInfo(this.getRoutesPathAndLabel());
+        const { onRaisedRoutesInfo } = this.props;
+        const data = this.getRoutesPathAndLabel();
+
+        onRaisedRoutesInfo(data);
     }
 
     componentDidMount = () => {
+        /*
+            The component has successfully mounted and set up the routes. We may now
+            provide the route information to App component.
+        */
         this.raiseRoutesInfo();
     }
 
     render = () => {
         /*
-            How to add a new Route to another view, which can provide modal info or info about view mounts:
+            Using React Router DOM to set up routes, which renders components
+            based on browser addressbar paths. In order for this to work, <BrowserRouter> needs
+            to encapsulate whatever <App /> render. (in this project, it encapsulates the <App> component
+            in src/index.js)
 
-            <Route 
-                path="/example" 
-                render={
-                    (props) => 
-                        <Anything
-                            onRaiseToModal={(data) => this.raiseToModal(data)} 
-                            onViewMount={(data) => this.handleViewMount(data)} 
-                            {...props} 
-                        />
-                } 
-            />
-
-            Remember: 
-            - The further up in the child list of <Switch> the route is placed, the higher priority its
-            path parameter has, when react-router-dom decides what to trigger.
-            - If the view requires access to any modal, or if any of the view's modules require access to any modal,
-            the onRaiseToModal parameter need to be set as a tag parameter when rendering the view.
-
-            onRaiseToModal={(data) => this.raiseToModal(data)
+            Read more: https://reacttraining.com/react-router/web/guides/quick-start
         */
-        
         return (
             <Switch>
                 {this.renderRoutes()}

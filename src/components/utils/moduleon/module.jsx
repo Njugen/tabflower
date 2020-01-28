@@ -13,7 +13,7 @@ class Module extends Component {
         (can be empty if the module does not generate necessary data)
 
         - settings
-        Contains preset information needed for the module features to work
+        Contains preset information needed for the module's basic/common features to work
 
     */
     state = {
@@ -31,8 +31,11 @@ class Module extends Component {
 
     handleDragOver = (componentEvent) => {
         /*
-            Once another module gets dragged over this module, this method gets called:
-            It's task
+            Once another module gets dragged over this module, this method gets called as part of the onDragOver event.
+            It's task is to inform the Moduleon component state that is has now been draggedover.
+
+            The information is raised through this component chain:
+            module > moduleColumn > moduleon
         */
 
         componentEvent.preventDefault();
@@ -48,43 +51,51 @@ class Module extends Component {
     }
 
     handleDrop = (componentEvent) => {
+        /*
+            Once this module has been dropped (when dragged), this method gets called as part of the onDrop event.
+            This method tells the Moduleon component that this module has been dropped. Once this is done, this module will
+            lose its CSS highlight.
+
+            The information is raised through this component chain:
+            module > moduleColumn > moduleon
+        */
         componentEvent.preventDefault();
         
-        //Prevent from targetting the container itself
-
-            this.props.onDrop(componentEvent.target.parentElement);
+        this.props.onDrop(componentEvent.target.parentElement);
      
-        
-        const { draggedOverModuleId, moduleBeingDraggedId } = this.state.dropDownGrid;
-   //     console.log(draggedOverModuleId, moduleBeingDraggedId);
-        if( draggedOverModuleId && moduleBeingDraggedId ){
-           // componentEvent.target.appendChild(document.getElementById(moduleBeingDraggedId));
-        }
     }
 
     handleDragStart = (componentEvent) => {
-     //   console.log(componentEvent.target);
+        /*
+            Once the user starts dragging this module, this method gets called as part of the onDragStart event.
+            This method tells the Moduleon component state that this module is being dragged, and in doing so enables
+            CSS highlight (which disappears when module is dropped)
+
+            The information is raised through this component chain:
+            module > moduleColumn > moduleon
+        */
         this.props.onDragStart(componentEvent.target);
     }
 
-    handleUpButton = () => {
-      /*  this.setState({
-            settings: {
-                minimized: true
-            }
-        }) */
+    handleModuleMinimize = () => {
+        /*
+            Event handler which is run when the user clicks the up/down array in the module's header. When clicked,
+            the state's settings section will change based on the inputs to this.changeStateSettings();
 
+            E.g. setting minimized to true will cause this module to contract, making only its header visible to the user
+        */
         this.changeStateSettings({
             minimized: true
         });
     }
 
-    handleDownButton = () => {
-      /*  this.setState({
-            settings: {
-                minimized: false
-            }
-        }) */
+    handleModuleExpand = () => {
+        /*
+            Event handler which is run when the user clicks the up/down array in the module's header. When clicked,
+            the state's settings section will change based on the inputs to this.changeStateSettings();
+
+            E.g. setting minimized to false will cause this module to expand, making its contents and footer visible to the user
+        */
 
         this.changeStateSettings({
             minimized: false
@@ -92,6 +103,13 @@ class Module extends Component {
     }
 
     changeStateSettings = (parameters) => {
+        /*
+            Change or modify the settings section of the module's state.
+
+            Parameters:
+            - parameters (object, mandatory): An object with a set of new options e.g. { minimized: false, blablabla: "blablabla" }
+        */
+
         if(typeof parameters === "object"){
             const settings = {
                 ...this.state.settings, ...parameters
@@ -104,6 +122,12 @@ class Module extends Component {
     }
 
     changeStateModuleData = (parameters) => {
+        /*
+            Change or modify the moduleData section of the module's state.
+
+            Parameters:
+            - parameters (object, mandatory): An object with a set of new options e.g. { module_specific_info_1: "abc", module_specific_info_2: "blablabla" }
+        */
         if(typeof parameters === "object"){
             const moduleData = {
                 ...this.state.moduleData, ...parameters
@@ -116,6 +140,24 @@ class Module extends Component {
     }
 
     createStateModuleDataSection = (sectionName) => {
+        /*
+            Create a sub section inside the state.moduleData. Use this function only
+            if keeping data separate inside the moduleData section is absolutely necessary (be it for sorting or
+            organizing purposes)
+
+            E.g. 
+            this.createStateModuleDataSection("batman");
+
+            will result in:
+
+            state = {
+                dropDownGrid: {...},
+                moduleData: {
+                    batman: {}
+                }, 
+                settings: {...}
+            }
+        */
 
         if(typeof sectionName === "string"){
             if(!this.state.moduleData[sectionName]){
@@ -127,13 +169,24 @@ class Module extends Component {
             }
         }
     }
-
-    componentDidUpdate = (prevProps, prevState) => {
-
-    }
-
     componentDidMount = () => {
-        this.changeStateSettings(this.settings); 
+        /*
+            Every module can set their own settings independent from other modules. E.g. Module A may be minimized
+            while Module B is not, and so forth.
+
+            This can be done by inserting a settings object into the modules. If the settings object
+            is found, it will be added to the module's state (doing it this way keeps us from constantly verifying
+            the other variables in the state).
+        */
+
+        if(typeof this.settings === "object"){
+            this.changeStateSettings(this.settings); 
+        }
+
+        /*
+            A module may also need to run its own special tasks immediately after mount. To do this, add
+            childComponentDidMount() into the module, which will be executed if it exists
+        */
 
         if(typeof this.childComponentDidMount === "function"){
             this.childComponentDidMount();
@@ -141,13 +194,28 @@ class Module extends Component {
     }
 
     componentWillMount = () => {
+        /*
+            A module may need to run its own special tasks before being mounted. To do this, add
+            childComponentWillMount() into the module, which will be executed if it exists
+        */
         if(typeof this.childComponentWillMount === "function"){
             this.childComponentWillMount();
         }
     }
 
     raiseToModal = (data) => {
-        // Send this to modal component, located in <App> (the root component)
+        /*
+            Parameters: 
+            -   data (object, containing whatever data that we want the modal to processs. Mandatory)
+
+            Inform the App component to launch a modal (popup), by raising the data provided
+            in this function's parameter. The data parameter will travel through the following components:
+
+                Module (any module, this module) > View (any view: this view) > RouteList > App
+
+            All components in this chain will have access to the information raised.
+        */
+
         const { onRaiseToModal } = this.props;
 
         onRaiseToModal(data);
@@ -183,7 +251,7 @@ class Module extends Component {
                                     </div>
                                 </div>
                                 <div className="col-4 tabeon-module-header-control">
-                                    <button onClick={(e) => this.state.settings.minimized === true ? this.handleDownButton(e) : this.handleUpButton(e) } className="btn shadow-none tabeon-module-header-control-button">
+                                    <button onClick={(e) => this.state.settings.minimized === true ? this.handleModuleExpand(e) : this.handleModuleMinimize(e) } className="btn shadow-none tabeon-module-header-control-button">
                                         <span className={this.state.settings.minimized === true ? "fas fa-chevron-down" : "fas fa-chevron-up"}></span>
                                     </button> 
                                 </div>

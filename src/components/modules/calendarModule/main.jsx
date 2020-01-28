@@ -48,7 +48,6 @@ class CalendarModule extends Module {
                 }   
                
             } else {
-                console.log("bah");
                 break;
             }
             startOfSelectedMonth += dayLengthInMilliseconds;
@@ -133,7 +132,7 @@ class CalendarModule extends Module {
                             storeDateJSX((<td key={year + "-" + month + "-padding-" + paddingRunner}></td>));
                             
                         }
-                        
+
                         storeDateJSX((<td onClick={() => {this.raiseToModal({ id: "date-settings" })}} className={dateAsKey === currentDate && month === currentMonth && year === currentYear ? "activeDate" : ""} key={year + "-" + month + "-" + dateAsKey}>{dateCounter}</td>));
                     }
                
@@ -229,7 +228,7 @@ class CalendarModule extends Module {
     renderBody = () => {
         const { year, month } = this.state.moduleData.selectedDate;
         
-        const parsedMonth = parseInt(month);
+        const parsedMonth = month;
 
         return (
             <Fragment>
@@ -242,7 +241,7 @@ class CalendarModule extends Module {
     }
 
     saveModalData = (bla) => {
-        console.log("MISGUIDED", "jajaj", bla);
+
     }
 
     renderFooter = () => {
