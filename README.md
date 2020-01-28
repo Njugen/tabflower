@@ -54,7 +54,7 @@ A basic single, independent component in React - with no regards to common featu
 
 More about React components here: https://reactjs.org/docs/components-and-props.html. More examples on how components are used to create modals, page views and modules used in Tabeon can be found below.
 
-### Important files and locations
+## Important files and locations
 
 __src/index.js: Start rendering the user interface with React__
 
@@ -71,28 +71,18 @@ The App component acts as Tabeon's root component. This component is used solely
 The rendered contents contains the following notable components and data passed to them (data are passed as props, defined below):
 
 - Any Modal Component
-    These components render popup, using Bootstrap's CSS modal (graphical features such as fadein and fadeout powered by jQuery are not included). Which modal is launched depends on what data is set in <App /> component state by ``modalHandler()``
-
-    - __onSave__: Props acting as a function. Meant for use when the modal wants to pass data to the <App /> component (optional)
-    - __onDismiss__: Props acting as a function. MEant for use when the modal is dismissed and cleanup work needs to be done in <App />. (mandatory)
-
 
 - MainSidebar
     Component rendering the sidebar, listing all main views
 
-    - __onMainSidebarClick__: Props acting as a function. This gets called by the sidebar when the user clicks any navigation link listed (mandatory)
-
 - RouteList
-    Component containing all views available to the user. This component also mounts views by the path set in the addressbar, using the react-router-dom library. For example: _/dashboard_ mounts ``<DashboardView>`` component, _/calendar_ mounts ``<CalendarView>``.
-
-    - __onRaiseModal__: Props acting as a function. Triggered when a view listed wants to trigger a modal
-    - __onNavigation__: Props acting as a function. Triggered by a view when it has been mounted
+    Component containing all views available to the user. Content is mounted based on the path given in the addressbar
 
 - ViewFooter
     Component containing the footer of the whole graphical user interface
 
 - FullWidthLoadbar
-    Component containing and animating a loadbar on top of the DOM. Animation triggers each time the refreshfactor in the App component state is increased.
+    Component containing and animating a loadbar on top of the DOM.
 
 __src/components/views/view.jsx: The view component__
 
