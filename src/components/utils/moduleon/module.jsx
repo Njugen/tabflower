@@ -30,6 +30,11 @@ class Module extends Component {
     }
 
     handleDragOver = (componentEvent) => {
+        /*
+            Once another module gets dragged over this module, this method gets called:
+            It's task
+        */
+
         componentEvent.preventDefault();
 
         const isModuleContainer = componentEvent.target.className.includes("tabeon-module-container");

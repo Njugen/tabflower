@@ -37,14 +37,11 @@ class MainSidebar extends Component {
     }
 
     render = () => {
-        const testSectionLinks = [
-            { label: "Dashboard", path: "/dashboard", key: 1 },
-            { label: "Scheduler", path: "/calendar", key: 2 }
-        ]
+        const { routes } = this.props;
 
         return (
             <div className="col-2 pl-0 pr-0" id="tabeon-main-nav-column">
-                {this.renderNavSection("Another", testSectionLinks)}
+                {this.renderNavSection("Another", routes)}
             </div>
         );
     }

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createElement } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import DashboardView from './../views/dashboard';
 import CalendarView from './../views/calendar';
@@ -18,6 +18,25 @@ import CalendarView from './../views/calendar';
 */
 
 class RouteList extends Component {
+    routes = [
+        { 
+            label: "Dashboard", 
+            path: "/dashboard" ,
+            component: DashboardView
+        },
+        { 
+            label: "Calendar", 
+            path: "/calendar/:year/:month/:date",
+            component: CalendarView
+        },
+        { 
+            label: "Calendar", 
+            path: "/calendar" ,
+            component: CalendarView
+        }
+    ];
+
+
     handleViewMount = (routeProps) => {
         /*
             Parameters: none
@@ -53,6 +72,58 @@ r
         onRaiseToModal(data);
     }
 
+    renderRoutes = () => {
+        const views = this.routes;
+
+        return views.map(
+            (view, key) => {
+                 const TagName = view.component;
+
+                return <Route path={view.path} render={
+                    (props) => {
+                        return <TagName
+                            onRaiseToModal={(data) => this.raiseToModal(data)} 
+                            onViewMount={(data) => this.handleViewMount(data)} 
+                            key={key}
+                            {...props} />
+ 
+                    } 
+                }></Route>
+            }
+        )
+    }
+
+    getRoutesPathAndLabel = () => {
+        const routes = this.routes;
+        const output = [];
+        
+        routes.map(
+            (route, i) => {
+                if(route.path.includes("/:") === false){
+                    output.push({
+                        label: route.label,
+                        path: route.path,
+                        key: i
+                    });
+                } 
+
+                return null;
+            }
+        )
+        
+        return output;
+    }
+
+    raiseRoutesInfo = () => {
+        const { onRaisedRoutesInfo } = this.props;
+
+        onRaisedRoutesInfo(this.getRoutesPathAndLabel());
+    }
+
+    componentDidMount = () => {
+        this.raiseRoutesInfo();
+    }
+
     render = () => {
         /*
             How to add a new Route to another view, which can provide modal info or info about view mounts:
@@ -77,42 +148,10 @@ r
 
             onRaiseToModal={(data) => this.raiseToModal(data)
         */
-
+        
         return (
             <Switch>
-                <Route 
-                    path="/dashboard" 
-                    render={
-                        (props) => 
-                            <DashboardView 
-                                onRaiseToModal={(data) => this.raiseToModal(data)} 
-                                onViewMount={(data) => this.handleViewMount(data)} 
-                                {...props} 
-                            />
-                    } 
-                />
-
-                <Route 
-                    path="/calendar/:year/:month/:date" 
-                    render={
-                        (props) => 
-                            <CalendarView 
-                                onRaiseToModal={(data) => this.raiseToModal(data)} 
-                                onViewMount={(data) => this.handleViewMount(data)} 
-                                {...props} 
-                            />
-                    } 
-                />
-
-                <Route 
-                    path="/calendar" 
-                    render={
-                        (props) => 
-                            <CalendarView 
-                                onRaiseToModal={(data) => this.raiseToModal(data)} 
-                                onViewMount={(data) => this.handleViewMount(data)} 
-                                {...props} />} 
-                            />
+                {this.renderRoutes()}
 
                 <Redirect from="/" to="/dashboard" />
             </Switch>

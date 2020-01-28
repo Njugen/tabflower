@@ -102,3 +102,5 @@ A module may pass data to its pageview component, which in turn can pass the dat
 
 Check the comments in these files for more information:
 - src/components/utils/moduleon/module.jsx
+
+## Adding a new page

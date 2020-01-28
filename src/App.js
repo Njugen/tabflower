@@ -32,6 +32,7 @@ import { ReactDOM } from 'react-dom';
 class App extends Component{
   state = {
     currentView: {},
+    routes: [],
     modal: {},
     mainSidebar: {},
     refreshFactor: 0
@@ -106,10 +107,13 @@ class App extends Component{
     }, 500)
     
   }
+  
+  handleRouteListReady = (data) => {
+    const routes = data;
 
-  componentDidMount = () => {
-
+    this.setState({ routes });
   }
+  
 
   render = () => {
     const { launched: modalLaunched, id: modalId } = this.state.modal;
@@ -121,9 +125,9 @@ class App extends Component{
           {(modalLaunched && modalId === "confirm-action") && <ConfirmationModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></ConfirmationModal>}
           {(modalLaunched && modalId === "date-settings") && <CalendarDateSettingsModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></CalendarDateSettingsModal>}
           <div className="row">
-            <MainSidebar onMainSidebarClick={(data) => this.handleMainSidebarClick(data)} />
+            <MainSidebar routes={this.state.routes} onMainSidebarClick={(data) => this.handleMainSidebarClick(data)} />
             <div className="col-10 py-2" id="tabeon-view-container">
-                <RouteList onRaiseToModal={(data) => this.modalHandler(data)} onNavigation={(data) => this.handleNavigation(data)} />
+                <RouteList views={this.state.views} onRaisedRoutesInfo={(data) => this.handleRouteListReady(data)} onRaiseToModal={(data) => this.modalHandler(data)} onNavigation={(data) => this.handleNavigation(data)} />
                 <ViewFooter />
             </div>
           </div>
