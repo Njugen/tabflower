@@ -104,7 +104,8 @@ r
 
             Good to know about these props:
             - onRaiseToModal: this props forwards info to the App component, triggering a modal based on forwarded info
-            - handleViewMount: once the view is mounted, it forwards that info to App component.
+            - onViewMount: once the view is mounted, it forwards that info to App component.
+            - label: The label, passed from Routelist down to the view component (not necessary)
         */
         const views = this.routes;
 
@@ -116,7 +117,8 @@ r
                     (props) => {
                         return <TagName
                             onRaiseToModal={(data) => this.raiseToModal(data)} 
-                            onViewMount={(data) => this.handleViewMount(data)} 
+                            onViewMount={(data) => this.handleViewMount(data)}
+                            label={view.label} 
                             key={key}
                             {...props} />
  

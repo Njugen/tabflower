@@ -27,11 +27,6 @@ import TestModule2 from './../modules/testModule2';
 
 
 class DashboardView extends View {
-    state = {
-        viewData: {
-            title: "Dashboard"
-        }
-    }
 
     render = () => {
         /*
@@ -42,7 +37,7 @@ class DashboardView extends View {
             <Fragment>
                 <div className="row">
                     <div className="col-12">
-                        <h1>Dashboard</h1>
+                        <h1>{this.props.label ? this.props.label : "Dashboard"}</h1>
                     </div>
                 </div>
                 <div className="row">

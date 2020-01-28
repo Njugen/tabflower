@@ -103,4 +103,44 @@ A module may pass data to its pageview component, which in turn can pass the dat
 Check the comments in these files for more information:
 - src/components/utils/moduleon/module.jsx
 
-## Adding a new page
+## Adding a new page view
+
+1. Go to the following folder: 
+/src/views/
+
+2. Add a new file and name it "myview.jsx"
+
+3. Open "myview.jsx" in any text or code editor
+
+4. Import the following dependencies into "myview.jsx" file:
+
+```
+import React, {Fragment} from 'react';
+import View from './view';
+```
+
+5. Create a new component class named "MyView" and let it inherit from View (which in turns inherits from Component). Once the MyView class has been created, add a render() function into it. Let the render function return null or JSX code 
+
+```
+import React, {Fragment} from 'react';
+import View from './view';
+
+class MyView extends View {
+    render = () => {
+        return (
+            <div>Example</div>
+        );
+    }
+}
+
+```
+
+More information about React Components and rendering can be found here: https://reactjs.org/docs/react-component.html
+
+6. Export the "MyView" component for use in other components as well, by adding the following at the bottom of the file:
+
+```
+export default MyView;
+```
+
+7. Save "myview.jsx"
