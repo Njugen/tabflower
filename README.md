@@ -66,9 +66,9 @@ The first UI js file to load when React launches in index.html. This file render
 
 __src/App.js: The root component__
 
-This file holds the App component, which acts as Tabeon's root component. This component is used solely in index.js mentioned above, and renders the groundwork JSX of the app's graphical user interface into the DOM. It also holds state data and retrieved updated state data necessary to render correct information in the user interface as a whole.
+The App component acts as Tabeon's root component. This component is used solely in index.js mentioned above, and renders the groundwork JSX of the app's graphical user interface into the DOM. It also holds state data and retrieved updated state data necessary to render correct information in the user interface as a whole.
 
-The rendered user interface contains the following notable components and data passed to them (data are passed as props, defined below):
+The rendered contents contains the following notable components and data passed to them (data are passed as props, defined below):
 
 - Any Modal Component
     These components render popup, using Bootstrap's CSS modal (graphical features such as fadein and fadeout powered by jQuery are not included). Which modal is launched depends on what data is set in <App /> component state by ``modalHandler()``
@@ -94,153 +94,21 @@ The rendered user interface contains the following notable components and data p
 - FullWidthLoadbar
     Component containing and animating a loadbar on top of the DOM. Animation triggers each time the refreshfactor in the App component state is increased.
 
-__src/components/views: The view component and its child components__
+__src/components/views/view.jsx: The view component__
 
-This folder holds all page view components, including view.jsx, which is the parent component for all pageviews in Tabeon. This component contains all common features for a pageview, such as calling the modal handler located in the app component, or automatically informing the app component whenever a view has been mounted. This component does not render anything, but its child components do.
+This folder holds all page view components, including view.jsx, which is the parent component for all pageviews in Tabeon. This component contains all common features for all pageviews, such as calling the modal handler located in the app component, or automatically informing the app component whenever a view has been mounted. This component does not render anything, but its child components do.
 
-Example:
+A pageview may receive data from - and send data to - the App component via the RouteList component. These files for more clarification:
 
-- The layout of view.jsx, as a React component:
-
-```
-import { Component } from 'react';
-
-class View extends Component {
-    state = {
-        viewData: {
-            
-        },
-        metaData: {
-        
-        }
-    };
-
-    handleViewMount = () => {
-        /*
-            Inform the App component that any view (this view) has been mounted, by raising its current state.
-            The state will travel through the following components:
-
-            View (any view) > RouteList > App
-        */
-        const { onViewMount } = this.props;
-
-        onViewMount(this.state);
-    }
-
-    raiseToModal = (data) => {
-        const { onRaiseToModal } = this.props;
-
-        onRaiseToModal(data);
-    }
-
-    componentDidMount = () => {
-        this.handleViewMount();
-
-        if(typeof this.childComponentDidMount === "function"){
-            this.childComponentDidMount();
-        }
-    }
-
-    render = () => {
-        return null;
-    }
-}
-
-export default View;
-```
-
-- A Tabeon page view component, inheriting features from View. This component also contain its own isolated features not available to other components, and renders its own UI into the DOM. Its location would be /tabeon/src/components/views under a filename representing it, e.g. myView.jsx.
+- src/components/views/view.jsx
+- src/components/routes/routeList.jsx
 
 
-```
-import React, {Fragment} from 'react';
-import View from './view';
+__src/components/modules/module.jsx: The module component__
 
-class MyView extends View {
-    render = () => {
-     
-        return(
-            <Fragment>
-                <h1>My Page</h1>
-                <MyModule></MyModule>
-            </Fragment>
-        );
-    }
-}
-
-export default MyView;
-```
-
-A pageview may receive data from - and send data to - the App component via the RouteList component.
-
-__src/components/modules: The module component and its child components__
-
-located in /tabeon/src/components/modules
-
-Each page view does not necessarily host only one single feature, but many. In order to keep the pageviews' code from getting convoluted, each feature is divided into their own components (called "modules"). For the same reason as in pageview's case, modules are also set into a parent-child relation. However, the rendering flow is handled slightly differently.
-
-The parent module, from which all child modules inherit common features, handles the rendering of a module's user interface by using the render() method inherited from React's Component class. Check the simplified example below:
-
-```
-import React, { Component, Fragment, CreateRef } from "react";
-
-class Module extends Component {
-    renderHeader = () => {}
-    renderBody = () => {}
-    renderFooter = () => {}
-
-    render = () => {
-        return (
-            <div className="module-container">
-                <div className="header-section">
-                    {this.renderHeader()}
-                </div>
-                <div className="contents-section">
-                    {this.renderBody()}
-                </div>
-                <div className="button-section">
-                    {this.renderFooter()}
-                </div>
-            </div>
-        );
-    }
-}
-```
-
-This means all modules look the same to the structure, except in the renderHeader(), renderBody(), renderFooter() where feature specific code (logic, as well as JSX) is executed. Check the example below:
-
-```
-class CalendarModule extends Module {
-    state = {
-        
-    }
-
-    renderHeader = () => {
-        return (
-            "<h1>Calendar</h1>"
-        )
-    }
-
-    renderBody = () => {
-        // Call necessary functions and features to build the calendar
-        
-        return (
-            // ... Render the calendar
-        );
-    }
-
-    renderFooter = () => {
-        return (
-            <Fragment>
-                <button className="btn btn-primary" onClick={() => saveData(this.state)}>Close<button>
-            </Fragment>
-        )
-    }
-
-    saveData = (data) => {
-        // Call a service or whatever providing storage for my data
-    }
-}
-```
+Each page view does not necessarily host only one single feature, but many. In order to keep the pageviews' code from getting convoluted, each feature is divided into their own components ("modules"). For the same reason as in pageview's case, modules are also set into a parent-child relation. However, the UI rendering is handled by the parent and the content themselves are set by the child components.
 
 A module may pass data to its pageview component, which in turn can pass the data to the App component via the RouteList component. Data may also be passed to the module starting anywhere in the parent chains e.g. App > RouteList > Pageview > Module.
+
+Check the comments in these files for more information:
+- src/components/utils/moduleon/module.jsx
