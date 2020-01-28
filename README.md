@@ -50,7 +50,9 @@ In Tabeon, React components are located in /tabeon/src/components.  A component 
 
 A basic single, independent component in React - with no regards to common features in other components - can be accomplished like this:
 
-``class FootballStandings extends Component``
+```javascript
+class FootballStandings extends Component
+```
 
 More about React components here: https://reactjs.org/docs/components-and-props.html. More examples on how components are used to create modals, page views and modules used in Tabeon can be found below.
 
@@ -114,14 +116,14 @@ Check the comments in these files for more information:
 
 4. Import the following dependencies into "myview.jsx" file:
 
-```
+```javascript
 import React, {Fragment} from 'react';
 import View from './view';
 ```
 
 5. Create a new component class named "MyView" and let it inherit from View (which in turns inherits from Component). Once the MyView class has been created, add a render() function into it. Let the render function return null or JSX code (more info: https://reactjs.org/docs/react-component.html)
 
-```
+```javascript
 import React, {Fragment} from 'react';
 import View from './view';
 
@@ -135,35 +137,34 @@ class MyView extends View {
 
 ```
 
+6. Export the "MyView" component for use in other components as well, by adding an export command at the bottom of the file. E.g. the example below:
 
-6. Export the "MyView" component for use in other components as well, by adding the following at the bottom of the file:
-
-```
+```javascript
 export default MyView;
 ```
 
 7. Save "myview.jsx"
 
-## Adding new navigation route, pointing to any page view
+## Adding a new navigation route, rendering any page view
 
 1. Open the RouteList component in a code editor, located at /src/components/routes/routeList.jsx
 
-2. At the topp of the document, you see a handful of imported resources. If the following resources are not available at the very top, then add or move them there:
+2. At the top of the document, you see a handful of imported resources. If the following resources are not available at the very top, then add or move them there:
 
-```
+```javascript
 import React, { Component } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 ```
 
 3. Then slightly below (before the declaration of the RouteList component class), import necessary views. E.g. the "MyView" that was created in previous tutorial.
 
-```
+```javascript
 import MyView from './../views/myview'
 ```
 
 4. In the RouteList component class, find the __routes__ array and add another object into it. The new object's keys should represent the resource it points to. Check the example below:
 
-```
+```javascript
 routes = [
     {
         label: "My View",
@@ -175,4 +176,4 @@ routes = [
 
 5. Save routeList.jsx
 
-6. Run the project. You should now see "My View" listed in the sidebar. Clicking it takes you to /myview, and shows you the "MyView" component rendered.
+6. Run the project. You should now see "My View" listed in the sidebar. Clicking it takes you to /myview, and shows you the "MyView" component rendered (the only text visible should be "Example").
