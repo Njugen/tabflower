@@ -1,7 +1,8 @@
-import React, { Component, createElement } from 'react';
+import React, { Component } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import DashboardView from './../views/dashboard';
 import CalendarView from './../views/calendar';
+import MyView from './../views/myview';
 
 /*
     The RouteList component

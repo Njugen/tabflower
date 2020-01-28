@@ -106,7 +106,7 @@ Check the comments in these files for more information:
 ## Adding a new page view
 
 1. Go to the following folder: 
-/src/views/
+/src/components/views/
 
 2. Add a new file and name it "myview.jsx"
 
@@ -119,7 +119,7 @@ import React, {Fragment} from 'react';
 import View from './view';
 ```
 
-5. Create a new component class named "MyView" and let it inherit from View (which in turns inherits from Component). Once the MyView class has been created, add a render() function into it. Let the render function return null or JSX code 
+5. Create a new component class named "MyView" and let it inherit from View (which in turns inherits from Component). Once the MyView class has been created, add a render() function into it. Let the render function return null or JSX code (more info: https://reactjs.org/docs/react-component.html)
 
 ```
 import React, {Fragment} from 'react';
@@ -135,7 +135,6 @@ class MyView extends View {
 
 ```
 
-More information about React Components and rendering can be found here: https://reactjs.org/docs/react-component.html
 
 6. Export the "MyView" component for use in other components as well, by adding the following at the bottom of the file:
 
@@ -144,3 +143,36 @@ export default MyView;
 ```
 
 7. Save "myview.jsx"
+
+## Adding new navigation route, pointing to any page view
+
+1. Open the RouteList component in a code editor, located at /src/components/routes/routeList.jsx
+
+2. At the topp of the document, you see a handful of imported resources. If the following resources are not available at the very top, then add or move them there:
+
+```
+import React, { Component } from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
+```
+
+3. Then slightly below (before the declaration of the RouteList component class), import necessary views. E.g. the "MyView" that was created in previous tutorial.
+
+```
+import MyView from './../views/myview'
+```
+
+4. In the RouteList component class, find the __routes__ array and add another object into it. The new object's keys should represent the resource it points to. Check the example below:
+
+```
+routes = [
+    {
+        label: "My View",
+        path: "/myview",
+        component: MyView
+    }
+]
+```
+
+5. Save routeList.jsx
+
+6. Run the project. You should now see "My View" listed in the sidebar. Clicking it takes you to /myview, and shows you the "MyView" component rendered.
