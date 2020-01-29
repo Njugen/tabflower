@@ -244,7 +244,7 @@ class Module extends Component {
                             <div className={this.state.settings.minimized === true ? "row tabeon-module-header-column-wrapper tabeon-no-border" : "row tabeon-module-header-column-wrapper" }>
                                 <div className="col-8">
                                     <div className="float-left">
-                                        <h4>{this.state.settings.moduleTitle}</h4>
+                                        <h5>{this.state.settings.moduleTitle}</h5>
                                     </div>
                                 </div>
                                 <div className="col-4 tabeon-module-header-control">
@@ -260,7 +260,7 @@ class Module extends Component {
                             {this.renderBody()}
                         </div>
                     </div>
-                    {typeof this.renderFooter === "function" && 
+                    {typeof this.renderFooter === "function" && this.renderFooter() !== null && 
                         <div className={this.state.settings.minimized === true ? "row tabeon-module-footer tabeon-hidden" : "row tabeon-module-footer  tabeon-inline-block"} draggable="false">
                             <div className="col-12">
                                 {this.renderFooter()}

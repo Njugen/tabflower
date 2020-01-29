@@ -47,13 +47,23 @@ class RouteList extends Component {
             component: DashboardView
         },
         { 
-            label: "Calendar", 
-            path: "/calendar/:year/:month/:date",
+            label: "Manage Tabs", 
+            path: "/manage",
             component: CalendarView
         },
         { 
             label: "Calendar", 
-            path: "/calendar" ,
+            path: "/scheduler/:year/:month/:date",
+            component: CalendarView
+        },
+        { 
+            label: "Scheduler", 
+            path: "/scheduler" ,
+            component: CalendarView
+        },
+        { 
+            label: "Settings", 
+            path: "/settings" ,
             component: CalendarView
         },
         { 

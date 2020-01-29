@@ -20,6 +20,19 @@ class BrowserStatusModule extends Module {
         );
    }
 
+   renderFooter = () => {
+        return (
+            <Fragment>
+                <p class="warning-paragraph">
+                    <small>
+                        You have more than 10 tabs open. We recommend you manage them to lessen the stress on your computer.
+                    </small>   
+                </p>
+                <button className="btn btn-tabeon">Manage tabs</button>
+            </Fragment>
+        );
+   }
+
    
     
 }

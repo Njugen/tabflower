@@ -13,16 +13,12 @@ class CurrentResourcesModule extends Module {
                     <ul className="window-listing">
                         <li>Window 1
                             <ul className="list-item-options">
-                                <li>x</li>
                                 <li>^</li>
                             </ul>
                         </li>
                             <ul className="tab-listing">
                                 <li>
                                     <span>Tab 1</span>
-                                    <ul className="list-item-options">
-                                        <li>x</li>
-                                    </ul>
                                 </li>
                                 <li>Tab 2</li>
                                 <li>Tab 3</li>
