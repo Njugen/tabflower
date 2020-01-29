@@ -227,6 +227,8 @@ class MyView extends View {
 }
 ```
 
+4. Save the view file. Once the user access the "MyView" page by route, he will see the "MyModule" fully visible
+
 ## Adding a new navigation route, rendering any page view
 
 1. Open the RouteList component in a code editor, located at /src/components/routes/routeList.jsx
@@ -258,4 +260,124 @@ routes = [
 
 5. Save routeList.jsx
 
-6. Run the project. You should now see "My View" listed in the sidebar. Clicking it takes you to /myview, and shows you the "MyView" component rendered (the only text visible should be "Example").
+6. Run the project. You should now see "My View" listed in the sidebar. Clicking it takes you to /myview, and shows you the "MyView" component rendered (including text and modules added to the view in the previous steps).
+
+## Adding a new modal
+
+1. Go to this folder: /src/components/modals
+
+2. Create a new file, which will contain your new modal. Name it "mymodal.jsx"
+
+3. Open "mymodal.jsx", and import the following snippet at the very top of the file:
+
+```javascript
+import React from "react";
+import Modal from './modal';
+```
+
+4. Below the imports, create a new modal component class, inheriting from the Modal component imported in the previous step. Name it "MyModal".
+
+5. Add the template functions into the modal. The template may be built upon, but the original code snippets should persist. See the full example of a default modal component:
+
+```javascript
+class MyModal extends Modal {
+    saveModalHandler = (callback) => {
+        /* 
+            If this function is available in the modal, then a blue progressive button
+            will be made available. This function is triggered when that button is clicked, and any
+            modal data is removed.
+
+            The callback provides the modal's state data to the caller. New features
+            may be added, but keep the existing logic
+        */
+
+        this.clearModalData(callback(this.state))
+    }
+
+    dismissModalHandler = () => {
+        /*
+            If this function is available in the modal, then a gray "cancel" button will be visible to the user.
+            This function is triggered when that button is clicked, dismissing the modal in the user interface and removes any state data.
+        */
+
+        this.clearModalData();
+    }
+
+     renderModalBody(){
+        /*
+            Return either string or JSX/HTML, which will be rendered
+            in the modal's content section
+        */
+        return "You have changed some important settings to the calendar feature. Are you sure you want to keep the changes?";    
+    }
+
+    renderModalHeader(){
+        /*
+            Return either string or JSX/HTML, which will be rendered
+            in the modal's headline section
+        */
+        return "Confirm your settings";    
+    }
+}
+```
+
+5. Export the modal, place an export snippet at the very bottom of the file. Then save it.
+
+```javascript
+export default MyModal
+```
+
+6. Go to /src/App.js, open it and import the modal
+
+```javascript
+import MyModal from "./components/modals/mymodal";
+```
+
+7. Add the following JSX snippet to the render() function located in the App component class. Preferably as the first thing inside the <Fragment> component. Example:
+
+```javascript
+    render = () => {
+        const { launched: modalLaunched, id: modalId } = this.state.modal;
+
+        return (
+            <Fragment>
+                 {(modalLaunched && modalId === "my-own-modal") && <MyModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></MyModal>}
+                 ... More contents
+            </Fragment>     
+        )
+    } 
+```
+
+8. The modal component has been added to App.js. As the code implies, the modal will only be rendered if the "my-own-modal" id is set to the App component's state. If the id is removed or changed, that modal will automatically be removed from the DOM by React.
+
+### Triggering a modal from a view or a module
+
+1. Open /src/components/views/myview.jsx, or any other view from which you want to trigger a modal. The upcoming steps work in both cases:
+
+2. Call the ``this.raiseToModal(options)`` function, where __options__ (valid keys are "id" and "action") is an object consisting of specifications for the call. Example on how to call "MyModal", created in the previous steps, when a button is clicked:
+
+```javascript
+render = () => {
+    return (
+        <button className="btn btn-tabeon" onClick={() => {this.raiseToModal({ id: "my-own-modal" })}>Click me!</button>
+    );
+}
+```
+
+3. It is possible to trigger a function located in the calling view's or modal's component when the user clicks the progressive button in the modal. Simply provide an ``action`` key in the __options__ object, which holds a function bound to this view class. 
+
+This is useful if the user needs to confirm something before an action can be executed. Check the example below:
+
+```javascript
+verifyPayment = () => {
+    console.log("Payment verified. Money has been deducted from your account.");
+}
+
+render = () => {
+    return (
+        <button className="btn btn-tabeon" onClick={() => {this.raiseToModal({ id: "my-own-modal", action: this.verifyPayment.bind(this) })}>Click me!</button>
+    );
+}
+```
+
+4. Save myview.jsx and run the project. 

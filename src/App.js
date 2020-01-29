@@ -120,10 +120,10 @@ class App extends Component{
     
     return (
       <Fragment>
-       
-        <div className="container-fluid">
-          {(modalLaunched && modalId === "confirm-action") && <ConfirmationModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></ConfirmationModal>}
+        {(modalLaunched && modalId === "confirm-action") && <ConfirmationModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></ConfirmationModal>}
           {(modalLaunched && modalId === "date-settings") && <CalendarDateSettingsModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></CalendarDateSettingsModal>}
+        <div className="container-fluid">
+         
           <div className="row">
             <MainSidebar routes={this.state.routes} onMainSidebarClick={(data) => this.handleMainSidebarClick(data)} />
             <div className="col-10 py-2" id="tabeon-view-container">

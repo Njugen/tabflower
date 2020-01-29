@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import DashboardView from './../views/dashboard';
 import CalendarView from './../views/calendar';
+import TestView from './../views/testview';
 
 /*
     The RouteList component
