@@ -9,6 +9,15 @@ import { Component } from 'react';
 
     By making a single View inherit from this class, all its feature will be
     shared with the inheritor also. The inheritor then runs its own unique features.
+
+    Props:
+    - onRaiseToModal(data): Call this when raising data to App component for modal triggering
+        - data = {
+            id: "id of the modal being called",
+            action: "function bound to the caller component. Can be executed by the modal"
+        }
+    - onViewMount(data): Call this when raising data to inform App component that this view has been mounted
+        - data = this.state or other parameters the App could use to verify this view as mounted    
 */
 
 class View extends Component {
