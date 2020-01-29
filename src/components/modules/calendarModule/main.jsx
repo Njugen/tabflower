@@ -1,7 +1,5 @@
 import React, { Fragment } from "react";
 import Module from '../../utils/moduleon/module';
-import "bootstrap.native";
-import { ReactDOM } from 'react-dom';
 
 
 class CalendarModule extends Module {

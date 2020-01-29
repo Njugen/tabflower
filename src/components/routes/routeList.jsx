@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import DashboardView from './../views/dashboard';
 import CalendarView from './../views/calendar';
-import TestView from './../views/testview';
 
 /*
     The RouteList component
@@ -55,6 +54,11 @@ class RouteList extends Component {
         { 
             label: "Calendar", 
             path: "/calendar" ,
+            component: CalendarView
+        },
+        { 
+            label: "About Tabflower", 
+            path: "/about" ,
             component: CalendarView
         }
     ];

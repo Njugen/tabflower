@@ -199,7 +199,7 @@ renderFooter = () => {
 8. Export the component by adding an export command to the bottom of the file. E.g.
 
 ```javascript
-export default MyView;
+export default MyModule;
 ```
 
 ### Adding the module to a page view
@@ -364,9 +364,7 @@ render = () => {
 }
 ```
 
-3. It is possible to trigger a function located in the calling view's or modal's component when the user clicks the progressive button in the modal. Simply provide an ``action`` key in the __options__ object, which holds a function bound to this view class. 
-
-This is useful if the user needs to confirm something before an action can be executed. Check the example below:
+3. It is possible to trigger a function located in the calling view's or modal's component when the user clicks the progressive button in the modal. Simply provide an ``action`` key in the __options__ object, which holds a function bound to this view class. This is useful if the user needs to confirm something before an action can be executed. Check the example below:
 
 ```javascript
 verifyPayment = () => {
