@@ -20,9 +20,30 @@ class TabManagementModule extends Module {
                 <div className="currently-opened-resources">
                     <h4>Currently opened resources</h4>
                     <p></p>
-                    <ul>
-                        <li>[X] windows</li>
-                        <li>[Y] tabs in total</li>
+                    <ul className="window-listing">
+                        <li>Window 1
+                            <ul className="list-item-options">
+                                <li>x</li>
+                                <li>^</li>
+                            </ul>
+                        </li>
+                            <ul className="tab-listing">
+                                <li>
+                                    <span>Tab 1</span>
+                                    <ul className="list-item-options">
+                                        <li>x</li>
+                                    </ul>
+                                </li>
+                                <li>Tab 2</li>
+                                <li>Tab 3</li>
+                            </ul>
+                        <li>Window 2</li>
+                            <ul className="tab-listing">
+                                <li>Tab 4</li>
+                                <li>Tab 5</li>
+                                <li>Tab 6</li>
+                                <li>Tab 7</li>
+                            </ul>
                     </ul>
                 </div>
             </Fragment>
