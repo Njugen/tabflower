@@ -114,7 +114,7 @@ Check the comments in these files for more information:
 
 3. Open "myview.jsx" in any text or code editor
 
-4. Import the following dependencies into "myview.jsx" file:
+4. Import the following dependencies into "myview.jsx" file. Place these lines at the very top of the doucment:
 
 ```javascript
 import React, {Fragment} from 'react';
@@ -144,6 +144,88 @@ export default MyView;
 ```
 
 7. Save "myview.jsx"
+
+## Adding a new module
+
+1. Go to the following folder: src/components/modules/
+
+2. Create a new file and give it a name, e.g. "mymodule.jsx"
+
+3. Open "mymodule.jsx" in a code editor
+
+4. Import the following dependencies into "mymodule.jsx". Place these lines at the very top of the doucment:
+
+```javascript
+import React, { Fragment } from "react";
+import Module from '../../utils/moduleon/module';
+```
+
+5. Create a new component class named "MyModule", and add a settings object to it. This component inherits from the Module component imported in the previous step:
+
+```javascript
+
+class MyModule extends Module {
+    settings = {
+        moduleTitle: "My Module"
+    }
+}
+
+```
+
+6. Add contents to the module by adding a renderBody() function to its class. For example:
+
+```javascript
+renderBody = () => {
+    // Logic here
+
+    return (
+        <span>"This is my module"</span>
+    );
+}
+```
+
+7. Add contents, or preferably, controls to its footer by adding renderFooter(). For example:
+
+```javascript
+renderFooter = () => {
+    return (
+        <Fragment>
+            <button className="btn btn-tabeon" onClick={() => "Trigger a save function"}>Save changes</button>
+        </Fragment>
+    );
+}
+```
+
+8. Export the component by adding an export command to the bottom of the file. E.g.
+
+```javascript
+export default MyView;
+```
+
+### Adding the module to a page view
+
+1. Open /src/components/views/myview.jsx or any other view where you want to add a module
+
+2. At the top of the view file, import the "MyModule" component
+
+```javascript
+import mymodule from './../modules/mymodule';
+```
+
+3. Then use the module in the view's render function. Like this:
+
+```javascript
+class MyView extends View {
+    render = () => {
+        return (
+            <Fragment>
+                <div>Example</div>
+                <MyModule></MyModule>
+            </Fragment>
+        );
+    }
+}
+```
 
 ## Adding a new navigation route, rendering any page view
 
