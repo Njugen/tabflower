@@ -229,9 +229,6 @@ class Module extends Component {
         
     }
 
-    renderFooter = () => {
-        
-    }
 
     constructor(props){
         super(props);
@@ -263,11 +260,13 @@ class Module extends Component {
                             {this.renderBody()}
                         </div>
                     </div>
-                    <div className={this.state.settings.minimized === true ? "row tabeon-module-footer tabeon-hidden" : "row tabeon-module-footer  tabeon-inline-block"} draggable="false">
-                        <div className="col-12">
-                            {this.renderFooter()}
+                    {typeof this.renderFooter === "function" && 
+                        <div className={this.state.settings.minimized === true ? "row tabeon-module-footer tabeon-hidden" : "row tabeon-module-footer  tabeon-inline-block"} draggable="false">
+                            <div className="col-12">
+                                {this.renderFooter()}
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
             </div> 
         );

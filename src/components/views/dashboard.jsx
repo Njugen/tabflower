@@ -3,7 +3,8 @@ import View from './view';
 
 import Moduleon from "../utils/moduleon/moduleon";
 import ModuleColumn from '../utils/moduleon/moduleColumn';
-import TabManagementModule from '../modules/tagmanagement';
+import BrowserStatusModule from '../modules/browserStatus';
+import CurrentResourcesModule from './../modules/currentResources';
 
 /*
     For information on how common processes for all views, this included, work
@@ -37,8 +38,11 @@ class DashboardView extends View {
                 
                 <div className="row">
                     <Moduleon>
-                        <ModuleColumn colspan="12">
-                            <TabManagementModule id="tabmanagement-module" onRaiseToModal={(data) => this.raiseToModal(data)}></TabManagementModule>
+                        <ModuleColumn colspan="6">
+                            <BrowserStatusModule id="tabmanagement-module" onRaiseToModal={(data) => this.raiseToModal(data)}></BrowserStatusModule>
+                        </ModuleColumn>
+                        <ModuleColumn colspan="6">
+                            <CurrentResourcesModule id="current-resource-module" onRaiseToModal={(data) => this.raiseToModal(data)}></CurrentResourcesModule>
                         </ModuleColumn>
                     </Moduleon>
                 </div>
