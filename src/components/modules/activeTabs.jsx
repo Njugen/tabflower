@@ -12,6 +12,9 @@ class ActiveTabsModule extends Module {
         return (
             <Fragment>
                 <div className="active-tabs-module">
+                    <p>Tab Flower offers you an oversight over all opened tabs, making it easier
+                        to remove tabs and windows you seldom use. You may also scan for unresponsive websites and remove them.
+                    </p>
                     <ul className="window-listing col-12">
                         <li>Window 1
                             <ul className="list-item-options">
@@ -59,10 +62,11 @@ class ActiveTabsModule extends Module {
    renderFooter = () => {
         return (
             <Fragment>
-                <Link to="/manage">
-                     <p class="tabeon-module-footer-text small d-inline-block">Need to archive these windows and tabs for future browsing? Save them to Tab Flower!</p>
-                    <button className="btn btn-tabeon d-inline-block">Save all as group</button>
-                </Link>
+                
+                    <p class="tabeon-module-footer-text small d-inline-block">Need to archive these windows and tabs for future browsing? Save them to Tab Flower!</p>
+                    <button className="btn btn-tabeon d-inline-block">Remove unresponsive tabs</button>
+                    <button className="btn btn-tabeon d-inline-block">Save listed tabs</button>
+              
             </Fragment>
         );
    }

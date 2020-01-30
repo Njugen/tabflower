@@ -342,12 +342,64 @@ div.container-fluid > .row > div[class^="col-"] {
         margin: auto 0rem auto 0.50rem;
     }
 
+/*
+    ExistingTabGroupsModule
+*/    
+
+.existing-tab-groups-list {
+    list-style-type: none;
+}
+
+    .existing-tab-groups-list .list-item-block {
+        display: inline-block;
+        background: #7a1d8c;
+        color: #ffffff;
+    }
+
+    .existing-tab-groups-list .list-item-block .list-item-block-header {
+        position: relative;
+    }
+
+        .existing-tab-groups-list .list-item-block .list-item-block-headline {
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .existing-tab-groups-list .list-item-block .list-item-block-options {
+            display: inline-block;
+            position: absolute;
+            top: 0;
+            right: 0.1rem;
+        }
+
+        .existing-tab-groups-list .list-item-block .list-item-block-options .options-button {
+            display: inline-block;
+        }
+
+    .existing-tab-groups-list .list-item-block .list-item-block-footer {
+        text-align: right
+    }
+
 /* Utils */
 
 .btn-tabeon {
     color: #ffffff;
     background: #7a1d8c;
     border-color: #7a1d8c;
+    white-space: no-wrap;
+}
+
+.btn-tabeon-reverse {
+    color: #ffffff;
+    background: #c95cdf;
+    border-color: #c95cdf;
+    white-space: no-wrap;
+}
+
+.btn-tabeon-reverse:hover {
+    color: #ffffff;
+    background: #7a1d8c;
+    border-color: #c95cdf;
     white-space: no-wrap;
 }
 
