@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import Modal from '../modal';
 
 
-class ETGMRemoveSingleGroupModal extends Modal {
+class ETGMRemoveGroupsModal extends Modal {
     saveModalHandler = (callback) => {
         this.clearModalData(callback(this.state));
     }
@@ -16,7 +16,7 @@ class ETGMRemoveSingleGroupModal extends Modal {
     renderModalBody(){
         return (
             <Fragment>
-                <p>Are you sure you want to remove this group? You will lose it as well as all windows and tabs stored in it. This cannot be undone.</p>
+                <p>Are you sure you want to remove all existing groups? You will lose all saved windows and tabs. This cannot be undone.</p>
                 
             </Fragment>
         );    
@@ -24,8 +24,8 @@ class ETGMRemoveSingleGroupModal extends Modal {
 
     renderModalHeader(){
         
-        return "Confirm Removal of Group";    
+        return "Confirm Removal of All Tabs";    
     }
 }
 
-export default ETGMRemoveSingleGroupModal;
+export default ETGMRemoveGroupsModal;

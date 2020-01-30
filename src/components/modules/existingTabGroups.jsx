@@ -13,13 +13,9 @@ class ExistingTabGroupsModule extends Module {
 
    }
 
-   removeAllGroups = () => {
+   removeGroups = (tabId) => {
        
    }
-
-   removeSingleGroup = (tabgroupId) => {
-        
-    }
 
    createNewGroup = (options) => {
 
@@ -37,8 +33,8 @@ class ExistingTabGroupsModule extends Module {
                             <div className="list-item-block-header mb-3">
                                 <h6 className="list-item-block-headline float-left pr-2">Webmie Work tabs</h6>
                                 <div className="list-item-block-options float-right">
-                                    <button className="fas fa-cog options-button" onClick={() => this.raiseToModal({ id: "etgmcreatenewgroupmodal", action: this.removeAllGroups.bind(this) })}></button>
-                                    <button className="fas fa-times options-button" onClick={() => this.raiseToModal({ id: "etgmremovesinglegroupmodal", action: this.removeSingleGroup.bind(this) })}></button>
+                                    <button className="fas fa-cog options-button" onClick={() => this.raiseToModal({ id: "etgmcreatenewgroupmodal", action: this.createNewGroup.bind(this) })}></button>
+                                    <button className="fas fa-times options-button" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", params: {nej: "hej"}, action: this.removeGroups.bind(this) })}></button>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
@@ -60,8 +56,8 @@ class ExistingTabGroupsModule extends Module {
         return (    
             <Fragment>
                  
-                <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmremoveallgroupsmodal", action: this.removeAllGroups.bind(this) })}>Remove all groups</button>
-                <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmcreatenewgroupmodal", action: this.removeAllGroups.bind(this) })}>Create a new group</button>
+                <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", action: this.removeGroups.bind(this) })}>Remove all groups</button>
+                <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmcreatenewgroupmodal", action: this.createNewGroup.bind(this) })}>Create a new group</button>
               
             </Fragment>
         );
