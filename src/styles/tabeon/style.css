@@ -165,6 +165,10 @@ div.container-fluid > .row > div[class^="col-"] {
     pointer-events: none;
 }
 
+.tabeon-module-footer-text {
+    color: #282828;
+}
+
 /* App Footer */
 
 #app-footer-adjuster {
@@ -256,42 +260,87 @@ div.container-fluid > .row > div[class^="col-"] {
 }
 
 /*
-    Window and tab listing
+    CurrentResourcesModule
 */
 
-ul.window-listing {
+.currently-opened-resources-module ul.window-listing {
     list-style-type: none;
     padding: 0px;
 }
 
-    ul.window-listing > li {
+    .currently-opened-resources-module ul.window-listing > li {
         background: #7a1d8c;
         color: #ffffff;
         font-weight: bold;
-        padding: 0.65rem 1rem;
+        padding: 0.45rem 1rem;
     }
 
-ul.tab-listing {
+.currently-opened-resources-module ul.tab-listing {
     list-style-type: none;
     padding: 0px;
 }    
 
-    ul.tab-listing > li {
+    .currently-opened-resources-module ul.tab-listing > li {
         background: #c95cdf;
         color: #ffffff;
-        padding: 0.65rem 1rem 0.65rem 2rem;
+        padding: 0.45rem 1rem 0.45rem 2rem;
         margin: 0.25rem 0rem;
     }
    
-.list-item-options {
+.currently-opened-resources-module .list-item-options {
     float: right;
     list-style-type: none;
 }
 
-.list-item-options > li {
+.currently-opened-resources-module .list-item-options > li {
     display: inline-block;
     margin: auto 0.25rem;
 }
+
+/*
+    ActiveTabsModule
+*/
+
+.active-tabs-module ul.window-listing {
+    list-style-type: none;
+    padding: 0px;
+}
+
+    .active-tabs-module ul.window-listing > li {
+        background: #7a1d8c;
+        color: #ffffff;
+        font-weight: bold;
+        padding: 0.45rem 1rem;
+    }
+
+.active-tabs-module ul.tab-listing {
+    list-style-type: none;
+    padding: 0px;
+}    
+
+    .active-tabs-module ul.tab-listing > li {
+        background: #c95cdf;
+        color: #ffffff;
+        padding: 0.45rem 1rem 0.45rem 2rem;
+        margin: 0.25rem 0.25rem 0.0rem 0rem;
+        display: inline-block;
+        
+    }
+
+
+.active-tabs-module .list-item-options {
+    float: right;
+    list-style-type: none;
+}
+
+    .active-tabs-module .list-item-options > li {
+        display: inline-block;
+        margin: auto 0.40rem auto 0.50rem;
+    }
+
+    .active-tabs-module .list-item-options > li:last-child {
+        margin: auto 0rem auto 0.50rem;
+    }
 
 /* Utils */
 

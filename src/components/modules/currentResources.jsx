@@ -9,8 +9,8 @@ class CurrentResourcesModule extends Module {
    renderBody = () => {
         return (
             <Fragment>
-                <div className="currently-opened-resources">
-                    <ul className="window-listing">
+                <div className="currently-opened-resources-module">
+                    <ul className="window-listing col-12">
                         <li>Window 1
                             <ul className="list-item-options">
                                 <li>^</li>

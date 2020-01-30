@@ -1,5 +1,7 @@
 import React, { Fragment } from "react";
+import { Link } from 'react-router-dom';
 import Module from '../utils/moduleon/module';
+
 
 class BrowserStatusModule extends Module {
    settings = {
@@ -15,6 +17,9 @@ class BrowserStatusModule extends Module {
                         <li>[X] windows</li>
                         <li>[Y] tabs in total</li>
                     </ul>
+                    <p class="small warning-paragraph">
+                        You have more than 10 tabs open. We recommend you manage them to lessen the stress on your computer.
+                    </p>
                 </div>
             </Fragment>
         );
@@ -23,12 +28,9 @@ class BrowserStatusModule extends Module {
    renderFooter = () => {
         return (
             <Fragment>
-                <p class="warning-paragraph">
-                    <small>
-                        You have more than 10 tabs open. We recommend you manage them to lessen the stress on your computer.
-                    </small>   
-                </p>
-                <button className="btn btn-tabeon">Manage tabs</button>
+                <Link to="/manage">
+                    <button className="btn btn-tabeon">Manage tabs</button>
+                </Link>
             </Fragment>
         );
    }

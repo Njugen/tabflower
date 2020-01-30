@@ -52,7 +52,7 @@ class ModuleColumn extends Component {
         const childElements = this.cloneChildren(this.props);
 
         return (
-            <div className={"tabeon-module-column col-" + colspan}>
+            <div className={"tabeon-module-column col-md-" + colspan}>
                 <div className="row">
                     {childElements && childElements.length > 1 ? this.mapComponents(childElements) : childElements}
                 </div>

@@ -40,7 +40,7 @@ class MainSidebar extends Component {
         const { routes } = this.props;
 
         return (
-            <div className="col-2 pl-0 pr-0" id="tabeon-main-nav-column">
+            <div className="col-md-2 pl-0 pr-0" id="tabeon-main-nav-column">
                 {this.renderNavSection("Another", routes)}
             </div>
         );
