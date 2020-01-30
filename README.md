@@ -1,8 +1,19 @@
-# Tabeon - The Ultimate Tab Manager
+# Tabflower- The Ultimate Tab Manager
 
-Tabeon is a webextension for managing browser window, tabs and history - as well as related history, sessions and media that the user stores while browsing the web. This extension
-is meant to help the user manage information stored in the browser, and in that manner cut and schedule information as needed, be it for lighter use of resources or more organized browsing
-for different tasks required by different situations (hobby, work etc)
+Tabflower is a webextension for managing browser windows and tabs. It is intended for people - like myself - who simply cannot browse a session without opening thirty-forty tabs, while never noticing before the computer slows down immensely. Using Tabflower, browsing becomes smoother as you may open - as well as close - one or multiple tabs at once depending on your needs and/or tasks at specific times, helping you be consequential with your browser. None of us wants to get distracted by irrelevant contents at work - and none of us wants to work during our freetime, right?
+
+### Features
+
+- Oversight of windows and tabs in your browser, and your latest actions in Tabflower
+- Create groups from tabs and windows already opened in the browser
+- Create groups from bookmarks and browsing history
+- Launch all tabs and windows stored in one or more groups at once
+- Close all existing tabs at once
+- Schedule tabs and groups to automatically launch at certain time
+- Scan groups and tab lists to remove unresponsive tabs
+- Export/Import your Tab Flower settings from one browser to another
+- Available for Mozilla Firefox, Google Chrome and Microsoft Edge
+- ... and more!
 
 Currently, this extension is in development for Google Chrome, Mozilla Firefox and Microsoft Edge, as a hobby/learning project.
 

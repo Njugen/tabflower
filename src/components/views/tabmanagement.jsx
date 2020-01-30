@@ -4,7 +4,7 @@ import View from './view';
 import Moduleon from "../utils/moduleon/moduleon";
 import ModuleColumn from '../utils/moduleon/moduleColumn';
 import ActiveTabsModule from "../modules/activeTabs";
-import ExistingTabGroupsModule from './../modules/existingTabGroups';
+import ExistingTabGroupsModule from '../modules/existingTabGroups';
 require("../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css")
 
 class TabManagementView extends View {

@@ -16,7 +16,7 @@ class ActiveTabsModule extends Module {
                         to remove tabs and windows you seldom use. You may also scan for unresponsive websites and remove them.
                     </p>
                     <ul className="window-listing col-12">
-                        <li>Window 1
+                        <li className="mt-2">Window 1
                             <ul className="list-item-options">
                                 <li><span className="fas fa-chevron-up"></span></li>
                                 <li><span className="fas fa-times"></span></li>
@@ -41,7 +41,7 @@ class ActiveTabsModule extends Module {
                                 <li className="col-2">Tab 2</li>
                                 <li className="col-2">Tab 3</li>
                             </ul>
-                        <li>Window 2
+                        <li className="mt-2">Window 2
                             <ul className="list-item-options">
                                 <li><span className="fas fa-chevron-up"></span></li>
                                 <li><span className="fas fa-times"></span></li>
