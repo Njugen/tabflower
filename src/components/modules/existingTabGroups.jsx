@@ -8,6 +8,23 @@ class ExistingTabGroupsModule extends Module {
        moduleTitle: "Existing Tab Groups"
    }
 
+   launchTabGroup = (tabgroupId) => {
+       // Send a message to browser (use browser API)
+
+   }
+
+   removeAllGroups = () => {
+       
+   }
+
+   removeSingleGroup = (tabgroupId) => {
+        
+    }
+
+   createNewGroup = (options) => {
+
+   }
+
    renderBody = () => {
         return (
             <Fragment>
@@ -20,8 +37,8 @@ class ExistingTabGroupsModule extends Module {
                             <div className="list-item-block-header mb-3">
                                 <h6 className="list-item-block-headline float-left pr-2">Webmie Work tabs</h6>
                                 <div className="list-item-block-options float-right">
-                                    <span className="fas fa-cog options-button ml-2"></span>
-                                    <span className="fas fa-times options-button ml-2"></span>
+                                    <button className="fas fa-cog options-button" onClick={() => this.raiseToModal({ id: "etgmcreatenewgroupmodal", action: this.removeAllGroups.bind(this) })}></button>
+                                    <button className="fas fa-times options-button" onClick={() => this.raiseToModal({ id: "etgmremovesinglegroupmodal", action: this.removeSingleGroup.bind(this) })}></button>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
@@ -29,58 +46,10 @@ class ExistingTabGroupsModule extends Module {
                                 <p>Contain resources necessary for daily work. Excellent to launch at 8:00 pm on a weekday!</p>
                             </div>
                             <div className="list-item-block-footer">
-                                <button class="btn btn-tabeon-reverse d-inline-block">Launch group</button>
+                                <button class="btn btn-tabeon-reverse d-inline-block" onClick={() => this.raiseToModal({ id: "etgmlaunchgroupsmodal", action: this.launchTabGroup.bind(this) })}>Launch group</button>
                             </div>
                         </div>
                         
-                        <div className="list-item-block col-3 m-1 p-3">
-                            <div className="list-item-block-header mb-3">
-                                <h6 className="list-item-block-headline float-left pr-2">Weeb mumbo jumbo</h6>
-                                <div className="list-item-block-options float-right">
-                                    <span className="fas fa-cog options-button ml-2"></span>
-                                    <span className="fas fa-times options-button ml-2"></span>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                            <div className="list-item-block-body small pb-3">
-                                <p>Throw away everything else in life - it's time to become anime geek!</p>
-                            </div>
-                            <div className="list-item-block-footer">
-                                <button class="btn btn-tabeon-reverse d-inline-block">Launch group</button>
-                            </div>
-                        </div>
-                        <div className="list-item-block col-3 m-1 p-3">
-                            <div className="list-item-block-header mb-3">
-                                <h6 className="list-item-block-headline float-left pr-2">Weeb mumbo jumbo</h6>
-                                <div className="list-item-block-options float-right">
-                                    <span className="fas fa-cog options-button ml-2"></span>
-                                    <span className="fas fa-times options-button ml-2"></span>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                            <div className="list-item-block-body small pb-3">
-                                <p>Throw away everything else in life - it's time to become anime geek!</p>
-                            </div>
-                            <div className="list-item-block-footer">
-                                <button class="btn btn-tabeon-reverse d-inline-block">Launch group</button>
-                            </div>
-                        </div>
-                        <div className="list-item-block col-3 m-1 p-3">
-                            <div className="list-item-block-header mb-3">
-                                <h6 className="list-item-block-headline float-left pr-2">Weeb mumbo jumbo</h6>
-                                <div className="list-item-block-options float-right">
-                                    <span className="fas fa-cog options-button ml-2"></span>
-                                    <span className="fas fa-times options-button ml-2"></span>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                            <div className="list-item-block-body small pb-3">
-                                <p>Throw away everything else in life - it's time to become anime geek!</p>
-                            </div>
-                            <div className="list-item-block-footer">
-                                <button class="btn btn-tabeon-reverse d-inline-block">Launch group</button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </Fragment>
@@ -91,8 +60,8 @@ class ExistingTabGroupsModule extends Module {
         return (    
             <Fragment>
                  
-                <button className="btn btn-tabeon d-inline-block">Remove all groups</button>
-                <button className="btn btn-tabeon d-inline-block">Create a new group</button>
+                <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmremoveallgroupsmodal", action: this.removeAllGroups.bind(this) })}>Remove all groups</button>
+                <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmcreatenewgroupmodal", action: this.removeAllGroups.bind(this) })}>Create a new group</button>
               
             </Fragment>
         );

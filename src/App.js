@@ -6,6 +6,11 @@ import React, { Fragment, Component } from 'react';
 import CalendarDateSettingsModal from "./components/modals/calendarDateSettingsModal";
 import ConfirmationModal from "./components/modals/confirmationModal";
 
+import ETGMLaunchGroupsModal from './components/modals/existingTabGroupsModule/etgmLaunchGroupsModal';
+import ETGMRemoveAllGroupsModal from './components/modals/existingTabGroupsModule/etgmRemoveAllGroupsModal';
+import ETGMCreateNewGroupModal from './components/modals/existingTabGroupsModule/etgmCreateNewGroupModal';
+import ETGMRemoveSingleGroupModal from './components/modals/existingTabGroupsModule/etgmRemoveSingleGroupModal';
+
 /* Import Routes */
 import RouteList from './components/routes/routeList';
 
@@ -121,7 +126,11 @@ class App extends Component{
     return (
       <Fragment>
         {(modalLaunched && modalId === "confirm-action") && <ConfirmationModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></ConfirmationModal>}
-          {(modalLaunched && modalId === "date-settings") && <CalendarDateSettingsModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></CalendarDateSettingsModal>}
+        {(modalLaunched && modalId === "date-settings") && <CalendarDateSettingsModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></CalendarDateSettingsModal>}
+        {(modalLaunched && modalId === "etgmlaunchgroupsmodal") && <ETGMLaunchGroupsModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></ETGMLaunchGroupsModal>}
+        {(modalLaunched && modalId === "etgmremoveallgroupsmodal") && <ETGMRemoveAllGroupsModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></ETGMRemoveAllGroupsModal>}
+        {(modalLaunched && modalId === "etgmremovesinglegroupmodal") && <ETGMRemoveSingleGroupModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></ETGMRemoveSingleGroupModal>}
+        {(modalLaunched && modalId === "etgmcreatenewgroupmodal") && <ETGMCreateNewGroupModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></ETGMCreateNewGroupModal>}
         <div className="container-fluid">
          
           <div className="row">
