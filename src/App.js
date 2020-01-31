@@ -8,7 +8,10 @@ import ConfirmationModal from "./components/modals/confirmationModal";
 
 import ETGMLaunchGroupsModal from './components/modals/existingTabGroupsModule/etgmLaunchGroupsModal';
 import ETGMRemoveGroupsModal from './components/modals/existingTabGroupsModule/etgmRemoveGroupsModal';
-import ETGMCreateNewGroupModal from './components/modals/existingTabGroupsModule/etgmCreateNewGroupModal';
+import ETGMCreateOrEditGroupModal from './components/modals/existingTabGroupsModule/etgmCreateOrEditGroupModal';
+
+import COTMRemoveUnresponsiveTabsModal from './components/modals/currentlyOpenedTabsModule/cotmRemoveUnresponsiveTabsModal';
+import COTMRemoveWindowModal from './components/modals/currentlyOpenedTabsModule/cotmRemoveWindowModal';
 
 /* Import Routes */
 import RouteList from './components/routes/routeList';
@@ -30,8 +33,6 @@ import './styles/react-generated/App.css';
 /* Import Tabeon app specific CSS */
 import './styles/tabeon/style.css';
 import { ReactDOM } from 'react-dom';
-
-
 
 class App extends Component{
   state = {
@@ -128,7 +129,9 @@ class App extends Component{
         {(modalLaunched && modalId === "date-settings") && <CalendarDateSettingsModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></CalendarDateSettingsModal>}
         {(modalLaunched && modalId === "etgmlaunchgroupsmodal") && <ETGMLaunchGroupsModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></ETGMLaunchGroupsModal>}
         {(modalLaunched && modalId === "etgmremovegroupsmodal") && <ETGMRemoveGroupsModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></ETGMRemoveGroupsModal>}
-        {(modalLaunched && modalId === "etgmcreatenewgroupmodal") && <ETGMCreateNewGroupModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></ETGMCreateNewGroupModal>}
+        {(modalLaunched && modalId === "etgmcreateoreditgroupmodal") && <ETGMCreateOrEditGroupModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></ETGMCreateOrEditGroupModal>}
+        {(modalLaunched && modalId === "cotmremoveunresponsivetabsmodal") && <COTMRemoveUnresponsiveTabsModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></COTMRemoveUnresponsiveTabsModal>}
+        {(modalLaunched && modalId === "cotmremovewindowmodal") && <COTMRemoveWindowModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></COTMRemoveWindowModal>}
         <div className="container-fluid">
          
           <div className="row">

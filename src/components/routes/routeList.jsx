@@ -43,11 +43,11 @@ class RouteList extends Component {
     */
 
     routes = [
-        { 
+       /* { 
             label: "Dashboard", 
             path: "/dashboard" ,
             component: DashboardView
-        },
+        }, */
         { 
             label: "Manage Tabs", 
             path: "/manage",

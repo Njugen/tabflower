@@ -186,7 +186,7 @@ class Modal extends Component {
                                 <button type="button" id="modal-dismiss" className="btn btn-secondary" onClick={() => this.dismissModalHandler()}>Close</button>
                             }
                             {typeof this.saveModalHandler === "function" &&
-                                <button type="button" id="modal-save" className="btn btn-primary"  onClick={() => this.saveModalHandler((data) => { this.executePropsAction(data)})}>Save changes</button>
+                                <button type="button" id="modal-save" className="btn btn-tabeon"  onClick={() => this.saveModalHandler((data) => { this.executePropsAction(data)})}>Save changes</button>
                             }
                         </div>
                     </div>

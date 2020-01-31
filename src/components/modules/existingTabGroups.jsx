@@ -8,17 +8,20 @@ class ExistingTabGroupsModule extends Module {
        moduleTitle: "Existing Tab Groups"
    }
 
-   launchTabGroup = (tabgroupId) => {
-       // Send a message to browser (use browser API)
-
+   launchTabGroup = (tabGroupId) => {
+       if(typeof tabGroupId === "string"){
+        // tabGroupId is a string, proceed...
+       } else if(typeof tabGroupId !== "string") {
+            // There is no valid tab id... show an error message.
+       } 
    }
 
-   removeGroups = (tabId) => {
+   removeTabGroups = (tabId) => {
        
    }
 
-   createNewGroup = (options) => {
-
+   createOrTabEditGroup = (options) => {
+   
    }
 
    renderBody = () => {
@@ -33,8 +36,8 @@ class ExistingTabGroupsModule extends Module {
                             <div className="list-item-block-header mb-3">
                                 <h6 className="list-item-block-headline float-left pr-2">Webmie Work tabs</h6>
                                 <div className="list-item-block-options float-right">
-                                    <button className="fas fa-cog options-button" onClick={() => this.raiseToModal({ id: "etgmcreatenewgroupmodal", action: this.createNewGroup.bind(this) })}></button>
-                                    <button className="fas fa-times options-button" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", params: {nej: "hej"}, action: this.removeGroups.bind(this) })}></button>
+                                    <button className="fas fa-cog options-button" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", action: this.createOrEditGroup.bind(this) })}></button>
+                                    <button className="fas fa-times options-button" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", params: {nej: "hej"}, action: this.removeTabGroups.bind(this) })}></button>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
@@ -56,8 +59,8 @@ class ExistingTabGroupsModule extends Module {
         return (    
             <Fragment>
                  
-                <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", action: this.removeGroups.bind(this) })}>Remove all groups</button>
-                <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmcreatenewgroupmodal", action: this.createNewGroup.bind(this) })}>Create a new group</button>
+                <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", action: this.removeTabGroups.bind(this) })}>Remove all groups</button>
+                <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", action: this.createOrEditTabGroup.bind(this) })}>Create a new group</button>
               
             </Fragment>
         );

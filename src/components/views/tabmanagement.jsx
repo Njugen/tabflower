@@ -3,7 +3,7 @@ import View from './view';
 
 import Moduleon from "../utils/moduleon/moduleon";
 import ModuleColumn from '../utils/moduleon/moduleColumn';
-import ActiveTabsModule from "../modules/activeTabs";
+import CurrentlyOpenedTabsModule from "../modules/currentlyOpenedTabs";
 import ExistingTabGroupsModule from '../modules/existingTabGroups';
 require("../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css")
 
@@ -16,7 +16,7 @@ class TabManagementView extends View {
                 <div className="row">
                     <Moduleon>
                         <ModuleColumn colspan="12">
-                            <ActiveTabsModule id="active-tabs-module" onRaiseToModal={(data) => this.raiseToModal(data)}></ActiveTabsModule>
+                            <CurrentlyOpenedTabsModule id="active-tabs-module" onRaiseToModal={(data) => this.raiseToModal(data)}></CurrentlyOpenedTabsModule>
                             <ExistingTabGroupsModule id="existing-tab-groups-module" onRaiseToModal={(data) => this.raiseToModal(data)}></ExistingTabGroupsModule>
                         </ModuleColumn> 
                     </Moduleon>
