@@ -4,6 +4,7 @@ import DashboardView from './../views/dashboard';
 import CalendarView from './../views/calendar';
 import TabManagementView from '../views/tabManagement';
 import AboutTabFlowerView from './../views/aboutTabFlower';
+import SettingsView from './../views/settings';
 
 /*
     The RouteList component
@@ -66,7 +67,7 @@ class RouteList extends Component {
         { 
             label: "Settings", 
             path: "/settings" ,
-            component: CalendarView
+            component: SettingsView
         },
         { 
             label: "About Tabflower", 

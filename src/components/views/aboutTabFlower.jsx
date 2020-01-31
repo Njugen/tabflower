@@ -4,9 +4,9 @@ import View from './view';
 class AboutTabFlowerView extends View {
     render = () => {
         return (
-            <div className="row">
+            <div className="row d-flex justify-content-center">
                 <div className="col-6">
-                    <h3>{this.props.label ? this.props.label : "About Tabflower"}</h3>
+                    <h4>{this.props.label ? this.props.label : "About Tabflower"}</h4>
                     <p>
                         Tabflower is a webextension for managing browser windows and tabs. It is intended for people who have
                         problems keeping their browser and all its tabs - and therefore resource consumption - in check. Tabflower is also
