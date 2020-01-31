@@ -82,6 +82,9 @@ class CurrentlyOpenedTabsModule extends Module {
 
     }
 
+    closeTab = (tabId) => {
+
+    }
 
    renderBody = () => {
         return (
@@ -102,13 +105,13 @@ class CurrentlyOpenedTabsModule extends Module {
                                 <li className="col-2">
                                     <span>Tab 1</span>
                                     <ul className="list-item-options">
-                                        <li><span className="fas fa-times"></span></li>
+                                        <li><button className="fas fa-times" onClick={() => this.raiseToModal({ id: "cotmremovetabmodal", action: this.closeTab.bind(this)})}></button></li>
                                     </ul>
                                 </li>
                                 <li className="col-2">
                                     <span>Tab 2</span>
                                     <ul className="list-item-options">
-                                        <li><span className="fas fa-times"></span></li>
+                                        <li><button className="fas fa-times" onClick={() => this.raiseToModal({ id: "cotmremovetabmodal", action: this.closeTab.bind(this)})}></button></li>
                                     </ul>
                                 </li>
                                 <li className="col-2">Tab 3</li>
@@ -130,13 +133,13 @@ class CurrentlyOpenedTabsModule extends Module {
                                 <li className="col-2">
                                     <span>Tab 1</span>
                                     <ul className="list-item-options">
-                                        <li><span className="fas fa-times"></span></li>
+                                        <li><button className="fas fa-times" onClick={() => this.raiseToModal({ id: "cotmremovetabmodal", action: this.closeTab.bind(this)})}></button></li>
                                     </ul>
                                 </li>
                                 <li className="col-2">
                                     <span>Tab 2</span>
                                     <ul className="list-item-options">
-                                        <li><span className="fas fa-times"></span></li>
+                                        <li><button className="fas fa-times" onClick={() => this.raiseToModal({ id: "cotmremovetabmodal", action: this.closeTab.bind(this)})}></button></li>
                                     </ul>
                                 </li>
                                 <li className="col-2">Tab 3</li>

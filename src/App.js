@@ -12,6 +12,7 @@ import ETGMCreateOrEditGroupModal from './components/modals/existingTabGroupsMod
 
 import COTMRemoveUnresponsiveTabsModal from './components/modals/currentlyOpenedTabsModule/cotmRemoveUnresponsiveTabsModal';
 import COTMRemoveWindowModal from './components/modals/currentlyOpenedTabsModule/cotmRemoveWindowModal';
+import COTMRemoveTabModal from './components/modals/currentlyOpenedTabsModule/cotmRemoveTabModal';
 
 /* Import Routes */
 import RouteList from './components/routes/routeList';
@@ -132,6 +133,7 @@ class App extends Component{
         {(modalLaunched && modalId === "etgmcreateoreditgroupmodal") && <ETGMCreateOrEditGroupModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></ETGMCreateOrEditGroupModal>}
         {(modalLaunched && modalId === "cotmremoveunresponsivetabsmodal") && <COTMRemoveUnresponsiveTabsModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></COTMRemoveUnresponsiveTabsModal>}
         {(modalLaunched && modalId === "cotmremovewindowmodal") && <COTMRemoveWindowModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></COTMRemoveWindowModal>}
+        {(modalLaunched && modalId === "cotmremovetabmodal") && <COTMRemoveTabModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></COTMRemoveTabModal>}
         <div className="container-fluid">
          
           <div className="row">

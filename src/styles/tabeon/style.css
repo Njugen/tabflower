@@ -332,7 +332,6 @@ div.container-fluid > .row > div[class^="col-"] {
 
         .active-tabs-module ul.tab-listing > li:hover {
             background: #c27fcf;
-            cursor: pointer;
         }
 
 
