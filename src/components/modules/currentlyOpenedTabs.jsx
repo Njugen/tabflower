@@ -24,14 +24,14 @@ class CurrentlyOpenedTabsModule extends Module {
         }
 
         /* Toggle up/down icon of window bar */
-        const iconElement = event.target;
-
-        if(iconElement.className.includes("fa-chevron-up")){
-            iconElement.className = "fas fa-chevron-down";
-        } else {
-            iconElement.className = "fas fa-chevron-up";
+        const iconElement = (event !== null && event.target);
+        if(iconElement){
+            if(iconElement.className.includes("fa-chevron-up")){
+                iconElement.className = "fas fa-chevron-down";
+            } else {
+                iconElement.className = "fas fa-chevron-up";
+            }
         }
-
    }
 
    toggleTabListStyle = (event, windowId) => {
@@ -67,6 +67,14 @@ class CurrentlyOpenedTabsModule extends Module {
             iconElement.className = "fas fa-grip-horizontal";
         } else {
             iconElement.className = "fas fa-align-justify";
+        }
+
+        /* 
+            If the tab list is invisible when changing style, then make it visible at style change. 
+            The user needs to observe the changes for the best user experience
+         */
+        if(tabList.style.display === "none"){
+            this.toggleTabListVisibility(null, windowId);
         }
    }
 
