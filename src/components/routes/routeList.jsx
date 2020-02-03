@@ -208,7 +208,7 @@ r
 
                 <Redirect from="/" to="/dashboard" />
             </Switch>
-        );
+        ); 
     }
 }
 
