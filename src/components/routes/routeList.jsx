@@ -205,10 +205,9 @@ r
         return (
             <Switch>
                 {this.renderRoutes()}
-
-                <Redirect from="/" to="/dashboard" />
+                <Redirect from="/" to="/manage"></Redirect>
             </Switch>
-        ); 
+        );
     }
 }
 
