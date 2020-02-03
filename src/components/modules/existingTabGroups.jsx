@@ -20,7 +20,7 @@ class ExistingTabGroupsModule extends Module {
        
    }
 
-   createOrTabEditGroup = (options) => {
+   createOrEditTabGroup = (options) => {
    
    }
 

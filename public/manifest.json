@@ -20,5 +20,16 @@
         "default_icon": "logo192.png",
         "default_title": "Tabeon",
         "default_panel": "index.html"
-    }
+    },
+    "background": {
+        "scripts": [
+            "background/receiver.js",
+            "background/tabs.js"
+        ],
+        "persistent": true
+    },
+    "permissions": [
+        "activeTab",
+        "tabs"
+    ]
 }
