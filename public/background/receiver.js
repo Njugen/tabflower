@@ -13,7 +13,7 @@
 */
 
 /*
-    const bridge() function
+    The receive() function
     
     This function triggers another function based on featureId. Whichever function gets triggered totally depends on 
     what string featureId holds.
@@ -21,7 +21,7 @@
     Params:
         - featureId (string, mandatory): id of the extension background feature you want to call
         More about extension API: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions
-        - sendResponse (function, optional): A function which sends response to the sender function
+        - onSendResponse (function, optional): A function which sends response to the sender function
 
     
 
@@ -39,29 +39,30 @@
     }
 
     - try to make the responseVariable tell the sender whether something in the background failed or not 
-    by using the "type key". Whether something is a success or a failure is decided by what you want to do. This
-    is merely to make it easier to handle the error on the user interface.
+    by using the "success" key. Whether something is a success or a failure is decided by what you want to do and what
+    results you consider to be a failure or success. This is merely to make it easier to decide whether to handle errors
+    on the client side or not.
     
-    - the "message" can be a boolean, null, string, number, object or whatever. If you choose to declare the response
-    a failure, you may want to set the "message" key to null. However, sometimes it may be a good idea to return
-    a valid message as well, for the sake of error handling and showing the user why something has failed and
-    what to do about it.
+    - the "message" can be a boolean, null, string, number, object or whatever value which can be used on the client side. 
+    If you choose to declare the response a failure, you may want to set the "message" key to null. However, sometimes it may 
+    be a good idea to return a valid message as well even if something is declared a failure, for the sake of error handling 
+    and showing the user why something has failed and what to do about it.
 */
 
-const receive = (featureId, sendResponse) => {
+const receive = (featureId, messageObj, onSendResponse) => {
     if(featureId === "get-all-tabs"){
 
         getAllTabs(
             (tabs) => {
 
-                sendResponse({
+                onSendResponse({
                     success: true,
                     message: tabs
                 });
             },
             (err) => {
                 console.log("ERROR");
-                sendResponse({success: false});
+                onSendResponse({success: false});
             }
         ) 
     } else {
@@ -72,13 +73,13 @@ const receive = (featureId, sendResponse) => {
 chrome.runtime.onMessage.addListener(
     (message, sender, sendResponse) => {
         if(typeof message === "object"){
-            const { id } = message;
+            const { id, details } = message;
 
             if(typeof id === "string"){
                 /*
                     The message has an id
                 */
-                receive(id, sendResponse);
+                receive(id, details || null, sendResponse);
                 
             }
         }
