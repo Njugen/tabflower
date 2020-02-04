@@ -11,7 +11,7 @@
         -
 */
 
-const getAllTabs = (options, successCallback, failCallback, timeoutCallback) => {
+const getAllTabs = (options, successCallback, failCallback) => {
     let getTabs = chrome.tabs.query(
         options,
         (tabs) => {

@@ -51,22 +51,22 @@
     and showing the user why something has failed and what to do about it.
 */
 
-const receive = (featureId, detailsObj, onSendResponse) => {
+const receive = (featureId, detailsObj, forwardResponse) => {
     if(featureId === "get-all-tabs"){
 
         getAllTabs(
             detailsObj,
             (tabs) => {
 
-                onSendResponse(tabs);
+                forwardResponse(tabs);
             },
             (err) => {
                 console.log("ERROR");
-                onSendResponse(null, err);
+                forwardResponse(null, err);
             }
         ) 
     } else {
-        onSendResponse();
+        forwardResponse();
     }
 }
 
