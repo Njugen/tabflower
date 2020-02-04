@@ -58,14 +58,11 @@ const receive = (featureId, detailsObj, onSendResponse) => {
             detailsObj,
             (tabs) => {
 
-                onSendResponse({
-                    success: true,
-                    message: tabs
-                });
+                onSendResponse(tabs);
             },
             (err) => {
                 console.log("ERROR");
-                onSendResponse({success: false});
+                onSendResponse(null, err);
             }
         ) 
     } else {
@@ -75,6 +72,25 @@ const receive = (featureId, detailsObj, onSendResponse) => {
 
 chrome.runtime.onMessage.addListener(
     (message, sender, sendResponse) => {
+        const manageResponse = (successMessage, failMessage) => {
+            let response;
+            if(successMessage && !failMessage){
+                response = {
+                    success: true,
+                    data: successMessage
+                };
+            }
+
+            if(failMessage && !successMessage){
+                response = {
+                    success: false,
+                    data: failMessage
+                };
+            }
+
+            sendResponse(response);
+        }
+
         if(typeof message === "object"){
             const { id, details } = message;
 
@@ -82,7 +98,7 @@ chrome.runtime.onMessage.addListener(
                 /*
                     The message has an id
                 */
-                receive(id, details || null, sendResponse);
+                receive(id, details || null, manageResponse);
                 
             }
         }

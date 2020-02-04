@@ -12,9 +12,12 @@ class ETGMCreateNewGroupModal extends Modal {
                     currentWindow: true,
                     active: true
                 },
-                (response) => {
-                    console.log("blablabla", response)
-                }
+                (successResponse) => {
+                    console.log("blablabla", successResponse)
+                },
+                (failResponse) => {
+                    console.log("ICE CREAM", failResponse);
+                } 
             )
         
         
