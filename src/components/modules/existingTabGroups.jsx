@@ -36,7 +36,7 @@ class ExistingTabGroupsModule extends Module {
                             <div className="list-item-block-header mb-3">
                                 <h6 className="list-item-block-headline float-left pr-2">Webmie Work tabs</h6>
                                 <div className="list-item-block-options float-right">
-                                    <button className="fas fa-cog options-button" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", action: this.createOrEditGroup.bind(this) })}></button>
+                                    <button className="fas fa-cog options-button" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", action: this.createOrEditTabGroup.bind(this) })}></button>
                                     <button className="fas fa-times options-button" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", params: {nej: "hej"}, action: this.removeTabGroups.bind(this) })}></button>
                                 </div>
                                 <div class="clearfix"></div>

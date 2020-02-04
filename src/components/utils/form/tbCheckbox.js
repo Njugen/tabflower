@@ -6,37 +6,66 @@ class TBCheckBox extends Component {
     }
 
     setButtonState = (input) => {
+        const { on } = this.state;
+        const { id, onToggle } = this.props;
+        
         this.setState({
             on: input
+        }, () => {
+            if(onToggle && id){
+                onToggle(id, on);
+            }
         })
     }
 
-    moveSelector = (target) => {
+    toggleCheckbox = (target) => {
         const { on } = this.state;
-        const { style, parentNode: parent } = target;
+        
 
-        if(on === false){
-            parent.style.backgroundColor = "#e2e2e2";
-            
-            style.marginLeft = "0rem";
-            this.setButtonState(true);
-        } else if(on === true){
-            parent.style.backgroundColor = "#c95cdf";
+        if(target.className === "tb-checkbox-ball"){
+            // If the user clicks on the "ball"
 
-            style.marginLeft = "6rem";
-            this.setButtonState(false);
+            const { style, parentNode: parent } = target;
+
+            if(on === false){
+                parent.style.backgroundColor = "#e2e2e2";
+                parent.style.borderColor = "#989898";
+                style.marginLeft = "0rem";
+                this.setButtonState(true);
+            } else if(on === true){
+                parent.style.backgroundColor = "#c95cdf";
+                parent.style.borderColor = "#7a1d8c";
+                style.marginLeft = "2rem";
+                this.setButtonState(false);
+            }
+        } else if(target.className === "tb-checkbox-container"){
+            // If the user clicks the checkbox background (not the ball)
+
+            const { style, lastChild: ball } = target;
+            console.log(ball);
+            if(on === false){
+                style.backgroundColor = "#e2e2e2";
+                style.borderColor = "#989898";
+                ball.style.marginLeft = "0rem";
+                this.setButtonState(true);
+            } else if(on === true) {
+                style.backgroundColor = "#c95cdf";
+                style.borderColor = "#7a1d8c";
+                ball.style.marginLeft = "2rem";
+                this.setButtonState(false);
+            }
         }
     }
 
     componentDidMount = () => {
-        console.log(this.selectorRef.current);
-        this.moveSelector(this.selectorRef.current);
+     //   console.log(this.selectorRef.current);
+       this.toggleCheckbox(this.checkboxRef.current);
     }
 
     render = () => {
         return (
-            <div className="tb-checkbox-container">
-                <span ref={this.selectorRef} className="tb-checkbox-selector" onClick={(e) => this.moveSelector(e.target)}></span>
+            <div ref={this.checkboxRef} className="tb-checkbox-container" onClick={(e) => this.toggleCheckbox(e.target)}>
+                <span className="tb-checkbox-ball"></span>
             </div>
 
         );
@@ -44,7 +73,7 @@ class TBCheckBox extends Component {
 
     constructor(props){
         super(props);
-        this.selectorRef = createRef();
+        this.checkboxRef = createRef();
     }
 }
 
