@@ -70,9 +70,6 @@ export const sendToBackground = (id, messageObj, success, fail) => {
                             fail("Response could not be received")
                         }
                     } 
-                },
-                () => {
-
                 }
             );
         } else {

@@ -20,7 +20,9 @@
 
     Params:
         - featureId (string, mandatory): id of the extension background feature you want to call
-        More about extension API: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions
+        More about extension API: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtension
+        - detailsObj (obj or null, optional): details from the sender, which the background operation might need
+        in order to execute its features.
         - onSendResponse (function, optional): A function which sends response to the sender function
 
     
@@ -49,10 +51,11 @@
     and showing the user why something has failed and what to do about it.
 */
 
-const receive = (featureId, messageObj, onSendResponse) => {
+const receive = (featureId, detailsObj, onSendResponse) => {
     if(featureId === "get-all-tabs"){
 
         getAllTabs(
+            detailsObj,
             (tabs) => {
 
                 onSendResponse({
@@ -66,7 +69,7 @@ const receive = (featureId, messageObj, onSendResponse) => {
             }
         ) 
     } else {
-        sendResponse();
+        onSendResponse();
     }
 }
 

@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import Modal from '../modal';
-import { sendToBackground } from "../../../services/webextension/webexAPIBackgroundBridge";
+import { sendToBackground } from "../../../services/webextension/APIBridge";
 
 class ETGMCreateNewGroupModal extends Modal {
    
@@ -9,7 +9,8 @@ class ETGMCreateNewGroupModal extends Modal {
             sendToBackground(
                 "get-all-tabs",
                 {
-                    robin: false
+                    currentWindow: true,
+                    active: true
                 },
                 (response) => {
                     console.log("blablabla", response)
