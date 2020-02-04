@@ -1,25 +1,21 @@
 import React, { Fragment } from "react";
 import Modal from '../modal';
-
-const chromeBridge = (typeof window.chrome === "undefined" ? null : window.chrome);
+import { sendToBackground } from "../../../services/webextension/webexAPIBackgroundBridge";
 
 class ETGMCreateNewGroupModal extends Modal {
    
 
     saveModalHandler = (callback) => {
-        if(chromeBridge){
-            console.log("CLICKED")
-            chromeBridge.runtime.sendMessage(
-                null,
+            sendToBackground(
+                "get-all-tabs",
                 {
-                    id: "get-all-tabs",
                     robin: false
                 },
                 (response) => {
                     console.log("blablabla", response)
                 }
             )
-        }
+        
         
         this.clearModalData(callback(this.state));
     }
