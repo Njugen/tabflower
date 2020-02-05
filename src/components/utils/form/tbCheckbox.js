@@ -56,7 +56,7 @@ class TBCheckBox extends Component {
             }
         }
     }
-
+  
     componentDidMount = () => {
      //   console.log(this.selectorRef.current);
        this.toggleCheckbox(this.checkboxRef.current);

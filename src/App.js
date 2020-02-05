@@ -136,7 +136,6 @@ class App extends Component{
         {(modalLaunched && modalId === "cotmremovewindowmodal") && <COTMRemoveWindowModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></COTMRemoveWindowModal>}
         {(modalLaunched && modalId === "cotmremovetabmodal") && <COTMRemoveTabModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></COTMRemoveTabModal>}
         <div className="container-fluid">
-          <TBCheckBox></TBCheckBox>
           <div className="row">
             <MainSidebar routes={this.state.routes} onMainSidebarClick={(data) => this.handleMainSidebarClick(data)} />
             <div className="col-md-10 py-2" id="tabeon-view-container">

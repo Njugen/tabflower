@@ -17,7 +17,7 @@ Tabflower is a webextension for managing browser windows and tabs. It is intende
 
 Currently, this extension is in development for Google Chrome, Mozilla Firefox and Microsoft Edge, as a hobby/learning project.
 
-## Libraries and frameworks used in Tabeon
+## Libraries and frameworks used in Tabflower
 
 - React - UI library to manage user interfaces shown to the user
 - Bootstrap - Toolkit to make the user interface responsive. In this project, jQuery is skipped and stick to HTML, CSS and Javascript.
@@ -25,7 +25,7 @@ Currently, this extension is in development for Google Chrome, Mozilla Firefox a
 
 ## Extension Structure
 
-Tabeon webextension consists of the following sections (all of them are most likely not used in every extension). Lets consider the following:
+Tabflower webextension consists of the following sections (all of them are most likely not used in every extension). Lets consider the following:
 
 - Popup (UI that shows up when clicking the extension icon in the browser tray)
 - Sidebar (UI that shows up at the side of a web page, when triggering certain functionalities. E.g. history sidebar listing all visited pages)
@@ -47,9 +47,9 @@ https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_o
 
 ... Under construction
 
-## React Components and State in Tabeon
+## React Components and State in Tabflower
 
-Since the Tabeon extension uses React to build UI, I've decided to separate each pageview and each feature into their own components (stored in separate files, and imported as necessary). This way, each feature becomes isolated from each other, and can be implemented more freely wherever they are needed. Pages and features
+Since the Tabflower extension uses React to build UI, I've decided to separate each pageview and each feature into their own components (stored in separate files, and imported as necessary). This way, each feature becomes isolated from each other, and can be implemented more freely wherever they are needed. Pages and features
 are managed by their own code, and receive data/info from other components as needed.
 
 Thanks to React re-rendering the user interface changes at state changing, updating components becomes much easier and  more manageable. Check out the following image for explanation:
@@ -57,7 +57,7 @@ Thanks to React re-rendering the user interface changes at state changing, updat
 [ IMAGE UNDER WORK ]
 
 
-In Tabeon, React components are located in /tabeon/src/components.  A component may contain programming logic to execute tasks, and its contents can be rendered by React using an extended JavaScript syntax called JSX (more about that: https://reactjs.org/docs/introducing-jsx.html)
+In Tabflower, React components are located in /Tabflower/src/components.  A component may contain programming logic to execute tasks, and its contents can be rendered by React using an extended JavaScript syntax called JSX (more about that: https://reactjs.org/docs/introducing-jsx.html)
 
 A basic single, independent component in React - with no regards to common features in other components - can be accomplished like this:
 
@@ -65,7 +65,7 @@ A basic single, independent component in React - with no regards to common featu
 class FootballStandings extends Component
 ```
 
-More about React components here: https://reactjs.org/docs/components-and-props.html. More examples on how components are used to create modals, page views and modules used in Tabeon can be found below.
+More about React components here: https://reactjs.org/docs/components-and-props.html. More examples on how components are used to create modals, page views and modules used in Tabflower can be found below.
 
 ## Important files and locations
 
@@ -79,7 +79,7 @@ The first UI js file to load when React launches in index.html. This file render
 
 __src/App.js: The root component__
 
-The App component acts as Tabeon's root component. This component is used solely in index.js mentioned above, and renders the groundwork JSX of the app's graphical user interface into the DOM. It also holds state data and retrieved updated state data necessary to render correct information in the user interface as a whole.
+The App component acts as Tabflower's root component. This component is used solely in index.js mentioned above, and renders the groundwork JSX of the app's graphical user interface into the DOM. It also holds state data and retrieved updated state data necessary to render correct information in the user interface as a whole.
 
 The rendered contents contains the following notable components and data passed to them (data are passed as props, defined below):
 
@@ -99,7 +99,7 @@ The rendered contents contains the following notable components and data passed 
 
 __src/components/views/view.jsx: The view component__
 
-This folder holds all page view components, including view.jsx, which is the parent component for all pageviews in Tabeon. This component contains all common features for all pageviews, such as calling the modal handler located in the app component, or automatically informing the app component whenever a view has been mounted. This component does not render anything, but its child components do.
+This folder holds all page view components, including view.jsx, which is the parent component for all pageviews in Tabflower. This component contains all common features for all pageviews, such as calling the modal handler located in the app component, or automatically informing the app component whenever a view has been mounted. This component does not render anything, but its child components do.
 
 A pageview may receive data from - and send data to - the App component via the RouteList component. These files for more clarification:
 
@@ -201,7 +201,7 @@ renderBody = () => {
 renderFooter = () => {
     return (
         <Fragment>
-            <button className="btn btn-tabeon" onClick={() => "Trigger a save function"}>Save changes</button>
+            <button className="btn btn-Tabflower" onClick={() => "Trigger a save function"}>Save changes</button>
         </Fragment>
     );
 }
@@ -370,7 +370,7 @@ import MyModal from "./components/modals/mymodal";
 ```javascript
 render = () => {
     return (
-        <button className="btn btn-tabeon" onClick={() => {this.raiseToModal({ id: "my-own-modal" })}>Click me!</button>
+        <button className="btn btn-Tabflower" onClick={() => {this.raiseToModal({ id: "my-own-modal" })}>Click me!</button>
     );
 }
 ```
@@ -384,7 +384,7 @@ verifyPayment = () => {
 
 render = () => {
     return (
-        <button className="btn btn-tabeon" onClick={() => {this.raiseToModal({ id: "my-own-modal", action: this.verifyPayment.bind(this) })}>Click me!</button>
+        <button className="btn btn-Tabflower" onClick={() => {this.raiseToModal({ id: "my-own-modal", action: this.verifyPayment.bind(this) })}>Click me!</button>
     );
 }
 ```

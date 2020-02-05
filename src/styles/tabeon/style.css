@@ -479,7 +479,7 @@ div.container-fluid > .row > div[class^="col-"] {
     border-radius: 5rem;
     background: #c95cdf;
     position: relative;
-    margin: 2rem;
+    margin: 1rem;
     border: 1px solid #7a1d8c;
     transition: background-color 0.5s ease;
 }

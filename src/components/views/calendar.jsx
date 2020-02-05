@@ -48,7 +48,7 @@ class CalendarView extends View {
         return(
             <Moduleon>
                 <ModuleColumn colspan="12">
-                    <CalendarModule id="tabscheduler" currentDate={this.state.currentDate} onRaiseToModal={(data) => this.raiseToModal(data)}></CalendarModule>
+                    <CalendarModule id="tabscheduler" urlPath={this.props.match.path} currentDate={this.state.currentDate} onRaiseToModal={(data) => this.raiseToModal(data)}></CalendarModule>
                 </ModuleColumn>
             </Moduleon>
             

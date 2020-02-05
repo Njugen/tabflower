@@ -215,9 +215,9 @@ class CalendarModule extends Module {
 
         return(
             <div className="tabeon-calendar-navigation-section">
-                <a href="#" className="tabeon-calendar-nav-arrow tabeon-calendar-left-nav fas fa-chevron-left" onClick={() => this.browseMonth("previous")}></a> 
+                <a href={"#" + this.props.urlPath} className="tabeon-calendar-nav-arrow tabeon-calendar-left-nav fas fa-chevron-left" onClick={() => this.browseMonth("previous")}></a> 
                 <h2 className="tabeon-calendar-title">{this.getMonthAsText(month) + " " + year}</h2>
-                <a href="#" className="tabeon-calendar-nav-arrow tabeon-calendar-right-nav fas fa-chevron-right" onClick={() => this.browseMonth("next")}></a> 
+                <a href={"#" + this.props.urlPath} className="tabeon-calendar-nav-arrow tabeon-calendar-right-nav fas fa-chevron-right" onClick={() => this.browseMonth("next")}></a> 
             </div>
 
         )
