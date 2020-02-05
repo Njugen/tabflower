@@ -13,13 +13,15 @@ class TabManagementView extends View {
    render = () => {
         return (
             <Fragment>
-                <div className="row">
-                    <Moduleon>
-                        <ModuleColumn colspan="12">
-                            <CurrentlyOpenedTabsModule id="active-tabs-module" onRaiseToModal={(data) => this.raiseToModal(data)}></CurrentlyOpenedTabsModule>
-                            <ExistingTabGroupsModule id="existing-tab-groups-module" onRaiseToModal={(data) => this.raiseToModal(data)}></ExistingTabGroupsModule>
-                        </ModuleColumn> 
-                    </Moduleon>
+                <div className="row d-flex justify-content-center">
+                    <div className="col-8">
+                        <Moduleon>
+                            <ModuleColumn colspan="12">
+                                <CurrentlyOpenedTabsModule id="active-tabs-module" onRaiseToModal={(data) => this.raiseToModal(data)}></CurrentlyOpenedTabsModule>
+                                <ExistingTabGroupsModule id="existing-tab-groups-module" onRaiseToModal={(data) => this.raiseToModal(data)}></ExistingTabGroupsModule>
+                            </ModuleColumn> 
+                        </Moduleon>
+                    </div>    
                 </div>
             </Fragment>
         );

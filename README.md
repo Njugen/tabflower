@@ -47,6 +47,15 @@ https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_o
 
 ... Under construction
 
+
+## How to use the source
+
+... Under contruction
+
+## How to build the webextension
+
+# The extension's options page
+
 ## React Components and State in Tabflower
 
 Since the Tabflower extension uses React to build UI, I've decided to separate each pageview and each feature into their own components (stored in separate files, and imported as necessary). This way, each feature becomes isolated from each other, and can be implemented more freely wherever they are needed. Pages and features

@@ -48,7 +48,7 @@ class CurrentlyOpenedTabsModule extends Module {
         
         for(let i = 0; i < tabListItems.length; i++){
             if(tabListIsHorizontal){
-                tabListItems[i].className = "col-8";
+                tabListItems[i].className = "col-12";
             } else {
                 tabListItems[i].className = "col-2";
             }

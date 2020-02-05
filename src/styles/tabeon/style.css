@@ -341,6 +341,7 @@ div.container-fluid > .row > div[class^="col-"] {
 .active-tabs-module .list-item-options {
     float: right;
     list-style-type: none;
+    padding-left: 0rem;
 }
 
     .active-tabs-module .list-item-options > li {

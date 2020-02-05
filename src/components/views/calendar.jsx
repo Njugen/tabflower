@@ -46,12 +46,15 @@ class CalendarView extends View {
 
     render = () => {
         return(
-            <Moduleon>
-                <ModuleColumn colspan="12">
-                    <CalendarModule id="tabscheduler" urlPath={this.props.match.path} currentDate={this.state.currentDate} onRaiseToModal={(data) => this.raiseToModal(data)}></CalendarModule>
-                </ModuleColumn>
-            </Moduleon>
-            
+            <div className="row d-flex justify-content-center">
+                <div className="col-8">
+                    <Moduleon>
+                        <ModuleColumn colspan="12">
+                            <CalendarModule id="tabscheduler" urlPath={this.props.match.path} currentDate={this.state.currentDate} onRaiseToModal={(data) => this.raiseToModal(data)}></CalendarModule>
+                        </ModuleColumn>
+                    </Moduleon>
+                </div> 
+            </div>
         );
     }
 }
