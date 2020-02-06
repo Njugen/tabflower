@@ -36,6 +36,45 @@ const deleteTab = (options, successCallback, failCallback) => {
     )
 }
 
+const deleteUnresponsiveTabs = (options, successCallback, failCallback) => {
+    console.log("IOI", options);
+
+    const { windowsAndTabs } = options;
+
+    function errorOccuredHandler(details){
+        console.log("VV", details);
+        if(details.error && details.type === "main_frame"){
+            if(details.tabId){
+                chrome.tabs.remove(
+                    details.tabId
+                )
+            }
+        }
+    }
+
+    chrome.webRequest.onErrorOccurred.addListener(errorOccuredHandler,{urls: ["<all_urls>"]});
+    setTimeout(() => chrome.webRequest.onErrorOccurred.removeListener(errorOccuredHandler), 2000);
+
+    windowsAndTabs.map(
+        (window, i, windowsList) => {
+            
+            const mapped = window.tabs.map(
+                (tab) => {
+                    console.log("luise", tab);
+                    chrome.tabs.reload(tab.id);
+                    if(tab.url === "about:blank" || tab.url.includes("chrome://newtab")){
+                        chrome.tabs.remove(
+                            tab.id
+                        )
+                    }
+                    return null;
+                } 
+            );
+            return mapped;
+        }
+    )
+}
+
 
 // Windows API
 

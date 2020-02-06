@@ -13,12 +13,26 @@ class COTMRemoveUnresponsiveTabs extends Modal {
         this.clearModalData();
     }
 
+    setTimeLimit = (event) => {
+        const data = {
+            timelimit: (event ? parseInt(event.target.value) : 10)
+        };
+        this.setState(
+            {
+               data
+            }
+        )
+    }
+
+    componentDidMount = () => {
+        this.setTimeLimit();
+    }
 
     renderModalBody(){
         return (
             <Fragment>
                 <p>Go through all opened tabs and remove them from the list</p>
-                <label>Close all tabs that does not respond within <input type="text" value="10" /> seconds</label>
+                <label>Close all tabs that does not respond within <input type="text" defaultValue="10" onChange={(e) => this.setTimeLimit(e)} /> seconds</label>
             </Fragment>
         );    
     }

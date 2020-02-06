@@ -50,33 +50,34 @@
 export const sendToBackground = (id, messageObj, success, fail) => {
     const bridge = (typeof window.chrome === "undefined" ? null : window.chrome);
     
-    if(typeof messageObj === "object"){
-        // Merge id and message obj into a new object, and forward it to the background.
-        const obj = {
-            id: id,
-            details: messageObj
-        }
+    if(bridge !== null){
+        if(typeof messageObj === "object"){
+            // Merge id and message obj into a new object, and forward it to the background.
+            const obj = {
+                id: id,
+                details: messageObj
+            }
 
-        if(typeof bridge === "object"){
-            bridge.runtime.sendMessage(
-                null,
-                obj,
-                (response) => {
-                    if(response){
-                        if(response.success === true){
-                            console.log("SUCCESS");
-                            success(response.data);
-                        } else if(response.success === false || !response.success){
-                            fail("Response could not be received")
-                        }
-                    } 
-                }
-            );
+            if(typeof bridge === "object"){
+                bridge.runtime.sendMessage(
+                    null,
+                    obj,
+                    (response) => {
+                        if(response){
+                            if(response.success === true){
+                                console.log("SUCCESS");
+                                success(response.data);
+                            } else if(response.success === false || !response.success){
+                                fail("Response could not be received")
+                            }
+                        } 
+                    }
+                );
+            } else {
+                fail("This shit has failed");
+            }
         } else {
-            fail("This shit has failed");
+            fail("messageObj is not an object");
         }
-    } else {
-        fail("messageObj is not an object");
     }
-
 }

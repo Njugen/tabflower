@@ -94,6 +94,16 @@ const receive = (featureId, detailsObj, forwardResponse) => {
                 console.log("FAILDED TO REMOVE TAB");
             }
         )
+    } else if(featureId === "delete-unresponsive-tabs"){
+        deleteUnresponsiveTabs(
+            detailsObj,
+            (message) => {
+                forwardResponse(message)
+            },
+            () => {
+                console.log("-");
+            }
+        )
     } else {
         forwardResponse();
     }
