@@ -36,6 +36,7 @@ const deleteTab = (options, successCallback, failCallback) => {
     )
 }
 
+
 // Windows API
 
 const getAllWindowsAndTabs = (successCallback, failCallback) => {

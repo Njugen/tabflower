@@ -169,8 +169,22 @@ class CurrentlyOpenedTabsModule extends Module {
     }
 
     childComponentDidMount = () => {
-        this.getOpenedWindowsAndTabs()
+        this.getOpenedWindowsAndTabs();
+
+        window.addEventListener("focus", this.getOpenedWindowsAndTabs);
+
+        window.addEventListener("mousemove", this.getOpenedWindowsAndTabs);
+
+        window.addEventListener("blur", this.getOpenedWindowsAndTabs);
     }
+
+   componentWillUnmount = () => {
+        window.removeEventListener("focus", this.getOpenedWindowsAndTabs);
+
+        window.removeEventListener("mousemove", this.getOpenedWindowsAndTabs);
+
+        window.removeEventListener("blur", this.getOpenedWindowsAndTabs);
+   } 
 
    renderBody = () => {
         return (
