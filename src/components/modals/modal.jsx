@@ -88,6 +88,9 @@ class Modal extends Component {
             this.fadeIn();
         }, 100)
 
+        if(this.childComponentDidMount){
+            this.childComponentDidMount();
+        }
     };
 
     componentWillMount = () => {

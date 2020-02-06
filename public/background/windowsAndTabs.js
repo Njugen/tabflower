@@ -11,8 +11,10 @@
         -
 */
 
+// Tabs API 
+
 const getAllTabs = (options, successCallback, failCallback) => {
-    let getTabs = chrome.tabs.query(
+    chrome.tabs.query(
         options,
         (tabs) => {
             if(1 === 2){
@@ -22,4 +24,29 @@ const getAllTabs = (options, successCallback, failCallback) => {
             }
         }
     )
+}
+
+const deleteTab = (options, successCallback, failCallback) => {
+    console.log(options);
+    chrome.tabs.remove(
+        options.tabId,
+        () => {
+           successCallback("Tab deleted");
+        } 
+    )
+}
+
+// Windows API
+
+const getAllWindowsAndTabs = (successCallback, failCallback) => {
+    const options = {
+        populate: true
+    }
+    
+    let gettingWindows = chrome.windows.getAll(
+        options, 
+        (windows) => {
+            successCallback(windows)
+        }
+    );
 }

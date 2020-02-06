@@ -210,7 +210,7 @@ renderBody = () => {
 renderFooter = () => {
     return (
         <Fragment>
-            <button className="btn btn-Tabflower" onClick={() => "Trigger a save function"}>Save changes</button>
+            <button className="btn btn-tabeon" onClick={() => "Trigger a save function"}>Save changes</button>
         </Fragment>
     );
 }
@@ -379,7 +379,7 @@ import MyModal from "./components/modals/mymodal";
 ```javascript
 render = () => {
     return (
-        <button className="btn btn-Tabflower" onClick={() => {this.raiseToModal({ id: "my-own-modal" })}>Click me!</button>
+        <button className="btn btn-tabeon" onClick={() => {this.raiseToModal({ id: "my-own-modal" })}>Click me!</button>
     );
 }
 ```
@@ -393,7 +393,7 @@ verifyPayment = () => {
 
 render = () => {
     return (
-        <button className="btn btn-Tabflower" onClick={() => {this.raiseToModal({ id: "my-own-modal", action: this.verifyPayment.bind(this) })}>Click me!</button>
+        <button className="btn btn-tabeon" onClick={() => {this.raiseToModal({ id: "my-own-modal", action: this.verifyPayment.bind(this) })}>Click me!</button>
     );
 }
 ```

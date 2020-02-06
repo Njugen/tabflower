@@ -13,12 +13,20 @@ class COTMRemoveTabModal extends Modal {
         this.clearModalData();
     }
 
+    childComponentDidMount = () => {
+        const data = this.props.data.tabInfo;
+        this.setState(
+            { data }
+        )
+    }
 
     renderModalBody(){
+        const { title } = this.props.data.tabInfo;
+
         return (
             <Fragment>
                 <p>
-                   You are about to close the tab [TABNAME - TITLE]. All ongoing activities will be interrupted and possibly lost.
+                    You are about to close the tab <strong>{ title }</strong>. All ongoing activities will be interrupted and possibly lost.
                 </p>
                 <p>
                     Are you sure you want to proceed?

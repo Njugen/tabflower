@@ -49,7 +49,7 @@
 
 export const sendToBackground = (id, messageObj, success, fail) => {
     const bridge = (typeof window.chrome === "undefined" ? null : window.chrome);
-
+    
     if(typeof messageObj === "object"){
         // Merge id and message obj into a new object, and forward it to the background.
         const obj = {

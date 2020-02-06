@@ -65,7 +65,26 @@ const receive = (featureId, detailsObj, forwardResponse) => {
                 forwardResponse(null, err);
             }
         ) 
-    } else {
+    } else if(featureId === "get-all-windows-and-tabs"){
+        getAllWindowsAndTabs(
+            (windows) => {
+                forwardResponse(windows);
+            },
+            (err) => {
+                console.log("TRIED to get all windows and tabs");
+            }
+        )
+    } else if(featureId === "delete-tab") {
+        deleteTab(
+            detailsObj,
+            (message) => {
+                forwardResponse(message);
+            },
+            () => {
+                console.log("FAILDED TO REMOVE TAB");
+            }
+        )
+    }else {
         forwardResponse();
     }
 }
@@ -87,7 +106,7 @@ chrome.runtime.onMessage.addListener(
                     data: failMessage
                 };
             }
-
+            
             sendResponse(response);
         }
 
