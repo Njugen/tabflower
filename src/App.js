@@ -124,7 +124,7 @@ class App extends Component{
 
   render = () => {
     const { launched: modalLaunched, id: modalId } = this.state.modal;
-    
+    console.log("MMMM", this.state.modal);
     return (
       <Fragment>
         {(modalLaunched && modalId === "confirm-action") && <ConfirmationModal data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></ConfirmationModal>}

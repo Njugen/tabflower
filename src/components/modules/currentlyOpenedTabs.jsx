@@ -165,6 +165,7 @@ class CurrentlyOpenedTabsModule extends Module {
     }
     
     closeUnresponsiveTabs = (data) => {
+        
         sendToBackground("delete-unresponsive-tabs", { windowsAndTabs: this.state.moduleData.openedWindowsAndTabs, timelimit: data.timelimit}, (response) => {
             setTimeout(() => this.getOpenedWindowsAndTabs(), 1500)
         });
@@ -207,7 +208,7 @@ class CurrentlyOpenedTabsModule extends Module {
             <Fragment>
                 
                     <p class="tabeon-module-footer-text small d-inline-block">Need to archive these windows and tabs for future browsing? Save them to Tab Flower!</p>
-                    <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "cotmremoveunresponsivetabsmodal", p: {t:10001}, action: this.closeUnresponsiveTabs.bind(this) })}>Remove unresponsive tabs</button>
+                    <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "cotmremoveunresponsivetabsmodal", action: this.closeUnresponsiveTabs.bind(this) })}>Remove unresponsive tabs</button>
                     <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", params: { windows: {} }, action: this.createTabGroup.bind(this) })}>Add to group</button>
               
             </Fragment>
