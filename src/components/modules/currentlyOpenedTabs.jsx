@@ -117,7 +117,7 @@ class CurrentlyOpenedTabsModule extends Module {
                                     <ul className="list-item-options">
                                         <li><button className="fas fa-align-justify" onClick={(e) => this.toggleTabListStyle(e, "window-container-id-" + key)}></button></li>
                                         <li><button className="fas fa-chevron-up" onClick={(e) => this.toggleTabListVisibility(e, "window-container-id-" + key)}></button></li>
-                                        <li><button className="fas fa-times" onClick={() => this.raiseToModal({id: "cotmremovewindowmodal", action: this.closeWindow.bind(this)})}></button></li>
+                                        <li><button className="fas fa-times" onClick={() => this.raiseToModal({id: "cotmremovewindowmodal", windowInfo: window, action: this.closeWindow.bind(this)})}></button></li>
                                     </ul>
                                     <ul className="tab-listing horizontal m-4">
                                         {tabList}
@@ -148,8 +148,15 @@ class CurrentlyOpenedTabsModule extends Module {
         });
     }
 
-    closeWindow = (windowId) => {
-
+    closeWindow = (window) => {
+        console.log("MM", window);
+        sendToBackground("delete-window", { windowId: window.data.id }, (response) => {
+            console.log("haha", response);
+            
+            setTimeout(() => this.getOpenedWindowsAndTabs(), 1500)
+            
+            
+        }); 
     }
 
     closeTab = (tab) => {
@@ -158,8 +165,6 @@ class CurrentlyOpenedTabsModule extends Module {
             console.log("haha", response);
             
             setTimeout(() => this.getOpenedWindowsAndTabs(), 1500)
-            
-            
         }); 
     }
 

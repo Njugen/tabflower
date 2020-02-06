@@ -13,6 +13,12 @@ class COTMRemoveWindowModal extends Modal {
         this.clearModalData();
     }
 
+    childComponentDidMount = () => {
+        const data = this.props.data.windowInfo;
+        this.setState(
+            { data }
+        )
+    }
 
     renderModalBody(){
         return (

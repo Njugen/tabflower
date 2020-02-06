@@ -84,7 +84,17 @@ const receive = (featureId, detailsObj, forwardResponse) => {
                 console.log("FAILDED TO REMOVE TAB");
             }
         )
-    }else {
+    } else if(featureId === "delete-window"){
+        deleteWindow(
+            detailsObj,
+            (message) => {
+                forwardResponse(message);
+            },
+            () => {
+                console.log("FAILDED TO REMOVE TAB");
+            }
+        )
+    } else {
         forwardResponse();
     }
 }

@@ -50,3 +50,14 @@ const getAllWindowsAndTabs = (successCallback, failCallback) => {
         }
     );
 }
+
+
+const deleteWindow = (options, successCallback, failCallback) => {
+    console.log(options);
+    chrome.windows.remove(
+        options.windowId,
+        () => {
+           successCallback("Tab deleted");
+        } 
+    )
+}
