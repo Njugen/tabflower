@@ -1,26 +1,14 @@
 import React, { Fragment } from "react";
 import Modal from '../modal';
+import WindowsList from './../../utils/windowsList';
 import { sendToBackground } from "../../../services/webextension/APIBridge";
+
 
 class ETGMCreateNewGroupModal extends Modal {
    
 
     saveModalHandler = (callback) => {
-            sendToBackground(
-                "get-all-tabs",
-                {
-                    currentWindow: true,
-                    active: true
-                },
-                (successResponse) => {
-                    console.log("blablabla", successResponse)
-                },
-                (failResponse) => {
-                    console.log("ICE CREAM", failResponse);
-                } 
-            )
-        
-        
+           
         this.clearModalData(callback(this.state));
     }
 
@@ -29,18 +17,27 @@ class ETGMCreateNewGroupModal extends Modal {
         this.clearModalData();
     }
 
+    renderForm = () => {
+
+    }
+
 
     renderModalBody(){
         return (
-            <Fragment>
-                <p>Blablabla</p>
-                
-            </Fragment>
+            <WindowsList 
+                windows={this.props.data.windowAndTabs} 
+                onRaiseToModal={(data) => this.raiseToModal(data)}
+                canCloseItems={false}
+                initialShowTabs={false}
+                initialTabStyle="horizontal"
+                initialWindowExpand={true}
+
+            />
         );    
     }
 
     renderModalHeader(){
-        
+
         return "Create a New Tab Group";    
     }
 }

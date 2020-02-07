@@ -383,6 +383,9 @@ div.container-fluid > .row > div[class^="col-"] {
             color: #ffffff
         }
 
+    .active-tabs-module .tab-listing-hide {
+        display: none;
+    }
 /*
     ExistingTabGroupsModule
 */    

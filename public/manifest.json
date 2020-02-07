@@ -24,7 +24,8 @@
     "background": {
         "scripts": [
             "background/receiver.js",
-            "background/windowsAndTabs.js"
+            "background/windowsAndTabs.js",
+            "background/storage.js"
         ],
         "persistent": true
     },
