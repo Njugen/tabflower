@@ -13,6 +13,7 @@
 
 // Tabs API 
 
+
 const getAllTabs = (options, successCallback, failCallback) => {
     chrome.tabs.query(
         options,
@@ -52,16 +53,25 @@ const deleteUnresponsiveTabs = (options, successCallback, failCallback) => {
         }
     }
 
-    chrome.webRequest.onErrorOccurred.addListener(errorOccuredHandler,{urls: ["<all_urls>"]});
-    setTimeout(() => chrome.webRequest.onErrorOccurred.removeListener(errorOccuredHandler), 2000);
-
     windowsAndTabs.map(
         (window, i, windowsList) => {
             
             const mapped = window.tabs.map(
                 (tab) => {
                     console.log("luise", tab);
-                    chrome.tabs.reload(tab.id);
+                    if(tab.url !== "about:blank" && !tab.url.includes("chrome://newtab")){
+                        fetch(tab.url).then((response) => {
+                            if (!response.ok) {
+                                throw new Error('Something went wrong');
+                            }
+                        })
+                        .catch((error) => {
+                            chrome.tabs.remove(
+                                tab.id
+                            )
+                        });
+                    }
+
                     if(tab.url === "about:blank" || tab.url.includes("chrome://newtab")){
                         chrome.tabs.remove(
                             tab.id
