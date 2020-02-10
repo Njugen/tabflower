@@ -143,6 +143,18 @@ class Modal extends Component {
         */
     }
 
+    saveToState = (pairId, value, callback) => {
+        const data = this.state.data;
+
+        data[pairId] = value;
+
+        this.setState({ data }, () => {
+            if(typeof callback === "function"){
+                callback();
+            }
+        })
+    }
+
 
     render = () => {
         /*

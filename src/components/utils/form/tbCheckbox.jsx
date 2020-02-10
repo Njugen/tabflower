@@ -29,7 +29,7 @@ class TBCheckBox extends Component {
 
             if(on === false){
                 parent.style.backgroundColor = "#e2e2e2";
-                parent.style.borderColor = "#989898";
+                parent.style.borderColor = "#c2c2c2";
                 style.marginLeft = "0rem";
                 this.setButtonState(true);
             } else if(on === true){
@@ -63,11 +63,19 @@ class TBCheckBox extends Component {
     }
 
     render = () => {
+        const { label } = this.props;
+        
         return (
-            <div ref={this.checkboxRef} className="tb-checkbox-container" onClick={(e) => this.toggleCheckbox(e.target)}>
-                <span className="tb-checkbox-ball"></span>
+            <div className="tb-form-row row d-flex justify-content-between">
+                <div className="col-8 label">
+                    <span>{typeof label === "string" && label}</span>
+                </div>
+                <div className="col-3">
+                    <div ref={this.checkboxRef} className="tb-checkbox-container" onClick={(e) => this.toggleCheckbox(e.target)}>
+                        <span className="tb-checkbox-ball"></span>
+                    </div>
+                </div>
             </div>
-
         );
     }
 

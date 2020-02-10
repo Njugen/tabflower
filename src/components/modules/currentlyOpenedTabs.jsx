@@ -10,7 +10,15 @@ class CurrentlyOpenedTabsModule extends Module {
        moduleTitle: "Currently Opened Windows and Tabs"
    }
 
-   createTabGroup = () => {}
+   createTabGroup = (group) => {
+       if(group){
+        console.log("DRAGONBALL", group);
+       }
+       
+       sendToBackground("save-tab-group", group.data, (response) => {
+           console.log("Spider-man", response);
+       });
+   }
 
     getOpenedWindowsAndTabs = () => {
         sendToBackground("get-all-windows-and-tabs", {}, (response) => {
@@ -76,7 +84,7 @@ class CurrentlyOpenedTabsModule extends Module {
                 
                     <p class="tabeon-module-footer-text small d-inline-block">Need to archive these windows and tabs for future browsing? Save them to Tab Flower!</p>
                     <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "cotmremoveunresponsivetabsmodal", action: this.closeUnresponsiveTabs.bind(this) })}>Remove unresponsive tabs</button>
-                    <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", windowAndTabs: this.state.moduleData.openedWindowsAndTabs, action: this.createTabGroup.bind(this) })}>Add to group</button>
+                    <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", params: { windowAndTabs: this.state.moduleData.openedWindowsAndTabs }, action: this.createTabGroup.bind(this) })}>Add to group</button>
               
             </Fragment>
         );

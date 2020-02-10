@@ -61,7 +61,7 @@ class WindowsList extends Component {
         const tabListItems = tabList.getElementsByTagName("li");
         
         for(let i = 0; i < tabListItems.length; i++){
-            if(tabListIsHorizontal){
+            if(tabListItems[i].classList.contains("col-3")){
                 tabListItems[i].className = "col-12";
             } else {
                 tabListItems[i].className = "col-3";
@@ -118,7 +118,7 @@ class WindowsList extends Component {
             canCloseItems,
             initialShowTabs,
             initialTabStyle,
-            initialWindowExpand
+
          } = this.props;
 
         if(windows && windows.length > 0){
@@ -129,7 +129,7 @@ class WindowsList extends Component {
                     const tabList = tabs.map(
                         (tab) => {
                             return (
-                                <li className="col-3">
+                                <li className={typeof initialTabStyle === "string" && initialTabStyle === "horizontal" ? "col-3" : "col-12"}>
                                     <img src={tab.favIconUrl} className="list-item-favicon" />
                                     <span>{tab.title}</span>
                                     <ul className="list-item-options">

@@ -104,6 +104,13 @@ const receive = (featureId, detailsObj, forwardResponse) => {
                 console.log("-");
             }
         )
+    } else if(featureId === "save-tab-group"){
+        saveTabsToStorage(
+            detailsObj,
+            (message) => {
+                forwardResponse(message);
+            }
+        )
     } else {
         forwardResponse();
     }
