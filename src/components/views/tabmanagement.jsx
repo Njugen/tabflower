@@ -9,6 +9,27 @@ require("../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css")
 
 class TabManagementView extends View {
 
+    handleRaisedData = (obj) => {
+        console.log(obj);
+        if(obj){
+            if(typeof obj === "string"){
+                if(obj === "refresh"){
+                    const existingState = this.state;
+                    let refreshFactor = this.state.refreshFactor;
+                    refreshFactor++;
+                    console.log("R", refreshFactor);
+                    this.setState(
+                        { refreshFactor },
+                        () => {
+                            console.log("MAR", this.state);
+                        }
+                    )
+                }
+            } else {
+
+            }
+        }
+    }
 
    render = () => {
         return (
@@ -17,8 +38,8 @@ class TabManagementView extends View {
                     <div className="col-8">
                         <Moduleon>
                             <ModuleColumn colspan="12">
-                                <CurrentlyOpenedTabsModule id="active-tabs-module" onRaiseToModal={(data) => this.raiseToModal(data)}></CurrentlyOpenedTabsModule>
-                                <ExistingTabGroupsModule id="existing-tab-groups-module" onRaiseToModal={(data) => this.raiseToModal(data)}></ExistingTabGroupsModule>
+                                <CurrentlyOpenedTabsModule refresh={this.state.refreshFactor} onRaiseToView={(data) => this.handleRaisedData(data)} id="active-tabs-module" onRaiseToModal={(data) => this.raiseToModal(data)}></CurrentlyOpenedTabsModule>
+                                <ExistingTabGroupsModule id="existing-tab-groups-module" refresh={this.state.refreshFactor} onRaiseToView={(data) => this.handleRaisedData(data)} onRaiseToModal={(data) => this.raiseToModal(data)}></ExistingTabGroupsModule>
                             </ModuleColumn> 
                         </Moduleon>
                     </div>    

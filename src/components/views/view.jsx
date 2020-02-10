@@ -38,7 +38,8 @@ class View extends Component {
 
     state = {
         viewData: {},
-        metaData: {}
+        metaData: {},
+        refreshFactor: 0
     }
 
     handleViewMount = () => {

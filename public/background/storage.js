@@ -1,3 +1,14 @@
+const getAllTabGroups = (successCallback, failCallback) => {
+    chrome.storage.local.get(
+        ["tabGroups"],
+        (data) => {
+            if(data && data.tabGroups){
+                successCallback(data.tabGroups);
+            }
+        }
+    )
+}
+
 const saveTabsToStorage = (group, successCallback, failCallback) => {
     chrome.storage.local.get(
         ["tabGroups"], (data) => {

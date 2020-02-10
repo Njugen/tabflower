@@ -2,7 +2,7 @@ import React, { Component, createRef } from 'react';
 
 class TBCheckBox extends Component {
     state = {
-        on: false
+        on: (this.props.value && this.props.value === "true" ? true : false)
     }
 
     setButtonState = (input) => {

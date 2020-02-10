@@ -111,7 +111,16 @@ const receive = (featureId, detailsObj, forwardResponse) => {
                 forwardResponse(message);
             }
         )
-    } else {
+    } else if(featureId === "get-all-tab-groups"){
+        getAllTabGroups(
+            (message) => {
+                forwardResponse(message)
+            },
+            () => {
+
+            }
+        )
+     }else {
         forwardResponse();
     }
 }

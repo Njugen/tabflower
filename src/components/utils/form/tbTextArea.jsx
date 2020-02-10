@@ -2,17 +2,18 @@ import React, { Component } from 'react';
 
 class TBTextArea extends Component {
     state = {
-        value: ""
+        
     }
 
     changeInputValue = (event, presetValue) => {
         const {id, onChange} = this.props;
-
+        console.log("lilla", presetValue, event);
         this.setState(
             {
                 value: event ? event.target.value : presetValue
             },
             () => {
+                console.log("stora", this.state.value);
                 if(onChange && id){
                     onChange(id, this.state.value);
                 }
@@ -43,7 +44,7 @@ class TBTextArea extends Component {
                 <div className="tb-form-row row">
                     <div className="col-12">
                             <textarea maxlength="170" onChange={(e) => this.changeInputValue(e)} className="tb-textarea">
-                                {this.state.value}
+                                {this.state.value || value}
                          </textarea>   
                     </div>
                 </div>

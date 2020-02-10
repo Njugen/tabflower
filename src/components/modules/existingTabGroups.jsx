@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import { Link } from 'react-router-dom';
 import Module from '../utils/moduleon/module';
+import { sendToBackground } from './../../services/webextension/APIBridge';
 require("../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css")
 
 class ExistingTabGroupsModule extends Module {
@@ -24,6 +25,60 @@ class ExistingTabGroupsModule extends Module {
    
    }
 
+   getAllTabGroups = () => {
+       sendToBackground("get-all-tab-groups", {}, (response) => {
+            this.setState({
+                moduleData: {
+                    loadedTabGroups: response
+                }
+            }, () => {
+                
+                console.log("NOM", this.state);
+            });
+
+           
+       })
+   }
+
+   renderTabGroups = () => {
+       const tabGroups = this.state.moduleData.loadedTabGroups || [];
+
+       return tabGroups.map(
+           (group, i) => {
+               return (
+                <div className="list-item-block col-3 m-1 p-3">
+                    <div className="list-item-block-header mb-3">
+                        <h6 className="list-item-block-headline float-left pr-2">{group.tabGroupName}</h6>
+                        <div className="list-item-block-options float-right">
+                            <button className="fas fa-cog options-button" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", params: { windowAndTabs: group.windowAndTabs, groupName: group.tabGroupName, groupCloseAll: group.tabGroupCloseAll, groupDescription: group.tabGroupDescription, groupId: group.groupId, type: "existing-group"}, action: this.createOrEditTabGroup.bind(this) })}></button>
+                            <button className="fas fa-times options-button" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", params: {nej: "hej"}, action: this.removeTabGroups.bind(this) })}></button>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div className="list-item-block-body small pb-3">
+                        <p>{group.tabGroupDescription}</p>
+                    </div>
+                    <div className="list-item-block-footer">
+                        <button class="btn btn-tabeon-reverse d-inline-block" onClick={() => this.raiseToModal({ id: "etgmlaunchgroupsmodal", action: this.launchTabGroup.bind(this) })}>Launch group</button>
+                    </div>
+                </div>
+               );
+           } 
+       )
+   }
+
+   childComponentDidMount = () => {
+       this.getAllTabGroups();
+       console.log("UPDATE");
+   }
+
+   componentDidUpdate = (prevProps, prevState) => {
+       if(prevProps.refresh !== this.props.refresh){
+    
+        this.getAllTabGroups();
+       }
+   }
+
    renderBody = () => {
         return (
             <Fragment>
@@ -32,55 +87,8 @@ class ExistingTabGroupsModule extends Module {
                         To keep the browser's tab bar from overflowing, Tab Flower lets you group windows and tabs together. You may create new tab groups at any time, and launch their tabs in a categorized manner later.
                     </p>
                     <div className="existing-tab-groups-list row d-flex justify-content-center">
-                        <div className="list-item-block col-3 m-1 p-3">
-                            <div className="list-item-block-header mb-3">
-                                <h6 className="list-item-block-headline float-left pr-2">Webmie Work tabs</h6>
-                                <div className="list-item-block-options float-right">
-                                    <button className="fas fa-cog options-button" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", action: this.createOrEditTabGroup.bind(this) })}></button>
-                                    <button className="fas fa-times options-button" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", params: {nej: "hej"}, action: this.removeTabGroups.bind(this) })}></button>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                            <div className="list-item-block-body small pb-3">
-                                <p>Contain resources necessary for daily work. Excellent to launch at 8:00 pm on a weekday!</p>
-                            </div>
-                            <div className="list-item-block-footer">
-                                <button class="btn btn-tabeon-reverse d-inline-block" onClick={() => this.raiseToModal({ id: "etgmlaunchgroupsmodal", action: this.launchTabGroup.bind(this) })}>Launch group</button>
-                            </div>
-                        </div>
-                        <div className="list-item-block col-3 m-1 p-3">
-                            <div className="list-item-block-header mb-3">
-                                <h6 className="list-item-block-headline float-left pr-2">Webmie Work tabs</h6>
-                                <div className="list-item-block-options float-right">
-                                    <button className="fas fa-cog options-button" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", action: this.createOrEditTabGroup.bind(this) })}></button>
-                                    <button className="fas fa-times options-button" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", params: {nej: "hej"}, action: this.removeTabGroups.bind(this) })}></button>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                            <div className="list-item-block-body small pb-3">
-                                <p>Contain resources necessary for daily work. Excellent to launch at 8:00 pm on a weekday!</p>
-                            </div>
-                            <div className="list-item-block-footer">
-                                <button class="btn btn-tabeon-reverse d-inline-block" onClick={() => this.raiseToModal({ id: "etgmlaunchgroupsmodal", action: this.launchTabGroup.bind(this) })}>Launch group</button>
-                            </div>
-                        </div>
-                        <div className="list-item-block col-3 m-1 p-3">
-                            <div className="list-item-block-header mb-3">
-                                <h6 className="list-item-block-headline float-left pr-2">Webmie Work tabs</h6>
-                                <div className="list-item-block-options float-right">
-                                    <button className="fas fa-cog options-button" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", action: this.createOrEditTabGroup.bind(this) })}></button>
-                                    <button className="fas fa-times options-button" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", params: {nej: "hej"}, action: this.removeTabGroups.bind(this) })}></button>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                            <div className="list-item-block-body small pb-3">
-                                <p>Contain resources necessary for daily work. Excellent to launch at 8:00 pm on a weekday!</p>
-                            </div>
-                            <div className="list-item-block-footer">
-                                <button class="btn btn-tabeon-reverse d-inline-block" onClick={() => this.raiseToModal({ id: "etgmlaunchgroupsmodal", action: this.launchTabGroup.bind(this) })}>Launch group</button>
-                            </div>
-                        </div>
-                    </div>
+                        {this.renderTabGroups()}
+                    </div>    
                 </div>
             </Fragment>
         );
@@ -91,7 +99,7 @@ class ExistingTabGroupsModule extends Module {
             <Fragment>
                  
                 <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", action: this.removeTabGroups.bind(this) })}>Remove all groups</button>
-                <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", action: this.createOrEditTabGroup.bind(this) })}>Create a new group</button>
+                <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", params: { windowAndTabs: {}, type: "new-group" }, action: this.createOrEditTabGroup.bind(this) })}>Create a new group</button>
               
             </Fragment>
         );
