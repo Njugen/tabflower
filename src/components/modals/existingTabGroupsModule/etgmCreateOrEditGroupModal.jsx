@@ -21,7 +21,7 @@ class ETGMCreateNewGroupModal extends Modal {
 
     setGroupId = (id) => {
         let groupId = "";
-
+        console.log("SETTING ID", id);
         if(id){
             groupId = id;
         } else {
@@ -33,18 +33,51 @@ class ETGMCreateNewGroupModal extends Modal {
 
     childComponentDidMount = () => {
         this.saveToState("windowAndTabs", this.props.data.params.windowAndTabs);
-        this.saveToState("groupId", this.setGroupId(this.props.data.params.id));
+        this.saveToState("groupId", this.setGroupId(this.props.data.params.groupId));
     } 
+
+    componentWillUnmount = () => {
+        console.log("UNMOUNT", this.props.data.params.windowAndTabs);
+        
+    }
+
+    addNewWindow = (inputUrl) => {
+        let windows;
+        console.log("VO", this.state.data.windowAndTabs);
+        if(Object.keys(this.state.data.windowAndTabs).length > 0){
+            windows = [...this.state.data.windowAndTabs];
+        } else {
+            windows = [];
+        }
+
+        console.log("HEH", windows);
+
+        windows.push({
+            tabs: [{
+                title: "RANDOM",
+                favIconUrl: "",
+                url: inputUrl
+            }]
+        })
+      
+        
+        console.log("UI", windows);
+        console.log("CD", this.props.data.params.windowAndTabs);
+        this.saveToState("windowAndTabs", windows, () => {
+            console.log("C", this.props.data.params.windowAndTabs);
+        })
+        
+    }
 
     renderWindowsAndTabsSection = (windowAndTabs, type) => {
         /* 
-            situations:
+           types:
             - currently-opened
             - existing-group
             - new-group
         */
         windowAndTabs = windowAndTabs || [];
-
+        console.log("WINDOWS", windowAndTabs);
         return (
             <div className="tb-windowlist-container">
                 <div className="tb-form-row row">
@@ -61,11 +94,11 @@ class ETGMCreateNewGroupModal extends Modal {
                     <div className="col-12 mt-0">
                         <WindowsList 
                             windows={windowAndTabs} 
-                            onRaiseToModal={(data) => this.raiseToModal(data)}
-                            canCloseItems={false}
+                            onAddNewWindow={(data) => this.addNewWindow(data)}
+                            canCloseItems={type === "existing-group" || type === "new-group" ? true : false}
                             initialShowTabs={false}
                             initialTabStyle="vertical"
-                            type=""
+                            type={this.props.data.params.type}
                         />
                     </div>
                 </div>    
@@ -87,7 +120,7 @@ class ETGMCreateNewGroupModal extends Modal {
                 <TBTextInput id="tabGroupName" label="Group Name" value={name ? name : ""} onChange={(id, value) => this.saveToState(id, value)}></TBTextInput>
                 <TBTextArea id="tabGroupDescription" label="Description (max 170 characters)" value={description ? description : ""} onChange={(id, value) => this.saveToState(id, value)}></TBTextArea>
                 <TBCheckBox id="tabGroupCloseAll" label="Close everything else before launching this tab group" value={closeAll && closeAll === true ? "true" : "false"} onToggle={(id, value) => this.saveToState(id, value)} />
-                {this.renderWindowsAndTabsSection(windowAndTabs, type)}
+                {this.renderWindowsAndTabsSection(this.state.data.windowAndTabs, type)}
             </Fragment>
         );    
     }

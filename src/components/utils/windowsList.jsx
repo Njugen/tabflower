@@ -1,7 +1,13 @@
 import React, { Component, Fragment } from "react";
 import { sendToBackground } from './../../services/webextension/APIBridge';
+import TBTextInput from './form/tbTextInput';
 
 class WindowsList extends Component {
+    state = {
+        newWindow: false,
+        newWindowURL: ""
+    }
+
     raiseToModal = (data) => {
         /*
             Parameters: 
@@ -112,55 +118,105 @@ class WindowsList extends Component {
         }); 
     }
 
+    addNewWindow = (boolInput) => {
+        const newWindow = boolInput;
+        console.log("BOOOL", newWindow);
+        this.setState(
+            {
+                newWindow
+            }
+        );
+    }
+
+
+    handleAddNewWindowInputChange = (id, value) => {
+        console.log("E", id);
+        const newWindowURL = value;
+        this.setState({ newWindowURL });
+        console.log(this.state);
+        
+        
+    }
+
+    raiseNewWindowToModal = (url) => {
+        const { onAddNewWindow } = this.props;
+
+        onAddNewWindow(url);
+        this.addNewWindow(false);
+    }
+
+    renderAddNewWindowForm = () => {
+        return (
+            <div className="addNewWindowForm">
+                <TBTextInput id="newWindowURL" label="URL" value={this.state.newWindowURL || "http://"} onChange={(id, value) => this.handleAddNewWindowInputChange(id, value)}></TBTextInput>
+                <button className="active-tabs-add-button" onClick={() => this.raiseNewWindowToModal(this.state.newWindowURL)}>Save window</button>
+            </div>
+        );
+    }
+
     render = () => {
         const { 
             windows,
             canCloseItems,
             initialShowTabs,
             initialTabStyle,
-
+            type
          } = this.props;
 
+         const { newWindow } = this.state;
+
         if(windows && windows.length > 0){
-            return windows.map(
-                (window, key) => {
-                    const { tabs } = window;
+            return (
 
-                    const tabList = tabs.map(
-                        (tab) => {
-                            return (
-                                <li className={typeof initialTabStyle === "string" && initialTabStyle === "horizontal" ? "col-3" : "col-12"}>
-                                    <img src={tab.favIconUrl} className="list-item-favicon" />
-                                    <span>{tab.title}</span>
-                                    <ul className="list-item-options">
-                                       {canCloseItems && canCloseItems === true && <li><button className="fas fa-times" onClick={() => this.raiseToModal({ id: "cotmremovetabmodal", tabInfo: tab, action: this.closeTab.bind(this)})}></button></li>}
-                                    </ul>
-                                </li>
-                            );
-                        }
-                    )
+                windows.map(
+                    (window, key, windowArray) => {
+                        const { tabs } = window;
 
-                    return (
-                        <div className="active-tabs-module">
-                            <ul className="window-listing col-12">
-                                <li className="mt-2" id={"window-container-id-" + key}>
-                                    Window {key}
-                                    <ul className="list-item-options">
-                                        <li><button className="fas fa-align-justify" onClick={(e) => this.toggleTabListStyle(e, "window-container-id-" + key)}></button></li>
-                                        <li><button className={typeof initialShowTabs === "boolean" && initialShowTabs === false ? "fas fa-chevron-down" : "fas fa-chevron-up"} onClick={(e) => this.toggleTabListVisibility(e, "window-container-id-" + key)}></button></li>
-                                        {canCloseItems && canCloseItems === true && <li><button className="fas fa-times" onClick={() => this.raiseToModal({id: "cotmremovewindowmodal", windowInfo: window, action: this.closeWindow.bind(this)})}></button></li> }
-                                    </ul>
-                                    <ul className={typeof initialShowTabs === "boolean" && initialShowTabs === false ? "tab-listing-hide tab-listing horizontal m-4" : "tab-listing horizontal m-4"}>
-                                        {tabList}
-                                    </ul>   
-                                </li>
-                            </ul>
-                        </div>    
-                    );
-                }
-            )
+                        const tabList = tabs.map(
+                            (tab) => {
+                                return (
+                                    <li className={typeof initialTabStyle === "string" && initialTabStyle === "horizontal" ? "col-3" : "col-12"}>
+                                        <img src={tab.favIconUrl} className="list-item-favicon" />
+                                        <span>{tab.title}</span>
+                                        <ul className="list-item-options">
+                                        {canCloseItems && canCloseItems === true && <li><button className="fas fa-times" onClick={() => this.raiseToModal({ id: "cotmremovetabmodal", tabInfo: tab, action: this.closeTab.bind(this)})}></button></li>}
+                                        </ul>
+                                    </li>
+                                );
+                            }
+                        )
+
+                        return (
+                            <div className="active-tabs-module">
+                                <ul className="window-listing col-12">
+                                    <li className="mt-2" id={"window-container-id-" + key}>
+                                        Window {key}
+                                        <ul className="list-item-options">
+                                            <li><button className="fas fa-align-justify" onClick={(e) => this.toggleTabListStyle(e, "window-container-id-" + key)}></button></li>
+                                            <li><button className={typeof initialShowTabs === "boolean" && initialShowTabs === false ? "fas fa-chevron-down" : "fas fa-chevron-up"} onClick={(e) => this.toggleTabListVisibility(e, "window-container-id-" + key)}></button></li>
+                                            {canCloseItems && canCloseItems === true && <li><button className="fas fa-times" onClick={() => this.raiseToModal({id: "cotmremovewindowmodal", windowInfo: window, action: this.closeWindow.bind(this)})}></button></li> }
+                                        </ul>
+                                        <ul className={typeof initialShowTabs === "boolean" && initialShowTabs === false ? "tab-listing-hide tab-listing horizontal m-4" : "tab-listing horizontal m-4"}>
+                                            {tabList}
+                                        </ul>
+                                        {type && (type === "new-group" || type === "existing-group") && <button className="active-tabs-add-button">Add new Tab</button>}   
+                                    </li>
+                                </ul>
+                                {newWindow && newWindow === true  && windowArray.length - 1 === key && this.renderAddNewWindowForm()}
+                                {((newWindow && newWindow === false) || !newWindow) && windowArray.length - 1 === key && (type === "existing-group" || type === "new-group") && <button className="active-tabs-add-button" onClick={() => this.addNewWindow(true)}>Add new window</button>}
+                            </div>
+                            
+                        );
+                    } 
+                )
+            );
         } else {
-            return null;
+            return (
+                <Fragment>
+                    {newWindow && newWindow === true && this.renderAddNewWindowForm()}
+                    {((newWindow && newWindow === false) || !newWindow) && type === "new-group" && <button className="active-tabs-add-button" onClick={() => this.addNewWindow(true)}>Add new window</button>}
+                </Fragment>
+            );
         }
     }
 }

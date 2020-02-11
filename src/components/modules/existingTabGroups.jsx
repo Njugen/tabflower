@@ -21,8 +21,19 @@ class ExistingTabGroupsModule extends Module {
        
    }
 
-   createOrEditTabGroup = (options) => {
-   
+   createOrEditTabGroup = (group) => {
+    if(group){
+        console.log("DRAGONBALL", group);
+       }
+       
+       sendToBackground("save-tab-group", group.data, (response) => {
+           console.log("Spider-man", response);
+           const { onRaiseToView } = this.props;
+
+           if(onRaiseToView){
+            onRaiseToView("refresh");
+           }
+       });
    }
 
    getAllTabGroups = () => {

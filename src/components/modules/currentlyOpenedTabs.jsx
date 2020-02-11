@@ -76,7 +76,7 @@ class CurrentlyOpenedTabsModule extends Module {
                         canCloseItems={true}
                         initialShowTabs={true}
                         initialTabStyle="horizontal"
-
+                        
                     />
                 </div>
             </Fragment>
