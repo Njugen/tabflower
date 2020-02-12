@@ -17,8 +17,22 @@ class ExistingTabGroupsModule extends Module {
        } 
    }
 
-   removeTabGroups = (tabId) => {
+   removeTabGroups = (data) => {
+       console.log("TABGROUP", data);
+
+       let groupId = "";
        
+       if(data.groupId){
+           groupId = data.groupId;
+       } else {
+            groupId = "all"
+       }
+
+       sendToBackground("delete-tab-groups", { id: groupId }, (response) => {
+           console.log("RESPONSE", this.state);
+           this.getAllTabGroups();
+        
+       });
    }
 
    createOrEditTabGroup = (group) => {
@@ -38,9 +52,10 @@ class ExistingTabGroupsModule extends Module {
 
    getAllTabGroups = () => {
        sendToBackground("get-all-tab-groups", {}, (response) => {
+           console.log("GETTING ALL TAB GROUPS");
             this.setState({
                 moduleData: {
-                    loadedTabGroups: response
+                    loadedTabGroups: response || []
                 }
             }, () => {
                 
@@ -70,7 +85,7 @@ class ExistingTabGroupsModule extends Module {
                         <p>{group.tabGroupDescription}</p>
                     </div>
                     <div className="list-item-block-footer">
-                        <button class="btn btn-tabeon-reverse d-inline-block" onClick={() => this.raiseToModal({ id: "etgmlaunchgroupsmodal", action: this.launchTabGroup.bind(this) })}>Launch group</button>
+                        <button class="btn btn-tabeon-reverse d-inline-block" onClick={() => this.raiseToModal({ id: "etgmlaunchgroupsmodal", params: { groupId: group.groupId}, action: this.launchTabGroup.bind(this) })}>Launch group</button>
                     </div>
                 </div>
                );

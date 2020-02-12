@@ -4,6 +4,8 @@ const getAllTabGroups = (successCallback, failCallback) => {
         (data) => {
             if(data && data.tabGroups){
                 successCallback(data.tabGroups);
+            } else {
+                successCallback([]);
             }
         }
     )
@@ -67,3 +69,42 @@ const saveTabsToStorage = (group, successCallback, failCallback) => {
 
 //    console.log(options);
 } 
+
+const launchTabGroup = (details, successCallback, failCallback) => {
+    const requestedGroupId = details.groupId;
+
+    chrome.storage.local.get(["tabGroups"], (data) => {
+        const storedTabGroup = data.tabGroups.find((item) => requestedGroupId === item.groupId);
+        console.log("M", storedTabGroup); 
+
+        // Go through all windows and open new ones based on stored information
+        const storedWindows = storedTabGroup.windowAndTabs;
+
+        storedWindows.map((window) => {
+            let urls = [];
+
+            for(let i = 0; i < window.tabs.length; i++){
+                urls.push(window.tabs[i].url);
+            }
+
+            chrome.windows.create({
+                url: urls
+            })
+
+            return null;
+        });
+    });
+
+}
+
+const deleteTabGroups = (details, successCallback, failCallback) => {
+    console.log(details);
+    if(typeof details.id === "number"){
+
+    } else if(typeof details.id === "string" && details.id === "all"){
+        chrome.storage.local.remove(["tabGroups"], () => {
+            console.log("TEST");
+            successCallback("asdsad");
+        });
+    }
+}

@@ -1,9 +1,12 @@
 import React, { Fragment } from "react";
 import Modal from '../modal';
-
+import { sendToBackground } from './../../../services/webextension/APIBridge';
 
 class ETGMLaunchGroupsModal extends Modal {
     saveModalHandler = (callback) => {
+        console.log(this.props.data.params.groupId);
+
+        sendToBackground("launch-tab-group", {groupId: this.props.data.params.groupId})
         this.clearModalData(callback(this.state));
     }
 

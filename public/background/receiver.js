@@ -120,7 +120,23 @@ const receive = (featureId, detailsObj, forwardResponse) => {
 
             }
         )
-     }else {
+     } else if(featureId === "launch-tab-group"){
+         launchTabGroup(
+             detailsObj,
+             (message) => {
+                 forwardResponse(message)
+             },
+             () => {}
+         )
+     } else if(featureId === "delete-tab-groups"){
+        deleteTabGroups(
+            detailsObj,
+             (message) => {
+                 forwardResponse(message)
+             },
+             () => {}
+        )
+     } else {
         forwardResponse();
     }
 }

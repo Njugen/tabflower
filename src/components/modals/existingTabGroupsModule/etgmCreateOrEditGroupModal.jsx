@@ -69,6 +69,29 @@ class ETGMCreateNewGroupModal extends Modal {
         
     }
 
+    addNewTab = (inputUrl, index) => {
+        let windows;
+
+        if(Object.keys(this.state.data.windowAndTabs).length > 0){
+            windows = [...this.state.data.windowAndTabs];
+        } else {
+            windows = [];
+        }
+        console.log("meager", windows[index], index);
+        windows[index].tabs.push(
+            {
+                title: "RANDOM TAB",
+                favIconUrl: "",
+                url: inputUrl
+            }
+        )
+       
+
+       /* this.saveToState("windowAndTabs", windows, () => {
+            //console.log("CX", this.props.data.params.windowAndTabs);
+        }) */
+    }
+
     renderWindowsAndTabsSection = (windowAndTabs, type) => {
         /* 
            types:
@@ -95,6 +118,7 @@ class ETGMCreateNewGroupModal extends Modal {
                         <WindowsList 
                             windows={windowAndTabs} 
                             onAddNewWindow={(data) => this.addNewWindow(data)}
+                            onAddNewTab={(data, index) => this.addNewTab(data, index)}
                             canCloseItems={type === "existing-group" || type === "new-group" ? true : false}
                             initialShowTabs={false}
                             initialTabStyle="vertical"

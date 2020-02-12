@@ -316,12 +316,19 @@ div.container-fluid > .row > div[class^="col-"] {
         background: #7a1d8c;
         color: #ffffff;
         font-weight: bold;
-        padding: 0.45rem 1rem;
+        
+    }
+
+    .active-tabs-module ul.window-listing > li > div.window-header {
+        display: block;
+        padding: 1rem 1rem;
     }
 
 .active-tabs-module ul.tab-listing {
     list-style-type: none;
-    padding: 0px;
+    padding-bottom: 1rem;
+    padding-right: 2rem;
+    padding-left: 2rem;
 }    
 
     .active-tabs-module ul.tab-listing > li {
@@ -363,7 +370,7 @@ div.container-fluid > .row > div[class^="col-"] {
         display: inline-block;
         margin-top: -10px;
     }
-
+    
     .active-tabs-module .list-item-options > li {
         display: inline-block;
         margin: auto 0.40rem auto 0.50rem;
@@ -383,11 +390,18 @@ div.container-fluid > .row > div[class^="col-"] {
             color: #ffffff
         }
 
+        .active-tabs-module .list-item-options > li > button:disabled {
+            opacity: 0.5;
+        } 
+    
     .active-tabs-module .tab-listing-hide {
         display: none;
     }
 
-    
+    .active-tabs-module .addNewTabForm {
+        background: #e8e8e8;
+        font-weight: normal;
+    }
 /*
     ExistingTabGroupsModule
 */    
@@ -401,6 +415,7 @@ div.container-fluid > .row > div[class^="col-"] {
         background: #7a1d8c;
         color: #ffffff;
     }
+
 
     .existing-tab-groups-list .list-item-block .list-item-block-header {
         position: relative;
@@ -438,6 +453,8 @@ div.container-fluid > .row > div[class^="col-"] {
     .existing-tab-groups-list .list-item-block .list-item-block-footer {
         text-align: right
     }
+
+
 
 /* Utils */
 

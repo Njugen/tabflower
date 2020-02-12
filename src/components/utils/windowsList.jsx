@@ -5,7 +5,9 @@ import TBTextInput from './form/tbTextInput';
 class WindowsList extends Component {
     state = {
         newWindow: false,
-        newWindowURL: ""
+        newWindowURL: "",
+        newTabInContainerIds: false,
+        newTabURL: ""
     }
 
     raiseToModal = (data) => {
@@ -26,30 +28,37 @@ class WindowsList extends Component {
         onRaiseToModal(data);
     }
 
-    toggleTabListVisibility = (event, windowId) => {
+    toggleTabListVisibility = (event, windowId, forceVisible) => {
         /* 
             Toggle tab list visibility: 
             - The tab list may be hidden or visible to the user. Useful for better or less oversight
             depending on user preference.
         */
+        
         const windowElement = document.getElementById(windowId);
         const tabList = windowElement.getElementsByClassName("tab-listing")[0];
         
-        if(tabList.style.display === "none" || tabList.classList.contains("tab-listing-hide")){
+        if(forceVisible && forceVisible === true){
             tabList.style.display = "block";
             tabList.classList.remove("tab-listing-hide");
         } else {
-            tabList.style.display = "none";
-        }
-
-        /* Toggle up/down icon of window bar */
-        const iconElement = (event !== null && event.target);
-        console.log(iconElement.className);
-        if(iconElement){
-            if(iconElement.className.includes("fa-chevron-up")){
-                iconElement.className = "fas fa-chevron-down";
+            if(tabList.style.display === "none" || tabList.classList.contains("tab-listing-hide")){
+                tabList.style.display = "block";
+                tabList.classList.remove("tab-listing-hide");
             } else {
-                iconElement.className = "fas fa-chevron-up";
+                tabList.style.display = "none";
+                this.cancelNewTab(windowId);
+            }
+
+            /* Toggle up/down icon of window bar */
+            const iconElement = (event !== null && event.target);
+            console.log(iconElement.className);
+            if(iconElement){
+                if(iconElement.className.includes("fa-chevron-up")){
+                    iconElement.className = "fas fa-chevron-down";
+                } else {
+                    iconElement.className = "fas fa-chevron-up";
+                }
             }
         }
    }
@@ -128,14 +137,56 @@ class WindowsList extends Component {
         );
     }
 
+    addNewTab = (containerId) => {
+       let newTabInContainerIds = this.state.newTabInContainerIds;
+
+        if(newTabInContainerIds === false){
+            newTabInContainerIds = [];
+        } else {
+            newTabInContainerIds = this.state.newTabInContainerIds;
+            
+        }
+
+        newTabInContainerIds.push(containerId);
+
+        this.setState(
+            {
+                newTabInContainerIds
+            }
+        );
+    }
+
+    cancelNewTab = (containerId) => {
+        let newTabInContainerIds = this.state.newTabInContainerIds;
+
+        if(newTabInContainerIds !== false){
+            if(containerId === "all"){
+                newTabInContainerIds = [];
+            } else {
+                const index = newTabInContainerIds.findIndex((item) => item === containerId);
+                newTabInContainerIds.splice(index, 1);
+            }
+
+            this.setState(
+                {
+                    newTabInContainerIds
+                }
+            );
+        }
+    }
 
     handleAddNewWindowInputChange = (id, value) => {
         console.log("E", id);
         const newWindowURL = value;
         this.setState({ newWindowURL });
+        console.log(this.state);   
+    }
+
+    handleAddNewTabInputChange = (id, value) => {
+        console.log("S", id);
+        const newTabURL = value;
+        this.setState({ newTabURL });
         console.log(this.state);
-        
-        
     }
 
     raiseNewWindowToModal = (url) => {
@@ -145,6 +196,14 @@ class WindowsList extends Component {
         this.addNewWindow(false);
     }
 
+    raiseNewTabToModal = (url, index, callback) => {
+        const { onAddNewTab } = this.props;
+
+        onAddNewTab(url, index);
+        this.addNewTab(false);
+        callback();
+    }
+
     renderAddNewWindowForm = () => {
         return (
             <div className="addNewWindowForm">
@@ -152,6 +211,20 @@ class WindowsList extends Component {
                 <button className="active-tabs-add-button" onClick={() => this.raiseNewWindowToModal(this.state.newWindowURL)}>Save window</button>
             </div>
         );
+    }
+
+    renderAddNewTabForm = (containerId, windowIndex) => {
+        this.toggleTabListVisibility(null,  containerId, true)
+
+        return (
+            <div className="addNewTabForm">
+                <TBTextInput id="newTabURL" label="URL" value={this.state.newWindowURL || "http://"} onChange={(id, value) => this.handleAddNewTabInputChange(id, value)}></TBTextInput>
+                <button onClick={() => this.cancelNewTab(containerId)}>Cancel</button>
+                <button onClick={() => this.raiseNewTabToModal(this.state.newTabURL, windowIndex, () =>{
+                    this.cancelNewTab(containerId)
+                })}>Add tab to window</button>
+            </div>
+        )
     }
 
     render = () => {
@@ -164,6 +237,7 @@ class WindowsList extends Component {
          } = this.props;
 
          const { newWindow } = this.state;
+         const { newTabInContainerIds } = this.state;
 
         if(windows && windows.length > 0){
             return (
@@ -171,7 +245,14 @@ class WindowsList extends Component {
                 windows.map(
                     (window, key, windowArray) => {
                         const { tabs } = window;
+                        const windowContainerId = "window-container-id-" + key;
 
+                        const isAddingNewTab = newTabInContainerIds !== false && newTabInContainerIds.find(
+                            (item) => item === windowContainerId
+                        ); 
+
+                        console.log(newTabInContainerIds, windowContainerId);
+                        
                         const tabList = tabs.map(
                             (tab) => {
                                 return (
@@ -179,7 +260,7 @@ class WindowsList extends Component {
                                         <img src={tab.favIconUrl} className="list-item-favicon" />
                                         <span>{tab.title}</span>
                                         <ul className="list-item-options">
-                                        {canCloseItems && canCloseItems === true && <li><button className="fas fa-times" onClick={() => this.raiseToModal({ id: "cotmremovetabmodal", tabInfo: tab, action: this.closeTab.bind(this)})}></button></li>}
+                                         {canCloseItems && canCloseItems === true && <li><button className="fas fa-times" onClick={() => this.raiseToModal({ id: "cotmremovetabmodal", tabInfo: tab, action: this.closeTab.bind(this)})}></button></li>}
                                         </ul>
                                     </li>
                                 );
@@ -189,17 +270,19 @@ class WindowsList extends Component {
                         return (
                             <div className="active-tabs-module">
                                 <ul className="window-listing col-12">
-                                    <li className="mt-2" id={"window-container-id-" + key}>
-                                        Window {key}
-                                        <ul className="list-item-options">
-                                            <li><button className="fas fa-align-justify" onClick={(e) => this.toggleTabListStyle(e, "window-container-id-" + key)}></button></li>
-                                            <li><button className={typeof initialShowTabs === "boolean" && initialShowTabs === false ? "fas fa-chevron-down" : "fas fa-chevron-up"} onClick={(e) => this.toggleTabListVisibility(e, "window-container-id-" + key)}></button></li>
-                                            {canCloseItems && canCloseItems === true && <li><button className="fas fa-times" onClick={() => this.raiseToModal({id: "cotmremovewindowmodal", windowInfo: window, action: this.closeWindow.bind(this)})}></button></li> }
-                                        </ul>
-                                        <ul className={typeof initialShowTabs === "boolean" && initialShowTabs === false ? "tab-listing-hide tab-listing horizontal m-4" : "tab-listing horizontal m-4"}>
+                                    <li className="mt-2" id={windowContainerId}>
+                                        <div className="window-header">Window {key+1}
+                                            <ul className="list-item-options">
+                                                <li><button className="fas fa-align-justify" onClick={(e) => this.toggleTabListStyle(e, windowContainerId)}></button></li>
+                                                <li><button disabled={isAddingNewTab ? true : false} className={typeof initialShowTabs === "boolean" && initialShowTabs === false ? "fas fa-chevron-down toggle-window" : "fas fa-chevron-up toggle-window"} onClick={(e) => this.toggleTabListVisibility(e, windowContainerId)}></button></li>
+                                                {canCloseItems && canCloseItems === true && <li><button className="fas fa-times" onClick={() => this.raiseToModal({id: "cotmremovewindowmodal", windowInfo: window, action: this.closeWindow.bind(this)})}></button></li> }
+                                            </ul>
+                                        </div>
+                                        <ul className={typeof initialShowTabs === "boolean" && initialShowTabs === false ? "tab-listing-hide tab-listing horizontal" : "tab-listing horizontal"}>
                                             {tabList}
                                         </ul>
-                                        {type && (type === "new-group" || type === "existing-group") && <button className="active-tabs-add-button">Add new Tab</button>}   
+                                        {isAddingNewTab && this.renderAddNewTabForm(windowContainerId, key)}
+                                        {(type && (type === "existing-group" || type === "new-group") && !isAddingNewTab) && <button className="active-tabs-add-button" onClick={() => this.addNewTab(windowContainerId)}>Add new Tab</button>}   
                                     </li>
                                 </ul>
                                 {newWindow && newWindow === true  && windowArray.length - 1 === key && this.renderAddNewWindowForm()}
