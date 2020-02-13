@@ -44,23 +44,37 @@ class CurrentlyOpenedTabsModule extends Module {
         });
     }
 
+    listenForWindowAndTabChanges = () => {
+        const chrome = (typeof window.chrome === "undefined" ? null : window.chrome);
+
+        if(chrome){
+            chrome.runtime.onMessage.addListener(
+                (message) => {
+                    console.log(message);
+                    if(message.messageId && message.messageId === "window-tabs-updated"){
+                        this.getOpenedWindowsAndTabs()
+                    }
+                }
+            )
+        }
+    }
 
     childComponentDidMount = () => {
         this.getOpenedWindowsAndTabs();
+        this.listenForWindowAndTabChanges();
+       // window.addEventListener("focus", this.getOpenedWindowsAndTabs);
 
-        window.addEventListener("focus", this.getOpenedWindowsAndTabs);
+      //  window.addEventListener("mousemove", this.getOpenedWindowsAndTabs);
 
-        window.addEventListener("mousemove", this.getOpenedWindowsAndTabs);
-
-        window.addEventListener("blur", this.getOpenedWindowsAndTabs);
+       // window.addEventListener("blur", this.getOpenedWindowsAndTabs);
     }
 
    componentWillUnmount = () => {
-        window.removeEventListener("focus", this.getOpenedWindowsAndTabs);
+       // window.removeEventListener("focus", this.getOpenedWindowsAndTabs);
 
-        window.removeEventListener("mousemove", this.getOpenedWindowsAndTabs);
+       // window.removeEventListener("mousemove", this.getOpenedWindowsAndTabs);
 
-        window.removeEventListener("blur", this.getOpenedWindowsAndTabs);
+       // window.removeEventListener("blur", this.getOpenedWindowsAndTabs);
    } 
 
    renderBody = () => {

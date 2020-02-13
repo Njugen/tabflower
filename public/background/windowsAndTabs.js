@@ -111,3 +111,35 @@ const deleteWindow = (options, successCallback, failCallback) => {
         } 
     )
 }
+
+/*
+    Trigger event listeners
+*/
+
+chrome.windows.onRemoved.addListener((windowId) => {
+    chrome.runtime.sendMessage({ messageId: "window-tabs-updated" });
+})
+
+chrome.windows.onCreated.addListener((window) => {
+    chrome.runtime.sendMessage({ messageId: "window-tabs-updated" });
+})
+
+chrome.tabs.onCreated.addListener((tab) => {
+    chrome.runtime.sendMessage({ messageId: "window-tabs-updated" });
+})
+
+chrome.tabs.onMoved.addListener((tab) => {
+    chrome.runtime.sendMessage({ messageId: "window-tabs-updated" });
+})
+
+chrome.tabs.onDetached.addListener((tab) => {
+    chrome.runtime.sendMessage({ messageId: "window-tabs-updated" });
+})
+
+chrome.tabs.onRemoved.addListener((tab) => {
+    chrome.runtime.sendMessage({ messageId: "window-tabs-updated" });
+})
+
+chrome.tabs.onUpdated.addListener((tab) => {
+    chrome.runtime.sendMessage({ messageId: "window-tabs-updated" });
+})
