@@ -28,8 +28,27 @@ import React, { Component, createRef } from "react";
 */
 
 class Modal extends Component {
+    /*
+        The modal state consists of information to be passed to
+        other components. E.g. 
+        
+        state = {
+            typeOfInformation: {}
+        }
+
+        "typeOfInformation" could be renamed to e.g. "tabGroupDetails", "firefighters" or any other
+        name which represents the stored information.
+
+        All UI related information (data passed to the state only for the purpose of re-rendering the component) should
+        be stored in the ui object. Like this:
+
+        state = {
+            typeOfInformation: {},
+            ui: { isHidden: false, ... }
+        }
+    */
     state = {
-        data: {}
+       ui: {}
     }
 
     fadeIn = () => {
@@ -67,7 +86,7 @@ class Modal extends Component {
         */
        const { onDismiss: onDismissModal } = this.props;
 
-        this.setState({ data: { } }, () => {
+        this.setState({ }, () => {
             this.fadeOut();
             onDismissModal();
 
@@ -143,16 +162,22 @@ class Modal extends Component {
         */
     }
 
-    saveToState = (pairId, value, callback) => {
-        const data = this.state.data;
-
-        data[pairId] = value;
-
-        this.setState({ data }, () => {
-            if(typeof callback === "function"){
-                callback();
+    saveToState = (key, value, area, callback) => {
+        if(typeof area === "string"){
+            let newInput = this.state;
+            
+            if(typeof newInput[area] !== "object"){
+                newInput[area] = {}
             }
-        })
+
+            newInput[area][key] = value;
+
+            this.setState(newInput, () => {
+                if(typeof callback === "function"){
+                    callback();
+                }
+            })
+        }
     }
 
 

@@ -6,24 +6,33 @@ import { sendToBackground } from "../../services/webextension/APIBridge";
 require("../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css")
 
 class CurrentlyOpenedTabsModule extends Module {
-   settings = {
+   /*
+        Settings
+        - moduleTitle: Title of the module (string)
+   */
+    settings = {
        moduleTitle: "Currently Opened Windows and Tabs"
    }
 
-   createTabGroup = (group) => {
-       if(group){
-        console.log("DRAGONBALL", group);
-       }
-       
-       sendToBackground("save-tab-group", group.data, (response) => {
-           console.log("Spider-man", response);
-           const { onRaiseToView } = this.props;
+    /*
+        createTabGroup
+        
+        Creates a new tab group based on information given in the input parameter. A group is
+        created when this parameter is sent to the browser, where the background script decides
+        whether to add a new group or overwrite an existing group. 
 
-           if(onRaiseToView){
-            onRaiseToView("refresh");
-           }
-       });
-   }
+        Paramer
+    */
+    createTabGroup = (details) => {
+        sendToBackground("save-tab-group", details, (response) => {
+            console.log("Spider-man", response);
+            const { onRaiseToView } = this.props;
+
+            if(onRaiseToView){
+                onRaiseToView("refresh");
+            }
+        });
+    }
 
     getOpenedWindowsAndTabs = () => {
         sendToBackground("get-all-windows-and-tabs", {}, (response) => {

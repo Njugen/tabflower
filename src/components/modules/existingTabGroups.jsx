@@ -35,12 +35,12 @@ class ExistingTabGroupsModule extends Module {
        });
    }
 
-   createOrEditTabGroup = (group) => {
-    if(group){
-        console.log("DRAGONBALL", group);
+   createOrEditTabGroup = (details) => {
+    if(details){
+        console.log("DRAGONBALL", details);
        }
        
-       sendToBackground("save-tab-group", group.data, (response) => {
+       sendToBackground("save-tab-group", details, (response) => {
            console.log("Spider-man", response);
            const { onRaiseToView } = this.props;
 

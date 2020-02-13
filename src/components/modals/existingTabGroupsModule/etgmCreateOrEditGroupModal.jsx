@@ -10,8 +10,8 @@ class ETGMCreateNewGroupModal extends Modal {
    
 
     saveModalHandler = (callback) => {
-           
-        this.clearModalData(callback(this.state));
+           console.log("BAG", this.state);
+        this.clearModalData(callback(this.state.tabGroupDetails));
     }
 
     dismissModalHandler = () => {
@@ -32,8 +32,8 @@ class ETGMCreateNewGroupModal extends Modal {
     }
 
     childComponentDidMount = () => {
-        this.saveToState("windowAndTabs", this.props.data.params.windowAndTabs);
-        this.saveToState("groupId", this.setGroupId(this.props.data.params.groupId));
+        this.saveToState("windowAndTabs", this.props.data.params.windowAndTabs, "tabGroupDetails");
+        this.saveToState("groupId", this.setGroupId(this.props.data.params.groupId), "tabGroupDetails");
     } 
 
     componentWillUnmount = () => {
@@ -63,7 +63,7 @@ class ETGMCreateNewGroupModal extends Modal {
         
         console.log("UI", windows);
         console.log("CD", this.props.data.params.windowAndTabs);
-        this.saveToState("windowAndTabs", windows, () => {
+        this.saveToState("windowAndTabs", windows, "data", () => {
             console.log("C", this.props.data.params.windowAndTabs);
         })
         
@@ -87,7 +87,7 @@ class ETGMCreateNewGroupModal extends Modal {
         )
        
 
-        this.saveToState("windowAndTabs", windows, () => {
+        this.saveToState("windowAndTabs", windows, "data", () => {
             //console.log("CX", this.props.data.params.windowAndTabs);
         }) 
     }
@@ -104,7 +104,7 @@ class ETGMCreateNewGroupModal extends Modal {
                 windows.splice(windowIndex, 1);
             }
 
-            this.saveToState("windowAndTabs", windows, () => {
+            this.saveToState("windowAndTabs", windows, "data", () => {
                 //console.log("CX", this.props.data.params.windowAndTabs);
             }) 
         }
@@ -120,7 +120,7 @@ class ETGMCreateNewGroupModal extends Modal {
             console.log("UID", windows, windowIndex);
             windows.splice(windowIndex, 1);
 
-            this.saveToState("windowAndTabs", windows, () => {
+            this.saveToState("windowAndTabs", windows, "data", () => {
                 //console.log("CX", this.props.data.params.windowAndTabs);
             }) 
         }
@@ -176,13 +176,15 @@ class ETGMCreateNewGroupModal extends Modal {
             groupDescription: description,
             type
         } = this.props.data.params;
+        
+        const { tabGroupDetails } = this.state;
 
         return (
             <Fragment>
-                <TBTextInput id="tabGroupName" label="Group Name" value={name ? name : ""} onChange={(id, value) => this.saveToState(id, value)}></TBTextInput>
-                <TBTextArea id="tabGroupDescription" label="Description (max 170 characters)" value={description ? description : ""} onChange={(id, value) => this.saveToState(id, value)}></TBTextArea>
-                <TBCheckBox id="tabGroupCloseAll" label="Close everything else before launching this tab group" value={closeAll && closeAll === true ? "true" : "false"} onToggle={(id, value) => this.saveToState(id, value)} />
-                {this.renderWindowsAndTabsSection(this.state.data.windowAndTabs, type)}
+                <TBTextInput id="tabGroupName" label="Group Name" value={name ? name : ""} onChange={(id, value) => this.saveToState(id, value, "tabGroupDetails")}></TBTextInput>
+                <TBTextArea id="tabGroupDescription" label="Description (max 170 characters)" value={description ? description : ""} onChange={(id, value) => this.saveToState(id, value, "tabGroupDetails")}></TBTextArea>
+                <TBCheckBox id="tabGroupCloseAll" label="Close everything else before launching this tab group" value={closeAll && closeAll === true ? "true" : "false"} onToggle={(id, value) => this.saveToState(id, value, "tabGroupDetails")} />
+                {tabGroupDetails && this.renderWindowsAndTabsSection(tabGroupDetails.windowAndTabs, type)}
             </Fragment>
         );    
     }
