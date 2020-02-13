@@ -87,9 +87,45 @@ class ETGMCreateNewGroupModal extends Modal {
         )
        
 
-       /* this.saveToState("windowAndTabs", windows, () => {
+        this.saveToState("windowAndTabs", windows, () => {
             //console.log("CX", this.props.data.params.windowAndTabs);
-        }) */
+        }) 
+    }
+
+    deleteTab = (windowIndex, tabIndex) => {
+        let windows;
+
+        if(Object.keys(this.state.data.windowAndTabs).length > 0){
+            windows = [...this.state.data.windowAndTabs];
+            console.log("UID", windows, windowIndex);
+            windows[windowIndex].tabs.splice(tabIndex, 1);
+
+            if(windowIndex === 0 && windows[windowIndex].tabs.length < 1){
+                windows.splice(windowIndex, 1);
+            }
+
+            this.saveToState("windowAndTabs", windows, () => {
+                //console.log("CX", this.props.data.params.windowAndTabs);
+            }) 
+        }
+
+        
+    }
+
+    deleteWindow = (windowIndex) => {
+        let windows;
+
+        if(Object.keys(this.state.data.windowAndTabs).length > 0){
+            windows = [...this.state.data.windowAndTabs];
+            console.log("UID", windows, windowIndex);
+            windows.splice(windowIndex, 1);
+
+            this.saveToState("windowAndTabs", windows, () => {
+                //console.log("CX", this.props.data.params.windowAndTabs);
+            }) 
+        }
+
+        
     }
 
     renderWindowsAndTabsSection = (windowAndTabs, type) => {
@@ -119,6 +155,8 @@ class ETGMCreateNewGroupModal extends Modal {
                             windows={windowAndTabs} 
                             onAddNewWindow={(data) => this.addNewWindow(data)}
                             onAddNewTab={(data, index) => this.addNewTab(data, index)}
+                            onDeleteTab={(windowIndex, tabIndex) => this.deleteTab(windowIndex, tabIndex)}
+                            onDeleteWindow={(windowIndex) => this.deleteWindow(windowIndex)}
                             canCloseItems={type === "existing-group" || type === "new-group" ? true : false}
                             initialShowTabs={false}
                             initialTabStyle="vertical"

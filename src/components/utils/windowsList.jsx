@@ -204,6 +204,24 @@ class WindowsList extends Component {
         callback();
     }
 
+    raiseDeleteTabToModal = (windowIndex, tabIndex, callback) => {
+        const { onDeleteTab } = this.props;
+        if(typeof onDeleteTab === "function"){
+            onDeleteTab(windowIndex, tabIndex);
+        }
+        callback();
+    }
+
+    raiseDeleteWindowToModal = (windowIndex, callback) => {
+        const { onDeleteWindow } = this.props;
+
+        if(typeof onDeleteWindow === "function"){
+            onDeleteWindow(windowIndex);
+        }
+
+        callback();
+    }
+
     renderAddNewWindowForm = () => {
         return (
             <div className="addNewWindowForm">
@@ -254,13 +272,21 @@ class WindowsList extends Component {
                         console.log(newTabInContainerIds, windowContainerId);
                         
                         const tabList = tabs.map(
-                            (tab) => {
+                            (tab, tabIndex) => {
                                 return (
                                     <li className={typeof initialTabStyle === "string" && initialTabStyle === "horizontal" ? "col-3" : "col-12"}>
                                         <img src={tab.favIconUrl} className="list-item-favicon" />
                                         <span>{tab.title}</span>
                                         <ul className="list-item-options">
-                                         {canCloseItems && canCloseItems === true && <li><button className="fas fa-times" onClick={() => this.raiseToModal({ id: "cotmremovetabmodal", tabInfo: tab, action: this.closeTab.bind(this)})}></button></li>}
+                                         {canCloseItems && canCloseItems === true && <li><button className="fas fa-times" onClick={() => 
+                                            {
+                                                if(type === "existing-group" || type === "new-group"){
+                                                    this.raiseDeleteTabToModal(key, tabIndex, () => {});
+                                                } else {
+                                                    this.raiseToModal({ id: "cotmremovetabmodal", tabInfo: tab, action: this.closeTab.bind(this)})
+                                                }
+                                            }
+                                         }></button></li>}
                                         </ul>
                                     </li>
                                 );
@@ -275,7 +301,13 @@ class WindowsList extends Component {
                                             <ul className="list-item-options">
                                                 <li><button className="fas fa-align-justify" onClick={(e) => this.toggleTabListStyle(e, windowContainerId)}></button></li>
                                                 <li><button disabled={isAddingNewTab ? true : false} className={typeof initialShowTabs === "boolean" && initialShowTabs === false ? "fas fa-chevron-down toggle-window" : "fas fa-chevron-up toggle-window"} onClick={(e) => this.toggleTabListVisibility(e, windowContainerId)}></button></li>
-                                                {canCloseItems && canCloseItems === true && <li><button className="fas fa-times" onClick={() => this.raiseToModal({id: "cotmremovewindowmodal", windowInfo: window, action: this.closeWindow.bind(this)})}></button></li> }
+                                                {canCloseItems && canCloseItems === true && <li><button className="fas fa-times" onClick={() => {
+                                                    if(type === "existing-group" || type === "new-group"){
+                                                        this.raiseDeleteWindowToModal(key, () => {});
+                                                    } else {
+                                                        this.raiseToModal({id: "cotmremovewindowmodal", windowInfo: window, action: this.closeWindow.bind(this)})
+                                                    }
+                                                }}></button></li> }
                                             </ul>
                                         </div>
                                         <ul className={typeof initialShowTabs === "boolean" && initialShowTabs === false ? "tab-listing-hide tab-listing horizontal" : "tab-listing horizontal"}>
@@ -297,7 +329,7 @@ class WindowsList extends Component {
             return (
                 <Fragment>
                     {newWindow && newWindow === true && this.renderAddNewWindowForm()}
-                    {((newWindow && newWindow === false) || !newWindow) && type === "new-group" && <button className="active-tabs-add-button" onClick={() => this.addNewWindow(true)}>Add new window</button>}
+                    {((newWindow && newWindow === false) || !newWindow) && (type === "new-group" || "existing-group") && <button className="active-tabs-add-button" onClick={() => this.addNewWindow(true)}>Add new window</button>}
                 </Fragment>
             );
         }
