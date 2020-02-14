@@ -165,3 +165,28 @@ const isNegativeNumber = (input) => {
     }
 }
 
+/*
+    isZero()
+
+    Check wether the input is zero or not
+
+    Params:
+    - input (can be anything)
+
+    Returns:
+    - true, if the input is a number and is zero
+    - false, if the input is a number but is not zero
+    - false, if the input is not a number
+*/
+
+const isZero = (input) => {
+    if(typeof input === "number"){
+        if(input === 0){
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
