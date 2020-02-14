@@ -94,3 +94,74 @@ const isString = (input) => {
         return false;
     }
 }
+
+/*
+    isNumber()
+
+    Verify that the input is actually a number
+
+    Parameters:
+    - input (Can be whatever)
+
+    Returns:
+    - true, if the input is a number (any number)
+    - false, if the input is not a number
+*/
+const isNumber = (input) => {
+    if(typeof input === "number"){
+        return true;
+    } else {
+        return false
+    }
+}
+
+/*
+    isPositiveNumber()
+
+    Check whether the input is a positive number or not
+
+    Params:
+    - input (can be anything)
+
+    Returns:
+    - true, if the input is a number AND the input is larger than 0
+    - false, if the input is a number but not larger than 0
+    - false, if the input is not a number
+*/
+const isPositiveNumber = (input) => {
+    if(typeof input === "number"){
+        if(input > 0){
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
+/*
+    isNegativeNumber()
+
+    Check if the input is a negative number
+
+    Params:
+    - input (can be any value)
+
+    Returns:
+    - true, if the input is a number and less than 0
+    - false, if the input is a number, but larger than 0
+    - false, if the input is not a number
+*/
+const isNegativeNumber = (input) => {
+    if(typeof input === "number"){
+        if(input < 0){
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
