@@ -1,4 +1,6 @@
 import React, { Component, createRef } from "react";
+import * as validator from './../utils/inputValidators';
+import { ValidatorError, ErrorHandler } from '../utils/exceptionsAndHandler';
 
 /*
     The Modal component
@@ -9,7 +11,8 @@ import React, { Component, createRef } from "react";
 
     The contents (the graphical render/user interface) of this class is empty. To use a modal with inserted contents, 
     create a child class inheriting from this component, then import it into src/App.js. The new class will inherit all 
-    the basics written in Modal class, including its rendered user interface. Example:
+    the basics written in Modal class, including its rendered 
+user interface. Example:
 
     modalForAPurpose.jsx:
     class ModalForAPurpose extends Modal {
@@ -51,16 +54,71 @@ class Modal extends Component {
        ui: {}
     }
 
+    raiseToMsgOverlay = (data) => {
+        /*
+            Parameters: 
+            -   data (object, containing whatever data that we want the modal to processs. Mandatory)
+
+            Inform the App component to launch a modal (popup), by raising the data provided
+            in this function's parameter. The data parameter will travel through the following components:
+
+                Module (any module, this module) > View (any view: this view) > RouteList > App
+
+            All components in this chain will have access to the information raised.
+        */
+
+        const { onRaiseToMsgOverlay } = this.props;
+        console.log("GOAT", data)
+        this.dismissModalHandler();
+
+        setTimeout(() => {
+                if(typeof onRaiseToMsgOverlay === "function"){
+                    onRaiseToMsgOverlay(data);
+                }
+            },
+            1000
+        );
+
+    }
+
     fadeIn = () => {
         /*
             Fading in the modal by accessing its tag by react ref (https://reactjs.org/docs/refs-and-the-dom.html).
             Check the CSS set in src/styles/tabeon/style.css
         */
 
-        let modal = this.modalRef.current;
+        const { isObject } = validator;
+ 
+        try {
+            console.log("FFXIV", isObject(this.modalRef));
+            
+            if(isObject(this.modalRef) && isObject(this.modalRef.current)){
+                let modal = this.modalRef.current;
 
-        modal.style.opacity = 1;
-        modal.style.zIndex = 10000;
+                if(isObject(modal.style)){
+                    modal.style.opacity = 1;
+                    modal.style.zIndex = 10000;
+                  //  JSON.parse(modal);
+                } else {
+                    throw new ValidatorError(
+                        "A style object is missing in the modal's jsx component. Style cannot be set", 
+                        "Modal.fadeIn()", 
+                        "modal-parent-101"
+                    )
+                }
+            } else {
+                throw new ValidatorError(
+                    "A reference to the jsx element representing the modal is missing or is invalid", 
+                    "Modal.fadeIn()", 
+                    "modal-parent-102"
+                )
+            }
+            
+        } catch(err){
+            if(this.props.data.id !== "errormodal"){
+                ErrorHandler(err, this.raiseToMsgOverlay); 
+            }
+        }
     }
 
     fadeOut = () => {
@@ -68,13 +126,37 @@ class Modal extends Component {
             Fading out the modal by accessing its tag by react ref (https://reactjs.org/docs/refs-and-the-dom.html).
             Check the CSS set under #tabeonModal in src/styles/tabeon/style.css
         */
+       const { isObject } = validator;
+       
+        try {
+            if(isObject(this.modalRef) && isObject(this.modalRef.current)){
 
-        let modal = this.modalRef.current;
+                let modal = this.modalRef.current;
 
-        modal.style.opacity = 0;
-        setTimeout(() => {
-            modal.style.zIndex = 0;
-        }, 500)
+                if(isObject(modal.style)){
+                    modal.style.opacity = 0;
+                    setTimeout(() => {
+                        modal.style.zIndex = 0;
+                    }, 500) 
+                } else {
+                    throw new ValidatorError(
+                        "A style object is missing in the modal's jsx component. Style cannot be set", 
+                        "Modal.fadeIn()", 
+                        "modal-parent-101"
+                    )
+                }
+            } else {
+                throw new ValidatorError(
+                    "A reference to the jsx element representing the modal is missing or is invalid", 
+                    "Modal.fadeIn()", 
+                    "modal-parent-102"
+                )
+            }
+        } catch(err){
+            if(this.props.data.id !== "errormodal"){
+                ErrorHandler(err, this.raiseToOverlay); 
+            }
+        }
     }
 
     clearModalData = (callback) => {
@@ -120,7 +202,7 @@ class Modal extends Component {
             <div ref={this.modalRef} className="modal" id="tabeonModal">
         */
 
-        this.modalRef = createRef();
+     //   this.modalRef = createRef();
     }
 
     componentDidUpdate = (prevProps, prevState) => {

@@ -12,7 +12,7 @@
     - false, if the input is not an object
 */
 
-const isObject = (input) => {
+export const isObject = (input) => {
     if(typeof input === "object"){
         return true;
     } else {
@@ -33,7 +33,7 @@ const isObject = (input) => {
     - false, if input is not an array or if input is not defined
 */
 
-const isArray = (input) => {
+export const isArray = (input) => {
     if(typeof input !== "undefined"){
         return Array.isArray(input);
     } else {
@@ -58,7 +58,7 @@ const isArray = (input) => {
         - false, if the input is not an empty string
 */
 
-const isEmptyString = (input) => {
+export const isEmptyString = (input) => {
     if(typeof input === "string"){
         if(input.length === 0 || input.replace(/ /g, "").length === 0){
             return true;
@@ -83,7 +83,7 @@ const isEmptyString = (input) => {
     - false, if the input is not a string OR if the input is a string consisting of 0 characters
 */
 
-const isString = (input) => {
+export const isString = (input) => {
     if(typeof input === "string"){
         if(input.length > 0){
             return true;
@@ -107,7 +107,7 @@ const isString = (input) => {
     - true, if the input is a number (any number)
     - false, if the input is not a number
 */
-const isNumber = (input) => {
+export const isNumber = (input) => {
     if(typeof input === "number"){
         return true;
     } else {
@@ -128,7 +128,7 @@ const isNumber = (input) => {
     - false, if the input is a number but not larger than 0
     - false, if the input is not a number
 */
-const isPositiveNumber = (input) => {
+export const isPositiveNumber = (input) => {
     if(typeof input === "number"){
         if(input > 0){
             return true;
@@ -153,7 +153,7 @@ const isPositiveNumber = (input) => {
     - false, if the input is a number, but larger than 0
     - false, if the input is not a number
 */
-const isNegativeNumber = (input) => {
+export const isNegativeNumber = (input) => {
     if(typeof input === "number"){
         if(input < 0){
             return true;
@@ -179,7 +179,7 @@ const isNegativeNumber = (input) => {
     - false, if the input is not a number
 */
 
-const isZero = (input) => {
+export const isZero = (input) => {
     if(typeof input === "number"){
         if(input === 0){
             return true;
