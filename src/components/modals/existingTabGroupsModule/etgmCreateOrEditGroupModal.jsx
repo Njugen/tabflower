@@ -6,13 +6,24 @@ import TBCheckBox from "../../utils/form/tbCheckbox";
 import TBTextInput from './../../utils/form/tbTextInput';
 import TBTextArea from './../../utils/form/tbTextArea';
 import { PropTypes } from 'prop-types';
+import { ValidatorError, ErrorHandler } from './../../utils/exceptionsAndHandler';
+import * as validator from './../../utils/inputValidators'
 
 class ETGMCreateNewGroupModal extends Modal {
-   
 
     saveModalHandler = (callback) => {
-           console.log("BAG", this.state);
-        this.clearModalData(callback(this.state.tabGroupDetails));
+        try {
+            const { isFunction } = validator;
+
+            if(isFunction(callback)){
+                throw new ValidatorError("ETGMCreateNewGroupModal-101")
+                this.clearModalData(callback(this.state.tabGroupDetails));
+            } else {
+                throw new ValidatorError("ETGMCreateNewGroupModal-101")
+            }
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+        }
     }
 
     dismissModalHandler = () => {

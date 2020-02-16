@@ -13,7 +13,7 @@ import { PropTypes } from 'prop-types';
 
     The contents (the graphical render/user interface) of this class is empty. To use a modal with inserted contents, 
     create a child class inheriting from this component, then import it into src/App.js. The new class will inherit all 
-    the basics written in Modal class, including its rendered 
+    the basics written in Modal class, including its rendered import { ValidatorError } from './../utils/exceptionsAndHandler';
 user interface. Example:
 
     modalForAPurpose.jsx:
@@ -131,7 +131,7 @@ class Modal extends Component {
                     throw new ValidatorError("mp-fadeOut-101")
                 }
             } else {
-                throw new ValidatorError("mp-fadeout-102")
+                throw new ValidatorError("mp-fadeOut-102")
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay); 
@@ -147,13 +147,18 @@ class Modal extends Component {
         */
         try {
             const { onDismiss: onDismissModal } = this.props;
+            const { isUndefined, isFunction } = validator;
 
             this.setState({ }, () => {
                 this.fadeOut();
                 onDismissModal();
 
-                if(typeof callback === "function"){
-                    callback();
+                if(!isUndefined(callback)){
+                    if(isFunction(callback)){
+                        callback();
+                    } else {
+                        throw new ValidatorError("mp-clearModalData-103")
+                    }
                 }
             });
         } catch(err){
@@ -167,7 +172,7 @@ class Modal extends Component {
             Apparently, the fade in does not work properly (resulting in immediate visibility of the component) without
             the timeout.
         */
-        JSON.parse({})
+       
         setTimeout(() => {
             this.fadeIn();
         }, 100)
@@ -232,8 +237,45 @@ class Modal extends Component {
     }
 
     saveToState = (key, value, area, callback) => {
+        /*
+            The saveToState function
+
+            This function saves information to a categorized/area section of the state. The
+            state for a modal may be used to store feature related data or simply have
+            information onhold to be passed. However, to avoid clutter, use this
+            function to store data in separate sections if necessary. 
+
+            E.g. 
+            state = {
+                ui: { key1: null }
+                dataOnHold: {key2: null}
+                AnotherArea: {key3: null}
+            }
+
+            instead of:
+            
+            state = {
+                key1: null, key2: null, key3: null ...
+            }
+
+            Parameters:
+            - key (string): A label representing the data to be stored
+            - value (anything, but not undefined): A value paired with the key
+            - area (string): Where in the state to store the value
+            - callback (function, optional): Function to execute once the data has been stored 
+        */
         try {
-            if(typeof area === "string"){
+            const { isString, isUndefined, isFunction } = validator
+            
+            if(isString(area)){
+                if(isUndefined(value)){
+                    throw new ValidatorError("mp-saveToState-104") 
+                }
+
+                if(!isString(area)){
+                    throw new ValidatorError("mp-saveToState-105") 
+                }
+
                 let newInput = this.state;
                 
                 if(typeof newInput[area] !== "object"){
@@ -243,10 +285,16 @@ class Modal extends Component {
                 newInput[area][key] = value;
 
                 this.setState(newInput, () => {
-                    if(typeof callback === "function"){
-                        callback();
+                    if(!isUndefined(callback)){
+                        if(isFunction(callback)){
+                            callback();
+                        } else {
+                            throw new ValidatorError("mp-saveToState-106") 
+                        }
                     }
                 })
+            } else {
+                throw new ValidatorError("mp-saveToState-107")
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay); 

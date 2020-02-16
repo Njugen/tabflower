@@ -10,19 +10,27 @@ class ErrorBoundary extends Component {
   
     static getDerivedStateFromError(error) {
       // Update state so the next render will show the fallback UI.
-      return { hasError: true };
+      //return { hasError: true };
     }
   
     componentDidCatch(error, errorInfo) {
       // You can also log the error to an error reporting service
         console.log("Error", error);
         console.log("ErrorInfo", errorInfo);
+
+        this.setState({
+            error,
+            errorInfo,
+            hasError: true
+        }, () => {
+            console.log("TTTTTTT", this.state);
+        })
     }
   
     render() {
       if (this.state.hasError) {
         // You can render any custom fallback UI
-        return <ErrorModal data={{error: {message: "test"}}} onSave={() => ""} onDismiss={() => ""}></ErrorModal>
+        return <ErrorModal data={this.state} onSave={() => ""} onDismiss={() => ""}></ErrorModal>
       }
   
       return this.props.children; 

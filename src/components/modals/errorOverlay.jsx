@@ -5,7 +5,7 @@ import Modal from './modal';
 class ErrorOverlay extends Component {
     render = () => {
         const { error } = this.props.data;
-
+        console.log("IN OVERLAY", this.props.data);
         return(
             <div id="tabflower-error-overlay">
                 <div className="contents-wrapper p-3">

@@ -190,3 +190,32 @@ export const isZero = (input) => {
         return false;
     }
 }
+
+/*
+    isFunction()
+
+    Check wether the input is a function or not
+
+    Params:
+    - input (can be anything)
+
+    Returns:
+    - true, if the input is a function
+    - false, if the input is not a function
+*/
+
+export const isFunction = (input) => {
+    if(typeof input === "function"){
+        return true
+    } else {
+        return false;
+    }
+}
+
+export const isUndefined = (input) => {
+    if(typeof input === "undefined"){
+        return true;
+    } else {
+        return false;
+    }
+}

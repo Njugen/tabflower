@@ -2,12 +2,20 @@ export const ValidatorError = (code) => {
     let message;
 
     switch(code){
+        // modal.js
         case "mp-fadeIn-101" || "mp-fadeOut-101":
             message = "A style object is missing in the modal's jsx component. Style cannot be set";
             break;
         case "mp-fadeIn-102" || "mp-fadeOut-102":
-            message = "A reference to the jsx element representing the modal is missing or is invalid";
-            break;  
+            message = "A reference to the JSX element representing the modal is missing or is invalid";
+            break; 
+        case "mp-clearModalData-103":
+            message = "The callback parameter is not a function";
+            break;
+
+        // ETGMCreateNewGroupModal
+        case "ETGMCreateNewGroupModal-101": 
+            message = "The callback parameter is not a function"    
         default:
             message = "An Unknown Error has occured"
     }
