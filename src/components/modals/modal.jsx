@@ -265,14 +265,14 @@ class Modal extends Component {
             - callback (function, optional): Function to execute once the data has been stored 
         */
         try {
-            const { isString, isUndefined, isFunction } = validator
+            const { isString, isUndefined, isFunction } = validator;
             
             if(isString(area)){
                 if(isUndefined(value)){
                     throw new ValidatorError("mp-saveToState-104") 
                 }
 
-                if(!isString(area)){
+                if(!isString(key)){
                     throw new ValidatorError("mp-saveToState-105") 
                 }
 

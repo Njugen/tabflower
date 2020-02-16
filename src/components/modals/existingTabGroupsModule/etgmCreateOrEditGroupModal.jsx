@@ -16,10 +16,9 @@ class ETGMCreateNewGroupModal extends Modal {
             const { isFunction } = validator;
 
             if(isFunction(callback)){
-                throw new ValidatorError("ETGMCreateNewGroupModal-101")
                 this.clearModalData(callback(this.state.tabGroupDetails));
             } else {
-                throw new ValidatorError("ETGMCreateNewGroupModal-101")
+                throw new ValidatorError("ETGMCreateNewGroupModal-101");
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay);
@@ -27,20 +26,35 @@ class ETGMCreateNewGroupModal extends Modal {
     }
 
     dismissModalHandler = () => {
-
-        this.clearModalData();
+        try {
+            this.clearModalData();
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+        }
     }
 
     setGroupId = (id) => {
-        let groupId = "";
-        console.log("SETTING ID", id);
-        if(id){
-            groupId = id;
-        } else {
-            groupId = Math.random().toString(36).slice(2);
-        }
+        try {
+            const { isString, isUndefined } = validator
 
-        return groupId;
+            let groupId = "";
+            
+            id=123;
+
+            if(!isUndefined(id)){
+                if(isString(id)){
+                    groupId = id;
+                } else {
+                    throw new ValidatorError("ETGMCreateNewGroupModal-102")
+                }
+            } else {
+                groupId = Math.random().toString(36).slice(2);
+            }
+
+            return groupId;
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+        }
     }
 
     childComponentDidMount = () => {
@@ -55,14 +69,14 @@ class ETGMCreateNewGroupModal extends Modal {
 
     addNewWindow = (inputUrl) => {
         let windows;
-        console.log("VO", this.state.tabGroupDetails.windowAndTabs);
-        if(Object.keys(this.state.tabGroupDetails.windowAndTabs).length > 0){
-            windows = [...this.state.tabGroupDetails.windowAndTabs];
+
+        const { windowAndTabs } = this.state.tabGroupDetails;
+
+        if(Object.keys(windowAndTabs).length > 0){
+            windows = [...windowAndTabs];
         } else {
             windows = [];
         }
-
-        console.log("HEH", windows);
 
         windows.push({
             tabs: [{
@@ -71,13 +85,8 @@ class ETGMCreateNewGroupModal extends Modal {
                 url: inputUrl
             }]
         })
-      
-        
-        console.log("UI", windows);
-        console.log("CD", this.props.data.params.windowAndTabs);
-        this.saveToState("windowAndTabs", windows, "tabGroupDetails", () => {
-            console.log("C", this.props.data.params.windowAndTabs);
-        })
+
+        this.saveToState("windowAndTabs", windows, "tabGroupDetails")
         
     }
 

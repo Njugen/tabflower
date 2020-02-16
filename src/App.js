@@ -47,6 +47,7 @@ class App extends Component{
     currentView: {},
     routes: [],
     modal: {},
+    errors: [],
     mainSidebar: {},
     refreshFactor: 0
   };
@@ -106,8 +107,25 @@ class App extends Component{
     if(data.clear && data.clear === true){
       this.clearModal();
     } else {
-      this.launchModal(data);
+      this.launchErrorOverlay(data);
     }
+  }
+
+  launchErrorOverlay = (data) => {
+    let errors = this.state.errors;
+    errors.push(data);
+
+    this.setState({
+      errors
+    }, () => {
+      console.log("ALL ERRORS", this.state.errors);
+    });
+  }
+
+  clearErrors = () => {
+    const errors = [];
+    
+    this.setState({errors});
   }
 
   launchModal = (data) => {
@@ -139,6 +157,7 @@ class App extends Component{
 
   render = () => {
     const { launched: modalLaunched, id: modalId } = this.state.modal;
+    const { errors } = this.state;
     console.log("MMMM", this.state.modal);
     return (
       <Fragment>
@@ -151,7 +170,7 @@ class App extends Component{
           {(modalLaunched && modalId === "cotmremoveunresponsivetabsmodal") && <COTMRemoveUnresponsiveTabsModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></COTMRemoveUnresponsiveTabsModal>}
           {(modalLaunched && modalId === "cotmremovewindowmodal") && <COTMRemoveWindowModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></COTMRemoveWindowModal>}
           {(modalLaunched && modalId === "cotmremovetabmodal") && <COTMRemoveTabModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></COTMRemoveTabModal>}
-          {(modalLaunched && modalId === "erroroverlay") && <ErrorOverlay data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></ErrorOverlay>}
+          {errors.length > 0 && <ErrorOverlay data={errors} onSave={() => ""} onDismiss={() => this.clearErrors()}></ErrorOverlay>}
         </ErrorBoundary>
         <div className="container-fluid">
           <div className="row">

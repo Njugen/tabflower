@@ -12,12 +12,28 @@ export const ValidatorError = (code) => {
         case "mp-clearModalData-103":
             message = "The callback parameter is not a function";
             break;
+        case "mp-saveToState-104": 
+            message = "The \"value\" parameter is undefined. Data was not saved";    
+            break;    
+        case "mp-saveToState-105": 
+            message = "The \"area\" parameter is not a string. Data was not saved.";    
+            break;
+        case "mp-saveToState-106": 
+            message = "The \"callback\" parameter is not a function";
+            break;    
+        case "mp-saveToState-107": 
+            message = "The \"area\" parameter is not a string. Data was not saved.";    
+            break;    
 
         // ETGMCreateNewGroupModal
         case "ETGMCreateNewGroupModal-101": 
-            message = "The callback parameter is not a function"    
+            message = "The callback parameter is not a function";
+            break;
+        case "ETGMCreateNewGroupModal-102": 
+            message = "A tab group id must be a string. The tab group could not be created."  
+            break;   
         default:
-            message = "An Unknown Error has occured"
+            message = "An Unknown Error has occured";
     }
 
     return {
@@ -48,11 +64,10 @@ export const ErrorHandler = (err, callback) => {
             cannot be executed properly... ????
         */
 
-        console.log("MEH", err);
 
-            if(typeof callback === "function"){
-                callback({id: "erroroverlay", error: err });
-            }
+        if(typeof callback === "function"){
+            callback(err);
+        }
 
     } else {
         // UNKNOWN ERROR
