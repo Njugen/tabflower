@@ -43,7 +43,7 @@ class TBTextArea extends Component {
                 </div>
                 <div className="tb-form-row row">
                     <div className="col-12">
-                            <textarea maxlength="170" onChange={(e) => this.changeInputValue(e)} className="tb-textarea">
+                            <textarea maxLength="170" onChange={(e) => this.changeInputValue(e)} className="tb-textarea">
                                 {this.state.value || value}
                          </textarea>   
                     </div>

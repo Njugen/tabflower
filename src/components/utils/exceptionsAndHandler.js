@@ -40,7 +40,7 @@ export const ErrorHandler = (err, callback) => {
             cannot be executed properly... ????
         */
 
-        console.log(err);
+        console.log("MEH", err);
 
             if(typeof callback === "function"){
                 callback({id: "erroroverlay", error: err });

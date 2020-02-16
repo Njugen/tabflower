@@ -93,15 +93,16 @@ class Modal extends Component {
         try {
             if(isObject(this.modalRef) && isObject(this.modalRef.current)){
                 let modal = this.modalRef.current;
-
+                
                 if(isObject(modal.style)){
                     modal.style.opacity = 1;
                     modal.style.zIndex = 10000;
+
                 } else {
-                    throw new ValidatorError("mp-fadeIn-101")
+                    throw new ValidatorError("mp-fadeIn-101");
                 }
             } else {
-                throw new ValidatorError("mp-fadeIn-102")
+                throw new ValidatorError("mp-fadeIn-102");
             }
             
         } catch(err){
@@ -118,7 +119,7 @@ class Modal extends Component {
        
         try {
             if(isObject(this.modalRef) && isObject(this.modalRef.current)){
-
+     
                 let modal = this.modalRef.current;
 
                 if(isObject(modal.style)){
@@ -166,7 +167,7 @@ class Modal extends Component {
             Apparently, the fade in does not work properly (resulting in immediate visibility of the component) without
             the timeout.
         */
-      //JSON.parse({})
+        JSON.parse({})
         setTimeout(() => {
             this.fadeIn();
         }, 100)

@@ -143,15 +143,15 @@ class App extends Component{
     return (
       <Fragment>
         <ErrorBoundary>
-        {(modalLaunched && modalId === "confirm-action") && <ConfirmationModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></ConfirmationModal>}
-        {(modalLaunched && modalId === "date-settings") && <CalendarDateSettingsModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></CalendarDateSettingsModal>}
-        {(modalLaunched && modalId === "etgmlaunchgroupsmodal") && <ETGMLaunchGroupsModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></ETGMLaunchGroupsModal>}
-        {(modalLaunched && modalId === "etgmremovegroupsmodal") && <ETGMRemoveGroupsModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></ETGMRemoveGroupsModal>}
-        {(modalLaunched && modalId === "etgmcreateoreditgroupmodal") && <ETGMCreateOrEditGroupModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></ETGMCreateOrEditGroupModal>}
-        {(modalLaunched && modalId === "cotmremoveunresponsivetabsmodal") && <COTMRemoveUnresponsiveTabsModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></COTMRemoveUnresponsiveTabsModal>}
-        {(modalLaunched && modalId === "cotmremovewindowmodal") && <COTMRemoveWindowModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></COTMRemoveWindowModal>}
-        {(modalLaunched && modalId === "cotmremovetabmodal") && <COTMRemoveTabModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></COTMRemoveTabModal>}
-        {(modalLaunched && modalId === "erroroverlay") && <ErrorOverlay data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></ErrorOverlay>}
+          {(modalLaunched && modalId === "confirm-action") && <ConfirmationModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></ConfirmationModal>}
+          {(modalLaunched && modalId === "date-settings") && <CalendarDateSettingsModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></CalendarDateSettingsModal>}
+          {(modalLaunched && modalId === "etgmlaunchgroupsmodal") && <ETGMLaunchGroupsModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></ETGMLaunchGroupsModal>}
+          {(modalLaunched && modalId === "etgmremovegroupsmodal") && <ETGMRemoveGroupsModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></ETGMRemoveGroupsModal>}
+          {(modalLaunched && modalId === "etgmcreateoreditgroupmodal") && <ETGMCreateOrEditGroupModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></ETGMCreateOrEditGroupModal>}
+          {(modalLaunched && modalId === "cotmremoveunresponsivetabsmodal") && <COTMRemoveUnresponsiveTabsModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></COTMRemoveUnresponsiveTabsModal>}
+          {(modalLaunched && modalId === "cotmremovewindowmodal") && <COTMRemoveWindowModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></COTMRemoveWindowModal>}
+          {(modalLaunched && modalId === "cotmremovetabmodal") && <COTMRemoveTabModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></COTMRemoveTabModal>}
+          {(modalLaunched && modalId === "erroroverlay") && <ErrorOverlay data={this.state.modal} onSave={() => ""} onDismiss={() => this.clearModal()}></ErrorOverlay>}
         </ErrorBoundary>
         <div className="container-fluid">
           <div className="row">

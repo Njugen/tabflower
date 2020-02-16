@@ -264,6 +264,31 @@ div.container-fluid > .row > div[class^="col-"] {
     max-width: 700px;
 }
 
+/* */
+
+#tabflower-error-overlay {
+    position: absolute;
+    background: rgba(0,0,0,0.5);
+    height: 100%;
+    width: 100%;
+    z-index: 20000;
+    color: #ffffff;
+}
+
+    #tabflower-error-overlay .contents-wrapper {
+        position: absolute;
+        background: #7a1d8c;
+        width: 100%;
+        min-height: 300px;
+        transform: translateY(-50%);
+        top: 50%;
+    }
+
+    #tabflower-error-overlay .error-info ul {
+        list-style-type: none;
+        padding: 0px;
+    }
+
 /*
     CurrentResourcesModule
 */

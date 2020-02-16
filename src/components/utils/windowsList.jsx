@@ -329,7 +329,7 @@ class WindowsList extends Component {
             return (
                 <Fragment>
                     {newWindow && newWindow === true && this.renderAddNewWindowForm()}
-                    {((newWindow && newWindow === false) || !newWindow) && (type === "new-group" || "existing-group") && <button className="active-tabs-add-button" onClick={() => this.addNewWindow(true)}>Add new window</button>}
+                    {((newWindow && newWindow === false) || !newWindow) && type && (type === "new-group" || "existing-group") && <button className="active-tabs-add-button" onClick={() => this.addNewWindow(true)}>Add new window</button>}
                 </Fragment>
             );
         }
