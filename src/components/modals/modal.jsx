@@ -1,6 +1,8 @@
 import React, { Component, createRef } from "react";
 import * as validator from './../utils/inputValidators';
 import { ValidatorError, ErrorHandler } from '../utils/exceptionsAndHandler';
+import { PropTypes } from 'prop-types';
+
 
 /*
     The Modal component
@@ -54,7 +56,7 @@ class Modal extends Component {
        ui: {}
     }
 
-    raiseToMsgOverlay = (data) => {
+    raiseToErrorOverlay = (data) => {
         /*
             Parameters: 
             -   data (object, containing whatever data that we want the modal to processs. Mandatory)
@@ -67,18 +69,17 @@ class Modal extends Component {
             All components in this chain will have access to the information raised.
         */
 
-        const { onRaiseToMsgOverlay } = this.props;
-        console.log("GOAT", data)
+        const { onRaiseToErrorOverlay } = this.props;
+
         this.dismissModalHandler();
 
         setTimeout(() => {
-                if(typeof onRaiseToMsgOverlay === "function"){
-                    onRaiseToMsgOverlay(data);
+                if(typeof onRaiseToErrorOverlay === "function"){
+                    onRaiseToErrorOverlay(data);
                 }
             },
             1000
         );
-
     }
 
     fadeIn = () => {
@@ -90,34 +91,21 @@ class Modal extends Component {
         const { isObject } = validator;
  
         try {
-            console.log("FFXIV", isObject(this.modalRef));
-            
             if(isObject(this.modalRef) && isObject(this.modalRef.current)){
                 let modal = this.modalRef.current;
 
                 if(isObject(modal.style)){
                     modal.style.opacity = 1;
                     modal.style.zIndex = 10000;
-                  //  JSON.parse(modal);
                 } else {
-                    throw new ValidatorError(
-                        "A style object is missing in the modal's jsx component. Style cannot be set", 
-                        "Modal.fadeIn()", 
-                        "modal-parent-101"
-                    )
+                    throw new ValidatorError("mp-fadeIn-101")
                 }
             } else {
-                throw new ValidatorError(
-                    "A reference to the jsx element representing the modal is missing or is invalid", 
-                    "Modal.fadeIn()", 
-                    "modal-parent-102"
-                )
+                throw new ValidatorError("mp-fadeIn-102")
             }
             
         } catch(err){
-            if(this.props.data.id !== "errormodal"){
-                ErrorHandler(err, this.raiseToMsgOverlay); 
-            }
+            ErrorHandler(err, this.raiseToErrorOverlay); 
         }
     }
 
@@ -139,23 +127,13 @@ class Modal extends Component {
                         modal.style.zIndex = 0;
                     }, 500) 
                 } else {
-                    throw new ValidatorError(
-                        "A style object is missing in the modal's jsx component. Style cannot be set", 
-                        "Modal.fadeIn()", 
-                        "modal-parent-101"
-                    )
+                    throw new ValidatorError("mp-fadeOut-101")
                 }
             } else {
-                throw new ValidatorError(
-                    "A reference to the jsx element representing the modal is missing or is invalid", 
-                    "Modal.fadeIn()", 
-                    "modal-parent-102"
-                )
+                throw new ValidatorError("mp-fadeout-102")
             }
         } catch(err){
-            if(this.props.data.id !== "errormodal"){
-                ErrorHandler(err, this.raiseToOverlay); 
-            }
+            ErrorHandler(err, this.raiseToErrorOverlay); 
         }
     }
 
@@ -166,16 +144,20 @@ class Modal extends Component {
             Parameter:
             - callback (function, optional: can be used to execute more functions after the modal has faded out and dismissed)
         */
-       const { onDismiss: onDismissModal } = this.props;
+        try {
+            const { onDismiss: onDismissModal } = this.props;
 
-        this.setState({ }, () => {
-            this.fadeOut();
-            onDismissModal();
+            this.setState({ }, () => {
+                this.fadeOut();
+                onDismissModal();
 
-            if(typeof callback === "function"){
-                callback();
-            }
-        });
+                if(typeof callback === "function"){
+                    callback();
+                }
+            });
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay); 
+        }
     }
 
     componentDidMount = () => {
@@ -184,11 +166,11 @@ class Modal extends Component {
             Apparently, the fade in does not work properly (resulting in immediate visibility of the component) without
             the timeout.
         */
-
+      //JSON.parse({})
         setTimeout(() => {
             this.fadeIn();
         }, 100)
-
+      
         if(this.childComponentDidMount){
             this.childComponentDidMount();
         }
@@ -201,8 +183,8 @@ class Modal extends Component {
 
             <div ref={this.modalRef} className="modal" id="tabeonModal">
         */
-
-     //   this.modalRef = createRef();
+         //JSON.parse({})
+        this.modalRef = createRef();
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -233,10 +215,14 @@ class Modal extends Component {
             - data (optional, any datatype: data passed from the modal to the caller component)
         */
 
-        data = data || null;
-        
-        if(this.props && this.props.data && typeof this.props.data.action == "function"){
-            this.props.data.action(data);
+        try {
+            data = data || null;
+            
+            if(this.props && this.props.data && typeof this.props.data.action == "function"){
+                this.props.data.action(data);
+            }
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay); 
         }
 
         /*
@@ -245,20 +231,24 @@ class Modal extends Component {
     }
 
     saveToState = (key, value, area, callback) => {
-        if(typeof area === "string"){
-            let newInput = this.state;
-            
-            if(typeof newInput[area] !== "object"){
-                newInput[area] = {}
-            }
-
-            newInput[area][key] = value;
-
-            this.setState(newInput, () => {
-                if(typeof callback === "function"){
-                    callback();
+        try {
+            if(typeof area === "string"){
+                let newInput = this.state;
+                
+                if(typeof newInput[area] !== "object"){
+                    newInput[area] = {}
                 }
-            })
+
+                newInput[area][key] = value;
+
+                this.setState(newInput, () => {
+                    if(typeof callback === "function"){
+                        callback();
+                    }
+                })
+            }
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay); 
         }
     }
 
@@ -316,9 +306,12 @@ class Modal extends Component {
             </div>
         );
     }
+}
 
-
-    
+Modal.propTypes = {
+    data: PropTypes.object,
+    onRaiseToErrorOverlay: PropTypes.func,
+    onDismiss: PropTypes.func
 }
 
 export default Modal;

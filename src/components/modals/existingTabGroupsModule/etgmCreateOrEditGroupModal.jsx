@@ -5,6 +5,7 @@ import { sendToBackground } from "../../../services/webextension/APIBridge";
 import TBCheckBox from "../../utils/form/tbCheckbox";
 import TBTextInput from './../../utils/form/tbTextInput';
 import TBTextArea from './../../utils/form/tbTextArea';
+import { PropTypes } from 'prop-types';
 
 class ETGMCreateNewGroupModal extends Modal {
    
@@ -43,9 +44,9 @@ class ETGMCreateNewGroupModal extends Modal {
 
     addNewWindow = (inputUrl) => {
         let windows;
-        console.log("VO", this.state.data.windowAndTabs);
-        if(Object.keys(this.state.data.windowAndTabs).length > 0){
-            windows = [...this.state.data.windowAndTabs];
+        console.log("VO", this.state.tabGroupDetails.windowAndTabs);
+        if(Object.keys(this.state.tabGroupDetails.windowAndTabs).length > 0){
+            windows = [...this.state.tabGroupDetails.windowAndTabs];
         } else {
             windows = [];
         }
@@ -63,7 +64,7 @@ class ETGMCreateNewGroupModal extends Modal {
         
         console.log("UI", windows);
         console.log("CD", this.props.data.params.windowAndTabs);
-        this.saveToState("windowAndTabs", windows, "data", () => {
+        this.saveToState("windowAndTabs", windows, "tabGroupDetails", () => {
             console.log("C", this.props.data.params.windowAndTabs);
         })
         
@@ -72,8 +73,8 @@ class ETGMCreateNewGroupModal extends Modal {
     addNewTab = (inputUrl, index) => {
         let windows;
 
-        if(Object.keys(this.state.data.windowAndTabs).length > 0){
-            windows = [...this.state.data.windowAndTabs];
+        if(Object.keys(this.state.tabGroupDetails.windowAndTabs).length > 0){
+            windows = [...this.state.tabGroupDetails.windowAndTabs];
         } else {
             windows = [];
         }
@@ -87,7 +88,7 @@ class ETGMCreateNewGroupModal extends Modal {
         )
        
 
-        this.saveToState("windowAndTabs", windows, "data", () => {
+        this.saveToState("windowAndTabs", windows, "tabGroupDetails", () => {
             //console.log("CX", this.props.data.params.windowAndTabs);
         }) 
     }
@@ -95,8 +96,8 @@ class ETGMCreateNewGroupModal extends Modal {
     deleteTab = (windowIndex, tabIndex) => {
         let windows;
 
-        if(Object.keys(this.state.data.windowAndTabs).length > 0){
-            windows = [...this.state.data.windowAndTabs];
+        if(Object.keys(this.state.tabGroupDetails.windowAndTabs).length > 0){
+            windows = [...this.state.tabGroupDetails.windowAndTabs];
             console.log("UID", windows, windowIndex);
             windows[windowIndex].tabs.splice(tabIndex, 1);
 
@@ -104,7 +105,7 @@ class ETGMCreateNewGroupModal extends Modal {
                 windows.splice(windowIndex, 1);
             }
 
-            this.saveToState("windowAndTabs", windows, "data", () => {
+            this.saveToState("windowAndTabs", windows, "tabGroupDetails", () => {
                 //console.log("CX", this.props.data.params.windowAndTabs);
             }) 
         }
@@ -115,12 +116,12 @@ class ETGMCreateNewGroupModal extends Modal {
     deleteWindow = (windowIndex) => {
         let windows;
 
-        if(Object.keys(this.state.data.windowAndTabs).length > 0){
-            windows = [...this.state.data.windowAndTabs];
+        if(Object.keys(this.state.tabGroupDetails.windowAndTabs).length > 0){
+            windows = [...this.state.tabGroupDetails.windowAndTabs];
             console.log("UID", windows, windowIndex);
             windows.splice(windowIndex, 1);
 
-            this.saveToState("windowAndTabs", windows, "data", () => {
+            this.saveToState("windowAndTabs", windows, "tabGroupDetails", () => {
                 //console.log("CX", this.props.data.params.windowAndTabs);
             }) 
         }
@@ -198,6 +199,12 @@ class ETGMCreateNewGroupModal extends Modal {
             return "Edit the \"" + groupName + "\" tab group";
         }
     }
+}
+
+ETGMCreateNewGroupModal.propTypes = {
+    data: PropTypes.object,
+    onRaiseToErrorOverlay: PropTypes.func,
+    onDismiss: PropTypes.func
 }
 
 export default ETGMCreateNewGroupModal;

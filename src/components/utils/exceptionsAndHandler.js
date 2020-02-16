@@ -1,8 +1,20 @@
-export const ValidatorError = (message, functionName, code) => {
+export const ValidatorError = (code) => {
+    let message;
+
+    switch(code){
+        case "mp-fadeIn-101" || "mp-fadeOut-101":
+            message = "A style object is missing in the modal's jsx component. Style cannot be set";
+            break;
+        case "mp-fadeIn-102" || "mp-fadeOut-102":
+            message = "A reference to the jsx element representing the modal is missing or is invalid";
+            break;  
+        default:
+            message = "An Unknown Error has occured"
+    }
+
     return {
         name: "ValidatorError",
         message: message,
-        function: functionName,
         code: code
     }
 }
@@ -31,10 +43,11 @@ export const ErrorHandler = (err, callback) => {
         console.log(err);
 
             if(typeof callback === "function"){
-                callback({id: "errormodal", error: err });
+                callback({id: "erroroverlay", error: err });
             }
 
     } else {
         // UNKNOWN ERROR
     }
+    
 }
