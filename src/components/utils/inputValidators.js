@@ -192,6 +192,32 @@ export const isZero = (input) => {
 }
 
 /*
+    isAtLeastZero()
+
+    Check wether the input is at least zero or not
+
+    Params:
+    - input (can be anything)
+
+    Returns:
+    - true, if the input is a number and is zero or higher
+    - false, if the input is a number but is not zero or higher
+    - false, if the input is not a number
+*/
+
+export const isAtLeastZero = (input) => {
+    if(typeof input === "number"){
+        if(input => 0){
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
+/*
     isFunction()
 
     Check wether the input is a function or not

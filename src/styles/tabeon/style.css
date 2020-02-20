@@ -289,7 +289,7 @@ div.container-fluid > .row > div[class^="col-"] {
         padding: 0px;
     }
 
-    #tabflower-error-overlay .error-info > .row.error-list:not(:last-child) {
+    #tabflower-error-overlay .error-info > .row.error-list:not(:last-child) .col-10 {
         border-bottom: 1px solid #ffffff;
     }
 

@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import Modal from '../modal';
 import WindowsList from './../../utils/windowsList';
-import { sendToBackground } from "../../../services/webextension/APIBridge";
 import TBCheckBox from "../../utils/form/tbCheckbox";
 import TBTextInput from './../../utils/form/tbTextInput';
 import TBTextArea from './../../utils/form/tbTextArea';
@@ -38,8 +37,7 @@ class ETGMCreateNewGroupModal extends Modal {
             const { isString, isUndefined } = validator
 
             let groupId = "";
-            
-            id=123;
+
 
             if(!isUndefined(id)){
                 if(isString(id)){
@@ -63,90 +61,199 @@ class ETGMCreateNewGroupModal extends Modal {
     } 
 
     componentWillUnmount = () => {
-        console.log("UNMOUNT", this.props.data.params.windowAndTabs);
         
+        
+    }
+
+    loadUrl = (url, success, fail) => {
+        try {
+            const { isString, isFunction } = validator;
+            
+            if(isString(url)){
+                if(!isFunction(success)){
+                    throw new ValidatorError("ETGMCreateNewGroupModal-105");
+                }
+
+                if(!isFunction(fail)){
+                    throw new ValidatorError("ETGMCreateNewGroupModal-106");
+                }
+
+                fetch(url)
+                .then((response) => {
+                    if(response.ok){
+                        return (response.text())
+                    } else {
+                        throw new ValidatorError("ETGMCreateNewGroupModal-103")
+                    }
+                })
+                .then((responseText) => {
+                    success(responseText);
+                })
+                .catch((err) => {   
+                    fail(err);
+                });
+            } else {
+                throw new ValidatorError("ETGMCreateNewGroupModal-104");
+            }
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+        }
     }
 
     addNewWindow = (inputUrl) => {
-        let windows;
+        try {
+            const { isString } = validator;
 
-        const { windowAndTabs } = this.state.tabGroupDetails;
+            if(isString(inputUrl)){
+                let windows;
 
-        if(Object.keys(windowAndTabs).length > 0){
-            windows = [...windowAndTabs];
-        } else {
-            windows = [];
+                const { windowAndTabs } = this.state.tabGroupDetails;
+
+                if(Object.keys(windowAndTabs).length > 0){
+                    windows = [...windowAndTabs];
+                } else {
+                    windows = [];
+                }
+
+                this.loadUrl(
+                    inputUrl,
+                    (responseText) => {
+                        const parsedResponse = (new window.DOMParser()).parseFromString(responseText, "text/html");
+                        
+                        windows.push({
+                            tabs: [{
+                                title: parsedResponse.title,
+                                favIconUrl: inputUrl + "/favicon.ico",
+                                url: inputUrl
+                            }]
+                        })
+                        this.saveToState("windowAndTabs", windows, "tabGroupDetails")
+                    },
+                    (err) => {
+                        
+                        windows.push({
+                            tabs: [{
+                                title: inputUrl,
+                                favIconUrl: inputUrl + "/favicon.ico",
+                                url: inputUrl
+                            }]
+                        });
+                        this.saveToState("windowAndTabs", windows, "tabGroupDetails");
+                    }
+                )
+              
+            } else {
+                throw new ValidatorError("ETGMCreateNewGroupModal-104")
+            }
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
         }
-
-        windows.push({
-            tabs: [{
-                title: "RANDOM",
-                favIconUrl: "",
-                url: inputUrl
-            }]
-        })
-
-        this.saveToState("windowAndTabs", windows, "tabGroupDetails")
-        
     }
 
     addNewTab = (inputUrl, index) => {
-        let windows;
+        try {
+            const { isString, isAtLeastZero } = validator;
 
-        if(Object.keys(this.state.tabGroupDetails.windowAndTabs).length > 0){
-            windows = [...this.state.tabGroupDetails.windowAndTabs];
-        } else {
-            windows = [];
-        }
-        console.log("meager", windows[index], index);
-        windows[index].tabs.push(
-            {
-                title: "RANDOM TAB",
-                favIconUrl: "",
-                url: inputUrl
+            if(isString(inputUrl)){
+                if(isAtLeastZero(index)){
+
+                    let windows;
+
+                    if(Object.keys(this.state.tabGroupDetails.windowAndTabs).length > 0){
+                        windows = [...this.state.tabGroupDetails.windowAndTabs];
+                    } else {
+                        windows = [];
+                    }
+
+
+                    this.loadUrl(
+                        inputUrl,
+                        (responseText) => {
+                            const parsedResponse = (new window.DOMParser()).parseFromString(responseText, "text/html");
+                            
+                            windows[index].tabs.push({
+                              
+                                    title: parsedResponse.title,
+                                    favIconUrl: inputUrl + "/favicon.ico",
+                                    url: inputUrl
+                            
+                            })
+                            this.saveToState("windowAndTabs", windows, "tabGroupDetails")
+                        },
+                        (err) => {
+                            
+                            windows[index].tabs.push({
+           
+                                    title: inputUrl,
+                                    favIconUrl: inputUrl + "/favicon.ico",
+                                    url: inputUrl
+                         
+                            });
+                            this.saveToState("windowAndTabs", windows, "tabGroupDetails");
+                        }
+                    )
+                 
+                } else {
+                    throw new ValidatorError("ETGMCreateNewGroupModal-107")
+                }
+            } else {
+                throw new ValidatorError("ETGMCreateNewGroupModal-108")
             }
-        )
-       
-
-        this.saveToState("windowAndTabs", windows, "tabGroupDetails", () => {
-            //console.log("CX", this.props.data.params.windowAndTabs);
-        }) 
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+        }
     }
 
     deleteTab = (windowIndex, tabIndex) => {
-        let windows;
+        
+        try {
+            const { isAtLeastZero } = validator;
+            
+            if(isAtLeastZero(windowIndex)){ 
+                if(isAtLeastZero(tabIndex)){
+                    let windows;
 
-        if(Object.keys(this.state.tabGroupDetails.windowAndTabs).length > 0){
-            windows = [...this.state.tabGroupDetails.windowAndTabs];
-            console.log("UID", windows, windowIndex);
-            windows[windowIndex].tabs.splice(tabIndex, 1);
+                    if(Object.keys(this.state.tabGroupDetails.windowAndTabs).length > 0){
+                        windows = [...this.state.tabGroupDetails.windowAndTabs];
+                        
+                        windows[windowIndex].tabs.splice(tabIndex, 1);
 
-            if(windowIndex === 0 && windows[windowIndex].tabs.length < 1){
-                windows.splice(windowIndex, 1);
+                        if(windowIndex === 0 && windows[windowIndex].tabs.length < 1){
+                            windows.splice(windowIndex, 1);
+                        }
+
+                        this.saveToState("windowAndTabs", windows, "tabGroupDetails") 
+                    }
+                } else {
+                    throw new ValidatorError("ETGMCreateNewGroupModal-109")
+                }
+            } else {
+                throw new ValidatorError("ETGMCreateNewGroupModal-110")
             }
-
-            this.saveToState("windowAndTabs", windows, "tabGroupDetails", () => {
-                //console.log("CX", this.props.data.params.windowAndTabs);
-            }) 
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
         }
-
         
     }
 
     deleteWindow = (windowIndex) => {
-        let windows;
+        try {
+            const { isAtLeastZero } = validator;
+            let windows;
 
-        if(Object.keys(this.state.tabGroupDetails.windowAndTabs).length > 0){
-            windows = [...this.state.tabGroupDetails.windowAndTabs];
-            console.log("UID", windows, windowIndex);
-            windows.splice(windowIndex, 1);
+            if(isAtLeastZero(windowIndex)){
+                if(Object.keys(this.state.tabGroupDetails.windowAndTabs).length > 0){
+                    windows = [...this.state.tabGroupDetails.windowAndTabs];
+                    windows.splice(windowIndex, 1);
 
-            this.saveToState("windowAndTabs", windows, "tabGroupDetails", () => {
-                //console.log("CX", this.props.data.params.windowAndTabs);
-            }) 
+                    this.saveToState("windowAndTabs", windows, "tabGroupDetails") 
+                }
+            } else {
+                throw new ValidatorError("ETGMCreateNewGroupModal-111")
+            }
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
         }
-
-        
     }
 
     renderWindowsAndTabsSection = (windowAndTabs, type) => {
@@ -157,7 +264,7 @@ class ETGMCreateNewGroupModal extends Modal {
             - new-group
         */
         windowAndTabs = windowAndTabs || [];
-        console.log("WINDOWS", windowAndTabs);
+
         return (
             <div className="tb-windowlist-container">
                 <div className="tb-form-row row">
@@ -191,7 +298,6 @@ class ETGMCreateNewGroupModal extends Modal {
 
     renderModalBody(){
         const { 
-            windowAndTabs,
             groupName: name,
             groupCloseAll: closeAll,
             groupDescription: description,

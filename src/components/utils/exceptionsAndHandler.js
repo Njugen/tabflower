@@ -30,8 +30,26 @@ export const ValidatorError = (code) => {
             message = "The callback parameter is not a function";
             break;
         case "ETGMCreateNewGroupModal-102": 
-            message = "A tab group id must be a string. The tab group could not be created."  
-            break;   
+            message = "A tab group id must be a string. The requested tab group could not be retrieved."  
+            break;
+        case "ETGMCreateNewGroupModal-103":
+                message = "The URL could not be found";
+                break;     
+        case "ETGMCreateNewGroupModal-104":
+            message = "The URL to be loaded needs to be a string";
+            break;
+        case "ETGMCreateNewGroupModal-105":
+            message = "The success parameter needs to be a function for callback";
+            break;     
+        case "ETGMCreateNewGroupModal-106":
+            message = "The fail parameter needs to be a function for callback";
+            break;
+        case "ETGMCreateNewGroupModal-107":
+            message = "A tab index needs to be a number ranging from 0 to any positive integer.";
+            break;       
+        case "ETGMCreateNewGroupModal-108":
+            message = "The URL to be loaded needs to be a string";
+            break;            
         default:
             message = "An Unknown Error has occured";
     }
