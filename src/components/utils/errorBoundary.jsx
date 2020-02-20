@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import { ValidatorError, ErrorHandler } from './exceptionsAndHandler';
-import ErrorModal from '../modals/errorOverlay';
+import ErrorOverlay from '../modals/errorOverlay';
 
 class ErrorBoundary extends Component {
     constructor(props) {
@@ -30,7 +30,7 @@ class ErrorBoundary extends Component {
     render() {
       if (this.state.hasError) {
         // You can render any custom fallback UI
-        return <ErrorModal data={this.state} onSave={() => ""} onDismiss={() => ""}></ErrorModal>
+        return <ErrorOverlay data={this.state} onSave={() => ""} onDismiss={() => ""}></ErrorOverlay>
       }
   
       return this.props.children; 

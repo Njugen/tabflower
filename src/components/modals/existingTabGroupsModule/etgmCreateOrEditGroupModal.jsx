@@ -15,7 +15,9 @@ class ETGMCreateNewGroupModal extends Modal {
             const { isFunction } = validator;
 
             if(isFunction(callback)){
-                this.clearModalData(callback(this.state.tabGroupDetails));
+                this.validateFields(() => {
+                    this.clearModalData(callback(this.state.tabGroupDetails));
+                });
             } else {
                 throw new ValidatorError("ETGMCreateNewGroupModal-101");
             }
@@ -32,12 +34,40 @@ class ETGMCreateNewGroupModal extends Modal {
         }
     }
 
+    validateFields = (success) => {
+       /* <TBTextInput id="tabGroupName" label="Group Name" value={name ? name : ""} onChange={(id, value) => this.saveToState(id, value, "tabGroupDetails")}></TBTextInput>
+                <TBTextArea id="tabGroupDescription" label="Description (max 170 characters)" value={description ? description : ""} onChange={(id, value) => this.saveToState(id, value, "tabGroupDetails")}></TBTextArea>
+                <TBCheckBox id="tabGroupCloseAll" label="Close everything else before launching this tab group" value={closeAll && closeAll === true ? "true" : "false"} onToggle={(id, value) => this.saveToState(id, value, "tabGroupDetails")} />
+        */
+       try {
+            const { tabGroupName, tabGroupDescription, windowAndTabs } = this.state.tabGroupDetails;
+            const { isString, isUndefined, isZero } = validator;
+
+            if(!isString(tabGroupName)){
+                throw new ValidatorError("ETGMCreateNewGroupModal-112");
+            }
+
+            if(!isString(tabGroupDescription)){
+                throw new ValidatorError("ETGMCreateNewGroupModal-113");
+            }
+
+            if(isUndefined(windowAndTabs.length) || isZero(windowAndTabs.length)){
+                throw new ValidatorError("ETGMCreateNewGroupModal-114");
+            }
+
+            success();
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+        }
+    }
+
     setGroupId = (id) => {
         try {
             const { isString, isUndefined } = validator
 
             let groupId = "";
 
+            groupId = 123;
 
             if(!isUndefined(id)){
                 if(isString(id)){

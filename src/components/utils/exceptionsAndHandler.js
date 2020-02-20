@@ -49,7 +49,25 @@ export const ValidatorError = (code) => {
             break;       
         case "ETGMCreateNewGroupModal-108":
             message = "The URL to be loaded needs to be a string";
-            break;            
+            break;
+        case "ETGMCreateNewGroupModal-109":
+            message = "The tabIndex parameter in the deleteTab function needs to be an integer 0 or higher";
+            break;         
+        case "ETGMCreateNewGroupModal-110":
+            message = "The windowIndex parameter in the deleteTab function needs to be an integer 0 or higher";
+            break;
+        case "ETGMCreateNewGroupModal-111":
+            message = "The windowIndex parameter in the deleteWindow function needs to be an integer 0 or higher";
+            break;
+        case "ETGMCreateNewGroupModal-112":
+            message = "A tab group needs to be given a name or a label before it can be saved.";
+            break;
+        case "ETGMCreateNewGroupModal-113":
+            message = "A tab group needs to be given a short description before it can be saved.";
+            break; 
+        case "ETGMCreateNewGroupModal-114":
+            message = "A tab group must consist of at least one window.";
+            break;                                         
         default:
             message = "An Unknown Error has occured";
     }

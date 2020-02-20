@@ -22,7 +22,7 @@ class ExistingTabGroupsModule extends Module {
 
        let groupId = "";
        
-       if(data.groupId){
+       if(data && data.groupId){
            groupId = data.groupId;
        } else {
             groupId = "all"
@@ -77,7 +77,7 @@ class ExistingTabGroupsModule extends Module {
                         <h6 className="list-item-block-headline float-left pr-2">{group.tabGroupName}</h6>
                         <div className="list-item-block-options float-right">
                             <button className="fas fa-cog options-button" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", params: { windowAndTabs: group.windowAndTabs, groupName: group.tabGroupName, groupCloseAll: group.tabGroupCloseAll, groupDescription: group.tabGroupDescription, groupId: group.groupId, type: "existing-group"}, action: this.createOrEditTabGroup.bind(this) })}></button>
-                            <button className="fas fa-times options-button" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", params: {nej: "hej"}, action: this.removeTabGroups.bind(this) })}></button>
+                            <button className="fas fa-times options-button" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", params: {groupId: group.groupId}, action: this.removeTabGroups.bind(this) })}></button>
                         </div>
                         <div class="clearfix"></div>
                     </div>

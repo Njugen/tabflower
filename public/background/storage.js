@@ -99,11 +99,34 @@ const launchTabGroup = (details, successCallback, failCallback) => {
 
 const deleteTabGroups = (details, successCallback, failCallback) => {
     console.log(details);
-    if(typeof details.id === "number"){
+    if(typeof details.id === "string" && details.id !== "all"){
+
+        chrome.storage.local.get(["tabGroups"], (data) => {
+            let currentTabGroups = data.tabGroups;
+            let updatedTabGroups = [];
+
+            currentTabGroups.map(
+                (item, i) => {
+                    if(item.groupId !== details.id){
+                        updatedTabGroups.push(item);
+                    }
+                    return null;
+                }
+            )
+            console.log(updatedTabGroups);
+
+        
+            chrome.storage.local.set({
+                tabGroups: updatedTabGroups
+            }, () => {
+                successCallback("asdsad");
+            })
+        
+        })  
 
     } else if(typeof details.id === "string" && details.id === "all"){
         chrome.storage.local.remove(["tabGroups"], () => {
-            console.log("TEST");
+
             successCallback("asdsad");
         });
     }
