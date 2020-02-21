@@ -43,21 +43,31 @@ class ETGMCreateNewGroupModal extends Modal {
             const { tabGroupName, tabGroupDescription, windowAndTabs } = this.state.tabGroupDetails;
             const { isString, isUndefined, isZero } = validator;
 
+            let errors = {};
+
             if(!isString(tabGroupName)){
-                throw new ValidatorError("ETGMCreateNewGroupModal-112");
+                //errors.push("ETGMCreateNewGroupModal-112");
+                errors["tabGroupName"] = "A tab group needs to be given a name or a label before it can be saved.";
             }
 
             if(!isString(tabGroupDescription)){
-                throw new ValidatorError("ETGMCreateNewGroupModal-113");
+                //errors.push("ETGMCreateNewGroupModal-113");
+                errors["tabGroupDescription"] = "A tab group needs to be given a short description before it can be saved.";
             }
 
             if(isUndefined(windowAndTabs.length) || isZero(windowAndTabs.length)){
-                throw new ValidatorError("ETGMCreateNewGroupModal-114");
+                //errors.push("ETGMCreateNewGroupModal-114");
+                errors["windowAndTabs"] = "A tab group must consist of at least one window.";
+            }
+
+            if(Object.keys(errors).length > 0){
+                throw errors;
             }
 
             success();
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            this.saveFieldErrorsToState(err);
+            //ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
@@ -286,7 +296,7 @@ class ETGMCreateNewGroupModal extends Modal {
         }
     }
 
-    renderWindowsAndTabsSection = (windowAndTabs, type) => {
+    renderWindowsAndTabsSection = (windowAndTabs, type, warning) => {
         /* 
            types:
             - currently-opened
@@ -297,15 +307,17 @@ class ETGMCreateNewGroupModal extends Modal {
 
         return (
             <div className="tb-windowlist-container">
-                <div className="tb-form-row row">
+                <div className="tb-form-row row d-flex justify-content-between">
                     <div className="col-8 label mb-0">
                         <span>
                             { type === "currently-opened" && "Currently opened windows and tabs" }
                             { type === "existing-group" && "Edit the windows and tabs in this group" }
-                            { type === "new-group" && "And windows or tabs to this new group" }
+                            { type === "new-group" && "Add windows or tabs to this new group" }
                         </span>
                     </div>
-                    
+                    <div className="col-4 label">
+                        <span>{typeof warning === "string" && warning}</span>
+                    </div>
                 </div>
                 <div className="tb-form-row row mr-1 mb-1 ml-1 mt-0">
                     <div className="col-12 mt-0">
@@ -334,14 +346,20 @@ class ETGMCreateNewGroupModal extends Modal {
             type
         } = this.props.data.params;
         
+        const { 
+            tabGroupName: nameErr,
+            tabGroupDescription: descErr,
+            windowAndTabs: windowErr
+        } = this.state.fieldErrors
+        
         const { tabGroupDetails } = this.state;
 
         return (
             <Fragment>
-                <TBTextInput id="tabGroupName" label="Group Name" value={name ? name : ""} onChange={(id, value) => this.saveToState(id, value, "tabGroupDetails")}></TBTextInput>
-                <TBTextArea id="tabGroupDescription" label="Description (max 170 characters)" value={description ? description : ""} onChange={(id, value) => this.saveToState(id, value, "tabGroupDetails")}></TBTextArea>
+                <TBTextInput id="tabGroupName" warning={nameErr || null} label="Group Name" value={name ? name : ""} onChange={(id, value) => this.saveToState(id, value, "tabGroupDetails")}></TBTextInput>
+                <TBTextArea id="tabGroupDescription" warning={descErr || null} label="Description (max 170 characters)" value={description ? description : ""} onChange={(id, value) => this.saveToState(id, value, "tabGroupDetails")}></TBTextArea>
                 <TBCheckBox id="tabGroupCloseAll" label="Close everything else before launching this tab group" value={closeAll && closeAll === true ? "true" : "false"} onToggle={(id, value) => this.saveToState(id, value, "tabGroupDetails")} />
-                {tabGroupDetails && this.renderWindowsAndTabsSection(tabGroupDetails.windowAndTabs, type)}
+                {tabGroupDetails && this.renderWindowsAndTabsSection(tabGroupDetails.windowAndTabs, type, windowErr || null)}
             </Fragment>
         );    
     }

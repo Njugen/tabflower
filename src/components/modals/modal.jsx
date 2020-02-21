@@ -53,7 +53,16 @@ class Modal extends Component {
         }
     */
     state = {
-       ui: {}
+       ui: {},
+       fieldErrors: {}
+    }
+
+    saveFieldErrorsToState = (data) => {
+        this.setState({
+            fieldErrors: data
+        }, () => {
+            console.log("NRM", this.state);
+        })
     }
 
     raiseToErrorOverlay = (data) => {

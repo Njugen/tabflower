@@ -141,7 +141,7 @@ class App extends Component{
 
   clearModal = () => {
     const modal = {};
-
+    
     setTimeout(() => {
       this.setState({ modal }); 
     }, 500)
