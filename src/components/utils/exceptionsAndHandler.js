@@ -85,21 +85,29 @@ export const ValidatorError = (code) => {
     Handle error by receiving the error information. 
 
     Parameters
-    - error (object), contains all information related to the error
-    - action (function), triggers immediately. Can be used to clean up or interrupt current sequence
-    - newSequence (function), triggers 1500 ms after the error handler launches. Can be used to notify the user
-    once the clean up has been finished
+    - err (object), contains all information related to the error
+    - callback (function), triggers immediately. Can be used to notify the user about the error
+    - additionalInfo (string), information to be added to the thrown error message 
+    (e.g. failure to save data because of error).
 */
-export const ErrorHandler = (err, callback) => {
+export const ErrorHandler = (err, callback, additionalInfo) => {
     if(err.name){
         /*
-            An error has apparently occured, however, IF this issue is
-            a ValidatorError, in what way should the user get notified???
+            An error has apparently occured. If the err object contains
+            a "name" property (like this: err.name), this ErrorHandler will
+            process it. 
 
-            during a ValidatorError in the modal component, we just know that a modal
-            cannot be executed properly... ????
+            To prevent ErrorHandler() from processing a custom error, throw that
+            error object without using a "name" property.
         */
 
+        if(typeof additionalInfo === "string"){
+            if(typeof err.message === "string"){
+                err.message += ". " + additionalInfo;
+            } else {
+                err.message = additionalInfo;
+            }
+        }
 
         if(typeof callback === "function"){
             callback(err);

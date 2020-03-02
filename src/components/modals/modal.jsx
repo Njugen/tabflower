@@ -58,10 +58,15 @@ class Modal extends Component {
     }
 
     saveFieldErrorsToState = (data) => {
+        /*
+            saveFieldErrorsToState()
+
+            Save input field errors to component state. (for use in
+            e.g. alert boxes or notifying the user based on the state variables alone) 
+            
+        */
         this.setState({
             fieldErrors: data
-        }, () => {
-            console.log("NRM", this.state);
         })
     }
 

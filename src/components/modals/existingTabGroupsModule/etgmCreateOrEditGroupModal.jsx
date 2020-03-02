@@ -12,7 +12,7 @@ class ETGMCreateNewGroupModal extends Modal {
 
     saveModalHandler = (callback) => {
         try {
-            const { isFunction } = validator;
+           const { isFunction } = validator;
 
             if(isFunction(callback)){
                 this.validateFields(() => {
@@ -22,7 +22,10 @@ class ETGMCreateNewGroupModal extends Modal {
                 throw new ValidatorError("ETGMCreateNewGroupModal-101");
             }
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            const { groupName } = this.props.data.params;
+            const additionalMessage = (!groupName ? "The tab group could not be saved" : "The tab group could not be changed" ) + ". Please try again.";
+
+            ErrorHandler(err, this.raiseToErrorOverlay, additionalMessage );
         }
     }
 
@@ -35,39 +38,39 @@ class ETGMCreateNewGroupModal extends Modal {
     }
 
     validateFields = (success) => {
-       /* <TBTextInput id="tabGroupName" label="Group Name" value={name ? name : ""} onChange={(id, value) => this.saveToState(id, value, "tabGroupDetails")}></TBTextInput>
-                <TBTextArea id="tabGroupDescription" label="Description (max 170 characters)" value={description ? description : ""} onChange={(id, value) => this.saveToState(id, value, "tabGroupDetails")}></TBTextArea>
-                <TBCheckBox id="tabGroupCloseAll" label="Close everything else before launching this tab group" value={closeAll && closeAll === true ? "true" : "false"} onToggle={(id, value) => this.saveToState(id, value, "tabGroupDetails")} />
-        */
        try {
-            const { tabGroupName, tabGroupDescription, windowAndTabs } = this.state.tabGroupDetails;
+            const { tabGroupName, tabGroupDescription, windowAndTabs } = this.state.tabGroupDetails2;
             const { isString, isUndefined, isZero } = validator;
 
             let errors = {};
 
             if(!isString(tabGroupName)){
-                //errors.push("ETGMCreateNewGroupModal-112");
                 errors["tabGroupName"] = "A tab group needs to be given a name or a label before it can be saved.";
             }
 
             if(!isString(tabGroupDescription)){
-                //errors.push("ETGMCreateNewGroupModal-113");
                 errors["tabGroupDescription"] = "A tab group needs to be given a short description before it can be saved.";
             }
 
             if(isUndefined(windowAndTabs.length) || isZero(windowAndTabs.length)){
-                //errors.push("ETGMCreateNewGroupModal-114");
                 errors["windowAndTabs"] = "A tab group must consist of at least one window.";
             }
 
             if(Object.keys(errors).length > 0){
                 throw errors;
-            }
+            } 
 
-            success();
+            success(); 
+           
         } catch(err){
-            this.saveFieldErrorsToState(err);
-            //ErrorHandler(err, this.raiseToErrorOverlay);
+            if(!err.name){
+                this.saveFieldErrorsToState(err);
+            } else {
+                const { groupName } = this.props.data.params;
+                const additionalMessage = (!groupName ? "The tab group could not be saved" : "The tab group could not be changed" ) + ". Please try again.";
+
+                ErrorHandler(err, this.raiseToErrorOverlay, additionalMessage);
+            }
         }
     }
 
@@ -76,8 +79,6 @@ class ETGMCreateNewGroupModal extends Modal {
             const { isString, isUndefined } = validator
 
             let groupId = "";
-
-            groupId = 123;
 
             if(!isUndefined(id)){
                 if(isString(id)){
