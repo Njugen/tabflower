@@ -12,10 +12,11 @@ class ETGMCreateNewGroupModal extends Modal {
 
     saveModalHandler = (callback) => {
         try {
-           const { isFunction } = validator;
-
+            const { isFunction } = validator;
+            
             if(isFunction(callback)){
                 this.validateFields(() => {
+                    this.blablabla();
                     this.clearModalData(callback(this.state.tabGroupDetails));
                 });
             } else {
@@ -39,7 +40,7 @@ class ETGMCreateNewGroupModal extends Modal {
 
     validateFields = (success) => {
        try {
-            const { tabGroupName, tabGroupDescription, windowAndTabs } = this.state.tabGroupDetails2;
+            const { tabGroupName, tabGroupDescription, windowAndTabs } = this.state.tabGroupDetails;
             const { isString, isUndefined, isZero } = validator;
 
             let errors = {};
@@ -76,8 +77,8 @@ class ETGMCreateNewGroupModal extends Modal {
 
     setGroupId = (id) => {
         try {
-            const { isString, isUndefined } = validator
-
+            const { isString, isUndefined } = validator;
+            
             let groupId = "";
 
             if(!isUndefined(id)){

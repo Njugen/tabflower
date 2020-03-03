@@ -237,9 +237,13 @@ class Modal extends Component {
 
         try {
             data = data || null;
-            
-            if(this.props && this.props.data && typeof this.props.data.action == "function"){
-                this.props.data.action(data);
+
+            if(this.props && this.props.data){
+                if(typeof this.props.data.action === "function"){
+                    this.props.data.action(data);
+                } else if(typeof this.props.data.action !== "undefined"){
+                    throw new ValidatorError("mp-propsAction-101")
+                }
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay); 

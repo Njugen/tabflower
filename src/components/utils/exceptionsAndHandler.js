@@ -24,7 +24,9 @@ export const ValidatorError = (code) => {
         case "mp-saveToState-107": 
             message = "The \"area\" parameter is not a string. Data was not saved.";    
             break;    
-
+        case "mp-propsAction-101": 
+            message = "The modal could not execute the requested action connected to it. The task(s) were ignored.";    
+            break;   
         // ETGMCreateNewGroupModal
         case "ETGMCreateNewGroupModal-101": 
             message = "The callback parameter is not a function";
