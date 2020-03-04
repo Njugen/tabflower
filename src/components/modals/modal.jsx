@@ -101,10 +101,10 @@ class Modal extends Component {
             Fading in the modal by accessing its tag by react ref (https://reactjs.org/docs/refs-and-the-dom.html).
             Check the CSS set in src/styles/tabeon/style.css
         */
-
-        const { isObject } = validator;
  
         try {
+            const { isObject } = validator;
+ 
             if(isObject(this.modalRef) && isObject(this.modalRef.current)){
                 let modal = this.modalRef.current;
                 
@@ -186,7 +186,7 @@ class Modal extends Component {
             Apparently, the fade in does not work properly (resulting in immediate visibility of the component) without
             the timeout.
         */
-       
+
         setTimeout(() => {
             this.fadeIn();
         }, 100)
@@ -194,6 +194,7 @@ class Modal extends Component {
         if(this.childComponentDidMount){
             this.childComponentDidMount();
         }
+        
     };
 
     componentWillMount = () => {
@@ -211,7 +212,7 @@ class Modal extends Component {
         /*
             Fade in the modal component if the props changes (this is meant to check props.data, which are
             bound to change as data raised by these modals will always differ)
-        */
+        */    
 
         if(prevProps !== this.props){
             setTimeout(() => {
@@ -338,7 +339,7 @@ class Modal extends Component {
             These functions add contents and functionalities to the modal's user interface. 
             Add these to the Modal child classes to give them necessary features.
         */
-
+       
         return (
             <div ref={this.modalRef} className="modal" id="tabeonModal">
                 <div className="modal-dialog" role="document">

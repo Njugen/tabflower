@@ -13,10 +13,9 @@ class ETGMCreateNewGroupModal extends Modal {
     saveModalHandler = (callback) => {
         try {
             const { isFunction } = validator;
-            
+
             if(isFunction(callback)){
                 this.validateFields(() => {
-                    this.blablabla();
                     this.clearModalData(callback(this.state.tabGroupDetails));
                 });
             } else {
@@ -26,7 +25,7 @@ class ETGMCreateNewGroupModal extends Modal {
             const { groupName } = this.props.data.params;
             const additionalMessage = (!groupName ? "The tab group could not be saved" : "The tab group could not be changed" ) + ". Please try again.";
 
-            ErrorHandler(err, this.raiseToErrorOverlay, additionalMessage );
+            ErrorHandler(err, this.raiseToErrorOverlay, additionalMessage);
         }
     }
 
@@ -145,7 +144,7 @@ class ETGMCreateNewGroupModal extends Modal {
     addNewWindow = (inputUrl) => {
         try {
             const { isString } = validator;
-
+            
             if(isString(inputUrl)){
                 let windows;
 
@@ -305,6 +304,17 @@ class ETGMCreateNewGroupModal extends Modal {
             - existing-group
             - new-group
         */
+       
+        const { isString } = validator;
+
+        if(!isString(type)){
+            throw new ValidatorError("ETGMCreateNewGroupModal-112");
+        } else {
+            if(type !== "currently-opened" && type !== "existing-group" && type !== "new-group"){
+                throw new ValidatorError("ETGMCreateNewGroupModal-113");
+            }
+        }
+
         windowAndTabs = windowAndTabs || [];
 
         return (
@@ -341,6 +351,12 @@ class ETGMCreateNewGroupModal extends Modal {
     }
 
     renderModalBody(){
+        const { isObject } = validator;
+
+        if(isObject(this.props.data.params)){
+            throw new ValidatorError("ETGMCreateNewGroupModal-115");
+        }
+
         const { 
             groupName: name,
             groupCloseAll: closeAll,
@@ -355,7 +371,7 @@ class ETGMCreateNewGroupModal extends Modal {
         } = this.state.fieldErrors
         
         const { tabGroupDetails } = this.state;
-
+        
         return (
             <Fragment>
                 <TBTextInput id="tabGroupName" warning={nameErr || null} label="Group Name" value={name ? name : ""} onChange={(id, value) => this.saveToState(id, value, "tabGroupDetails")}></TBTextInput>
@@ -372,15 +388,25 @@ class ETGMCreateNewGroupModal extends Modal {
         if(type === "currently-opened" || type === "new-group"){
             return "Create a New Tab Group";
         } else if(type === "existing-group") {
-            return "Edit the \"" + groupName + "\" tab group";
+            return "Edit the \"" + (groupName || "") + "\" tab group";
+        } else {
+            throw new ValidatorError("ETGMCreateNewGroupModal-114");
         }
     }
 }
 
+
 ETGMCreateNewGroupModal.propTypes = {
-    data: PropTypes.object,
-    onRaiseToErrorOverlay: PropTypes.func,
-    onDismiss: PropTypes.func
+    data: PropTypes.shape({
+            params: PropTypes.shape({
+                name: PropTypes.string,
+                groupCloseAll: PropTypes.bool,
+                groupDescription: PropTypes.string,
+                type: PropTypes.string.isRequired
+            })
+    }),
+    onRaiseToErrorOverlay: PropTypes.func.isRequired,
+    onDismiss: PropTypes.func.isRequired
 }
 
 export default ETGMCreateNewGroupModal;

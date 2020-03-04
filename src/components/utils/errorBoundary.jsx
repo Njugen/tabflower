@@ -3,14 +3,17 @@ import { ValidatorError, ErrorHandler } from './exceptionsAndHandler';
 import ErrorOverlay from '../modals/errorOverlay';
 
 class ErrorBoundary extends Component {
-    constructor(props) {
-      super(props);
-      this.state = { hasError: false };
-    }
+    state = { errors: [] };
   
     static getDerivedStateFromError(error) {
       // Update state so the next render will show the fallback UI.
       //return { hasError: true };
+
+      let currentErrors = [];
+      const newError = error;
+      currentErrors.push(newError);
+
+      return { errors: currentErrors };
     }
   
     componentDidCatch(error, errorInfo) {
@@ -18,19 +21,23 @@ class ErrorBoundary extends Component {
         console.log("Error", error);
         console.log("ErrorInfo", errorInfo);
 
+        let currentErrors = this.state.errors;
+
+        const newError = Object.assign(error, errorInfo);
+
+        currentErrors.push(newError);
+        
         this.setState({
-            error,
-            errorInfo,
-            hasError: true
+            errors: currentErrors
         }, () => {
             console.log("TTTTTTT", this.state);
         })
     }
   
     render() {
-      if (this.state.hasError) {
+      if (this.state.errors.length > 0) {
         // You can render any custom fallback UI
-        return <ErrorOverlay data={this.state} onSave={() => ""} onDismiss={() => ""}></ErrorOverlay>
+        return <ErrorOverlay data={this.state.errors} onSave={() => ""} onDismiss={() => window.location.reload()}></ErrorOverlay>
       }
   
       return this.props.children; 

@@ -77,7 +77,7 @@ class ExistingTabGroupsModule extends Module {
                         <h6 className="list-item-block-headline float-left pr-2">{group.tabGroupName}</h6>
                         <div className="list-item-block-options float-right">
                             <button className="fas fa-cog options-button" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", params: { windowAndTabs: group.windowAndTabs, groupName: group.tabGroupName, groupCloseAll: group.tabGroupCloseAll, groupDescription: group.tabGroupDescription, groupId: group.groupId, type: "existing-group"}, action: this.createOrEditTabGroup.bind(this) })}></button>
-                            <button className="fas fa-times options-button" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", params: {groupId: group.groupId}, action: this.removeTabGroups.bind(this) })}></button>
+                            <button className="fas fa-times options-button" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", params: {groupId: group.groupId, groupName: group.tabGroupName}, action: this.removeTabGroups.bind(this) })}></button>
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -124,7 +124,7 @@ class ExistingTabGroupsModule extends Module {
         return (    
             <Fragment>
                  
-                <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", action: this.removeTabGroups.bind(this) })}>Remove all groups</button>
+                <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", params: {}, action: this.removeTabGroups.bind(this) })}>Remove all groups</button>
                 <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", params: { windowAndTabs: {}, type: "new-group" }, action: this.createOrEditTabGroup.bind(this) })}>Create a new group</button>
               
             </Fragment>

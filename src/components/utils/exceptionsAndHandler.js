@@ -25,7 +25,7 @@ export const ValidatorError = (code) => {
             message = "The \"area\" parameter is not a string. Data was not saved.";    
             break;    
         case "mp-propsAction-101": 
-            message = "The modal could not execute the requested action connected to it. The task(s) were ignored.";    
+            message = "The modal could not execute the requested action connected to it because it is invalid. The task(s) were ignored.";    
             break;   
         // ETGMCreateNewGroupModal
         case "ETGMCreateNewGroupModal-101": 
@@ -62,14 +62,21 @@ export const ValidatorError = (code) => {
             message = "The windowIndex parameter in the deleteWindow function needs to be an integer 0 or higher";
             break;
         case "ETGMCreateNewGroupModal-112":
-            message = "A tab group needs to be given a name or a label before it can be saved.";
+            message = "The \"type\" parameter in renderWindowsAndTabsSection() needs to be a string. Cannot add nor edit a tab group at this time.";
             break;
         case "ETGMCreateNewGroupModal-113":
-            message = "A tab group needs to be given a short description before it can be saved.";
+            message = "The \"type\" parameter in renderWindowsAndTabsSection() needs to have either of the following values: \"currently-opened\", \"existing-group\" or \"new-group\". Cannot add nor edit a tab group at this time.";
             break; 
         case "ETGMCreateNewGroupModal-114":
-            message = "A tab group must consist of at least one window.";
-            break;                                         
+            message = "The \"type\" parameter in renderModalHeader() needs to have either of the following values: \"currently-opened\", \"existing-group\" or \"new-group\". Cannot add nor edit a tab group at this time.";
+            break;   
+        case "ETGMCreateNewGroupModal-115":
+            message = "When using a modal to create a new tab group or to edite an existing tab group, certain parameters (information about the affected group) needs to be provided. Please refer to the documentation for instructions on how to call a modal.";
+            break;         
+        // ETGMRemoveGroupsModal
+        case "ETGMRemoveGroupsModal-101":
+            message = "The callback parameter is not a function.";
+            break;    
         default:
             message = "An Unknown Error has occured";
     }

@@ -38,14 +38,14 @@ class ErrorOverlay extends Component {
     render = () => {
         const {data, onDismiss}  = this.props;
 
-        console.log("IN OVERLAY", this.props.data);
+        console.log("IN OVERLAY");
         return(
             <div id="tabflower-error-overlay">
                 <div className="contents-wrapper p-3">
                     <div className="error-info container">
                         <div className="row d-flex justify-content-center ">
                             <div className="col-10">
-                                <h3>{<datalist></datalist>.length > 1 ? "Multiple errors have occured" : "An error has occured"}</h3>
+                                <h3>{data.length > 1 ? "Multiple errors have occured" : "An error has occured"}</h3>
                             </div>
                         </div>
                         {this.renderErrors(data)}

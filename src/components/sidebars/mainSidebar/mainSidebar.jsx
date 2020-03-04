@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import NavSection from './components/navSection';
+import { PropTypes } from 'prop-types';
 
 class MainSidebar extends Component {
     state = {
