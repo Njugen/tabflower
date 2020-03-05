@@ -27,6 +27,18 @@ export const ValidatorError = (code) => {
         case "mp-propsAction-101": 
             message = "The modal could not execute the requested action connected to it because it is invalid. The task(s) were ignored.";    
             break;   
+        case "mp-verifyProps-101": 
+            message = "The \"onDismiss\" props function is missing in the requested modal. Request aborted.";    
+            break;      
+        case "mp-verifyProps-102": 
+            message = "The \"onRaiseToErrorOverlay\" props function is missing in the requested modal. Request aborted.";    
+            break;
+        case "mp-verifyProps-103": 
+            message = "The \"data\" props is either not an object, or is missing, in the requested modal. Request aborted.";    
+            break;   
+        case "mp-verifyProps-104": 
+            message = "A modal always need to be requested using an \"params\" object. Request aborted";    
+            break;                
         // ETGMCreateNewGroupModal
         case "ETGMCreateNewGroupModal-101": 
             message = "The callback parameter is not a function";
@@ -69,9 +81,6 @@ export const ValidatorError = (code) => {
             break; 
         case "ETGMCreateNewGroupModal-114":
             message = "The \"type\" parameter in renderModalHeader() needs to have either of the following values: \"currently-opened\", \"existing-group\" or \"new-group\". Cannot add nor edit a tab group at this time.";
-            break;   
-        case "ETGMCreateNewGroupModal-115":
-            message = "When using a modal to create a new tab group or to edite an existing tab group, certain parameters (information about the affected group) needs to be provided. Please refer to the documentation for instructions on how to call a modal.";
             break;         
         // ETGMRemoveGroupsModal
         case "ETGMRemoveGroupsModal-101":

@@ -283,7 +283,7 @@ class WindowsList extends Component {
                                                 if(type === "existing-group" || type === "new-group"){
                                                     this.raiseDeleteTabToModal(key, tabIndex, () => {});
                                                 } else {
-                                                    this.raiseToModal({ id: "cotmremovetabmodal", tabInfo: tab, action: this.closeTab.bind(this)})
+                                                    this.raiseToModal({ id: "cotmremovetabmodal", params: { tabInfo: tab }, action: this.closeTab.bind(this)})
                                                 }
                                             }
                                          }></button></li>}

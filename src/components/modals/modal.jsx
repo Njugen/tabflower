@@ -57,6 +57,11 @@ class Modal extends Component {
        fieldErrors: {}
     }
 
+    constructor(props){
+        super(props);
+        this.verifyProps();
+    }
+
     saveFieldErrorsToState = (data) => {
         /*
             saveFieldErrorsToState()
@@ -181,16 +186,22 @@ class Modal extends Component {
     }
 
     componentDidMount = () => {
+       
+        
         /*
             When a modal is rendered into the DOM, wait 100ms before fading in.
             Apparently, the fade in does not work properly (resulting in immediate visibility of the component) without
             the timeout.
         */
 
+       if(typeof this.verifyChildProps === "function"){
+           this.verifyChildProps();
+       }
+
         setTimeout(() => {
             this.fadeIn();
         }, 100)
-      
+        
         if(this.childComponentDidMount){
             this.childComponentDidMount();
         }
@@ -320,6 +331,32 @@ class Modal extends Component {
         }
     }
 
+    verifyProps = () => {
+        /*
+            verifyProps
+            
+            All modals need to have a mandatory set of props:
+            - onDismiss (function), function for triggering a function when modal is dimissed
+            - onRaiseToErrorOverlay (function), function for passing information to the graphical UI if something goes wrong
+            - data (object), object containing modal id, optional save function, and data parameters of possible existing values 
+
+            A single modal can, of course have its own unique props that do not exist in other modals. These
+            may be checked by adding a verifyChildProps function to that modal class.
+            
+            The data.params object should also be verified for each individual modal. Do this using
+            the verifyChildProps function.
+        */
+       
+        const { onDismiss, onRaiseToErrorOverlay, data } = this.props;
+        const { isFunction, isObject } = validator;
+
+        if(!isFunction(onDismiss)){ throw new ValidatorError("mp-verifyProps-101"); }
+        if(!isFunction(onRaiseToErrorOverlay)){ throw new ValidatorError("mp-verifyProps-102"); }
+        if(!isObject(data)){ throw new ValidatorError("mp-verifyProps-103"); } else {
+            if(!isObject(data.params)){ throw new ValidatorError("mp-verifyProps-104"); }
+        }
+       
+    }
 
     render = () => {
         /*

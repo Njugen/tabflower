@@ -13,7 +13,7 @@
 */
 
 export const isObject = (input) => {
-    if(typeof input === "object"){
+    if(typeof input === "object" && input !== null){
         return true;
     } else {
         return false;

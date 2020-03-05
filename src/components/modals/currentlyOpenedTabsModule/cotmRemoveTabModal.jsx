@@ -14,14 +14,14 @@ class COTMRemoveTabModal extends Modal {
     }
 
     childComponentDidMount = () => {
-        const data = this.props.data.tabInfo;
+        const data = this.props.data.params.tabInfo;
         this.setState(
             { data }
         )
     }
 
     renderModalBody(){
-        const { title } = this.props.data.tabInfo;
+        const { title } = this.props.data.params.tabInfo;
 
         return (
             <Fragment>

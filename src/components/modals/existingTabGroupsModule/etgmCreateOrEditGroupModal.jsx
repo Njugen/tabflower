@@ -10,6 +10,15 @@ import * as validator from './../../utils/inputValidators'
 
 class ETGMCreateNewGroupModal extends Modal {
 
+    verifyChildProps = () => {
+        /*
+            Verify the this.props.data.params object
+        */
+        const { groupName, groupCloseAll, groupDescription, type } = this.props.data.params;
+
+        console.log("ANGEAL", groupName, groupCloseAll, groupDescription, type);
+    }
+
     saveModalHandler = (callback) => {
         try {
             const { isFunction } = validator;
@@ -352,10 +361,6 @@ class ETGMCreateNewGroupModal extends Modal {
 
     renderModalBody(){
         const { isObject } = validator;
-
-        if(isObject(this.props.data.params)){
-            throw new ValidatorError("ETGMCreateNewGroupModal-115");
-        }
 
         const { 
             groupName: name,
