@@ -14,9 +14,67 @@ class ETGMCreateNewGroupModal extends Modal {
         /*
             Verify the this.props.data.params object
         */
-        const { groupName, groupCloseAll, groupDescription, type } = this.props.data.params;
+        const { isBoolean, isString, isUndefined, isObject } = validator;
+        const { windowAndTabs, groupName, groupCloseAll, groupDescription, type } = this.props.data.params;
+      
+        /*
+            type (string, mandatory)
 
-        console.log("ANGEAL", groupName, groupCloseAll, groupDescription, type);
+            A type is always required and needs to hold either of the following values:
+            - "currently-opened"
+            - "new-group"
+            - "existing-group"
+        */
+        if(!isString(type)){
+            throw new ValidatorError("ETGMCreateNewGroupModal-114");
+        } else {
+            if(type !== "currently-opened" && type !== "new-group" && type !== "existing-group"){
+                throw new ValidatorError("ETGMCreateNewGroupModal-115");
+            }
+        }
+
+        /*
+            groupName (string, optional)
+
+            A group name is optional and if given, should always be a string. If there is no
+            group name, refrain from using the groupName parameter when calling this modal
+        */
+
+        if(!isString(groupName) && !isUndefined(groupName)){
+            throw new ValidatorError("ETGMCreateNewGroupModal-116");
+        }
+
+
+        /*
+            groupDescription (string, optional)
+
+            A group description is optional and if given, should always be a string. If there is no
+            group description, refrain from using the groupDescription parameter when calling this modal
+        */
+        if(!isString(groupDescription) && !isUndefined(groupDescription)){
+            throw new ValidatorError("ETGMCreateNewGroupModal-117");
+        }
+
+        /*
+            groupCloseAll (boolean, optional)
+
+            This parameter is optional and if given, should always be a boolean (either true or false). If there is boolean value, 
+            refrain from using the groupCloseAll parameter when calling this modal
+        */
+        if(!isBoolean(groupCloseAll) && !isUndefined(groupCloseAll)){
+            throw new ValidatorError("ETGMCreateNewGroupModal-118");
+        }
+
+        /* 
+            windowAndTabs (object, mandatory)
+
+            This parameter contains windows and tabs stored into a single object. If there are no windows/tabs, this object
+            is empty e.g. object = {} 
+        */
+        
+        if(!isObject(windowAndTabs)){
+            throw new ValidatorError("ETGMCreateNewGroupModal-119");
+        }
     }
 
     saveModalHandler = (callback) => {
@@ -360,7 +418,6 @@ class ETGMCreateNewGroupModal extends Modal {
     }
 
     renderModalBody(){
-        const { isObject } = validator;
 
         const { 
             groupName: name,
@@ -394,8 +451,6 @@ class ETGMCreateNewGroupModal extends Modal {
             return "Create a New Tab Group";
         } else if(type === "existing-group") {
             return "Edit the \"" + (groupName || "") + "\" tab group";
-        } else {
-            throw new ValidatorError("ETGMCreateNewGroupModal-114");
         }
     }
 }

@@ -80,8 +80,20 @@ export const ValidatorError = (code) => {
             message = "The \"type\" parameter in renderWindowsAndTabsSection() needs to have either of the following values: \"currently-opened\", \"existing-group\" or \"new-group\". Cannot add nor edit a tab group at this time.";
             break; 
         case "ETGMCreateNewGroupModal-114":
-            message = "The \"type\" parameter in renderModalHeader() needs to have either of the following values: \"currently-opened\", \"existing-group\" or \"new-group\". Cannot add nor edit a tab group at this time.";
-            break;         
+            message = "The \"type\" parameter in this.props.data.params is neither missing or not a string. As a result, tab groups cannot be added nor edited at this time.";
+            break;      
+        case "ETGMCreateNewGroupModal-115":
+            message = "The \"type\" parameter in this.props.data.params needs to have either of the following values: \"currently-opened\", \"existing-group\" or \"new-group\". As a result, tab groups cannot be added nor edited at this time.";
+            break;      
+        case "ETGMCreateNewGroupModal-116":
+            message = "The \"groupName\" parameter in this.props.data.params needs to be a text string if given. If a string is not available, remove \"groupName\" from props. As a result of this error, tab groups cannot be added nor edited at this time.";
+            break;   
+        case "ETGMCreateNewGroupModal-118":
+            message = "The \"groupCloseAll\" parameter in this.props.data.params needs to be a boolean value (true or false) if given. If such a value is not available, remove \"groupCloseAll\" from props. As a result of this error, tab groups cannot be added nor edited at this time.";
+            break;       
+        case "ETGMCreateNewGroupModal-119":
+            message = "The \"windowAndTabs\" parameter needs to be an object in this.props.data.params, containing information about all windows and tabs in a tab group. If there is no such information available, this parameter should be an empty object. As a result of this error, tab groups cannot be added nor edited at this time.";
+            break;                 
         // ETGMRemoveGroupsModal
         case "ETGMRemoveGroupsModal-101":
             message = "The callback parameter is not a function.";
