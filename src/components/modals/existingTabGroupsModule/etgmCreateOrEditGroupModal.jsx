@@ -15,7 +15,7 @@ class ETGMCreateNewGroupModal extends Modal {
             Verify the this.props.data.params object
         */
         const { isBoolean, isString, isUndefined, isObject } = validator;
-        const { windowAndTabs, groupName, groupCloseAll, groupDescription, type } = this.props.data.params;
+        const { windowAndTabs, groupName, groupCloseAll, groupDescription, type, groupId } = this.props.data.params;
       
         /*
             type (string, mandatory)
@@ -31,6 +31,17 @@ class ETGMCreateNewGroupModal extends Modal {
             if(type !== "currently-opened" && type !== "new-group" && type !== "existing-group"){
                 throw new ValidatorError("ETGMCreateNewGroupModal-115");
             }
+        }
+
+        /*
+            groupId (string, optional)
+
+            A group id is optional and if given, should always be a string. If there is no
+            group id, refrain from using the groupId parameter when calling this modal
+        */
+
+        if(!isString(groupId) && !isUndefined(groupId)){
+            throw new ValidatorError("ETGMCreateNewGroupModal-120");
         }
 
         /*
