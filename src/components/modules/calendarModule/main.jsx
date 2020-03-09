@@ -131,7 +131,7 @@ class CalendarModule extends Module {
                             
                         }
 
-                        storeDateJSX((<td onClick={() => {this.raiseToModal({ id: "date-settings" })}} className={dateAsKey === currentDate && month === currentMonth && year === currentYear ? "activeDate" : ""} key={year + "-" + month + "-" + dateAsKey}>{dateCounter}</td>));
+                        storeDateJSX((<td onClick={() => {this.raiseToModal({ id: "date-settings", params: {} })}} className={dateAsKey === currentDate && month === currentMonth && year === currentYear ? "activeDate" : ""} key={year + "-" + month + "-" + dateAsKey}>{dateCounter}</td>));
                     }
                
                     if(dates[year][month][dateAsKey].weekday === "Sunday"){
@@ -246,7 +246,7 @@ class CalendarModule extends Module {
        
         return (
             <Fragment>
-                <button className="btn btn-tabeon" onClick={() => {this.raiseToModal({ id: "confirm-action", action: this.saveModalData.bind(this) })}}>Save</button>
+                <button className="btn btn-tabeon" onClick={() => {this.raiseToModal({ id: "confirm-action", params: {}, action: this.saveModalData.bind(this) })}}>Save</button>
                 <button className="btn btn-tabeon btn-tabeon-cancel">Reset</button>
             </Fragment>
         );

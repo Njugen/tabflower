@@ -1,18 +1,39 @@
 import React, { Fragment } from "react";
 import Modal from '../modal';
 import { sendToBackground } from './../../../services/webextension/APIBridge';
+import { PropTypes } from 'prop-types';
+import { ValidatorError, ErrorHandler } from './../../utils/exceptionsAndHandler';
+import * as validator from './../../utils/inputValidators'
 
 class ETGMLaunchGroupsModal extends Modal {
-    saveModalHandler = (callback) => {
-        console.log(this.props.data.params.groupId);
+    verifyChildProps = () => {
+        const { isString } = validator;
+        const { groupId } = this.props.data.params;
 
-        sendToBackground("launch-tab-group", {groupId: this.props.data.params.groupId})
-        this.clearModalData(callback(this.state));
+        if(!isString(groupId)){ throw new ValidatorError("ETGMLaunchGroupsModal-102"); }
+    }
+
+    saveModalHandler = (callback) => {
+        try {
+            const { isFunction } = validator;
+            const { groupId } = this.props.data.params;
+
+            if(isFunction(callback)){
+                this.clearModalData(callback(groupId));
+            } else {
+                throw new ValidatorError("ETGMLaunchGroupsModal-101");
+            }
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+        }
     }
 
     dismissModalHandler = () => {
-
-        this.clearModalData();
+        try {
+            this.clearModalData();
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+        }
     }
 
     manyTabsDetected = (numberOfWindows, numberOfTabs) => {

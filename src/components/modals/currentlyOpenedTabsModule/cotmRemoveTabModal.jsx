@@ -1,23 +1,61 @@
 import React, { Fragment } from "react";
 import Modal from '../modal';
-
+import { ValidatorError, ErrorHandler } from './../../utils/exceptionsAndHandler';
+import * as validator from './../../utils/inputValidators'
 
 class COTMRemoveTabModal extends Modal {
+    verifyChildProps = () => {
+        const { isObject, isNumber, isString } = validator;
+        const { tabInfo } = this.props.data.params;
+
+        if(isObject(tabInfo)){ 
+            if(!isNumber(tabInfo.id)){
+                throw new ValidatorError("COTMRemoveTabModal-101");
+            }
+
+            if(!isString(tabInfo.title)){
+                throw new ValidatorError("COTMRemoveTabModal-104");
+            }
+        } else {
+            throw new ValidatorError("COTMRemoveTabModal-102");
+        }
+    }
+
 
     saveModalHandler = (callback) => {
-        this.clearModalData(callback(this.state));
+        try {
+            const { isFunction } = validator;
+
+            if(isFunction(callback)){
+                this.clearModalData(callback(this.state));
+            } else {
+                throw new ValidatorError("COTMRemoveTabModal-103");
+            }
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+        }
     }
 
     dismissModalHandler = () => {
-
-        this.clearModalData();
+        try{
+            this.clearModalData();
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+        }
     }
 
     childComponentDidMount = () => {
+        const { isObject} = validator;
         const data = this.props.data.params.tabInfo;
-        this.setState(
-            { data }
-        )
+
+        if(isObject(data)){ 
+            this.setState(
+                { data }
+            )
+        } else {
+            throw new ValidatorError("COTMRemoveTabModal-102");
+        }
+        
     }
 
     renderModalBody(){

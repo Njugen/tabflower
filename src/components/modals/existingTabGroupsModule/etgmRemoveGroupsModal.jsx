@@ -5,6 +5,17 @@ import { ValidatorError, ErrorHandler } from './../../utils/exceptionsAndHandler
 import * as validator from './../../utils/inputValidators'
 
 class ETGMRemoveGroupsModal extends Modal {
+    verifyChildProps = () => {
+        /*
+            Verify the this.props.data.params object
+        */
+        const { isString, isUndefined } = validator;
+        const { groupId, groupName } = this.props.data.params;
+
+        if(!isString(groupId) && !isUndefined(groupId)){ throw new ValidatorError("ETGMRemoveGroupsModal-102"); }
+        if(!isString(groupName) || isUndefined(groupId)){ throw new ValidatorError("ETGMRemoveGroupsModal-103"); }
+    }
+
     saveModalHandler = (callback) => {
         try {
             const { isFunction } = validator;
@@ -15,10 +26,7 @@ class ETGMRemoveGroupsModal extends Modal {
                 throw new ValidatorError("ETGMRemoveGroupsModal-101");
             }
         } catch(err){
-            const { groupName } = this.props.data.params || {};
-            const additionalMessage = (!groupName ? "The targetted tab group does not exist, therefore it cannot be deleted" : "The tab group(s) could not be removed. Please try again." ) + "";
-
-            ErrorHandler(err, this.raiseToErrorOverlay, additionalMessage);
+            ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 

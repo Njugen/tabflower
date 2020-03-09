@@ -6,8 +6,8 @@ import ErrorBoundary from './components/utils/errorBoundary';
 
 /* Import Modals */
 
-import CalendarDateSettingsModal from "./components/modals/calendarDateSettingsModal";
-import ConfirmationModal from "./components/modals/confirmationModal";
+import CalendarDateSettingsModal from "./components/modals/calendarModule/calendarDateSettingsModal";
+import ConfirmationModal from "./components/modals/calendarModule/confirmationModal";
 
 import ETGMLaunchGroupsModal from './components/modals/existingTabGroupsModule/etgmLaunchGroupsModal';
 import ETGMRemoveGroupsModal from './components/modals/existingTabGroupsModule/etgmRemoveGroupsModal';

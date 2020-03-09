@@ -101,8 +101,34 @@ export const ValidatorError = (code) => {
         case "ETGMRemoveGroupsModal-101":
             message = "The callback parameter is not a function.";
             break;    
+        case "ETGMRemoveGroupsModal-102":
+            message = "A group id needs to be provided as a text string in order to identify what tab group to delete. If all tab groups are meant to be deleted, please do not provide any group id when calling this modal. As a result of this, no tab groups can be deleted at this point.";
+            break;     
+        case "ETGMRemoveGroupsModal-103":
+            message = "A tab group name needs to be provided to this modal for user convenience. The tab group name needs to be a text string";
+            break;         
+        // ETGMLaunchGroupsModal
+        case "ETGMLaunchGroupsModal-101":
+            message = "The callback parameter is not a function.";
+            break;        
+        case "ETGMLaunchGroupsModal-102":
+            message = "A group id needs to be provided as a text string in order to identify which tab group to launch. As no tab group id has been provided, nothing will be launched by this request.";
+            break;    
+        // COTMRemoveTabModal     
+        case "COTMRemoveTabModal-101": 
+            message = "The targetted tab could not be identified since its unique identification number is missing or provided in wrong format. This might be caused if the tab information has been modified per request. Please, make sure the tab information has not been modified after being retrieved directly from the browser. As a result, the requested tab cannot be deleted at this time.";
+            break;  
+        case "COTMRemoveTabModal-102": 
+            message = "No information about the targetted tab could be retrieved, therefore the tab cannot be closed at this point.";
+            break; 
+        case "COTMRemoveTabModal-103": 
+            message = "The callback parameter is not a function.";
+            break;   
+        case "COTMRemoveTabModal-104": 
+            message = "The title of the targetted tab is missing. As the title is missing, other information related to the targetted tab could be missing or incorrect as well. As a precaution, no tab will be deleted as the extension cannot guarantee that the correct tab is targetted.";
+            break;          
         default:
-            message = "An Unknown Error has occured";
+            message = "An Unknown Error has occured.";
     }
 
     return {

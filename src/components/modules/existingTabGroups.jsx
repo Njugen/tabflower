@@ -10,8 +10,10 @@ class ExistingTabGroupsModule extends Module {
    }
 
    launchTabGroup = (tabGroupId) => {
+       console.log("TGROUPID", tabGroupId);
        if(typeof tabGroupId === "string"){
         // tabGroupId is a string, proceed...
+        sendToBackground("launch-tab-group", {groupId: tabGroupId});
        } else if(typeof tabGroupId !== "string") {
             // There is no valid tab id... show an error message.
        } 
