@@ -77,7 +77,6 @@ class COTMRemoveTabModal extends Modal {
     }
 
     renderModalHeader(){
-        
         return "Close Tab";    
     }
 }

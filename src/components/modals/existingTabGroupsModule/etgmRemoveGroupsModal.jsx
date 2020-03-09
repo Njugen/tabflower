@@ -10,10 +10,20 @@ class ETGMRemoveGroupsModal extends Modal {
             Verify the this.props.data.params object
         */
         const { isString, isUndefined } = validator;
-        const { groupId, groupName } = this.props.data.params;
+        const { groupId, groupName, removeAll } = this.props.data.params;
 
-        if(!isString(groupId) && !isUndefined(groupId)){ throw new ValidatorError("ETGMRemoveGroupsModal-102"); }
-        if(!isString(groupName) || isUndefined(groupId)){ throw new ValidatorError("ETGMRemoveGroupsModal-103"); }
+        if(isUndefined(removeAll) || (!isUndefined(removeAll) && removeAll === false)){
+            // If the "removeAll" variable is not provided or is false, the task will be to delete a specific tab group
+            // In this case, groupId and groupName need to be provided also.
+            if(!isString(groupId) && !isUndefined(groupId)){ throw new ValidatorError("ETGMRemoveGroupsModal-102"); }
+            if(!isString(groupName) || isUndefined(groupName)){ throw new ValidatorError("ETGMRemoveGroupsModal-103"); }
+        } else {
+            
+            
+             // If this variable is provided and true, the task will be to delete all tab groups.
+            // groupId and groupName will be ignored
+        }
+       
     }
 
     saveModalHandler = (callback) => {

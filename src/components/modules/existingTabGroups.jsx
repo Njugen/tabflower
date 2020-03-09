@@ -126,7 +126,7 @@ class ExistingTabGroupsModule extends Module {
         return (    
             <Fragment>
                  
-                <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", params: {}, action: this.removeTabGroups.bind(this) })}>Remove all groups</button>
+                <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", params: { removeAll: true }, action: this.removeTabGroups.bind(this) })}>Remove all groups</button>
                 <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", params: { windowAndTabs: [], type: "new-group" }, action: this.createOrEditTabGroup.bind(this) })}>Create a new group</button>
               
             </Fragment>
