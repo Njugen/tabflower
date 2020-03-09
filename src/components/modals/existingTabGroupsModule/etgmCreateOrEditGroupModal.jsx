@@ -14,7 +14,7 @@ class ETGMCreateNewGroupModal extends Modal {
         /*
             Verify the this.props.data.params object
         */
-        const { isBoolean, isString, isUndefined, isObject } = validator;
+        const { isBoolean, isString, isUndefined, isArray } = validator;
         const { windowAndTabs, groupName, groupCloseAll, groupDescription, type, groupId } = this.props.data.params;
       
         /*
@@ -79,11 +79,11 @@ class ETGMCreateNewGroupModal extends Modal {
         /* 
             windowAndTabs (object, mandatory)
 
-            This parameter contains windows and tabs stored into a single object. If there are no windows/tabs, this object
-            is empty e.g. object = {} 
+            This parameter contains windows and tabs stored into a single array. If there are no windows/tabs, this array
+            is empty e.g. windowAndTabs = []
         */
         
-        if(!isObject(windowAndTabs)){
+        if(!isArray(windowAndTabs)){
             throw new ValidatorError("ETGMCreateNewGroupModal-119");
         }
     }
@@ -383,7 +383,7 @@ class ETGMCreateNewGroupModal extends Modal {
             - new-group
         */
        
-        const { isString } = validator;
+        const { isString, isArray } = validator;
 
         if(!isString(type)){
             throw new ValidatorError("ETGMCreateNewGroupModal-112");
@@ -393,7 +393,13 @@ class ETGMCreateNewGroupModal extends Modal {
             }
         }
 
-        windowAndTabs = windowAndTabs || [];
+        if(isArray(windowAndTabs)){
+            windowAndTabs = windowAndTabs || [];
+        } else {
+            throw new ValidatorError("ETGMCreateNewGroupModal-121");
+        }
+
+        
 
         return (
             <div className="tb-windowlist-container">

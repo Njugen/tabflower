@@ -94,9 +94,12 @@ export const ValidatorError = (code) => {
         case "ETGMCreateNewGroupModal-119":
             message = "The \"windowAndTabs\" parameter needs to be an object in this.props.data.params, containing information about all windows and tabs in a tab group. If there is no such information available, this parameter should be an empty object. As a result of this error, tab groups cannot be added nor edited at this time.";
             break; 
-        case "ETGMCreateNewGroupModal-119":
+        case "ETGMCreateNewGroupModal-120":
             message = "The \"groupId\" parameter needs to be a string in this.props.data.params, containing an id string of the requested tab group. If such an id does not exist as a text string, refrain from providing the groupId variable when calling this modal. As a result of this error, the requested tab group cannot be identified and can therefore not be edited.";
-            break;                      
+            break;       
+        case "ETGMCreateNewGroupModal-121":
+            message = "The predefined tabs and arrays were provided to this modal in an incorrect format. As a result, no tab groups can be created at this moment.";
+            break;                         
         // ETGMRemoveGroupsModal
         case "ETGMRemoveGroupsModal-101":
             message = "The callback parameter is not a function.";
