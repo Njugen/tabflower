@@ -129,7 +129,11 @@ export const ValidatorError = (code) => {
             break;   
         case "COTMRemoveTabModal-104": 
             message = "The title of the targetted tab is missing. As the title is missing, other information related to the targetted tab could be missing or incorrect as well. As a precaution, no tab will be deleted as the extension cannot guarantee that the correct tab is targetted.";
-            break;          
+            break;  
+        // COTMRemoveUnresponsiveTabs
+        case "COTMRemoveUnresponsiveTabs-101":
+            message = "The callback parameter is not a function.";
+            break;                    
         default:
             message = "An Unknown Error has occured.";
     }

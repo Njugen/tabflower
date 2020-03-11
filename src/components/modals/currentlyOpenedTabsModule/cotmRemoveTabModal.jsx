@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import Modal from '../modal';
 import { ValidatorError, ErrorHandler } from './../../utils/exceptionsAndHandler';
 import * as validator from './../../utils/inputValidators'
+import { PropTypes } from 'prop-types';
 
 class COTMRemoveTabModal extends Modal {
     verifyChildProps = () => {
@@ -79,6 +80,19 @@ class COTMRemoveTabModal extends Modal {
     renderModalHeader(){
         return "Close Tab";    
     }
+}
+
+COTMRemoveTabModal.propTypes = {
+    data: PropTypes.shape({
+        params: PropTypes.shape({
+            tabInfo: PropTypes.shape({
+                id: PropTypes.string.isRequired,
+                title: PropTypes.string.isRequired
+            })
+        })
+    }),
+    onRaiseToErrorOverlay: PropTypes.func.isRequired,
+    onDismiss: PropTypes.func.isRequired
 }
 
 export default COTMRemoveTabModal;

@@ -1,7 +1,11 @@
 import React, { Component } from "react";
+import { ValidatorError, ErrorHandler } from '../exceptionsAndHandler';
+import { PropTypes } from 'prop-types';
 require("../../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
 
+
 class Module extends Component {
+
     /*
         Module State
         - dropDownGrid 
