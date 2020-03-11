@@ -136,8 +136,32 @@ export const ValidatorError = (code) => {
             break;  
         // module.jsx
         case "module-101":
+            message = "The componentEvent parameter in handleDragOver() does not target anything."
+            break;   
+        case "module-102":
             message = "The componentEvent parameter in handleDragOver() is not an object."
-            break;                      
+            break;     
+        case "module-103":
+            message = "The componentEvent parameter in handleDrop() does not target anything."
+            break;  
+        case "module-104":
+            message = "The componentEvent parameter in handleDrop() is not an object."
+            break; 
+        case "module-105":
+            message = "The componentEvent parameter in handleDragStart() does not target anything."
+            break;  
+        case "module-106":
+            message = "The componentEvent parameter in handleDragStart() is not an object."
+            break;   
+        case "module-107":
+            message = "The parameters input in changeStateSettings() is not an object."
+            break;  
+        case "module-108":
+            message = "The parameters input in changeStateModuleData() is not an object."
+            break; 
+        case "module-109":
+            message = "The sectionName parameter in createStateModuleDataSection() is not a string consisting of at least 1 character."
+            break;                                        
         default:
             message = "An Unknown Error has occured.";
     }

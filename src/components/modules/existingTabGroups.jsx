@@ -2,12 +2,15 @@ import React, { Fragment } from "react";
 import { Link } from 'react-router-dom';
 import Module from '../utils/moduleon/module';
 import { sendToBackground } from './../../services/webextension/APIBridge';
+import { ValidatorError, ErrorHandler } from '../utils/exceptionsAndHandler';
+import * as validator from '../utils/inputValidators'
 require("../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css")
 
 class ExistingTabGroupsModule extends Module {
    settings = {
        moduleTitle: "Existing Tab Groups"
    }
+
 
    launchTabGroup = (tabGroupId) => {
        console.log("TGROUPID", tabGroupId);

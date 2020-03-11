@@ -55,15 +55,20 @@ class Module extends Component {
 
             if(isObject(componentEvent)){
                 componentEvent.preventDefault();
-                const isModuleContainer = componentEvent.target.className.includes("tabeon-module-container");
 
-                if(isModuleContainer){
-                    this.props.onDragOver(componentEvent.target.children[0].id)
+                if(isObject(componentEvent.target)){
+                    const isModuleContainer = componentEvent.target.className.includes("tabeon-module-container");
+
+                    if(isModuleContainer){
+                        this.props.onDragOver(componentEvent.target.children[0].id)
+                    } else {
+                        return;
+                    }
                 } else {
-                    return;
+                    throw new ValidatorError("module-101");
                 }
             } else {
-                throw new ValidatorError("module-101");
+                throw new ValidatorError("module-102");
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay);
@@ -80,10 +85,23 @@ class Module extends Component {
             The information is raised through this component chain:
             module > moduleColumn > moduleon
         */
-        componentEvent.preventDefault();
-        
-        this.props.onDrop(componentEvent.target.parentElement);
-     
+       try {
+            const { isObject } = validator;
+
+            if(isObject(componentEvent)){
+                componentEvent.preventDefault();
+
+                if(isObject(componentEvent.target)){
+                    this.props.onDrop(componentEvent.target.parentElement);
+                } else {
+                    throw new ValidatorError("module-103");
+                }
+            } else {
+                throw new ValidatorError("module-104");
+            }
+       } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+       }
     }
 
     handleDragStart = (componentEvent) => {
@@ -95,7 +113,21 @@ class Module extends Component {
             The information is raised through this component chain:
             module > moduleColumn > moduleon
         */
-        this.props.onDragStart(componentEvent.target);
+        try {
+            const { isObject } = validator;
+
+            if(isObject(componentEvent)){
+                if(isObject(componentEvent.target)){
+                    this.props.onDragStart(componentEvent.target);
+                } else {
+                    throw new ValidatorError("module-105");
+                }
+            } else {
+                throw new ValidatorError("module-106");
+            }
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+        }
     }
 
     handleModuleMinimize = () => {
@@ -105,9 +137,13 @@ class Module extends Component {
 
             E.g. setting minimized to true will cause this module to contract, making only its header visible to the user
         */
-        this.changeStateSettings({
-            minimized: true
-        });
+        try {
+            this.changeStateSettings({
+                minimized: true
+            });
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+        }
     }
 
     handleModuleExpand = () => {
@@ -117,10 +153,13 @@ class Module extends Component {
 
             E.g. setting minimized to false will cause this module to expand, making its contents and footer visible to the user
         */
-
-        this.changeStateSettings({
-            minimized: false
-        });
+        try {
+            this.changeStateSettings({
+                minimized: false
+            });
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+        }
     }
 
     changeStateSettings = (parameters) => {
@@ -130,15 +169,22 @@ class Module extends Component {
             Parameters:
             - parameters (object, mandatory): An object with a set of new options e.g. { minimized: false, blablabla: "blablabla" }
         */
+        try {
+            const { isObject } = validator;
+            
+            if(isObject(parameters)){
+                const settings = {
+                    ...this.state.settings, ...parameters
+                }
 
-        if(typeof parameters === "object"){
-            const settings = {
-                ...this.state.settings, ...parameters
+                this.setState({
+                    settings
+                });
+            } else {
+                throw new ValidatorError("module-107");
             }
-
-            this.setState({
-                settings
-            });
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
@@ -149,14 +195,22 @@ class Module extends Component {
             Parameters:
             - parameters (object, mandatory): An object with a set of new options e.g. { module_specific_info_1: "abc", module_specific_info_2: "blablabla" }
         */
-        if(typeof parameters === "object"){
-            const moduleData = {
-                ...this.state.moduleData, ...parameters
-            }
+        try {
+            const { isObject } = validator;
 
-            this.setState({
-                moduleData
-            });
+            if(isObject(parameters)){
+                const moduleData = {
+                    ...this.state.moduleData, ...parameters
+                }
+
+                this.setState({
+                    moduleData
+                });
+            } else {
+                throw new ValidatorError("module-108");
+            }
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
@@ -179,18 +233,29 @@ class Module extends Component {
                 settings: {...}
             }
         */
+        try{
+            const { isString } = validator;
 
-        if(typeof sectionName === "string"){
-            if(!this.state.moduleData[sectionName]){
-                let data = {
-                };
-                
-                data[sectionName] = {};
-                this.changeStateModuleData(data);
+            if(isString(sectionName)){
+                if(!this.state.moduleData[sectionName]){
+                    let data = {
+                    };
+                    
+                    data[sectionName] = {};
+                    this.changeStateModuleData(data);
+                }
+            } else {
+                throw new ValidatorError("module-109");
             }
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
     componentDidMount = () => {
+        if(typeof this.verifyChildProps === "function"){
+            this.verifyChildProps();
+        }
+
         /*
             Every module can set their own settings independent from other modules. E.g. Module A may be minimized
             while Module B is not, and so forth.
@@ -250,10 +315,13 @@ class Module extends Component {
         
     }
 
+    verifyProps = () => {
+
+    }
 
     constructor(props){
         super(props);
-     
+        this.verifyProps();
     }
 
     render = () => {

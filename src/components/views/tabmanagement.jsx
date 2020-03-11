@@ -5,6 +5,8 @@ import Moduleon from "../utils/moduleon/moduleon";
 import ModuleColumn from '../utils/moduleon/moduleColumn';
 import CurrentlyOpenedTabsModule from "../modules/currentlyOpenedTabs";
 import ExistingTabGroupsModule from '../modules/existingTabGroups';
+import { ValidatorError, ErrorHandler } from '../utils/exceptionsAndHandler';
+import * as validator from '../utils/inputValidators'
 require("../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css")
 
 class TabManagementView extends View {
