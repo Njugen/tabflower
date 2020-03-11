@@ -112,6 +112,12 @@ r
         onRaiseToModal(data);
     }
 
+    raiseToErrorOverlay = (data) => {
+        const { onRaiseToErrorOverlay } = this.props;
+
+        onRaiseToErrorOverlay(data);
+    }
+
     renderRoutes = () => {
         /*
             This function loops through every object set up in the 
@@ -138,6 +144,7 @@ r
                             onViewMount={(data) => this.handleViewMount(data)}
                             label={view.label} 
                             key={key}
+                            onRaiseToErrorOverlay={(data) => this.raiseToErrorOverlay(data)}
                             {...props} />
  
                     } 

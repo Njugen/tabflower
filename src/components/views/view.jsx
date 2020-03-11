@@ -42,6 +42,14 @@ class View extends Component {
         refreshFactor: 0
     }
 
+    raiseToErrorOverlay = (data) => {
+        const { onRaiseToErrorOverlay } = this.props;
+
+        if(typeof onRaiseToErrorOverlay === "function"){
+            onRaiseToErrorOverlay(data);
+        }
+    } 
+
     handleViewMount = () => {
         /*
             Parameters: none

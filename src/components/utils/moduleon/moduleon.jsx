@@ -60,13 +60,13 @@ class Moduleon extends Component {
 
     highlightModule = (moduleId) => {
         const module = document.getElementById(moduleId);
-        module.style.border = "1px solid #7a1d8c";
+        module.style.border = "0px solid #7a1d8c";
         module.style.boxShadow = "0px 0px 10px #7a1d8c";
     }
 
     removeModuleHighlight = (moduleId) => {
         const module = document.getElementById(moduleId);
-        module.style.border = "1px solid #d2d2d2";
+        module.style.border = "0px solid #d2d2d2";
         module.style.boxShadow = "0px 0px 10px #ffffff";
     }
 

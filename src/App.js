@@ -172,18 +172,19 @@ class App extends Component{
           {(modalLaunched && modalId === "cotmremovewindowmodal") && <COTMRemoveWindowModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></COTMRemoveWindowModal>}
           {(modalLaunched && modalId === "cotmremovetabmodal") && <COTMRemoveTabModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></COTMRemoveTabModal>}
           {errors.length > 0 && <ErrorOverlay data={errors} onSave={() => ""} onDismiss={() => this.clearErrors()}></ErrorOverlay>}
-        </ErrorBoundary>
+        
         <div className="container-fluid">
           <div className="row">
             <MainSidebar routes={this.state.routes} onMainSidebarClick={(data) => this.handleMainSidebarClick(data)} />
             <div className="col-md-10 py-2" id="tabeon-view-container">
-                <RouteList onRaisedRoutesInfo={(data) => this.handleRouteListReady(data)} onRaiseToModal={(data) => this.modalHandler(data)} onNavigation={(data) => this.handleNavigation(data)} />
+                <RouteList onRaisedRoutesInfo={(data) => this.handleRouteListReady(data)} onRaiseToModal={(data) => this.modalHandler(data)} onNavigation={(data) => this.handleNavigation(data)} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} />
                 <ViewFooter />
             </div>
           </div>
           
         </div>
         <FullWidthLoadbar refreshFactor={this.state.refreshFactor} />
+        </ErrorBoundary>
       </Fragment>
     );
   }

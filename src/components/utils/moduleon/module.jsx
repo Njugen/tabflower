@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { ValidatorError, ErrorHandler } from '../exceptionsAndHandler';
 import { PropTypes } from 'prop-types';
+import * as validator from './../../utils/inputValidators'
 require("../../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
 
 
@@ -33,6 +34,14 @@ class Module extends Component {
         }
     }
 
+    raiseToErrorOverlay = (data) => {
+        const { onRaiseToErrorOverlay } = this.props;
+
+        if(typeof onRaiseToErrorOverlay === "function"){
+            onRaiseToErrorOverlay(data);
+        }
+    } 
+
     handleDragOver = (componentEvent) => {
         /*
             Once another module gets dragged over this module, this method gets called as part of the onDragOver event.
@@ -41,15 +50,23 @@ class Module extends Component {
             The information is raised through this component chain:
             module > moduleColumn > moduleon
         */
+        try {
+            const { isObject } = validator;
 
-        componentEvent.preventDefault();
+            if(isObject(componentEvent)){
+                componentEvent.preventDefault();
+                const isModuleContainer = componentEvent.target.className.includes("tabeon-module-container");
 
-        const isModuleContainer = componentEvent.target.className.includes("tabeon-module-container");
-
-        if(isModuleContainer){
-            this.props.onDragOver(componentEvent.target.children[0].id)
-        } else {
-            return;
+                if(isModuleContainer){
+                    this.props.onDragOver(componentEvent.target.children[0].id)
+                } else {
+                    return;
+                }
+            } else {
+                throw new ValidatorError("module-101");
+            }
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
         }
         
     }

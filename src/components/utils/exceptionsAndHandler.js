@@ -133,7 +133,11 @@ export const ValidatorError = (code) => {
         // COTMRemoveUnresponsiveTabs
         case "COTMRemoveUnresponsiveTabs-101":
             message = "The callback parameter is not a function.";
-            break;                    
+            break;  
+        // module.jsx
+        case "module-101":
+            message = "The componentEvent parameter in handleDragOver() is not an object."
+            break;                      
         default:
             message = "An Unknown Error has occured.";
     }
