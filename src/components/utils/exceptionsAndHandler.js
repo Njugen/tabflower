@@ -161,7 +161,28 @@ export const ValidatorError = (code) => {
             break; 
         case "module-109":
             message = "The sectionName parameter in createStateModuleDataSection() is not a string consisting of at least 1 character."
-            break;                                        
+            break;
+        case "module-verifyProps-101":
+            message = "The onRaiseToModal prop of the \"Modal\" component is either not a function or is missing."
+            break;
+        case "module-verifyProps-102":
+            message = "The onDragOver prop of the \"Modal\" component is either not a function or is missing."
+            break;
+        case "module-verifyProps-103":
+            message = "The onDrop prop of the \"Modal\" component is either not a function or is missing."
+            break;     
+        case "module-verifyProps-104":
+            message = "The onDragStart prop of the \"Modal\" component is either not a function or is missing."
+            break;
+        case "module-verifyProps-105":
+            message = "The onClick prop of the \"Modal\" component is either not a function or is missing."
+            break; 
+        case "module-verifyProps-106":
+            message = "The onRaiseToErrorOverlay prop of the \"Modal\" component is either not a function or is missing."
+            break; 
+        case "module-verifyProps-106":
+            message = "The id prop of the \"Modal\" component is either not a string or is missing."
+            break;                                                              
         default:
             message = "An Unknown Error has occured.";
     }

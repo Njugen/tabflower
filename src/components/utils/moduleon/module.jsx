@@ -252,7 +252,9 @@ class Module extends Component {
         }
     }
     componentDidMount = () => {
-        if(typeof this.verifyChildProps === "function"){
+        const { isFunction, isObject } = validator;
+        
+        if(isFunction(this.verifyChildProps)){
             this.verifyChildProps();
         }
 
@@ -265,7 +267,7 @@ class Module extends Component {
             the other variables in the state).
         */
 
-        if(typeof this.settings === "object"){
+        if(isObject(this.settings)){
             this.changeStateSettings(this.settings); 
         }
 
@@ -274,7 +276,7 @@ class Module extends Component {
             childComponentDidMount() into the module, which will be executed if it exists
         */
 
-        if(typeof this.childComponentDidMount === "function"){
+        if(isFunction(this.childComponentDidMount)){
             this.childComponentDidMount();
         }
     }
@@ -284,7 +286,9 @@ class Module extends Component {
             A module may need to run its own special tasks before being mounted. To do this, add
             childComponentWillMount() into the module, which will be executed if it exists
         */
-        if(typeof this.childComponentWillMount === "function"){
+        const { isFunction } = validator;
+
+        if(isFunction(this.childComponentWillMount)){
             this.childComponentWillMount();
         }
     }
@@ -316,7 +320,25 @@ class Module extends Component {
     }
 
     verifyProps = () => {
+        const { 
+            onRaiseToModal, 
+            onDragOver, 
+            onDrop, 
+            onDragStart, 
+            onClick, 
+            onRaiseToErrorOverlay,
+            id
+        } = this.props;
 
+        const { isFunction, isString } = validator;
+
+        if(!isFunction(onRaiseToModal)){ throw new ValidatorError("module-verifyProps-101"); }
+        if(!isFunction(onDragOver)){ throw new ValidatorError("module-verifyProps-102"); }
+        if(!isFunction(onDrop)){ throw new ValidatorError("module-verifyProps-103"); } 
+        if(!isFunction(onDragStart)){ throw new ValidatorError("module-verifyProps-104"); }
+        if(!isFunction(onClick)){ throw new ValidatorError("module-verifyProps-105"); }
+        if(!isFunction(onRaiseToErrorOverlay)){ throw new ValidatorError("module-verifyProps-106"); }
+        if(!isString(id)){ throw new ValidatorError("module-verifyProps-107"); }
     }
 
     constructor(props){
