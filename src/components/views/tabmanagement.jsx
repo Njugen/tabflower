@@ -5,8 +5,10 @@ import Moduleon from "../utils/moduleon/moduleon";
 import ModuleColumn from '../utils/moduleon/moduleColumn';
 import CurrentlyOpenedTabsModule from "../modules/currentlyOpenedTabs";
 import ExistingTabGroupsModule from '../modules/existingTabGroups';
+import BrowserStatusModule from './../modules/browserStatus';
 import { ValidatorError, ErrorHandler } from '../utils/exceptionsAndHandler';
 import * as validator from '../utils/inputValidators'
+
 require("../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css")
 
 class TabManagementView extends View {
@@ -40,7 +42,7 @@ class TabManagementView extends View {
                     <div className="col-8">
                         <Moduleon>
                             <ModuleColumn colspan="12">
-                                <CurrentlyOpenedTabsModule refresh={this.state.refreshFactor} onRaiseToView={(data) => this.handleRaisedData(data)} id="active-tabs-module" onRaiseToModal={(data) => this.raiseToModal(data)} onRaiseToErrorOverlay={(data) => this.raiseToErrorOverlay(data)}></CurrentlyOpenedTabsModule>
+                                <CurrentlyOpenedTabsModule onRaiseToView={(data) => this.handleRaisedData(data)} id="active-tabs-module" onRaiseToModal={(data) => this.raiseToModal(data)} onRaiseToErrorOverlay={(data) => this.raiseToErrorOverlay(data)}></CurrentlyOpenedTabsModule>
                                 <ExistingTabGroupsModule id="existing-tab-groups-module" refresh={this.state.refreshFactor} onRaiseToView={(data) => this.handleRaisedData(data)} onRaiseToModal={(data) => this.raiseToModal(data)} onRaiseToErrorOverlay={(data) => this.raiseToErrorOverlay(data)}></ExistingTabGroupsModule>
                             </ModuleColumn> 
                         </Moduleon>

@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import Module from '../utils/moduleon/module';
 import WindowsList from './../utils/windowsList';
 import { sendToBackground } from "../../services/webextension/APIBridge";
+import * as validator from './../utils/inputValidators';
+import { ValidatorError, ErrorHandler } from '../utils/exceptionsAndHandler';
 require("../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css")
 
 class CurrentlyOpenedTabsModule extends Module {
@@ -11,8 +13,23 @@ class CurrentlyOpenedTabsModule extends Module {
         - moduleTitle: Title of the module (string)
    */
     settings = {
-       moduleTitle: "Currently Opened Windows and Tabs"
-   }
+        moduleTitle: "abc"
+    }
+
+    verifyChildProps = () => {
+        const { isObject, isString } = validator;
+        console.log("LAPRAS", isObject(this.settings)); 
+        if(isObject(this.settings)){
+            const { moduleTitle } = this.settings;
+
+            if(!isString(moduleTitle)){
+                throw new ValidatorError("cotm-module-102");
+            } else {}
+        } else {
+            console.log("SIMPUKKA", isObject(this.settings));
+            throw new ValidatorError("cotm-module-101");
+        }
+    }
 
     /*
         createTabGroup

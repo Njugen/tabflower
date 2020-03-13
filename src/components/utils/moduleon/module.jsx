@@ -34,6 +34,13 @@ class Module extends Component {
         }
     }
 
+    /*
+        Module settings
+
+        - More info to be added...
+    */
+    settings = {};
+
     raiseToErrorOverlay = (data) => {
         const { onRaiseToErrorOverlay } = this.props;
 
@@ -253,7 +260,6 @@ class Module extends Component {
     }
     componentDidMount = () => {
         const { isFunction, isObject } = validator;
-        
         if(isFunction(this.verifyChildProps)){
             this.verifyChildProps();
         }
@@ -325,20 +331,45 @@ class Module extends Component {
             onDragOver, 
             onDrop, 
             onDragStart, 
-            onClick, 
             onRaiseToErrorOverlay,
             id
         } = this.props;
 
-        const { isFunction, isString } = validator;
+        const { isFunction, isString, isObject, isEmptyString } = validator;
 
         if(!isFunction(onRaiseToModal)){ throw new ValidatorError("module-verifyProps-101"); }
         if(!isFunction(onDragOver)){ throw new ValidatorError("module-verifyProps-102"); }
         if(!isFunction(onDrop)){ throw new ValidatorError("module-verifyProps-103"); } 
         if(!isFunction(onDragStart)){ throw new ValidatorError("module-verifyProps-104"); }
-        if(!isFunction(onClick)){ throw new ValidatorError("module-verifyProps-105"); }
         if(!isFunction(onRaiseToErrorOverlay)){ throw new ValidatorError("module-verifyProps-106"); }
         if(!isString(id)){ throw new ValidatorError("module-verifyProps-107"); }
+
+        if(!isObject(this.settings)){ throw new ValidatorError("module-verifyProps-108"); }
+        
+
+        // Check state
+        if(isObject(this.state)){
+            const { dropDownGrid, moduleData, settings } = this.state;
+
+            if(!isObject(dropDownGrid)){ 
+                throw new ValidatorError("module-verifyProps-110");
+            } else { 
+                const { draggedOverModuleId, moduleBeingDraggedId } = dropDownGrid;
+
+                if(!isString(draggedOverModuleId) && !isEmptyString(draggedOverModuleId)){
+                    throw new ValidatorError("module-verifyProps-113");
+                }
+
+                if(!isString(moduleBeingDraggedId) && !isEmptyString(moduleBeingDraggedId)){
+                    throw new ValidatorError("module-verifyProps-114");
+                }
+            }
+
+            if(!isObject(moduleData)){ throw new ValidatorError("module-verifyProps-111"); }
+            if(!isObject(settings)){ throw new ValidatorError("module-verifyProps-112"); }
+        } else {
+            throw new ValidatorError("module-verifyProps-109");
+        }
     }
 
     constructor(props){

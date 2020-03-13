@@ -356,6 +356,14 @@ class Modal extends Component {
             if(!isObject(data.params)){ throw new ValidatorError("mp-verifyProps-104"); }
         }
        
+        if(isObject(this.state)){
+            const { ui, fieldErrors } = this.state;
+
+            if(!isObject(ui)){ throw new ValidatorError("mp-verifyProps-106"); }
+            if(!isObject(fieldErrors)){ throw new ValidatorError("mp-verifyProps-107"); }
+        } else {
+            throw new ValidatorError("mp-verifyProps-105");
+        }
     }
 
     render = () => {

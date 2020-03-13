@@ -38,7 +38,16 @@ export const ValidatorError = (code) => {
             break;   
         case "mp-verifyProps-104": 
             message = "A modal always need to be requested using an \"params\" object. Request aborted";    
-            break;                
+            break;   
+        case "mp-verifyProps-105": 
+            message = "A state object is missing in the \"Modal\" component. Request aborted";    
+            break;    
+        case "mp-verifyProps-106": 
+            message = "A ui object is missing in the state object of the \"Modal\" component. Request aborted";    
+            break;       
+        case "mp-verifyProps-107": 
+            message = "A fieldErrors object is missing in the state object of the \"Modal\" component. Request aborted";    
+            break;                         
         // ETGMCreateNewGroupModal
         case "ETGMCreateNewGroupModal-101": 
             message = "The callback parameter is not a function";
@@ -163,26 +172,54 @@ export const ValidatorError = (code) => {
             message = "The sectionName parameter in createStateModuleDataSection() is not a string consisting of at least 1 character."
             break;
         case "module-verifyProps-101":
-            message = "The onRaiseToModal prop of the \"Modal\" component is either not a function or is missing."
+            message = "The onRaiseToModal prop of the \"Module\" component is either not a function or is missing."
             break;
         case "module-verifyProps-102":
-            message = "The onDragOver prop of the \"Modal\" component is either not a function or is missing."
+            message = "The onDragOver prop of the \"Module\" component is either not a function or is missing."
             break;
         case "module-verifyProps-103":
-            message = "The onDrop prop of the \"Modal\" component is either not a function or is missing."
+            message = "The onDrop prop of the \"Module\" component is either not a function or is missing."
             break;     
         case "module-verifyProps-104":
-            message = "The onDragStart prop of the \"Modal\" component is either not a function or is missing."
+            message = "The onDragStart prop of the \"Module\" component is either not a function or is missing."
             break;
         case "module-verifyProps-105":
-            message = "The onClick prop of the \"Modal\" component is either not a function or is missing."
+            message = "The onClick prop of the \"Module\" component is either not a function or is missing."
             break; 
         case "module-verifyProps-106":
-            message = "The onRaiseToErrorOverlay prop of the \"Modal\" component is either not a function or is missing."
+            message = "The onRaiseToErrorOverlay prop of the \"Module\" component is either not a function or is missing."
             break; 
         case "module-verifyProps-107":
-            message = "The id prop of the \"Modal\" component is either not a string or is missing."
-            break;                                                              
+            message = "The id prop of the \"Module\" component is either not a string or is missing."
+            break;     
+        case "module-verifyProps-108":
+            message = "A settings object is missing in the \"Module\" component."
+            break;    
+        case "module-verifyProps-109":
+            message = "A state object is missing in the \"Module\" component."
+            break;    
+        case "module-verifyProps-110":
+            message = "A dropDownGrid object is missing in the state of the \"Module\" component."
+            break;    
+        case "module-verifyProps-111":
+            message = "A moduleData object is missing in the state of the \"Module\" component."
+            break;       
+        case "module-verifyProps-112":
+            message = "A settings object is missing in the state of the \"Module\" component."
+            break;  
+        case "module-verifyProps-113":
+            message = "The draggedOverModuleId is missing or is not a string in the dropDownGrid located in the state of \"Module\" component."
+            break;   
+        case "module-verifyProps-114":
+            message = "The moduleBeingDraggedId is missing or is not a string in the dropDownGrid located in the state of \"Module\" component."
+            break;                       
+        // modules/currentlyOpenedTabs
+        case "cotm-module-101":
+            message = "A settings object is missing in \"CurrentlyOpenedTabsModule\". This object is mandatory for all modules. Please refer to the documentation for more details.";
+            break;        
+        case "cotm-module-102":
+            message = "A moduleTitle key consisting of at least 1 character is missing in the settings object for \"CurrentlyOpenedTabsModule\". This key represents the title of the module, and will be shown as a title to the user.";
+            break;                                                            
         default:
             message = "An Unknown Error has occured.";
     }
