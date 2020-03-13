@@ -180,7 +180,7 @@ export const ValidatorError = (code) => {
         case "module-verifyProps-106":
             message = "The onRaiseToErrorOverlay prop of the \"Modal\" component is either not a function or is missing."
             break; 
-        case "module-verifyProps-106":
+        case "module-verifyProps-107":
             message = "The id prop of the \"Modal\" component is either not a string or is missing."
             break;                                                              
         default:
