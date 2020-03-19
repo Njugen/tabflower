@@ -7,68 +7,140 @@ import * as validator from '../utils/inputValidators'
 require("../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css")
 
 class ExistingTabGroupsModule extends Module {
-   settings = {
-       moduleTitle: "Existing Tab Groups"
-   }
+    settings = {
+        moduleTitle: "Existing Tab Groups"
+    }
+
+    verifyChildProps = () => {
+        const { isObject, isString } = validator;
+
+        if(isObject(this.settings)){
+            const { moduleTitle } = this.settings;
+
+            if(!isString(moduleTitle)){
+                throw new ValidatorError("etgm-module-102");
+            }
+        } else {
+            throw new ValidatorError("etgm-module-101");
+        }
+    }
 
 
    launchTabGroup = (tabGroupId) => {
-       console.log("TGROUPID", tabGroupId);
-       if(typeof tabGroupId === "string"){
-        // tabGroupId is a string, proceed...
-        sendToBackground("launch-tab-group", {groupId: tabGroupId});
-       } else if(typeof tabGroupId !== "string") {
-            // There is no valid tab id... show an error message.
-       } 
+        try {
+            const { isString } = validator;
+
+            if(isString(tabGroupId)){
+          
+                sendToBackground("launch-tab-group", {groupId: tabGroupId});
+            } else {
+                throw new ValidatorError("etgm-module-103");
+            } 
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+        }
    }
 
-   removeTabGroups = (data) => {
-       console.log("TABGROUP", data);
+    removeTabGroups = (data) => {
+        try {
+            const { isString } = validator;
 
-       let groupId = "";
-       
-       if(data && data.groupId){
-           groupId = data.groupId;
-       } else {
-            groupId = "all"
-       }
+            let groupId = "";
 
-       sendToBackground("delete-tab-groups", { id: groupId }, (response) => {
-           console.log("RESPONSE", this.state);
-           this.getAllTabGroups();
-        
-       });
-   }
+            if(data && data.groupId){
+                if(isString(data.groupId)){
+                    groupId = data.groupId;
+                } else {
+                    throw new ValidatorError("etgm-module-104");
+                }
+            } else {
+                groupId = "all"
+            }
+
+            sendToBackground("delete-tab-groups", { id: groupId }, () => {
+                this.getAllTabGroups();
+            });
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+        }
+    }
 
    createOrEditTabGroup = (details) => {
-    if(details){
-        console.log("DRAGONBALL", details);
-       }
-       
-       sendToBackground("save-tab-group", details, (response) => {
-           console.log("Spider-man", response);
-           const { onRaiseToView } = this.props;
+       try {
+            const { isObject, isString, isArray } = validator; 
 
-           if(onRaiseToView){
-            onRaiseToView("refresh");
-           }
-       });
+            if(isObject(details)){
+                const { groupId, windowAndTabs, tabGroupName, tabGroupDescription } = details;
+
+                if(!isArray(windowAndTabs) || (isArray(windowAndTabs) && windowAndTabs.length < 1)){
+                    throw new ValidatorError("etgm-module-106");
+                }
+
+                if(!isString(groupId)){ throw new ValidatorError("etgm-module-107"); }
+                if(!isString(tabGroupName)){ throw new ValidatorError("etgm-module-108"); }
+                if(!isString(tabGroupDescription)){ throw new ValidatorError("etgm-module-109"); }
+
+                sendToBackground(
+                    "save-tab-group", 
+                    details, 
+                    () => {
+                        const { onRaiseToView } = this.props;
+
+                        if(onRaiseToView){
+                            onRaiseToView("refresh");
+                        }
+                    },
+                    (failResponse) => {
+                        const err = ValidatorError(failResponse.data);
+                        ErrorHandler(err, this.raiseToErrorOverlay);
+                    
+                    }
+                );
+            } else {
+                throw new ValidatorError("etgm-module-105");
+            }
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+        }
    }
 
    getAllTabGroups = () => {
-       sendToBackground("get-all-tab-groups", {}, (response) => {
-           console.log("GETTING ALL TAB GROUPS");
-            this.setState({
-                moduleData: {
-                    loadedTabGroups: response.data || []
-                }
-            }, () => {
-                
-                console.log("NOM", this.state);
-            });
+        try {
+            sendToBackground(
+                "get-all-tab-groups", 
+                {}, 
+                (response) => {
+                    try {
+                        const { isUndefined, isArray } = validator;
 
-           
-       })
+                        let tabGroups = [];
+
+                        if(!isUndefined(response) && isArray(response.data)){
+                            tabGroups = response.data;
+                        } else {
+                            throw new ValidatorError("etgm-module-110");
+                        }
+
+                        this.setState({
+                            moduleData: {
+                                loadedTabGroups: tabGroups
+                            }
+                        }, () => {
+
+                        });
+                    } catch(err){
+                        ErrorHandler(err, this.raiseToErrorOverlay);
+                    }
+                },
+                (failResponse) => {
+                    const err = ValidatorError(failResponse.data);
+                    ErrorHandler(err, this.raiseToErrorOverlay);
+                
+                }
+            );
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+        }
    }
 
    renderTabGroups = () => {

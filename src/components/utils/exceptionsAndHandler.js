@@ -240,7 +240,38 @@ export const ValidatorError = (code) => {
             break;    
         case "cotm-module-109":
             message = "The extension attempts to listen for changes in your current tabs and windows, but your web browser does not support the Webextension API which is required for it to function properly. As a result, information about windows and tabs cannot be retrieved.";
-            break;                                                                               
+            break;
+        // modules/existingTabGroups    
+        case "etgm-module-101":
+            message = "A settings object is missing in \"ExistingTabGroupsModule\". This object is mandatory for all modules. Please refer to the documentation for more details.";
+            break;    
+        case "etgm-module-102":
+            message = "A moduleTitle key consisting of at least 1 character is missing in the settings object for \"CurrentlyOpenedTabsModule\". This key represents the title of the module, and will be shown as a title to the user.";
+            break;   
+        case "etgm-module-103":
+            message = "In order to launch a tab group, a target id (also known as \"tabGroupId\") needs to be provided as a text string. No target id/tab group id was correctly provided in this call. As a result, no tab group will be launched.";
+            break;
+        case "etgm-module-104":
+            message = "In order to target a specific tab group for removal through the removeTabGroups() function, an object containing the tab id key \"groupId\" (string) needs to be provided as a parameter to this function. If no object parameter containing this key is provided, all tab groups will be targetted for removal.";
+            break;      
+        case "etgm-module-105":
+            message = "The details parameter for the createOrEditTabGroup() function must be an object consisting of information about the new tab group. If an existing tab group is being edited, then the information provided should instead represent the tab group to be changed.";
+            break;   
+        case "etgm-module-106":
+            message = "The details object for the createOrEditTabGroup() function must contain a \"windowAndTabs\" key in array format. This array must contain at least 1 object containing information about windows and tabs to base the new tab group on. As a result, your attempt to create a new tab group failed.";
+            break; 
+        case "etgm-module-107":
+            message = "The details object for the createOrEditTabGroup() function must contain a \"groupId\" key as a string consisting of at least 1 character. This key should contain any string that is unique only to the tab group being created. This ID is used to target the tab group for e.g. changes or removal. As a result, your attempt to create a new tab group failed.";
+            break;   
+        case "etgm-module-108":
+            message = "The details object for the createOrEditTabGroup() function must contain a \"tabGroupName\" key as a string consisting of at least 1 character. This key represents the name of the tab group, which can be whatever for the user's own convenience. As a result, your attempt to create a new tab group failed.";
+            break; 
+        case "etgm-module-109":
+            message = "The details object for the createOrEditTabGroup() function must contain a \"tabGroupDescription\" key as a string consisting of at least 1 character. This key represents the description of the tab group, which can be whatever for the user's own convenience. As a result, your attempt to create a new tab group failed.";
+            break;
+        case "etgm-module-110":
+            message = "The attempt to list all tab groups previously saved to the extension failed. This is because the tab/window information was not properly delivered from the browser on request. The information needs to be delivered to Tabflower as an object containing the array key \"data\", where the tab group information is located.";
+            break;                                                                                                 
         default:
             message = "An Unknown Error has occured.";
     }

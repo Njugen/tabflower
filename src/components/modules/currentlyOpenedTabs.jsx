@@ -24,7 +24,7 @@ class CurrentlyOpenedTabsModule extends Module {
 
             if(!isString(moduleTitle)){
                 throw new ValidatorError("cotm-module-102");
-            } else {}
+            }
         } else {
             console.log("SIMPUKKA", isObject(this.settings));
             throw new ValidatorError("cotm-module-101");
