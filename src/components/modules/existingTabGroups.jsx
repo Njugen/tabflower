@@ -60,7 +60,7 @@ class ExistingTabGroupsModule extends Module {
            console.log("GETTING ALL TAB GROUPS");
             this.setState({
                 moduleData: {
-                    loadedTabGroups: response || []
+                    loadedTabGroups: response.data || []
                 }
             }, () => {
                 

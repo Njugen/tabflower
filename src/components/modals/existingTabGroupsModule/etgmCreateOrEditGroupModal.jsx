@@ -91,7 +91,7 @@ class ETGMCreateNewGroupModal extends Modal {
     saveModalHandler = (callback) => {
         try {
             const { isFunction } = validator;
-
+            console.log("saveModalHandler triggered");
             if(isFunction(callback)){
                 this.validateFields(() => {
                     this.clearModalData(callback(this.state.tabGroupDetails));

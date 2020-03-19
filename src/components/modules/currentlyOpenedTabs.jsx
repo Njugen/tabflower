@@ -18,7 +18,7 @@ class CurrentlyOpenedTabsModule extends Module {
 
     verifyChildProps = () => {
         const { isObject, isString } = validator;
-        console.log("LAPRAS", isObject(this.settings)); 
+
         if(isObject(this.settings)){
             const { moduleTitle } = this.settings;
 
@@ -38,50 +38,129 @@ class CurrentlyOpenedTabsModule extends Module {
         created when this parameter is sent to the browser, where the background script decides
         whether to add a new group or overwrite an existing group. 
 
-        Paramer
+        Parameter
+        - details (object), information about the tab group to create
     */
     createTabGroup = (details) => {
-        sendToBackground("save-tab-group", details, (response) => {
-            console.log("Spider-man", response);
-            const { onRaiseToView } = this.props;
+        try {
+            const { isObject, isString, isArray } = validator; 
 
-            if(onRaiseToView){
-                onRaiseToView("refresh");
+            if(isObject(details)){ 
+                const { groupId, windowAndTabs, tabGroupName, tabGroupDescription } = details;
+
+                if(!isArray(windowAndTabs) || (isArray(windowAndTabs) && windowAndTabs.length < 1)){
+                    throw new ValidatorError("cotm-module-104");
+                }
+
+                if(!isString(groupId)){ throw new ValidatorError("cotm-module-105"); }
+                if(!isString(tabGroupName)){ throw new ValidatorError("cotm-module-106"); }
+                if(!isString(tabGroupDescription)){ throw new ValidatorError("cotm-module-107"); }
+
+                sendToBackground(
+                    "save-tab-group", 
+                    details, 
+                    () => {
+                        try {
+                            const { onRaiseToView } = this.props;
+
+                            if(onRaiseToView){
+                                onRaiseToView("refresh");
+                            }
+                        } catch(err){
+                            ErrorHandler(err, this.raiseToErrorOverlay);
+                        }
+                    },
+                    (failResponse) => {
+                        const err = ValidatorError(failResponse.data);
+                        ErrorHandler(err, this.raiseToErrorOverlay);
+                    
+                    }
+                );
+            } else {
+                throw new ValidatorError("cotm-module-103");
             }
-        });
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+        }
     }
 
     getOpenedWindowsAndTabs = () => {
-        sendToBackground("get-all-windows-and-tabs", {}, (response) => {
-          
-            this.setState({
-                moduleData: {
-                    openedWindowsAndTabs: response
-                }
-            });
-        });
+        sendToBackground(
+            "get-all-windows-and-tabs", 
+            {}, 
+            (successResponse) => {
+                try {
+                    const { isArray, isObject } = validator;
+
+                    if(!isObject(successResponse) || (isObject(successResponse) && !isArray(successResponse.data))){
+                        throw new ValidatorError("cotm-module-108");
+                    }
+
+                    this.setState({
+                        moduleData: {
+                            openedWindowsAndTabs: successResponse.data
+                        }
+                    });
+                } catch(err){
+                    ErrorHandler(err, this.raiseToErrorOverlay);
+                }    
+            },
+            (failResponse) => {
+                const err = ValidatorError(failResponse.data);
+                ErrorHandler(err, this.raiseToErrorOverlay);
+            }
+        );
     }
 
     
     closeUnresponsiveTabs = (data) => {
-        
-        sendToBackground("delete-unresponsive-tabs", { windowsAndTabs: this.state.moduleData.openedWindowsAndTabs, timelimit: data.timelimit}, (response) => {
-            setTimeout(() => this.getOpenedWindowsAndTabs(), 1500)
-        });
+        try {
+            sendToBackground(
+                "delete-unresponsive-tabs", 
+                { 
+                    windowsAndTabs: this.state.moduleData.openedWindowsAndTabs
+                }, 
+                () => {
+                    try {
+                        setTimeout(
+                            () => this.getOpenedWindowsAndTabs(), 
+                            1500
+                        );
+                    } catch(err){
+                        ErrorHandler(err, this.raiseToErrorOverlay);
+                    }
+                },
+                (failResponse) => {
+                    const err = ValidatorError(failResponse.data);
+                    ErrorHandler(err, this.raiseToErrorOverlay);
+                }
+            );
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+        }
     }
 
     listenForWindowAndTabChanges = () => {
-        const chrome = (typeof window.chrome === "undefined" ? null : window.chrome);
+        try {
+            const chrome = (typeof window.chrome === "undefined" ? null : window.chrome);
 
-        if(chrome){
-            chrome.runtime.onMessage.addListener(
-                (message) => {
-                    console.log(message);
-                    if(message.messageId && message.messageId === "window-tabs-updated"){
-                        this.getOpenedWindowsAndTabs()
+            if(chrome){
+                chrome.runtime.onMessage.addListener(
+                    (message) => {
+                        try {
+                            if(message.messageId && message.messageId === "window-tabs-updated"){
+                                this.getOpenedWindowsAndTabs()
+                            }
+                        } catch(err){
+                            ErrorHandler(err, this.raiseToErrorOverlay);
+                        }
                     }
-                }
-            )
+                )
+            } else {
+                throw new ValidatorError("cotm-module-109")
+            }
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 

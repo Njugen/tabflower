@@ -66,9 +66,9 @@ export const sendToBackground = (id, messageObj, success, fail) => {
                         if(response){
                             if(response.success === true){
                         
-                                success(response.data);
+                                success(response);
                             } else if(response.success === false || !response.success){
-                                fail("Response could not be received")
+                                fail(response)
                             }
                         } 
                     }

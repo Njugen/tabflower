@@ -300,7 +300,7 @@ class CalendarModule extends Module {
     }
 
     childComponentDidMount = () => {
-
+        
     }
 
     childComponentWillMount = () => {

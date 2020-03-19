@@ -39,6 +39,7 @@ class CalendarView extends View {
     }
 
     childComponentDidMount = () => {
+       
         let { date, month, year } = this.props.match.params;
 
         this.setCurrentDate(date, parseInt(month), year);
@@ -50,7 +51,13 @@ class CalendarView extends View {
                 <div className="col-8">
                     <Moduleon>
                         <ModuleColumn colspan="12">
-                            <CalendarModule id="tabscheduler" urlPath={this.props.match.path} currentDate={this.state.currentDate} onRaiseToModal={(data) => this.raiseToModal(data)}></CalendarModule>
+                            <CalendarModule 
+                                id="tabscheduler" 
+                                urlPath={this.props.match.path} 
+                                currentDate={this.state.currentDate} 
+                                onRaiseToModal={(data) => this.raiseToModal(data)}
+                                onRaiseToErrorOverlay={(data) => this.raiseToErrorOverlay(data)}>
+                            </CalendarModule>
                         </ModuleColumn>
                     </Moduleon>
                 </div> 

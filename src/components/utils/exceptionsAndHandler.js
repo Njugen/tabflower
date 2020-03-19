@@ -219,7 +219,28 @@ export const ValidatorError = (code) => {
             break;        
         case "cotm-module-102":
             message = "A moduleTitle key consisting of at least 1 character is missing in the settings object for \"CurrentlyOpenedTabsModule\". This key represents the title of the module, and will be shown as a title to the user.";
-            break;                                                            
+            break;      
+        case "cotm-module-103":
+            message = "The details parameter for the createTabGroup() function must be an object consisting of information about the new tab group.";
+            break;
+        case "cotm-module-104":
+            message = "The details object for the createTabGroup() function must contain a \"windowAndTabs\" key in array format. This array must contain at least 1 object containing information about windows and tabs to base the new tab group on. As a result, your attempt to create a new tab group failed.";
+            break; 
+        case "cotm-module-105":
+            message = "The details object for the createTabGroup() function must contain a \"groupId\" key as a string consisting of at least 1 character. This key should contain any string that is unique only to the tab group being created. This ID is used to target the tab group for e.g. changes or removal. As a result, your attempt to create a new tab group failed.";
+            break;   
+        case "cotm-module-106":
+            message = "The details object for the createTabGroup() function must contain a \"tabGroupName\" key as a string consisting of at least 1 character. This key represents the name of the tab group, which can be whatever for the user's own convenience. As a result, your attempt to create a new tab group failed.";
+            break; 
+        case "cotm-module-107":
+            message = "The details object for the createTabGroup() function must contain a \"tabGroupDescription\" key as a string consisting of at least 1 character. This key represents the description of the tab group, which can be whatever for the user's own convenience. As a result, your attempt to create a new tab group failed.";
+            break;   
+        case "cotm-module-108":
+            message = "The information about currently opened windows and tabs retrieved from the web browser could not be processed by Tabflower. Please, make sure the retrieved information is an object consisting of a key named \"data\" in array format.";
+            break;    
+        case "cotm-module-109":
+            message = "The extension attempts to listen for changes in your current tabs and windows, but your web browser does not support the Webextension API which is required for it to function properly. As a result, information about windows and tabs cannot be retrieved.";
+            break;                                                                               
         default:
             message = "An Unknown Error has occured.";
     }
@@ -227,6 +248,17 @@ export const ValidatorError = (code) => {
     return {
         name: "ValidatorError",
         message: message,
+        code: code
+    }
+}
+
+export const ExtensionError = (code, data) => {
+    let message = "Wooho";
+    
+    return {
+        name: "ExtensionError",
+        message: message,
+        attachment: data,
         code: code
     }
 }

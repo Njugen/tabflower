@@ -11,7 +11,8 @@ const getAllTabGroups = (successCallback, failCallback) => {
     )
 }
 
-const saveTabsToStorage = (group, successCallback, failCallback) => {
+const saveTabsToStorage = (groupDetails, successCallback, failCallback) => {
+
     chrome.storage.local.get(
         ["tabGroups"], (data) => {
             let updatedTabGroups = data.tabGroups;
@@ -28,14 +29,14 @@ const saveTabsToStorage = (group, successCallback, failCallback) => {
 
                 const existingGroupIndex = updatedTabGroups.findIndex(
                     (loopGroup, key, groupArray) => {
-                        return loopGroup.groupId === group.groupId
+                        return loopGroup.groupId === groupDetails.groupId
                     }
                 )
                 
                 if(existingGroupIndex > -1){
-                    updatedTabGroups[existingGroupIndex] = group;
+                    updatedTabGroups[existingGroupIndex] = groupDetails;
                 } else {
-                    updatedTabGroups.push(group);
+                    updatedTabGroups.push(groupDetails);
                 }
 
                 chrome.storage.local.set({
@@ -46,7 +47,7 @@ const saveTabsToStorage = (group, successCallback, failCallback) => {
             } else {
                 if(!updatedTabGroups){
                     updatedTabGroups = [];
-                    updatedTabGroups.push(group)
+                    updatedTabGroups.push(groupDetails)
                 }
                 chrome.storage.local.set({
                     tabGroups: updatedTabGroups

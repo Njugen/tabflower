@@ -51,114 +51,122 @@
     and showing the user why something has failed and what to do about it.
 */
 
-const receive = (featureId, detailsObj, forwardResponse) => {
+const receive = (featureId, detailsObj, forwardSuccessResponse, forwardFailureResponse) => {
     if(featureId === "get-all-tabs"){
 
         getAllTabs(
             detailsObj,
             (tabs) => {
 
-                forwardResponse(tabs);
+                forwardSuccessResponse(tabs);
             },
-            (err) => {
+            (message) => {
                 console.log("ERROR");
-                forwardResponse(null, err);
+                forwardFailureResponse(message);
             }
         ) 
     } else if(featureId === "get-all-windows-and-tabs"){
         getAllWindowsAndTabs(
             (windows) => {
-                forwardResponse(windows);
+                forwardSuccessResponse(windows);
             },
-            (err) => {
-                console.log("TRIED to get all windows and tabs");
+            (message) => {
+                forwardFailureResponse(message);
             }
         )
     } else if(featureId === "delete-tab") {
         deleteTab(
             detailsObj,
             (message) => {
-                forwardResponse(message);
+                forwardSuccessResponse(message);
             },
-            () => {
-                console.log("FAILDED TO REMOVE TAB");
+            (message) => {
+                forwardFailureResponse(message);
             }
         )
     } else if(featureId === "delete-window"){
         deleteWindow(
             detailsObj,
             (message) => {
-                forwardResponse(message);
+                forwardSuccessResponse(message);
             },
-            () => {
-                console.log("FAILDED TO REMOVE TAB");
+            (message) => {
+                forwardFailureResponse(message);
             }
         )
     } else if(featureId === "delete-unresponsive-tabs"){
         deleteUnresponsiveTabs(
             detailsObj,
             (message) => {
-                forwardResponse(message)
+                forwardSuccessResponse(message)
             },
-            () => {
-                console.log("-");
+            (message) => {
+                forwardFailureResponse(message);
             }
         )
     } else if(featureId === "save-tab-group"){
         saveTabsToStorage(
             detailsObj,
             (message) => {
-                forwardResponse(message);
+                forwardSuccessResponse(message);
+            },
+            (message) => {
+                console.log("FAIL CALLBACK CALLED");
+                forwardFailureResponse(message);
             }
         )
     } else if(featureId === "get-all-tab-groups"){
         getAllTabGroups(
             (message) => {
-                forwardResponse(message)
+                forwardSuccessResponse(message)
             },
-            () => {
-
+            (message) => {
+                forwardFailureResponse(message);
             }
         )
      } else if(featureId === "launch-tab-group"){
          launchTabGroup(
              detailsObj,
              (message) => {
-                 forwardResponse(message)
+                 forwardSuccessResponse(message)
              },
-             () => {}
+             (message) => {
+                forwardFailureResponse(message);
+             }
          )
      } else if(featureId === "delete-tab-groups"){
         deleteTabGroups(
             detailsObj,
              (message) => {
-                 forwardResponse(message)
+                forwardSuccessResponse(message)
              },
-             () => {}
+             (message) => {
+                forwardFailureResponse(message);
+             }
         )
      } else {
-        forwardResponse();
+        forwardFailureResponse();
     }
 }
 
 chrome.runtime.onMessage.addListener(
     (message, sender, sendResponse) => {
-        const manageResponse = (successMessage, failMessage) => {
-            let response;
-            if(successMessage && !failMessage){
-                response = {
-                    success: true,
-                    data: successMessage
-                };
+        const successResponse = (message) => {
+            const response = {
+                success: true,
+                data: message
+            };
+
+            sendResponse(response);
+        }
+
+        const failureResponse  = (message) => {
+            console.log("TRY TRIGGER FAILURE RESPONSE");
+            const response = {
+                success: false,
+                data: message
             }
 
-            if(failMessage && !successMessage){
-                response = {
-                    success: false,
-                    data: failMessage
-                };
-            }
-            
             sendResponse(response);
         }
 
@@ -169,7 +177,7 @@ chrome.runtime.onMessage.addListener(
                 /*
                     The message has an id
                 */
-                receive(id, details || null, manageResponse);
+                receive(id, details || null, successResponse, failureResponse);
                 
             }
         }

@@ -27,7 +27,7 @@ class Module extends Component {
             moduleBeingDraggedId: ""
         },
         moduleData: {
-            
+            loadedTabGroups: []
         },
         settings: {
             minimized: false
@@ -336,7 +336,7 @@ class Module extends Component {
         } = this.props;
 
         const { isFunction, isString, isObject, isEmptyString } = validator;
-
+        
         if(!isFunction(onRaiseToModal)){ throw new ValidatorError("module-verifyProps-101"); }
         if(!isFunction(onDragOver)){ throw new ValidatorError("module-verifyProps-102"); }
         if(!isFunction(onDrop)){ throw new ValidatorError("module-verifyProps-103"); } 
