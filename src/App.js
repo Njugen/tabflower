@@ -23,7 +23,7 @@ import ErrorOverlay from './components/modals/errorOverlay';
 import RouteList from './components/routes/routeList';
 
 /* Import Sidebars */
-import MainSidebar from './components/sidebars/mainSidebar/mainSidebar';
+import MainNavBar from './components/sidebars/MainNavBar/MainNavBar';
 
 /* Import Utilities */
 import FullWidthLoadbar from './components/utils/fullWidthLoadbar';
@@ -48,7 +48,7 @@ class App extends Component{
     routes: [],
     modal: {},
     errors: [],
-    mainSidebar: {},
+    MainNavBar: {},
     refreshFactor: 0
   };
 
@@ -83,10 +83,10 @@ class App extends Component{
     )
   }
 
-  handleMainSidebarClick = (sidebarProps) => {
+  handleMainNavBarClick = (sidebarProps) => {
     this.updateState(
       {
-        mainSidebar: sidebarProps,
+        MainNavBar: sidebarProps,
       
       },
       false
@@ -174,7 +174,7 @@ class App extends Component{
           {errors.length > 0 && <ErrorOverlay data={errors} onSave={() => ""} onDismiss={() => this.clearErrors()}></ErrorOverlay>}
         
         <div className="container-fluid">
-          <MainSidebar routes={this.state.routes} onMainSidebarClick={(data) => this.handleMainSidebarClick(data)} />
+          <MainNavBar routes={this.state.routes} onMainNavBarClick={(data) => this.handleMainNavBarClick(data)} />
           <div className="row">
             <div className="col-md-12 py-2" id="tabeon-view-container">
                 <RouteList onRaisedRoutesInfo={(data) => this.handleRouteListReady(data)} onRaiseToModal={(data) => this.modalHandler(data)} onNavigation={(data) => this.handleNavigation(data)} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} />

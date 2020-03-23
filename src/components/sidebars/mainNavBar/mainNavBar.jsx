@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import NavSection from './components/navSection';
 import { PropTypes } from 'prop-types';
 
-class MainSidebar extends Component {
+class MainNavBar extends Component {
     state = {
         activeNavLinkKey: ""
     }
@@ -24,9 +24,9 @@ class MainSidebar extends Component {
             Inform the App component that a link in the main sidebar has been clicked (any link) by raising
             the main sidebar's state.
         */
-        const { onMainSidebarClick } = this.props;
+        const { onMainNavBarClick } = this.props;
 
-        onMainSidebarClick(this.state);
+        onMainNavBarClick(this.state);
     }
 
     renderNavSection = (title, links) => {
@@ -43,11 +43,11 @@ class MainSidebar extends Component {
         return (
             <div className="row">
                 <div className="col-md-12" id="tabeon-main-nav-column">
-                    {this.renderNavSection("Another", routes)}
+                    {this.renderNavSection("Tabflower", routes)}
                 </div>
             </div>
         );
     }
 }
 
-export default MainSidebar;
+export default MainNavBar;
