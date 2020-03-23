@@ -9,15 +9,15 @@ div#root,
 div.container-fluid,
 div.container-fluid > .row,
 div.container-fluid > .row > div[class^="col-"] {
-    min-height: 100vh !important;
+
 }
 
 /* Container and Container Fluids */
 
 
-/* Main Navigation Column */
+/* Main Navigation Bar */
 #tabeon-main-nav-column {
-    background: #7a1d8c;;
+    background: #ffffff;
     box-shadow: 5px 0px 0px 0px #ffffff;
 }
 
@@ -32,25 +32,28 @@ div.container-fluid > .row > div[class^="col-"] {
     }
 
     .tabeon-nav-section-title {
-        border-bottom: 1px solid #7a1d8c;
-        color: #ffffff;
-        text-align: center;
+        border-bottom: 0px solid #7a1d8c;
+        color: #525252;
+        text-align: left;
     }
 
+.tabeon-nav-link-container {
+    text-align: right;
+}    
+
 .tabeon-nav-link {
-    display: block;
+    display: inline-block;
     padding: 0.6rem 1.5rem;
     text-align: center;
     margin: 0.3rem 0rem;
-    color: #ffffff;
+    color: #5a5a5a;
     box-shadow: 5px 0px 0px 0px #ffffff;
     transition: background-color 0.15s ease-in-out, font-weight 0.15s ease-in-out
 }
 
     .tabeon-nav-link.active {
         font-weight: bold;
-        color: #ffffff;
-        background: #bf21df;
+        color: #7a1d8c;
     }
 
     .tabeon-nav-link.active:hover {
@@ -59,11 +62,9 @@ div.container-fluid > .row > div[class^="col-"] {
     }
 
     .tabeon-nav-link:not(.active):hover {
-        color: #ffffff;
+        color: #a746bb;
         text-decoration: none;
-        font-weight: bold;
         box-shadow: 5px 0px 0px 0px #ffffff;
-        background: #bf21df;
     }
 
 /* Full Width Load Bar */
@@ -176,13 +177,13 @@ div.container-fluid > .row > div[class^="col-"] {
 /* App Footer */
 
 #app-footer-adjuster {
-    margin-top: 2rem;
+    margin-top: 5rem;
 }
 
 #app-footer {
     position: absolute; 
     width: 100%;
-    text-align: right;
+    text-align: center;
     bottom: 0;
     z-index:1000;
     font-size: 0.8rem;

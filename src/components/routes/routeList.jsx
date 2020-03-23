@@ -54,7 +54,7 @@ class RouteList extends Component {
             path: "/manage",
             component: TabManagementView
         },
-        { 
+     /*   { 
             label: "Calendar", 
             path: "/scheduler/:year/:month/:date",
             component: CalendarView
@@ -63,7 +63,7 @@ class RouteList extends Component {
             label: "Scheduler", 
             path: "/scheduler" ,
             component: CalendarView
-        },
+        }, */
         { 
             label: "Settings", 
             path: "/settings" ,

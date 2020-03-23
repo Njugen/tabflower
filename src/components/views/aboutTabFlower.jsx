@@ -3,6 +3,7 @@ import View from './view';
 
 class AboutTabFlowerView extends View {
     render = () => {
+     
         return (
             <div className="row d-flex justify-content-center">
                 <div className="col-6">

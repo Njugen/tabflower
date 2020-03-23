@@ -27,10 +27,16 @@ class NavSection extends Component {
 
         return(
             <div className="tabeon-nav-section">
-                <h4 className="tabeon-nav-section-title p-2 pb-3 mb-0">{title}</h4>
-                {
-                    this.mapLinks(links, onNavClick)
-                }
+                <div className="row">
+                    <div className="col-md-2">
+                        <h4 className="tabeon-nav-section-title p-2 pb-3 mb-0">{title}</h4>
+                    </div>
+                    <div className="col-md-10 tabeon-nav-link-container">
+                        {
+                            this.mapLinks(links, onNavClick)
+                        }
+                    </div>
+                </div>
             </div>
         )
     }
