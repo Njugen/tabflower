@@ -436,9 +436,16 @@ div.container-fluid > .row > div[class^="col-"] {
     ExistingTabGroupsModule
 */    
 
+
+
 .existing-tab-groups-list {
     list-style-type: none;
 }
+
+    .existing-tab-groups-list .no-tab-groups-msg {
+        margin: 2rem;
+        font-weight: bold;
+    }
 
     .existing-tab-groups-list .list-item-block {
         display: inline-block;

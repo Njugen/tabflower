@@ -144,30 +144,39 @@ class ExistingTabGroupsModule extends Module {
    }
 
    renderTabGroups = () => {
-       const tabGroups = this.state.moduleData.loadedTabGroups || [];
+        const tabGroups = this.state.moduleData.loadedTabGroups || [];
+        const { isPositiveNumber } = validator;
 
-       return tabGroups.map(
-           (group, i) => {
-               return (
-                <div className="list-item-block col-3 m-1 p-3">
-                    <div className="list-item-block-header mb-3">
-                        <h6 className="list-item-block-headline float-left pr-2">{group.tabGroupName}</h6>
-                        <div className="list-item-block-options float-right">
-                            <button className="fas fa-cog options-button" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", params: { windowAndTabs: group.windowAndTabs, groupName: group.tabGroupName, groupCloseAll: group.tabGroupCloseAll, groupDescription: group.tabGroupDescription, groupId: group.groupId, type: "existing-group"}, action: this.createOrEditTabGroup.bind(this) })}></button>
-                            <button className="fas fa-times options-button" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", params: {groupId: group.groupId, groupName: group.tabGroupName}, action: this.removeTabGroups.bind(this) })}></button>
+        if(isPositiveNumber(tabGroups.length)){
+            return tabGroups.map(
+                (group, i) => {
+                    return (
+                        <div className="list-item-block col-3 m-1 p-3">
+                            <div className="list-item-block-header mb-3">
+                                <h6 className="list-item-block-headline float-left pr-2">{group.tabGroupName}</h6>
+                                <div className="list-item-block-options float-right">
+                                    <button className="fas fa-cog options-button" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", params: { windowAndTabs: group.windowAndTabs, groupName: group.tabGroupName, groupCloseAll: group.tabGroupCloseAll, groupDescription: group.tabGroupDescription, groupId: group.groupId, type: "existing-group"}, action: this.createOrEditTabGroup.bind(this) })}></button>
+                                    <button className="fas fa-times options-button" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", params: {groupId: group.groupId, groupName: group.tabGroupName}, action: this.removeTabGroups.bind(this) })}></button>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div className="list-item-block-body small pb-3">
+                                <p>{group.tabGroupDescription}</p>
+                            </div>
+                            <div className="list-item-block-footer">
+                                <button class="btn btn-tabeon-reverse d-inline-block" onClick={() => this.raiseToModal({ id: "etgmlaunchgroupsmodal", params: { groupId: group.groupId}, action: this.launchTabGroup.bind(this) })}>Launch group</button>
+                            </div>
                         </div>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div className="list-item-block-body small pb-3">
-                        <p>{group.tabGroupDescription}</p>
-                    </div>
-                    <div className="list-item-block-footer">
-                        <button class="btn btn-tabeon-reverse d-inline-block" onClick={() => this.raiseToModal({ id: "etgmlaunchgroupsmodal", params: { groupId: group.groupId}, action: this.launchTabGroup.bind(this) })}>Launch group</button>
-                    </div>
+                    );
+                } 
+            );
+        } else {
+            return (
+                <div className="no-tab-groups-msg">
+                    There are no saved tab groups at the moment. You may add a new tab group by clicking the "Create a new group" button below.
                 </div>
-               );
-           } 
-       )
+            );
+        }
    }
 
    childComponentDidMount = () => {
