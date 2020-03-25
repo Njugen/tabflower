@@ -13,7 +13,7 @@ class CurrentlyOpenedTabsModule extends Module {
         - moduleTitle: Title of the module (string)
    */
     settings = {
-        moduleTitle: "abc"
+        moduleTitle: "Currently Opened Tabs"
     }
 
     verifyChildProps = () => {

@@ -1,4 +1,6 @@
 import { Component } from 'react';
+import { ValidatorError, ErrorHandler } from './../utils/exceptionsAndHandler';
+import * as validator from './../utils/inputValidators'
 
 /*
     The View Class
@@ -61,9 +63,14 @@ class View extends Component {
 
             All components in this chain will have access to the information raised.
         */
+        const { isFunction } = validator;
         const { onViewMount } = this.props;
 
-        onViewMount(this.state);
+        if(isFunction(onViewMount)){
+            onViewMount(this.state);
+        } else {
+            throw new ValidatorError("view-101");
+        }
     }
 
     raiseToModal = (data) => {

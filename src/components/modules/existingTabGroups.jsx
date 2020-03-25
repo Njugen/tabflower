@@ -173,7 +173,7 @@ class ExistingTabGroupsModule extends Module {
         } else {
             return (
                 <div className="no-tab-groups-msg">
-                    There are no saved tab groups at the moment. You may add a new tab group by clicking the "Create a new group" button below.
+                    There are no saved tab groups at the moment. You may add a new tab group by clicking the "Create a new group" button below
                 </div>
             );
         }

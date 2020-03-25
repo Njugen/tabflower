@@ -14,24 +14,27 @@ require("../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css")
 class TabManagementView extends View {
 
     handleRaisedData = (obj) => {
-        console.log(obj);
-        if(obj){
-            if(typeof obj === "string"){
+        try {
+            const { isString } = validator;
+            
+            if(isString(obj)){
                 if(obj === "refresh"){
-                    const existingState = this.state;
                     let refreshFactor = this.state.refreshFactor;
                     refreshFactor++;
-                    console.log("R", refreshFactor);
+
                     this.setState(
                         { refreshFactor },
                         () => {
-                            console.log("MAR", this.state);
+                
                         }
                     )
                 }
             } else {
-
+                throw new ValidatorError("tabManagement-view-101");
             }
+            
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
@@ -39,7 +42,7 @@ class TabManagementView extends View {
         return (
             <Fragment>
                 <div className="row d-flex justify-content-center">
-                    <div className="col-8">
+                    <div className="col-6">
                         <Moduleon>
                             <ModuleColumn colspan="12">
                                 <CurrentlyOpenedTabsModule onRaiseToView={(data) => this.handleRaisedData(data)} id="active-tabs-module" onRaiseToModal={(data) => this.raiseToModal(data)} onRaiseToErrorOverlay={(data) => this.raiseToErrorOverlay(data)}></CurrentlyOpenedTabsModule>

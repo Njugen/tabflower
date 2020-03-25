@@ -271,7 +271,37 @@ export const ValidatorError = (code) => {
             break;
         case "etgm-module-110":
             message = "The attempt to list all tab groups previously saved to the extension failed. This is because the tab/window information was not properly delivered from the browser on request. The information needs to be delivered to Tabflower as an object containing the array key \"data\", where the tab group information is located.";
-            break;                                                                                                 
+            break;        
+        // modules/aboutTabflower.jsx
+        case "atfm-module-101":
+            message = "A settings object is missing in \"AboutTabflowerModule\". This object is mandatory for all modules. Please refer to the documentation for more details.";
+            break;        
+        case "atfm-module-102":
+            message = "A moduleTitle key consisting of at least 1 character is missing in the settings object for \"AboutTabflowerModule\". This key represents the title of the module, and will be shown as a title to the user.";
+            break; 
+        // modules/extensionSettings.jsx
+        case "settings-module-101":
+            message = "A settings object is missing in \"ExtensionSettingsModule\". This object is mandatory for all modules. Please refer to the documentation for more details.";
+            break;        
+        case "settings-module-102":
+            message = "A moduleTitle key consisting of at least 1 character is missing in the settings object for \"ExtensionSettingsModule\". This key represents the title of the module, and will be shown as a title to the user.";
+            break;               
+        // views/view.jsx 
+        case "view-101":
+            message = "The \"onViewMount\" parameter is not set in this view. Any view inserted into Tabflower must have this parameter set as a function.";
+            break;  
+        // views/tabManagement.jsx
+        case "tabManagement-view-101":
+            message = "An error has occured when attempting to reload the user interface. However, the requested data changes have been made successfully. Please, reload this page manually to see these changes.";
+            break;   
+        // views/aboutTabFlower.jsx
+        case "aboutTabflower-view-101":
+            message = "An error has occured when attempting to reload the user interface. However, the requested data changes have been made successfully. Please, reload this page manually to see these changes.";
+            break;  
+        // views/settings.jsx
+        case "settings-view-101":
+            message = "An error has occured when attempting to reload the user interface. However, the requested data changes have been made successfully. Please, reload this page manually to see these changes.";
+            break;                                                                                                     
         default:
             message = "An Unknown Error has occured.";
     }
