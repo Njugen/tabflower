@@ -10,7 +10,7 @@ class ETGMLaunchGroupsModal extends Modal {
         const { isString } = validator;
         const { groupId } = this.props.data.params;
 
-        if(!isString(groupId)){ throw new ValidatorError("ETGMLaunchGroupsModal-102"); }
+        if(!isString(groupId)){ throw ValidatorError("ETGMLaunchGroupsModal-102"); }
     }
 
     saveModalHandler = (callback) => {
@@ -21,7 +21,7 @@ class ETGMLaunchGroupsModal extends Modal {
             if(isFunction(callback)){
                 this.clearModalData(callback(groupId));
             } else {
-                throw new ValidatorError("ETGMLaunchGroupsModal-101");
+                throw ValidatorError("ETGMLaunchGroupsModal-101");
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay);

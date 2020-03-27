@@ -23,7 +23,7 @@ import ErrorOverlay from './components/modals/errorOverlay';
 import RouteList from './components/routes/routeList';
 
 /* Import Sidebars */
-import MainNavBar from './components/sidebars/MainNavBar/MainNavBar';
+import MainNavBar from './components/sidebars/mainNavBar/mainNavBar';
 
 /* Import Utilities */
 import FullWidthLoadbar from './components/utils/fullWidthLoadbar';

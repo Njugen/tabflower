@@ -72,10 +72,10 @@ class Module extends Component {
                         return;
                     }
                 } else {
-                    throw new ValidatorError("module-101");
+                    throw ValidatorError("module-101");
                 }
             } else {
-                throw new ValidatorError("module-102");
+                throw ValidatorError("module-102");
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay);
@@ -101,10 +101,10 @@ class Module extends Component {
                 if(isObject(componentEvent.target)){
                     this.props.onDrop(componentEvent.target.parentElement);
                 } else {
-                    throw new ValidatorError("module-103");
+                    throw ValidatorError("module-103");
                 }
             } else {
-                throw new ValidatorError("module-104");
+                throw ValidatorError("module-104");
             }
        } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay);
@@ -127,10 +127,10 @@ class Module extends Component {
                 if(isObject(componentEvent.target)){
                     this.props.onDragStart(componentEvent.target);
                 } else {
-                    throw new ValidatorError("module-105");
+                    throw ValidatorError("module-105");
                 }
             } else {
-                throw new ValidatorError("module-106");
+                throw ValidatorError("module-106");
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay);
@@ -188,7 +188,7 @@ class Module extends Component {
                     settings
                 });
             } else {
-                throw new ValidatorError("module-107");
+                throw ValidatorError("module-107");
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay);
@@ -214,7 +214,7 @@ class Module extends Component {
                     moduleData
                 });
             } else {
-                throw new ValidatorError("module-108");
+                throw ValidatorError("module-108");
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay);
@@ -252,7 +252,7 @@ class Module extends Component {
                     this.changeStateModuleData(data);
                 }
             } else {
-                throw new ValidatorError("module-109");
+                throw ValidatorError("module-109");
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay);
@@ -337,14 +337,14 @@ class Module extends Component {
 
         const { isFunction, isString, isObject, isEmptyString } = validator;
         
-        if(!isFunction(onRaiseToModal)){ throw new ValidatorError("module-verifyProps-101"); }
-        if(!isFunction(onDragOver)){ throw new ValidatorError("module-verifyProps-102"); }
-        if(!isFunction(onDrop)){ throw new ValidatorError("module-verifyProps-103"); } 
-        if(!isFunction(onDragStart)){ throw new ValidatorError("module-verifyProps-104"); }
-        if(!isFunction(onRaiseToErrorOverlay)){ throw new ValidatorError("module-verifyProps-106"); }
-        if(!isString(id)){ throw new ValidatorError("module-verifyProps-107"); }
+        if(!isFunction(onRaiseToModal)){ throw ValidatorError("module-verifyProps-101"); }
+        if(!isFunction(onDragOver)){ throw ValidatorError("module-verifyProps-102"); }
+        if(!isFunction(onDrop)){ throw ValidatorError("module-verifyProps-103"); } 
+        if(!isFunction(onDragStart)){ throw ValidatorError("module-verifyProps-104"); }
+        if(!isFunction(onRaiseToErrorOverlay)){ throw ValidatorError("module-verifyProps-106"); }
+        if(!isString(id)){ throw ValidatorError("module-verifyProps-107"); }
 
-        if(!isObject(this.settings)){ throw new ValidatorError("module-verifyProps-108"); }
+        if(!isObject(this.settings)){ throw ValidatorError("module-verifyProps-108"); }
         
 
         // Check state
@@ -352,23 +352,23 @@ class Module extends Component {
             const { dropDownGrid, moduleData, settings } = this.state;
 
             if(!isObject(dropDownGrid)){ 
-                throw new ValidatorError("module-verifyProps-110");
+                throw ValidatorError("module-verifyProps-110");
             } else { 
                 const { draggedOverModuleId, moduleBeingDraggedId } = dropDownGrid;
 
                 if(!isString(draggedOverModuleId) && !isEmptyString(draggedOverModuleId)){
-                    throw new ValidatorError("module-verifyProps-113");
+                    throw ValidatorError("module-verifyProps-113");
                 }
 
                 if(!isString(moduleBeingDraggedId) && !isEmptyString(moduleBeingDraggedId)){
-                    throw new ValidatorError("module-verifyProps-114");
+                    throw ValidatorError("module-verifyProps-114");
                 }
             }
 
-            if(!isObject(moduleData)){ throw new ValidatorError("module-verifyProps-111"); }
-            if(!isObject(settings)){ throw new ValidatorError("module-verifyProps-112"); }
+            if(!isObject(moduleData)){ throw ValidatorError("module-verifyProps-111"); }
+            if(!isObject(settings)){ throw ValidatorError("module-verifyProps-112"); }
         } else {
-            throw new ValidatorError("module-verifyProps-109");
+            throw ValidatorError("module-verifyProps-109");
         }
     }
 

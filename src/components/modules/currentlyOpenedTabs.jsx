@@ -23,11 +23,11 @@ class CurrentlyOpenedTabsModule extends Module {
             const { moduleTitle } = this.settings;
 
             if(!isString(moduleTitle)){
-                throw new ValidatorError("cotm-module-102");
+                throw ValidatorError("cotm-module-102");
             }
         } else {
             console.log("SIMPUKKA", isObject(this.settings));
-            throw new ValidatorError("cotm-module-101");
+            throw ValidatorError("cotm-module-101");
         }
     }
 
@@ -49,12 +49,12 @@ class CurrentlyOpenedTabsModule extends Module {
                 const { groupId, windowAndTabs, tabGroupName, tabGroupDescription } = details;
 
                 if(!isArray(windowAndTabs) || (isArray(windowAndTabs) && windowAndTabs.length < 1)){
-                    throw new ValidatorError("cotm-module-104");
+                    throw ValidatorError("cotm-module-104");
                 }
 
-                if(!isString(groupId)){ throw new ValidatorError("cotm-module-105"); }
-                if(!isString(tabGroupName)){ throw new ValidatorError("cotm-module-106"); }
-                if(!isString(tabGroupDescription)){ throw new ValidatorError("cotm-module-107"); }
+                if(!isString(groupId)){ throw ValidatorError("cotm-module-105"); }
+                if(!isString(tabGroupName)){ throw ValidatorError("cotm-module-106"); }
+                if(!isString(tabGroupDescription)){ throw ValidatorError("cotm-module-107"); }
 
                 sendToBackground(
                     "save-tab-group", 
@@ -77,7 +77,7 @@ class CurrentlyOpenedTabsModule extends Module {
                     }
                 );
             } else {
-                throw new ValidatorError("cotm-module-103");
+                throw ValidatorError("cotm-module-103");
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay);
@@ -90,10 +90,11 @@ class CurrentlyOpenedTabsModule extends Module {
             {}, 
             (successResponse) => {
                 try {
+                    console.log("AVENGERS", successResponse);
                     const { isArray, isObject } = validator;
 
                     if(!isObject(successResponse) || (isObject(successResponse) && !isArray(successResponse.data))){
-                        throw new ValidatorError("cotm-module-108");
+                        throw ValidatorError("cotm-module-108");
                     }
 
                     this.setState({
@@ -157,7 +158,10 @@ class CurrentlyOpenedTabsModule extends Module {
                     }
                 )
             } else {
-                throw new ValidatorError("cotm-module-109")
+                // If the webextension API does not exist, simply ignore listening for anything and just request dummy data
+                this.getOpenedWindowsAndTabs();
+                
+                //throw ValidatorError("cotm-module-109")
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay);

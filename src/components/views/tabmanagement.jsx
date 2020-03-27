@@ -30,7 +30,7 @@ class TabManagementView extends View {
                     )
                 }
             } else {
-                throw new ValidatorError("tabManagement-view-101");
+                throw ValidatorError("tabManagement-view-101");
             }
             
         } catch(err){

@@ -11,14 +11,14 @@ class COTMRemoveTabModal extends Modal {
 
         if(isObject(tabInfo)){ 
             if(!isNumber(tabInfo.id)){
-                throw new ValidatorError("COTMRemoveTabModal-101");
+                throw ValidatorError("COTMRemoveTabModal-101");
             }
 
             if(!isString(tabInfo.title)){
-                throw new ValidatorError("COTMRemoveTabModal-104");
+                throw ValidatorError("COTMRemoveTabModal-104");
             }
         } else {
-            throw new ValidatorError("COTMRemoveTabModal-102");
+            throw ValidatorError("COTMRemoveTabModal-102");
         }
     }
 
@@ -30,7 +30,7 @@ class COTMRemoveTabModal extends Modal {
             if(isFunction(callback)){
                 this.clearModalData(callback(this.state));
             } else {
-                throw new ValidatorError("COTMRemoveTabModal-103");
+                throw ValidatorError("COTMRemoveTabModal-103");
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay);
@@ -54,7 +54,7 @@ class COTMRemoveTabModal extends Modal {
                 { data }
             )
         } else {
-            throw new ValidatorError("COTMRemoveTabModal-102");
+            throw ValidatorError("COTMRemoveTabModal-102");
         }
         
     }

@@ -24,7 +24,7 @@ class SettingsView extends View {
                     )
                 }
             } else {
-                throw new ValidatorError("settings-view-101");
+                throw ValidatorError("settings-view-101");
             }
             
         } catch(err){

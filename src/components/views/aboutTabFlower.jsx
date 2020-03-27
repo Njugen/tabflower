@@ -24,7 +24,7 @@ class AboutTabFlowerView extends View {
                     )
                 }
             } else {
-                throw new ValidatorError("aboutTabflower-view-101");
+                throw ValidatorError("aboutTabflower-view-101");
             }
             
         } catch(err){

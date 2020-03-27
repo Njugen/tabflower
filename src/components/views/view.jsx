@@ -69,7 +69,7 @@ class View extends Component {
         if(isFunction(onViewMount)){
             onViewMount(this.state);
         } else {
-            throw new ValidatorError("view-101");
+            throw ValidatorError("view-101");
         }
     }
 

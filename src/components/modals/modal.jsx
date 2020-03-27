@@ -118,10 +118,10 @@ class Modal extends Component {
                     modal.style.zIndex = 10000;
 
                 } else {
-                    throw new ValidatorError("mp-fadeIn-101");
+                    throw ValidatorError("mp-fadeIn-101");
                 }
             } else {
-                throw new ValidatorError("mp-fadeIn-102");
+                throw ValidatorError("mp-fadeIn-102");
             }
             
         } catch(err){
@@ -147,10 +147,10 @@ class Modal extends Component {
                         modal.style.zIndex = 0;
                     }, 500) 
                 } else {
-                    throw new ValidatorError("mp-fadeOut-101")
+                    throw ValidatorError("mp-fadeOut-101")
                 }
             } else {
-                throw new ValidatorError("mp-fadeOut-102")
+                throw ValidatorError("mp-fadeOut-102")
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay); 
@@ -176,7 +176,7 @@ class Modal extends Component {
                     if(isFunction(callback)){
                         callback();
                     } else {
-                        throw new ValidatorError("mp-clearModalData-103")
+                        throw ValidatorError("mp-clearModalData-103")
                     }
                 }
             });
@@ -254,7 +254,7 @@ class Modal extends Component {
                 if(typeof this.props.data.action === "function"){
                     this.props.data.action(data);
                 } else if(typeof this.props.data.action !== "undefined"){
-                    throw new ValidatorError("mp-propsAction-101")
+                    throw ValidatorError("mp-propsAction-101")
                 }
             }
         } catch(err){
@@ -299,11 +299,11 @@ class Modal extends Component {
             
             if(isString(area)){
                 if(isUndefined(value)){
-                    throw new ValidatorError("mp-saveToState-104") 
+                    throw ValidatorError("mp-saveToState-104") 
                 }
 
                 if(!isString(key)){
-                    throw new ValidatorError("mp-saveToState-105") 
+                    throw ValidatorError("mp-saveToState-105") 
                 }
 
                 let newInput = this.state;
@@ -319,12 +319,12 @@ class Modal extends Component {
                         if(isFunction(callback)){
                             callback();
                         } else {
-                            throw new ValidatorError("mp-saveToState-106") 
+                            throw ValidatorError("mp-saveToState-106") 
                         }
                     }
                 })
             } else {
-                throw new ValidatorError("mp-saveToState-107")
+                throw ValidatorError("mp-saveToState-107")
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay); 
@@ -350,19 +350,19 @@ class Modal extends Component {
         const { onDismiss, onRaiseToErrorOverlay, data } = this.props;
         const { isFunction, isObject } = validator;
 
-        if(!isFunction(onDismiss)){ throw new ValidatorError("mp-verifyProps-101"); }
-        if(!isFunction(onRaiseToErrorOverlay)){ throw new ValidatorError("mp-verifyProps-102"); }
-        if(!isObject(data)){ throw new ValidatorError("mp-verifyProps-103"); } else {
-            if(!isObject(data.params)){ throw new ValidatorError("mp-verifyProps-104"); }
+        if(!isFunction(onDismiss)){ throw ValidatorError("mp-verifyProps-101"); }
+        if(!isFunction(onRaiseToErrorOverlay)){ throw ValidatorError("mp-verifyProps-102"); }
+        if(!isObject(data)){ throw ValidatorError("mp-verifyProps-103"); } else {
+            if(!isObject(data.params)){ throw ValidatorError("mp-verifyProps-104"); }
         }
        
         if(isObject(this.state)){
             const { ui, fieldErrors } = this.state;
 
-            if(!isObject(ui)){ throw new ValidatorError("mp-verifyProps-106"); }
-            if(!isObject(fieldErrors)){ throw new ValidatorError("mp-verifyProps-107"); }
+            if(!isObject(ui)){ throw ValidatorError("mp-verifyProps-106"); }
+            if(!isObject(fieldErrors)){ throw ValidatorError("mp-verifyProps-107"); }
         } else {
-            throw new ValidatorError("mp-verifyProps-105");
+            throw ValidatorError("mp-verifyProps-105");
         }
     }
 

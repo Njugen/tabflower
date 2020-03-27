@@ -23,10 +23,10 @@ class ExtensionSettingsModule extends Module {
             const { moduleTitle } = this.settings;
 
             if(!isString(moduleTitle)){
-                throw new ValidatorError("settings-module-102");
+                throw ValidatorError("settings-module-102");
             }
         } else {
-            throw new ValidatorError("settings-module-102");
+            throw ValidatorError("settings-module-102");
         }
     }
 

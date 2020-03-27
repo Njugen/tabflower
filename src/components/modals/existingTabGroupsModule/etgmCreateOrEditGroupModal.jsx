@@ -26,10 +26,10 @@ class ETGMCreateNewGroupModal extends Modal {
             - "existing-group"
         */
         if(!isString(type)){
-            throw new ValidatorError("ETGMCreateNewGroupModal-114");
+            throw ValidatorError("ETGMCreateNewGroupModal-114");
         } else {
             if(type !== "currently-opened" && type !== "new-group" && type !== "existing-group"){
-                throw new ValidatorError("ETGMCreateNewGroupModal-115");
+                throw ValidatorError("ETGMCreateNewGroupModal-115");
             }
         }
 
@@ -41,7 +41,7 @@ class ETGMCreateNewGroupModal extends Modal {
         */
 
         if(!isString(groupId) && !isUndefined(groupId)){
-            throw new ValidatorError("ETGMCreateNewGroupModal-120");
+            throw ValidatorError("ETGMCreateNewGroupModal-120");
         }
 
         /*
@@ -52,7 +52,7 @@ class ETGMCreateNewGroupModal extends Modal {
         */
 
         if(!isString(groupName) && !isUndefined(groupName)){
-            throw new ValidatorError("ETGMCreateNewGroupModal-116");
+            throw ValidatorError("ETGMCreateNewGroupModal-116");
         }
 
 
@@ -63,7 +63,7 @@ class ETGMCreateNewGroupModal extends Modal {
             group description, refrain from using the groupDescription parameter when calling this modal
         */
         if(!isString(groupDescription) && !isUndefined(groupDescription)){
-            throw new ValidatorError("ETGMCreateNewGroupModal-117");
+            throw ValidatorError("ETGMCreateNewGroupModal-117");
         }
 
         /*
@@ -73,7 +73,7 @@ class ETGMCreateNewGroupModal extends Modal {
             refrain from using the groupCloseAll parameter when calling this modal
         */
         if(!isBoolean(groupCloseAll) && !isUndefined(groupCloseAll)){
-            throw new ValidatorError("ETGMCreateNewGroupModal-118");
+            throw ValidatorError("ETGMCreateNewGroupModal-118");
         }
 
         /* 
@@ -84,7 +84,7 @@ class ETGMCreateNewGroupModal extends Modal {
         */
         
         if(!isArray(windowAndTabs)){
-            throw new ValidatorError("ETGMCreateNewGroupModal-119");
+            throw ValidatorError("ETGMCreateNewGroupModal-119");
         }
     }
 
@@ -97,7 +97,7 @@ class ETGMCreateNewGroupModal extends Modal {
                     this.clearModalData(callback(this.state.tabGroupDetails));
                 });
             } else {
-                throw new ValidatorError("ETGMCreateNewGroupModal-101");
+                throw ValidatorError("ETGMCreateNewGroupModal-101");
             }
         } catch(err){
             const { groupName } = this.props.data.params;
@@ -162,7 +162,7 @@ class ETGMCreateNewGroupModal extends Modal {
                 if(isString(id)){
                     groupId = id;
                 } else {
-                    throw new ValidatorError("ETGMCreateNewGroupModal-102")
+                    throw ValidatorError("ETGMCreateNewGroupModal-102")
                 }
             } else {
                 groupId = Math.random().toString(36).slice(2);
@@ -190,11 +190,11 @@ class ETGMCreateNewGroupModal extends Modal {
             
             if(isString(url)){
                 if(!isFunction(success)){
-                    throw new ValidatorError("ETGMCreateNewGroupModal-105");
+                    throw ValidatorError("ETGMCreateNewGroupModal-105");
                 }
 
                 if(!isFunction(fail)){
-                    throw new ValidatorError("ETGMCreateNewGroupModal-106");
+                    throw ValidatorError("ETGMCreateNewGroupModal-106");
                 }
 
                 fetch(url)
@@ -202,7 +202,7 @@ class ETGMCreateNewGroupModal extends Modal {
                     if(response.ok){
                         return (response.text())
                     } else {
-                        throw new ValidatorError("ETGMCreateNewGroupModal-103")
+                        throw ValidatorError("ETGMCreateNewGroupModal-103")
                     }
                 })
                 .then((responseText) => {
@@ -212,7 +212,7 @@ class ETGMCreateNewGroupModal extends Modal {
                     fail(err);
                 });
             } else {
-                throw new ValidatorError("ETGMCreateNewGroupModal-104");
+                throw ValidatorError("ETGMCreateNewGroupModal-104");
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay);
@@ -262,7 +262,7 @@ class ETGMCreateNewGroupModal extends Modal {
                 )
               
             } else {
-                throw new ValidatorError("ETGMCreateNewGroupModal-104")
+                throw ValidatorError("ETGMCreateNewGroupModal-104")
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay);
@@ -313,10 +313,10 @@ class ETGMCreateNewGroupModal extends Modal {
                     )
                  
                 } else {
-                    throw new ValidatorError("ETGMCreateNewGroupModal-107")
+                    throw ValidatorError("ETGMCreateNewGroupModal-107")
                 }
             } else {
-                throw new ValidatorError("ETGMCreateNewGroupModal-108")
+                throw ValidatorError("ETGMCreateNewGroupModal-108")
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay);
@@ -344,10 +344,10 @@ class ETGMCreateNewGroupModal extends Modal {
                         this.saveToState("windowAndTabs", windows, "tabGroupDetails") 
                     }
                 } else {
-                    throw new ValidatorError("ETGMCreateNewGroupModal-109")
+                    throw ValidatorError("ETGMCreateNewGroupModal-109")
                 }
             } else {
-                throw new ValidatorError("ETGMCreateNewGroupModal-110")
+                throw ValidatorError("ETGMCreateNewGroupModal-110")
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay);
@@ -368,7 +368,7 @@ class ETGMCreateNewGroupModal extends Modal {
                     this.saveToState("windowAndTabs", windows, "tabGroupDetails") 
                 }
             } else {
-                throw new ValidatorError("ETGMCreateNewGroupModal-111")
+                throw ValidatorError("ETGMCreateNewGroupModal-111")
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay);
@@ -386,17 +386,17 @@ class ETGMCreateNewGroupModal extends Modal {
         const { isString, isArray } = validator;
 
         if(!isString(type)){
-            throw new ValidatorError("ETGMCreateNewGroupModal-112");
+            throw ValidatorError("ETGMCreateNewGroupModal-112");
         } else {
             if(type !== "currently-opened" && type !== "existing-group" && type !== "new-group"){
-                throw new ValidatorError("ETGMCreateNewGroupModal-113");
+                throw ValidatorError("ETGMCreateNewGroupModal-113");
             }
         }
 
         if(isArray(windowAndTabs)){
             windowAndTabs = windowAndTabs || [];
         } else {
-            throw new ValidatorError("ETGMCreateNewGroupModal-121");
+            throw ValidatorError("ETGMCreateNewGroupModal-121");
         }
 
         

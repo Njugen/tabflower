@@ -57,7 +57,7 @@ const receive = (featureId, detailsObj, forwardSuccessResponse, forwardFailureRe
         getAllTabs(
             detailsObj,
             (tabs) => {
-
+                console.log("GETALLTABS", JSON.stringify(tabs));
                 forwardSuccessResponse(tabs);
             },
             (message) => {
@@ -68,6 +68,7 @@ const receive = (featureId, detailsObj, forwardSuccessResponse, forwardFailureRe
     } else if(featureId === "get-all-windows-and-tabs"){
         getAllWindowsAndTabs(
             (windows) => {
+     
                 forwardSuccessResponse(windows);
             },
             (message) => {

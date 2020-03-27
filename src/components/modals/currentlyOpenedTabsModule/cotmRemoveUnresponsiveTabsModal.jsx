@@ -15,7 +15,7 @@ class COTMRemoveUnresponsiveTabs extends Modal {
             if(isFunction(callback)){
                 this.clearModalData(callback(this.state));
             } else {
-                throw new ValidatorError("COTMRemoveUnresponsiveTabs-101");
+                throw ValidatorError("COTMRemoveUnresponsiveTabs-101");
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay);

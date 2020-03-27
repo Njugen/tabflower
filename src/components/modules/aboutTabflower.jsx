@@ -23,10 +23,10 @@ class AboutTabflowerModule extends Module {
             const { moduleTitle } = this.settings;
 
             if(!isString(moduleTitle)){
-                throw new ValidatorError("atfm-module-102");
+                throw ValidatorError("atfm-module-102");
             }
         } else {
-            throw new ValidatorError("atfm-module-102");
+            throw ValidatorError("atfm-module-102");
         }
     }
 

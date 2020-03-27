@@ -18,11 +18,10 @@ const getAllTabs = (options, successCallback, failCallback) => {
     chrome.tabs.query(
         options,
         (tabs) => {
-            if(1 === 2){
-                successCallback(tabs);
-            } else {
-                failCallback("GET ALL TABS FAILED");
-            }
+            successCallback(tabs);
+
+            //failCallback("GET ALL TABS FAILED");
+            
         }
     )
 }
@@ -62,7 +61,7 @@ const deleteUnresponsiveTabs = (options, successCallback, failCallback) => {
                     if(tab.url !== "about:blank" && !tab.url.includes("chrome://newtab")){
                         fetch(tab.url).then((response) => {
                             if (!response.ok) {
-                                throw new Error('Something went wrong');
+                                throw Error('Something went wrong');
                             }
                         })
                         .catch((error) => {
@@ -107,7 +106,7 @@ const deleteWindow = (options, successCallback, failCallback) => {
     chrome.windows.remove(
         options.windowId,
         () => {
-           successCallback("Tab deleted");
+           successCallback("Window deleted");
         } 
     )
 }

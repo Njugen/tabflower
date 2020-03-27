@@ -15,8 +15,8 @@ class ETGMRemoveGroupsModal extends Modal {
         if(isUndefined(removeAll) || (!isUndefined(removeAll) && removeAll === false)){
             // If the "removeAll" variable is not provided or is false, the task will be to delete a specific tab group
             // In this case, groupId and groupName need to be provided also.
-            if(!isString(groupId) && !isUndefined(groupId)){ throw new ValidatorError("ETGMRemoveGroupsModal-102"); }
-            if(!isString(groupName) || isUndefined(groupName)){ throw new ValidatorError("ETGMRemoveGroupsModal-103"); }
+            if(!isString(groupId) && !isUndefined(groupId)){ throw ValidatorError("ETGMRemoveGroupsModal-102"); }
+            if(!isString(groupName) || isUndefined(groupName)){ throw ValidatorError("ETGMRemoveGroupsModal-103"); }
         } else {
             
             
@@ -33,7 +33,7 @@ class ETGMRemoveGroupsModal extends Modal {
             if(isFunction(callback)){
                 this.clearModalData(callback(this.props.data.params));
             } else {
-                throw new ValidatorError("ETGMRemoveGroupsModal-101");
+                throw ValidatorError("ETGMRemoveGroupsModal-101");
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay);

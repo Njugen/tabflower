@@ -45,19 +45,27 @@
             }
         }
     )
+
+    Other notes:
+
+    The sendToBackground() function will automatically send messages to the extension background ONLY if
+    this code is run as a webextension or as a temporary webextension in the correct environment (Edge, Firefox or Chrome).
+    
+    If this code is not run in the correct environment, all background features will simply not workdue to the 
+    Webextension API being unavailable. In such case, we could let the function send messages to a dummy API located
+    elsewhere, which in turn returns dummy data for testing purposes only.
 */
 
-export const sendToBackground = (id, messageObj, success, fail) => {
-    const bridge = (typeof window.chrome === "undefined" ? null : window.chrome);
-    
-    if(bridge !== null){
-        if(typeof messageObj === "object"){
-            // Merge id and message obj into a new object, and forward it to the background.
-            const obj = {
-                id: id,
-                details: messageObj
-            }
+import { dummyReceiver } from './dummyService/receiver';
 
+export const sendToBackground = (id, messageObj, success, fail) => {
+    let bridge = (typeof window.chrome === "undefined" ? null : window.chrome);
+    const obj = (typeof messageObj === "object" ? { id: id, details: messageObj } : null);
+
+    if(obj !== null){
+
+        if(bridge !== null){
+            // The code is being run as a webextension, the API does exist (npm run build -> load into the browser)
             if(typeof bridge === "object"){
                 bridge.runtime.sendMessage(
                     null,
@@ -77,7 +85,24 @@ export const sendToBackground = (id, messageObj, success, fail) => {
                 fail("This shit has failed");
             }
         } else {
-            fail("messageObj is not an object");
+            // The code is not being run as a webextension (e.g. npm start, as a react app)
+            
+            bridge = {
+                runtime: {
+                    sendMessage: (extensionId, message, response) => {
+                        // imitate the chrome.runtime.sendMessage() function, read more here: https://developer.chrome.com/extensions/runtime#method-sendMessage
+                        dummyReceiver(message.id, message.details || null, response);
+
+                    }
+                }
+            }
+
+            bridge.runtime.sendMessage(null, obj, (response) => {
+                success(response);
+            });
         }
-    }
+    } else {
+        fail("messageObj is not an object");
+        
+    }   
 }

@@ -18,10 +18,10 @@ class ExistingTabGroupsModule extends Module {
             const { moduleTitle } = this.settings;
 
             if(!isString(moduleTitle)){
-                throw new ValidatorError("etgm-module-102");
+                throw ValidatorError("etgm-module-102");
             }
         } else {
-            throw new ValidatorError("etgm-module-101");
+            throw ValidatorError("etgm-module-101");
         }
     }
 
@@ -34,7 +34,7 @@ class ExistingTabGroupsModule extends Module {
           
                 sendToBackground("launch-tab-group", {groupId: tabGroupId});
             } else {
-                throw new ValidatorError("etgm-module-103");
+                throw ValidatorError("etgm-module-103");
             } 
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay);
@@ -51,7 +51,7 @@ class ExistingTabGroupsModule extends Module {
                 if(isString(data.groupId)){
                     groupId = data.groupId;
                 } else {
-                    throw new ValidatorError("etgm-module-104");
+                    throw ValidatorError("etgm-module-104");
                 }
             } else {
                 groupId = "all"
@@ -73,12 +73,12 @@ class ExistingTabGroupsModule extends Module {
                 const { groupId, windowAndTabs, tabGroupName, tabGroupDescription } = details;
 
                 if(!isArray(windowAndTabs) || (isArray(windowAndTabs) && windowAndTabs.length < 1)){
-                    throw new ValidatorError("etgm-module-106");
+                    throw ValidatorError("etgm-module-106");
                 }
 
-                if(!isString(groupId)){ throw new ValidatorError("etgm-module-107"); }
-                if(!isString(tabGroupName)){ throw new ValidatorError("etgm-module-108"); }
-                if(!isString(tabGroupDescription)){ throw new ValidatorError("etgm-module-109"); }
+                if(!isString(groupId)){ throw ValidatorError("etgm-module-107"); }
+                if(!isString(tabGroupName)){ throw ValidatorError("etgm-module-108"); }
+                if(!isString(tabGroupDescription)){ throw ValidatorError("etgm-module-109"); }
 
                 sendToBackground(
                     "save-tab-group", 
@@ -97,7 +97,7 @@ class ExistingTabGroupsModule extends Module {
                     }
                 );
             } else {
-                throw new ValidatorError("etgm-module-105");
+                throw ValidatorError("etgm-module-105");
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay);
@@ -118,7 +118,7 @@ class ExistingTabGroupsModule extends Module {
                         if(!isUndefined(response) && isArray(response.data)){
                             tabGroups = response.data;
                         } else {
-                            throw new ValidatorError("etgm-module-110");
+                            throw ValidatorError("etgm-module-110");
                         }
 
                         this.setState({
