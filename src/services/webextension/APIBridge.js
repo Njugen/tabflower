@@ -73,10 +73,13 @@ export const sendToBackground = (id, messageObj, success, fail) => {
                     (response) => {
                         if(response){
                             if(response.success === true){
-                        
-                                success(response);
+                                if(typeof success === "function"){
+                                    success(response);
+                                }
                             } else if(response.success === false || !response.success){
-                                fail(response)
+                                if(typeof fail === "function"){
+                                    fail(response)
+                                }
                             }
                         } 
                     }
@@ -98,11 +101,14 @@ export const sendToBackground = (id, messageObj, success, fail) => {
             }
 
             bridge.runtime.sendMessage(null, obj, (response) => {
-                success(response);
+                if(typeof success === "function"){
+                    success(response);
+                }
             });
         }
     } else {
-        fail("messageObj is not an object");
-        
+        if(typeof fail === "function"){
+            fail("messageObj is not an object");
+        }
     }   
 }
