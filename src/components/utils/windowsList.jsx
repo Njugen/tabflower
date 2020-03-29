@@ -111,9 +111,6 @@ class WindowsList extends Component {
    closeWindow = (window) => {
        
         sendToBackground("delete-window", { windowId: window.data.id }, (response) => {
-
-            setTimeout(() => this.getOpenedWindowsAndTabs(), 1500)
-            
             
         }); 
     }
@@ -122,8 +119,8 @@ class WindowsList extends Component {
        
         sendToBackground("delete-tab", { tabId: tab.data.id }, (response) => {
             console.log("haha", response);
-            
-            setTimeout(() => this.getOpenedWindowsAndTabs(), 1500)
+            this.props.refreshList();
+            //setTimeout(() => this.getOpenedWindowsAndTabs(), 1500)
         }); 
     }
 

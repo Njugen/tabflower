@@ -1,3 +1,8 @@
+
+import { dummyWindowsAndTabs } from './data';
+
+let importedWindowsAndTabs = dummyWindowsAndTabs;
+
 /*
     getAllTabs
 
@@ -16,18 +21,71 @@
 
 export const getAllTabs = (options, successCallback, failCallback) => {
     const response = {
-        data: [{"active":false,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://s.yimg.com/rz/l/favicon.ico","height":1281,"highlighted":false,"id":2,"incognito":false,"index":0,"mutedInfo":{"muted":false},"pinned":false,"selected":false,"status":"complete","title":"Yahoo","url":"https://www.yahoo.com/?fr=fpc-comodo&type=81_25050030006_77.0.3865.120_u_hp_sp","width":2560,"windowId":1},{"active":false,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"chrome-extension://chphlpgkkbolifaimnlloiipkdnihall/images/extension-icon64.png","height":1329,"highlighted":false,"id":8,"incognito":false,"index":1,"mutedInfo":{"muted":false},"pinned":false,"selected":false,"status":"complete","title":"OneTab","url":"chrome-extension://chphlpgkkbolifaimnlloiipkdnihall/onetab.html","width":2560,"windowId":1},{"active":false,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"","height":1329,"highlighted":false,"id":9,"incognito":false,"index":2,"mutedInfo":{"muted":false},"pinned":false,"selected":false,"status":"complete","title":"Extensions - Tabeon","url":"chrome://extensions/?id=iofccfgjcakiohdkbplbcajjfedlkjkg","width":2560,"windowId":1},{"active":false,"audible":false,"autoDiscardable":true,"discarded":false,"height":1297,"highlighted":false,"id":15,"incognito":false,"index":3,"mutedInfo":{"muted":false},"pinned":false,"selected":false,"status":"complete","title":"New Tab","url":"chrome://newtab/","width":2560,"windowId":1},{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"chrome-extension://iofccfgjcakiohdkbplbcajjfedlkjkg/favicon.ico","height":1329,"highlighted":true,"id":16,"incognito":false,"index":4,"mutedInfo":{"muted":false},"openerTabId":9,"pinned":false,"selected":true,"status":"complete","title":"React App","url":"chrome-extension://iofccfgjcakiohdkbplbcajjfedlkjkg/index.html#manage","width":2560,"windowId":1}]
+        data: importedWindowsAndTabs
     }
 
     successCallback(response);
 }
 
 export const deleteTab = (options, successCallback, failCallback) => {
+    const windowsAndTabs = importedWindowsAndTabs;
+    let updatedWindowsAndTabs = [];
+
+    for(let i = 0; i < windowsAndTabs.length; i++){
+        let tempTabs = [];
+
+        if(typeof windowsAndTabs[i].tabs === "object" && windowsAndTabs[i].tabs.length > 0){
+            for(let j = 0; j < windowsAndTabs[i].tabs.length; j++){
+                const thisTab = windowsAndTabs[i].tabs[j];
+                
+                if(thisTab.id !== options.tabId){
+                    tempTabs.push(thisTab);
+                }
+         
+            }
+            
+            if(tempTabs.length > 0){
+                console.log("TEMPTABS", tempTabs, tempTabs.length);
+                windowsAndTabs[i].tabs = tempTabs;
+                updatedWindowsAndTabs.push(windowsAndTabs[i]);
+            } 
+        }
+    }
+
+    importedWindowsAndTabs = updatedWindowsAndTabs;
+    console.log("simulated import", importedWindowsAndTabs); 
     successCallback("Tab deleted");
 }
 
 export const deleteUnresponsiveTabs = (options, successCallback, failCallback) => {
+    // Simulate tab/window deleting of inactive tabs/windows.
+    // In this case, we do not simulate async calls, but instead just shut down about:blank and chrome://newtab tabs
 
+    const windowsAndTabs = importedWindowsAndTabs;
+    let updatedWindowsAndTabs = [];
+
+    for(let i = 0; i < windowsAndTabs.length; i++){
+        let tempTabs = [];
+
+        if(typeof windowsAndTabs[i].tabs === "object" && windowsAndTabs[i].tabs.length > 0){
+            for(let j = 0; j < windowsAndTabs[i].tabs.length; j++){
+                const thisTab = windowsAndTabs[i].tabs[j];
+                
+                if(thisTab.url !== "about:blank" && !thisTab.url.includes("chrome://newtab")){
+                    tempTabs.push(thisTab);
+                }
+         
+            }
+
+            if(tempTabs.length > 0){
+                windowsAndTabs[i].tabs = tempTabs;
+                updatedWindowsAndTabs.push(windowsAndTabs[i]);
+            }
+        }
+    }
+
+    importedWindowsAndTabs = updatedWindowsAndTabs;
+    successCallback("Simulation of unresponsive tab removal completed.");
 }
 
 
@@ -35,7 +93,7 @@ export const deleteUnresponsiveTabs = (options, successCallback, failCallback) =
 
 export const getAllWindowsAndTabs = (successCallback, failCallback) => {
     const response = { 
-        data: [{"alwaysOnTop":false,"focused":true,"height":1416,"id":1,"incognito":false,"left":1912,"state":"maximized","tabs":[{"active":false,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://s.yimg.com/rz/l/favicon.ico","height":1281,"highlighted":false,"id":2,"incognito":false,"index":0,"mutedInfo":{"muted":false},"pinned":false,"selected":false,"status":"complete","title":"Yahoo","url":"https://www.yahoo.com/?fr=fpc-comodo&type=81_25050030006_77.0.3865.120_u_hp_sp","width":2560,"windowId":1},{"active":false,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"chrome-extension://chphlpgkkbolifaimnlloiipkdnihall/images/extension-icon64.png","height":1329,"highlighted":false,"id":8,"incognito":false,"index":1,"mutedInfo":{"muted":false},"pinned":false,"selected":false,"status":"complete","title":"OneTab","url":"chrome-extension://chphlpgkkbolifaimnlloiipkdnihall/onetab.html","width":2560,"windowId":1},{"active":false,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"","height":1329,"highlighted":false,"id":9,"incognito":false,"index":2,"mutedInfo":{"muted":false},"pinned":false,"selected":false,"status":"complete","title":"Extensions - Tabeon","url":"chrome://extensions/?id=iofccfgjcakiohdkbplbcajjfedlkjkg","width":2560,"windowId":1},{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"chrome-extension://iofccfgjcakiohdkbplbcajjfedlkjkg/favicon.ico","height":1329,"highlighted":true,"id":14,"incognito":false,"index":3,"mutedInfo":{"muted":false},"openerTabId":9,"pinned":false,"selected":true,"status":"complete","title":"React App","url":"chrome-extension://iofccfgjcakiohdkbplbcajjfedlkjkg/index.html#manage","width":2560,"windowId":1}],"top":-8,"type":"normal","width":2576}]
+        data: importedWindowsAndTabs
     }
 
     successCallback(response);

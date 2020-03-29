@@ -199,6 +199,7 @@ class CurrentlyOpenedTabsModule extends Module {
                         canCloseItems={true}
                         initialShowTabs={true}
                         initialTabStyle="horizontal"
+                        refreshList={() => this.getOpenedWindowsAndTabs()}
                     />
                 </div>
             </Fragment>

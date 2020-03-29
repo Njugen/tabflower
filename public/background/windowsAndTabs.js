@@ -37,20 +37,8 @@ const deleteTab = (options, successCallback, failCallback) => {
 }
 
 const deleteUnresponsiveTabs = (options, successCallback, failCallback) => {
-    console.log("IOI", options);
 
     const { windowsAndTabs } = options;
-
-    function errorOccuredHandler(details){
-        console.log("VV", details);
-        if(details.error && details.type === "main_frame"){
-            if(details.tabId){
-                chrome.tabs.remove(
-                    details.tabId
-                )
-            }
-        }
-    }
 
     windowsAndTabs.map(
         (window, i, windowsList) => {
