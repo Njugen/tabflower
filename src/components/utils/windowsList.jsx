@@ -324,6 +324,7 @@ class WindowsList extends Component {
                 )
             );
         } else {
+   
             return (
                 <Fragment>
                     {newWindow && newWindow === true && this.renderAddNewWindowForm()}
@@ -336,11 +337,21 @@ class WindowsList extends Component {
 
 WindowsList.propTypes = {
     windows: PropTypes.array.isRequired,
+    onAddNewWindow: PropTypes.func,
+    onAddNewTab: PropTypes.func,
+    onDeleteTab: PropTypes.func,
+    OnDeleteWindow: PropTypes.func,
     onRaiseToModal: PropTypes.func,
     canCloseItems: PropTypes.bool.isRequired,
     initialShowTabs: PropTypes.bool.isRequired,
     initialTabStyle: PropTypes.string.isRequired,
-    refreshList: PropTypes.func
+    refreshList: PropTypes.func,
+    type: PropTypes.string.isRequired
 }
+
+WindowsList.defaultProps = {
+    type: ""
+}
+
 
 export default WindowsList;

@@ -47,7 +47,7 @@ class View extends Component {
 
     raiseToErrorOverlay = (data) => {
         const { onRaiseToErrorOverlay } = this.props;
-
+        
         if(typeof onRaiseToErrorOverlay === "function"){
             onRaiseToErrorOverlay(data);
         }
@@ -88,7 +88,7 @@ class View extends Component {
         */
 
         const { onRaiseToModal } = this.props;
-
+    
         onRaiseToModal(data);
     }
 
@@ -107,6 +107,7 @@ class View extends Component {
         this.handleViewMount();
 
         if(typeof this.childComponentDidMount === "function"){
+            
             this.childComponentDidMount();
         }
     }

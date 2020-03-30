@@ -39,7 +39,7 @@ class ErrorBoundary extends Component {
         return <ErrorOverlay data={this.state.errors} onSave={() => ""} onDismiss={() => window.location.reload()}></ErrorOverlay>
       }
   
-      return this.props.children; 
+      return this.props.children || null; 
     }
   }
 

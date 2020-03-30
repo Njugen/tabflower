@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from 'prop-types';
 
 class FullWidthLoadbar extends Component {
     origin = {
@@ -91,6 +92,14 @@ class FullWidthLoadbar extends Component {
         );
     }
 
+}
+
+FullWidthLoadbar.propTypes = {
+    refreshFactor: PropTypes.number.isRequired
+}
+
+FullWidthLoadbar.defaultProps = {
+    refreshFactor: 0
 }
 
 export default FullWidthLoadbar;
