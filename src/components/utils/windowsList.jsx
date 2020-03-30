@@ -272,7 +272,7 @@ class WindowsList extends Component {
                             (tab, tabIndex) => {
                                 return (
                                     <li key={"tabindex-" + tabIndex} className={typeof initialTabStyle === "string" && initialTabStyle === "horizontal" ? "col-3" : "col-12"}>
-                                        <img src={tab.favIconUrl} className="list-item-favicon" />
+                                        <img src={tab.favIconUrl} alt={"Favicon - " + tab.title} className="list-item-favicon" />
                                         <span>{tab.title}</span>
                                         <ul className="list-item-options">
                                          {canCloseItems && canCloseItems === true && <li><button className="fas fa-times" onClick={() => 

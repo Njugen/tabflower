@@ -1,10 +1,11 @@
 import React, { Fragment } from "react";
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import Module from '../utils/moduleon/module';
-import WindowsList from '../utils/windowsList';
-import { sendToBackground } from "../../services/webextension/APIBridge";
+//import WindowsList from '../utils/windowsList';
+//import { sendToBackground } from "../../services/webextension/APIBridge";
 import * as validator from '../utils/inputValidators';
-import { ValidatorError, ErrorHandler } from '../utils/exceptionsAndHandler';
+//import { ValidatorError, ErrorHandler } from '../utils/exceptionsAndHandler';
+import { ValidatorError } from '../utils/exceptionsAndHandler';
 require("../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css")
 
 class ExtensionSettingsModule extends Module {

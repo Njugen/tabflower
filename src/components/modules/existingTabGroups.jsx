@@ -1,5 +1,4 @@
 import React, { Fragment } from "react";
-import { Link } from 'react-router-dom';
 import Module from '../utils/moduleon/module';
 import { sendToBackground } from './../../services/webextension/APIBridge';
 import { ValidatorError, ErrorHandler } from '../utils/exceptionsAndHandler';

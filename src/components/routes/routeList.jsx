@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import DashboardView from './../views/dashboard';
-import CalendarView from './../views/calendar';
 import TabManagementView from '../views/tabManagement';
 import AboutTabFlowerView from './../views/aboutTabFlower';
 import SettingsView from './../views/settings';

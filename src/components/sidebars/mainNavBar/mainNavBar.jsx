@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 
 import NavSection from './components/navSection';
-import { PropTypes } from 'prop-types';
-
 class MainNavBar extends Component {
     state = {
         activeNavLinkKey: ""

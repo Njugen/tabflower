@@ -1,5 +1,4 @@
-import React, { Fragment, Component } from "react";
-import Modal from './modal';
+import React, { Component } from "react";
 
 
 class ErrorOverlay extends Component {

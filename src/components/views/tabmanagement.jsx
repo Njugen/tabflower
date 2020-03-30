@@ -5,7 +5,6 @@ import Moduleon from "../utils/moduleon/moduleon";
 import ModuleColumn from '../utils/moduleon/moduleColumn';
 import CurrentlyOpenedTabsModule from "../modules/currentlyOpenedTabs";
 import ExistingTabGroupsModule from '../modules/existingTabGroups';
-import BrowserStatusModule from './../modules/browserStatus';
 import { ValidatorError, ErrorHandler } from '../utils/exceptionsAndHandler';
 import * as validator from '../utils/inputValidators'
 

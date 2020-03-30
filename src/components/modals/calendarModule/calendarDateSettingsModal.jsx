@@ -1,4 +1,3 @@
-import React, { Component } from "react";
 import Modal from '../modal';
 
 class CalendarDateSettingsModal extends Modal {

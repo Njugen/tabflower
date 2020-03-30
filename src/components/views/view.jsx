@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { ValidatorError, ErrorHandler } from './../utils/exceptionsAndHandler';
+import { ValidatorError } from './../utils/exceptionsAndHandler';
 import * as validator from './../utils/inputValidators'
 import { PropTypes } from 'prop-types';
 

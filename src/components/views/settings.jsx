@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import View from './view';
 import Moduleon from "../utils/moduleon/moduleon";
 import ModuleColumn from '../utils/moduleon/moduleColumn';

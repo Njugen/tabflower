@@ -1,4 +1,4 @@
-import React, { Component, cloneElement, Children } from 'react';
+import { Component, cloneElement, Children } from 'react';
 
 class Moduleon extends Component {
     state = {

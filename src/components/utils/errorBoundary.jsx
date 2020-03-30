@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import { ValidatorError, ErrorHandler } from './exceptionsAndHandler';
 import ErrorOverlay from '../modals/errorOverlay';
 
 class ErrorBoundary extends Component {

@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import View from './view';
 import AboutTabflowerModule from './../modules/aboutTabflower';
 import Moduleon from './../utils/moduleon/moduleon';

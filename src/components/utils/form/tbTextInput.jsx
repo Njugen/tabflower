@@ -30,7 +30,7 @@ class TBTextInput extends Component {
     }
 
     render = () => {
-        const { label, value, warning } = this.props;
+        const { label, warning } = this.props;
 
         return (
             <div className="tb-textinput-container">
