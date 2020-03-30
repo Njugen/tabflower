@@ -17,8 +17,8 @@ class ErrorBoundary extends Component {
   
     componentDidCatch(error, errorInfo) {
       // You can also log the error to an error reporting service
-        console.log("Error", error);
-        console.log("ErrorInfo", errorInfo);
+        
+        
 
         let currentErrors = this.state.errors;
 
@@ -29,7 +29,7 @@ class ErrorBoundary extends Component {
         this.setState({
             errors: currentErrors
         }, () => {
-            console.log("TTTTTTT", this.state);
+            
         })
     }
   

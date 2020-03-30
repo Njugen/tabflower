@@ -57,11 +57,11 @@ const receive = (featureId, detailsObj, forwardSuccessResponse, forwardFailureRe
         getAllTabs(
             detailsObj,
             (tabs) => {
-                console.log("GETALLTABS", JSON.stringify(tabs));
+                
                 forwardSuccessResponse(tabs);
             },
             (message) => {
-                console.log("ERROR");
+                
                 forwardFailureResponse(message);
             }
         ) 
@@ -112,7 +112,7 @@ const receive = (featureId, detailsObj, forwardSuccessResponse, forwardFailureRe
                 forwardSuccessResponse(message);
             },
             (message) => {
-                console.log("FAIL CALLBACK CALLED");
+                
                 forwardFailureResponse(message);
             }
         )
@@ -162,7 +162,7 @@ chrome.runtime.onMessage.addListener(
         }
 
         const failureResponse  = (message) => {
-            console.log("TRY TRIGGER FAILURE RESPONSE");
+            
             const response = {
                 success: false,
                 data: message

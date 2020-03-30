@@ -25,7 +25,7 @@ class CurrentlyOpenedTabsModule extends Module {
                 throw ValidatorError("cotm-module-102");
             }
         } else {
-            console.log("SIMPUKKA", isObject(this.settings));
+            
             throw ValidatorError("cotm-module-101");
         }
     }
@@ -89,7 +89,7 @@ class CurrentlyOpenedTabsModule extends Module {
             {}, 
             (successResponse) => {
                 try {
-                    console.log("AVENGERS", successResponse);
+                    
                     const { isArray, isObject } = validator;
 
                     if(!isObject(successResponse) || (isObject(successResponse) && !isArray(successResponse.data))){

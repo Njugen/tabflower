@@ -388,7 +388,7 @@ render = () => {
 
 ```javascript
 verifyPayment = () => {
-    console.log("Payment verified. Money has been deducted from your account.");
+    
 }
 
 render = () => {

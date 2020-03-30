@@ -42,7 +42,7 @@ class TBCheckBox extends Component {
             // If the user clicks the checkbox background (not the ball)
 
             const { style, lastChild: ball } = target;
-            console.log(ball);
+            
             if(on === false){
                 style.backgroundColor = "#e2e2e2";
                 style.borderColor = "#989898";
@@ -58,7 +58,7 @@ class TBCheckBox extends Component {
     }
   
     componentDidMount = () => {
-     //   console.log(this.selectorRef.current);
+     //   
        this.toggleCheckbox(this.checkboxRef.current);
     }
 

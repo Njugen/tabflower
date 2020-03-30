@@ -27,7 +27,7 @@ const getAllTabs = (options, successCallback, failCallback) => {
 }
 
 const deleteTab = (options, successCallback, failCallback) => {
-    console.log(options);
+    
     chrome.tabs.remove(
         options.tabId,
         () => {
@@ -45,7 +45,7 @@ const deleteUnresponsiveTabs = (options, successCallback, failCallback) => {
             
             const mapped = window.tabs.map(
                 (tab) => {
-                    console.log("luise", tab);
+                    
                     if(tab.url !== "about:blank" && !tab.url.includes("chrome://newtab")){
                         fetch(tab.url).then((response) => {
                             if (!response.ok) {
@@ -90,7 +90,7 @@ const getAllWindowsAndTabs = (successCallback, failCallback) => {
 
 
 const deleteWindow = (options, successCallback, failCallback) => {
-    console.log(options);
+    
     chrome.windows.remove(
         options.windowId,
         () => {

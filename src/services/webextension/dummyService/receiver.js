@@ -11,12 +11,12 @@ export const dummyReceiver = (featureId, detailsObj, forwardSuccessResponse, for
                 forwardSuccessResponse(tabs);
             },
             (message) => {
-                console.log("ERROR");
+                
                 forwardFailureResponse(message);
             }
         ) 
     } else if(featureId === "get-all-windows-and-tabs"){
-        console.log("calling getting all windows and tabs");
+        
         getAllWindowsAndTabs(
             (windows) => {
                 
@@ -63,7 +63,7 @@ export const dummyReceiver = (featureId, detailsObj, forwardSuccessResponse, for
                 forwardSuccessResponse(message);
             },
             (message) => {
-                console.log("FAIL CALLBACK CALLED");
+                
                 forwardFailureResponse(message);
             }
         )

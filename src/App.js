@@ -90,7 +90,7 @@ class App extends Component{
   }
 
   modalHandler = (data) => {
-    console.log("BATMAN", data);
+    
     if(data.clear && data.clear === true){
       this.clearModal();
     } else {
@@ -99,7 +99,7 @@ class App extends Component{
   }
 
   errorOverlayHandler = (data) => {
-    console.log("BATMAN2", data);
+    
     if(data.clear && data.clear === true){
       this.clearModal();
     } else {
@@ -114,7 +114,7 @@ class App extends Component{
     this.setState({
       errors
     }, () => {
-      console.log("ALL ERRORS", this.state.errors);
+      
     });
   }
 
@@ -154,8 +154,8 @@ class App extends Component{
   render = () => {
     const { launched: modalLaunched, id: modalId } = this.state.modal;
     const { errors } = this.state;
-    console.log("MMMM", this.state.modal);
-    console.log("CURRENTMODAL", this.state.modal);
+    
+    
     return (
       <Fragment>
         <ErrorBoundary>

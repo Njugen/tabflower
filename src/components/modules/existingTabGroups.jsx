@@ -180,7 +180,7 @@ class ExistingTabGroupsModule extends Module {
 
    childComponentDidMount = () => {
        this.getAllTabGroups();
-       console.log("UPDATE");
+       
    }
 
    componentDidUpdate = (prevProps, prevState) => {

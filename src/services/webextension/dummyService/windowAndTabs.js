@@ -45,7 +45,7 @@ export const deleteTab = (options, successCallback, failCallback) => {
             }
             
             if(tempTabs.length > 0){
-                console.log("TEMPTABS", tempTabs, tempTabs.length);
+                
                 windowsAndTabs[i].tabs = tempTabs;
                 updatedWindowsAndTabs.push(windowsAndTabs[i]);
             } 
@@ -53,7 +53,7 @@ export const deleteTab = (options, successCallback, failCallback) => {
     }
 
     importedWindowsAndTabs = updatedWindowsAndTabs;
-    console.log("simulated import", importedWindowsAndTabs); 
+     
     successCallback("Tab deleted");
 }
 
@@ -86,7 +86,7 @@ export const deleteUnresponsiveTabs = (options, successCallback, failCallback) =
     }
 
     importedWindowsAndTabs = updatedWindowsAndTabs;
-    console.log("COMP", importedWindowsAndTabs);
+    
     successCallback("Simulation of unresponsive tab removal completed.");
 }
 
@@ -107,13 +107,13 @@ export const deleteWindow = (options, successCallback, failCallback) => {
     let updatedWindowsAndTabs = [];
 
     for(let i = 0; i < windowsAndTabs.length; i++){
-        console.log("DF", windowsAndTabs[i].id, options.windowId);
+        
         if(windowsAndTabs[i].id && options.windowId && (windowsAndTabs[i].id !== options.windowId)){
             updatedWindowsAndTabs.push(windowsAndTabs[i]);
         }
     }
 
     importedWindowsAndTabs = updatedWindowsAndTabs;
-    console.log("simulated import", importedWindowsAndTabs); 
+     
     successCallback("Window deleted");
 }

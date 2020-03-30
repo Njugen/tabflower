@@ -44,7 +44,7 @@ class ModuleColumn extends Component {
     } 
 
     componentDidMount = () => {
-        console.log(this.props);
+        
     }
 
     render = () => {

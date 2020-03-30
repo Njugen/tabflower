@@ -32,7 +32,7 @@ class Moduleon extends Component {
 
 
     handleDragStart = (element) => {
-        console.log(element);
+        
         const moduleId = element.parentElement.id;
 
         this.highlightModule(moduleId);

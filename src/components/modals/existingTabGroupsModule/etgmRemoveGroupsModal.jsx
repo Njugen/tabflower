@@ -49,7 +49,7 @@ class ETGMRemoveGroupsModal extends Modal {
     }
 
     renderModalBody(){
-        console.log("REMOVE GROUP ID", this.props.data.params);
+        
         
         const { groupId } = this.props.data.params;
 

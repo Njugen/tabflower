@@ -17,7 +17,7 @@ const saveTabsToStorage = (groupDetails, successCallback, failCallback) => {
         ["tabGroups"], (data) => {
             let updatedTabGroups = data.tabGroups;
             
-           // console.log(updatedTabGroups);
+           // 
             // Add an entirely new tab group if it does not exist
             if(typeof updatedTabGroups !== "undefined"){
                 /*
@@ -62,13 +62,13 @@ const saveTabsToStorage = (groupDetails, successCallback, failCallback) => {
                 successCallback("A new tab group was added to TabFlower");
             });
 
-            console.log("ABC", updatedTabGroups);
+            
 
             
         }
     );
 
-//    console.log(options);
+//    
 } 
 
 const launchTabGroup = (details, successCallback, failCallback) => {
@@ -76,7 +76,7 @@ const launchTabGroup = (details, successCallback, failCallback) => {
 
     chrome.storage.local.get(["tabGroups"], (data) => {
         const storedTabGroup = data.tabGroups.find((item) => requestedGroupId === item.groupId);
-        console.log("M", storedTabGroup); 
+         
 
         // Go through all windows and open new ones based on stored information
         const storedWindows = storedTabGroup.windowAndTabs;
@@ -99,7 +99,7 @@ const launchTabGroup = (details, successCallback, failCallback) => {
 }
 
 const deleteTabGroups = (details, successCallback, failCallback) => {
-    console.log(details);
+    
     if(typeof details.id === "string" && details.id !== "all"){
 
         chrome.storage.local.get(["tabGroups"], (data) => {
@@ -114,7 +114,7 @@ const deleteTabGroups = (details, successCallback, failCallback) => {
                     return null;
                 }
             )
-            console.log(updatedTabGroups);
+            
 
         
             chrome.storage.local.set({

@@ -52,7 +52,7 @@ class WindowsList extends Component {
 
             /* Toggle up/down icon of window bar */
             const iconElement = (event !== null && event.target);
-            console.log(iconElement.className);
+            
             if(iconElement){
                 if(iconElement.className.includes("fa-chevron-up")){
                     iconElement.className = "fas fa-chevron-down";
@@ -118,7 +118,7 @@ class WindowsList extends Component {
     closeTab = (tab) => {
        
         sendToBackground("delete-tab", { tabId: tab.data.id }, (response) => {
-            console.log("haha", response);
+            
             this.props.refreshList();
             //setTimeout(() => this.getOpenedWindowsAndTabs(), 1500)
         }); 
@@ -126,7 +126,7 @@ class WindowsList extends Component {
 
     addNewWindow = (boolInput) => {
         const newWindow = boolInput;
-        console.log("BOOOL", newWindow);
+        
         this.setState(
             {
                 newWindow
@@ -173,17 +173,17 @@ class WindowsList extends Component {
     }
 
     handleAddNewWindowInputChange = (id, value) => {
-        console.log("E", id);
+        
         const newWindowURL = value;
         this.setState({ newWindowURL });
-        console.log(this.state);   
+           
     }
 
     handleAddNewTabInputChange = (id, value) => {
-        console.log("S", id);
+        
         const newTabURL = value;
         this.setState({ newTabURL });
-        console.log(this.state);
+        
     }
 
     raiseNewWindowToModal = (url) => {
@@ -266,7 +266,7 @@ class WindowsList extends Component {
                             (item) => item === windowContainerId
                         ); 
 
-                        console.log(newTabInContainerIds, windowContainerId);
+                        
                         
                         const tabList = tabs.map(
                             (tab, tabIndex) => {

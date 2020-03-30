@@ -29,7 +29,7 @@ export const launchTabGroup = (details, successCallback, failCallback) => {
 }
 
 export const deleteTabGroups = (details, successCallback, failCallback) => {
-    console.log("TO-DELETE", details);
+    
     if(typeof details.id === "string" && details.id !== "all"){
         let currentTabGroups = importedTabGroups;
         let updatedTabGroups = [];

@@ -7,13 +7,13 @@ class TBTextArea extends Component {
 
     changeInputValue = (event, presetValue) => {
         const {id, onChange} = this.props;
-        console.log("lilla", presetValue, event);
+        
         this.setState(
             {
                 value: event ? event.target.value : presetValue
             },
             () => {
-                console.log("stora", this.state.value);
+                
                 if(onChange && id){
                     onChange(id, this.state.value);
                 }
