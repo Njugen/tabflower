@@ -24,7 +24,7 @@ export let dummyWindowsAndTabs = [{
         "selected": false,
         "status": "complete",
         "title": "Yahoo",
-        "url": "https://www.yahoo.com/?fr=fpc-comodo&type=81_25050030006_77.0.3865.120_u_hp_sp",
+        "url": "about:blank",
         "width": 2560,
         "windowId": 1
     }, {

@@ -111,7 +111,7 @@ class WindowsList extends Component {
    closeWindow = (window) => {
        
         sendToBackground("delete-window", { windowId: window.data.id }, (response) => {
-            
+            this.props.refreshList();
         }); 
     }
 
