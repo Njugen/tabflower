@@ -104,7 +104,7 @@ r
 
             All components in this chain will have access to the information raised.
         */
-        console.log("BATMAN", data)
+        
         const { onRaiseToModal } = this.props;
 
         onRaiseToModal(data);
