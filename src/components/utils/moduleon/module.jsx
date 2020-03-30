@@ -26,7 +26,8 @@ class Module extends Component {
             moduleBeingDraggedId: ""
         },
         moduleData: {
-            loadedTabGroups: []
+            loadedTabGroups: [],
+            openedWindowsAndTabs: []
         },
         settings: {
             minimized: false

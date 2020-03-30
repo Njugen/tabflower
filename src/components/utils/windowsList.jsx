@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { sendToBackground } from './../../services/webextension/APIBridge';
 import TBTextInput from './form/tbTextInput';
+import PropTypes from 'prop-types';
 
 class WindowsList extends Component {
     state = {
@@ -331,6 +332,15 @@ class WindowsList extends Component {
             );
         }
     }
+}
+
+WindowsList.propTypes = {
+    windows: PropTypes.array.isRequired,
+    onRaiseToModal: PropTypes.func,
+    canCloseItems: PropTypes.bool.isRequired,
+    initialShowTabs: PropTypes.bool.isRequired,
+    initialTabStyle: PropTypes.string.isRequired,
+    refreshList: PropTypes.func
 }
 
 export default WindowsList;
