@@ -137,13 +137,13 @@ r
             (view, key) => {
                  const TagName = view.component;
 
-                return <Route path={view.path} render={
+                return <Route path={view.path} key={"route-" + key} render={
                     (props) => {
                         return <TagName
                             onRaiseToModal={(data) => this.raiseToModal(data)} 
                             onViewMount={(data) => this.handleViewMount(data)}
                             label={view.label} 
-                            key={key}
+                            key={"routeView-" + key}
                             onRaiseToErrorOverlay={(data) => this.raiseToErrorOverlay(data)}
                             {...props} />
  

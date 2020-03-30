@@ -271,7 +271,7 @@ class WindowsList extends Component {
                         const tabList = tabs.map(
                             (tab, tabIndex) => {
                                 return (
-                                    <li className={typeof initialTabStyle === "string" && initialTabStyle === "horizontal" ? "col-3" : "col-12"}>
+                                    <li key={"tabindex-" + tabIndex} className={typeof initialTabStyle === "string" && initialTabStyle === "horizontal" ? "col-3" : "col-12"}>
                                         <img src={tab.favIconUrl} className="list-item-favicon" />
                                         <span>{tab.title}</span>
                                         <ul className="list-item-options">
@@ -291,7 +291,7 @@ class WindowsList extends Component {
                         )
 
                         return (
-                            <div className="active-tabs-module">
+                            <div className="active-tabs-module" key={"window-" + key}>
                                 <ul className="window-listing col-12">
                                     <li className="mt-2" id={windowContainerId}>
                                         <div className="window-header">Window {key+1}

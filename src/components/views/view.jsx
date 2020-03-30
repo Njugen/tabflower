@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { ValidatorError, ErrorHandler } from './../utils/exceptionsAndHandler';
 import * as validator from './../utils/inputValidators'
+import { PropTypes } from 'prop-types';
 
 /*
     The View Class
@@ -118,6 +119,13 @@ class View extends Component {
         */
         return null;
     }
+}
+
+View.propTypes = {
+    onRaiseToModal: PropTypes.func,
+    onViewMount: PropTypes.func,
+    onRaiseToErrorOverlay: PropTypes.func
+
 }
 
 export default View;
