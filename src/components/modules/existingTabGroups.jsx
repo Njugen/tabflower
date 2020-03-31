@@ -2,7 +2,8 @@ import React, { Fragment } from "react";
 import Module from '../utils/moduleon/module';
 import { sendToBackground } from './../../services/webextension/APIBridge';
 import { ValidatorError, ErrorHandler } from '../utils/exceptionsAndHandler';
-import * as validator from '../utils/inputValidators'
+import * as validator from '../utils/inputValidators';
+import PropTypes from 'prop-types';
 require("../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css")
 
 class ExistingTabGroupsModule extends Module {
@@ -217,5 +218,13 @@ class ExistingTabGroupsModule extends Module {
    }
     
 }
+
+console.log();
+
+ExistingTabGroupsModule.propTypes = {
+    ...Module.propTypes,
+    onRaiseToView: PropTypes.func.isRequired,
+    refresh: PropTypes.number.isRequired
+} 
 
 export default ExistingTabGroupsModule;
