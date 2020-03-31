@@ -3,6 +3,8 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import TabManagementView from '../views/tabManagement';
 import AboutTabFlowerView from './../views/aboutTabFlower';
 import SettingsView from './../views/settings';
+import PropTypes from 'prop-types';
+
 
 /*
     The RouteList component
@@ -214,6 +216,13 @@ r
             </Switch>
         );
     }
+}
+
+RouteList.propTypes = {
+    onRaisedRoutesInfo: PropTypes.func.isRequired,
+    onRaiseToModal: PropTypes.func.isRequired,
+    onRaiseToErrorOverlay: PropTypes.func.isRequired,
+    onNavigation: PropTypes.func.isRequired
 }
 
 export default RouteList;
