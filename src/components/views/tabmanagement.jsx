@@ -43,7 +43,10 @@ class TabManagementView extends View {
                 <div className="row d-flex justify-content-center">
                     <div className="col-6">
                         <Moduleon>
-                            
+                            <ModuleColumn colspan="12">
+                                <CurrentlyOpenedTabsModule onRaiseToView={(data) => this.handleRaisedData(data)} id="active-tabs-module" onRaiseToModal={(data) => this.raiseToModal(data)} onRaiseToErrorOverlay={(data) => this.raiseToErrorOverlay(data)}></CurrentlyOpenedTabsModule>
+                                <ExistingTabGroupsModule id="existing-tab-groups-module" refresh={this.state.refreshFactor} onRaiseToView={(data) => this.handleRaisedData(data)} onRaiseToModal={(data) => this.raiseToModal(data)} onRaiseToErrorOverlay={(data) => this.raiseToErrorOverlay(data)}></ExistingTabGroupsModule>
+                            </ModuleColumn> 
                         </Moduleon>
                     </div>    
                 </div>

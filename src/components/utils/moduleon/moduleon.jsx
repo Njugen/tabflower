@@ -97,12 +97,13 @@ class Moduleon extends Component {
     }
 
     cloneChildren = (newProps) => {
-        const clonedChildren = Children.map(newProps.children, (child) => {
+        const clonedChildren = Children.map(newProps.children, (child, i) => {
             return cloneElement(child, {
                 onRenderedModules: this.handleRenderedModules,
                 onDragStart: this.handleDragStart,
                 onDragOver: this.handleDragOver,
-                onDrop: this.handleDrop
+                onDrop: this.handleDrop,
+                key: i
             });
         }) 
 
@@ -120,7 +121,7 @@ class Moduleon extends Component {
 }
 
 Moduleon.propTypes = {
-    children: PropTypes.element
+    children: PropTypes.element.isRequired
 }
 
 export default Moduleon
