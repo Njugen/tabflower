@@ -181,6 +181,7 @@ class App extends Component{
         </div>
         <FullWidthLoadbar refreshFactor={this.state.refreshFactor} />
         </ErrorBoundary>
+
       </Fragment>
     );
   }

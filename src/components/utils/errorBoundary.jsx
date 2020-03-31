@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import ErrorOverlay from '../modals/errorOverlay';
+import { PropTypes } from 'prop-types';
 
 class ErrorBoundary extends Component {
     state = { errors: [] };
@@ -41,6 +42,10 @@ class ErrorBoundary extends Component {
   
       return this.props.children || null; 
     }
+  }
+
+  ErrorBoundary.propTypes = {
+    children: PropTypes.any.isRequired
   }
 
   export default ErrorBoundary;
