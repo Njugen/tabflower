@@ -1,4 +1,5 @@
 import { Component, cloneElement, Children } from 'react';
+import { PropTypes } from 'prop-types';
 
 class Moduleon extends Component {
     state = {
@@ -109,13 +110,17 @@ class Moduleon extends Component {
     } 
 
     render = () => {
-        const adjustedChildren = this.cloneChildren(this.props);
+        const adjustedChildren = this.cloneChildren(this.props) || null;
  
         return (
             adjustedChildren
             
         );
     }
+}
+
+Moduleon.propTypes = {
+    children: PropTypes.element
 }
 
 export default Moduleon
