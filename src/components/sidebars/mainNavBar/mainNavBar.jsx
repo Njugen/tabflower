@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-
+import PropTypes from 'prop-types';
 import NavSection from './components/navSection';
+
 class MainNavBar extends Component {
     state = {
         activeNavLinkKey: ""
@@ -46,6 +47,11 @@ class MainNavBar extends Component {
             </div>
         );
     }
+}
+
+MainNavBar.propTypes = {
+    routes: PropTypes.array.isRequired,
+    onMainNavBarClick: PropTypes.func.isRequired
 }
 
 export default MainNavBar;
