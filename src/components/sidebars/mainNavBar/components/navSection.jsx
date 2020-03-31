@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
+import PropTypes from 'prop-types';
 
 class NavSection extends Component {
     renderNavLink = (label, path, key, handleClick) => {
@@ -40,6 +41,12 @@ class NavSection extends Component {
             </div>
         )
     }
+}
+
+NavSection.propTypes = {
+    title: PropTypes.string.isRequired,
+    links: PropTypes.array.isRequired,
+    onNavClick: PropTypes.func.isRequired
 }
 
 export default NavSection;
