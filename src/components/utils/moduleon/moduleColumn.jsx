@@ -1,4 +1,5 @@
 import React, { Component, cloneElement, Children } from "react";
+import { PropTypes } from 'prop-types';
 
 class ModuleColumn extends Component {
     state = {
@@ -59,6 +60,13 @@ class ModuleColumn extends Component {
             </div>
         );
     }
+}
+
+ModuleColumn.propTypes = {
+    colspan: PropTypes.string.isRequired,
+    onDragStart: PropTypes.func,
+    onDragOver: PropTypes.func,
+    onDrop: PropTypes.func
 }
 
 export default ModuleColumn;
