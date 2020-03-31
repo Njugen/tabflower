@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class TBTextArea extends Component {
     state = {
@@ -45,14 +46,20 @@ class TBTextArea extends Component {
                 </div>
                 <div className="tb-form-row row">
                     <div className="col-12">
-                            <textarea maxLength="170" onChange={(e) => this.changeInputValue(e)} className="tb-textarea">
-                                {this.state.value || value}
-                         </textarea>   
+                            <textarea value={this.state.value || value} maxLength="170" onChange={(e) => this.changeInputValue(e)} className="tb-textarea"></textarea>   
                     </div>
                 </div>
             </div>  
         );
     }
+}
+
+TBTextArea.propTypes = {
+    value: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+    label: PropTypes.string.isRequired,
+    warning: PropTypes.string
 }
 
 export default TBTextArea;

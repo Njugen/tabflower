@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class TBTextInput extends Component {
     state = {
@@ -50,6 +51,14 @@ class TBTextInput extends Component {
             </div>  
         );
     }
+}
+
+TBTextInput.propTypes = {
+    value: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+    label: PropTypes.string.isRequired,
+    warning: PropTypes.string
 }
 
 export default TBTextInput;

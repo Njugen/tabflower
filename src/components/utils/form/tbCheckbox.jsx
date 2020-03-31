@@ -1,4 +1,5 @@
 import React, { Component, createRef } from 'react';
+import PropTypes from 'prop-types';
 
 class TBCheckBox extends Component {
     state = {
@@ -83,6 +84,13 @@ class TBCheckBox extends Component {
         super(props);
         this.checkboxRef = createRef();
     }
+}
+
+TBCheckBox.propTypes = {
+    onToggle: PropTypes.func.isRequired,
+    value: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired
 }
 
 export default TBCheckBox;
