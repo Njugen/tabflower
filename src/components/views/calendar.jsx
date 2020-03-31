@@ -6,6 +6,7 @@ import CalendarModule from '../modules/calendarModule/main';
 import Moduleon from '../utils/moduleon/moduleon';
 import ModuleColumn from '../utils/moduleon/moduleColumn';
 import { ReactDOM } from 'react-dom';
+import PropTypes from 'prop-types';
 
 class CalendarView extends View {
     state = {
@@ -64,6 +65,14 @@ class CalendarView extends View {
             </div>
         );
     }
+}
+
+CalendarView.PropTypes = {
+    match: PropTypes.shape(
+        {
+            path: PropTypes.string.isRequired
+        }
+    )
 }
 
 export default CalendarView;
