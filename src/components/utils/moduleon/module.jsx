@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { ValidatorError, ErrorHandler } from '../exceptionsAndHandler';
-import * as validator from './../../utils/inputValidators'
+import * as validator from './../../utils/inputValidators';
+import PropTypes from 'prop-types';
 require("../../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
 
 
@@ -413,6 +414,21 @@ class Module extends Component {
             </div> 
         );
     }
+}
+
+
+Module.propTypes = {
+    /*
+        onDragOver, onDrop and onDragStart are all dynamically added handlers, and will not be detected by
+        proptypes. Adding handlers dynamically in this manner feels unjustified, and based on how Moduleon works (ridiculously bad performance, just to mention
+            one of the issues), these handlers + moduleon's drag drop features should be removed from the project entirely...!
+    */
+    onDragOver: PropTypes.func, 
+    onDrop: PropTypes.func, 
+    onDragStart: PropTypes.func,
+    onRaiseToModal: PropTypes.func.isRequired, 
+    onRaiseToErrorOverlay: PropTypes.func.isRequired, 
+    id: PropTypes.string.isRequired
 }
 
 export default Module;
