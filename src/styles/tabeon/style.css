@@ -555,7 +555,7 @@ div.container-fluid > .row > div[class^="col-"] {
 
 /* form */
 .tb-form-row > .label {
-    margin: 1rem;
+    margin: 0rem 1rem 1rem 1rem;
     display: block;
     font-size: 0.90rem;
     color: #7a1d8c;
@@ -594,9 +594,8 @@ div.container-fluid > .row > div[class^="col-"] {
 }
 
 .tb-textinput {
-    width: 90%;
+    width: 100%;
     display: block;
-    margin: -0.5rem 1rem 0rem 1rem;
     height: 2rem;
     border: 0px;
     border: 1px solid #c2c2c2;
@@ -606,9 +605,8 @@ div.container-fluid > .row > div[class^="col-"] {
 }
 
 .tb-textarea {
-    width: 90%;
+    width: 100%;
     display: block;
-    margin: -0.5rem 1rem 0rem 1rem;
     height: 7rem;
     border: 0px;
     border: 1px solid #c2c2c2;
@@ -616,3 +614,23 @@ div.container-fluid > .row > div[class^="col-"] {
     padding: 1.0rem 1.0rem;
     transition: background-color 0.25s ease-in-out;
 }
+
+/* Add New Window Form Area */
+
+.addNewWindowForm {
+    background: #e2e2e2;
+}
+
+.addNewWindowForm > h5 {
+    display: inline-block;
+    margin: 1rem 0rem 0rem 0rem;
+    text-align: center;
+    width: 100%;
+}
+
+/* other */
+
+.text-aligner {
+    text-align: right;
+}
+

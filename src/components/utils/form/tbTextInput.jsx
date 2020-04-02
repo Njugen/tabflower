@@ -34,12 +34,12 @@ class TBTextInput extends Component {
         const { label, warning } = this.props;
 
         return (
-            <div className="tb-textinput-container">
-                <div className="tb-form-row row d-flex justify-content-between">
-                    <div className="col-4 label">
+            <div className="p-3">
+                <div className="tb-form-row row">
+                    <div className="label">
                         <span>{typeof label === "string" && label}</span>
                     </div>
-                    <div className="col-6 label">
+                    <div className="label">
                         <span>{typeof warning === "string" && warning}</span>
                     </div>
                 </div>

@@ -409,7 +409,7 @@ class ETGMCreateNewGroupModal extends Modal {
                             { type === "currently-opened" && "Currently opened windows and tabs" }
                             { type === "existing-group" && "Edit the windows and tabs in this group" }
                             { type === "new-group" && "Add windows or tabs to this new group" }
-                        </span>
+                        </span> 
                     </div>
                     <div className="col-4 label">
                         <span>{typeof warning === "string" && warning}</span>

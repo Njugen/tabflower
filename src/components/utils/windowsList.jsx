@@ -223,8 +223,12 @@ class WindowsList extends Component {
     renderAddNewWindowForm = () => {
         return (
             <div className="addNewWindowForm">
-                <TBTextInput id="newWindowURL" label="URL" value={this.state.newWindowURL || "http://"} onChange={(id, value) => this.handleAddNewWindowInputChange(id, value)}></TBTextInput>
-                <button className="active-tabs-add-button" onClick={() => this.raiseNewWindowToModal(this.state.newWindowURL)}>Save window</button>
+                <h5>Add new window</h5>
+                <TBTextInput id="newWindowURL" label="URL" value={this.state.newWindowURL || "https://"} onChange={(id, value) => this.handleAddNewWindowInputChange(id, value)}></TBTextInput>
+                <div className="text-aligner p-3">
+                    <button className="btn btn-secondary" onClick={() => this.hideAddNewWindowForm()}>Cancel</button>
+                    <button className="btn-tabeon btn" onClick={() => this.raiseNewWindowToModal(this.state.newWindowURL)}>Save window</button>
+                </div>
             </div>
         );
     }
@@ -234,13 +238,20 @@ class WindowsList extends Component {
 
         return (
             <div className="addNewTabForm">
-                <TBTextInput id="newTabURL" label="URL" value={this.state.newWindowURL || "http://"} onChange={(id, value) => this.handleAddNewTabInputChange(id, value)}></TBTextInput>
+                <TBTextInput id="newTabURL" label="URL" value={this.state.newWindowURL || "https://"} onChange={(id, value) => this.handleAddNewTabInputChange(id, value)}></TBTextInput>
                 <button onClick={() => this.cancelNewTab(containerId)}>Cancel</button>
                 <button onClick={() => this.raiseNewTabToModal(this.state.newTabURL, windowIndex, () =>{
                     this.cancelNewTab(containerId)
                 })}>Add tab to window</button>
             </div>
         )
+    }
+
+    hideAddNewWindowForm = () => {
+        const newWindow = false;
+        this.setState({
+            newWindow
+        });
     }
 
     render = () => {
@@ -312,11 +323,11 @@ class WindowsList extends Component {
                                             {tabList}
                                         </ul>
                                         {isAddingNewTab && this.renderAddNewTabForm(windowContainerId, key)}
-                                        {(type && (type === "existing-group" || type === "new-group") && !isAddingNewTab) && <button className="active-tabs-add-button" onClick={() => this.addNewTab(windowContainerId)}>Add new Tab</button>}   
+                                        {(type && (type === "existing-group" || type === "new-group") && !isAddingNewTab) && <button className="btn-tabeon-reverse btn" onClick={() => this.addNewTab(windowContainerId)}>Add new Tab</button>}   
                                     </li>
                                 </ul>
                                 {newWindow && newWindow === true  && windowArray.length - 1 === key && this.renderAddNewWindowForm()}
-                                {((newWindow && newWindow === false) || !newWindow) && windowArray.length - 1 === key && (type === "existing-group" || type === "new-group") && <button className="active-tabs-add-button" onClick={() => this.addNewWindow(true)}>Add new window</button>}
+                                {((newWindow && newWindow === false) || !newWindow) && windowArray.length - 1 === key && (type === "existing-group" || type === "new-group") && <button className="btn-tabeon btn" onClick={() => this.addNewWindow(true)}>Add new window</button>}
                             </div>
                             
                         );
@@ -328,7 +339,7 @@ class WindowsList extends Component {
             return (
                 <Fragment>
                     {newWindow && newWindow === true && this.renderAddNewWindowForm()}
-                    {((newWindow && newWindow === false) || !newWindow) && type && (type === "new-group" || "existing-group") && <button className="active-tabs-add-button" onClick={() => this.addNewWindow(true)}>Add new window</button>}
+                    {((newWindow && newWindow === false) || !newWindow) && type && (type === "new-group" || "existing-group") && <button className="btn-tabeon btn" onClick={() => this.addNewWindow(true)}>Add new window</button>}
                 </Fragment>
             );
         }
