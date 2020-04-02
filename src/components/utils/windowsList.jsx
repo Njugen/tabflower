@@ -272,8 +272,8 @@ class WindowsList extends Component {
                         const tabList = tabs.map(
                             (tab, tabIndex) => {
                                 return (
-                                    <li key={"tabindex-" + tabIndex} className={typeof initialTabStyle === "string" && initialTabStyle === "horizontal" ? "col-3" : "col-12"}>
-                                        <img src={tab.favIconUrl} alt={"Favicon - " + tab.title} className="list-item-favicon" />
+                                    <li key={"tabindex-" + key + "-" + tabIndex} className={typeof initialTabStyle === "string" && initialTabStyle === "horizontal" ? "col-3" : "col-12"}>
+                                        <img src={tab.favIconUrl} alt={""} className="list-item-favicon" />
                                         <span>{tab.title}</span>
                                         <ul className="list-item-options">
                                          {canCloseItems && canCloseItems === true && <li><button className="fas fa-times" onClick={() => 

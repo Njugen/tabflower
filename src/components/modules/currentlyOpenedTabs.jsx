@@ -4,6 +4,7 @@ import WindowsList from './../utils/windowsList';
 import { sendToBackground } from "../../services/webextension/APIBridge";
 import * as validator from './../utils/inputValidators';
 import { ValidatorError, ErrorHandler } from '../utils/exceptionsAndHandler';
+import PropTypes from 'prop-types';
 require("../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css")
 
 class CurrentlyOpenedTabsModule extends Module {
@@ -220,5 +221,11 @@ class CurrentlyOpenedTabsModule extends Module {
    
     
 }
+
+CurrentlyOpenedTabsModule.propTypes = {
+    ...Module.propTypes,
+    onRaiseToView: PropTypes.func.isRequired
+} 
+
 
 export default CurrentlyOpenedTabsModule;

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import PropTypes from 'prop-types';
 
 class ErrorOverlay extends Component {
     renderErrors = (errors) => {
@@ -35,7 +35,7 @@ class ErrorOverlay extends Component {
     }
 
     render = () => {
-        const {data, onDismiss}  = this.props;
+        const {data, onDismiss} = this.props;
 
         
         return(
@@ -56,6 +56,11 @@ class ErrorOverlay extends Component {
             </div>
         )
     }
+}
+
+ErrorOverlay.propTypes = {
+    data: PropTypes.array.isRequired,
+    onDismiss: PropTypes.func.isRequired
 }
 
 export default ErrorOverlay;

@@ -70,7 +70,7 @@ class RouteList extends Component {
             component: SettingsView
         },
         { 
-            label: "About Tabflower", 
+            label: "About", 
             path: "/about" ,
             component: AboutTabFlowerView 
         }

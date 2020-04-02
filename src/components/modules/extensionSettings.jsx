@@ -40,9 +40,6 @@ class ExtensionSettingsModule extends Module {
             </Fragment>
         );
    }
-
-
-   
     
 }
 

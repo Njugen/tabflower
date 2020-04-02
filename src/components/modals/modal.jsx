@@ -422,7 +422,9 @@ class Modal extends Component {
 }
 
 Modal.propTypes = {
-    data: PropTypes.object,
+    data: PropTypes.shape({
+        params: PropTypes.object.isRequired
+    }),
     onRaiseToErrorOverlay: PropTypes.func,
     onDismiss: PropTypes.func
 }
