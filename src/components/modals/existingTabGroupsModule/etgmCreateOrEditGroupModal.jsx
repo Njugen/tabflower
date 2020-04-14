@@ -340,7 +340,7 @@ class ETGMCreateNewGroupModal extends Modal {
                         if(windowIndex === 0 && windows[windowIndex].tabs.length < 1){
                             windows.splice(windowIndex, 1);
                         }
-
+ 
                         this.saveToState("windowAndTabs", windows, "tabGroupDetails") 
                     }
                 } else {

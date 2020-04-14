@@ -123,16 +123,18 @@ class App extends Component{
     
     this.setState({errors});
   }
-
+ 
   launchModal = (data) => {
     const modal = {
       launched: true,
       ...data
     }
 
+    if(this.state.modal.launched !== true){
     this.setState({
       modal
     });
+  }
   }
 
   clearModal = () => {

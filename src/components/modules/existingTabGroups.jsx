@@ -151,7 +151,7 @@ class ExistingTabGroupsModule extends Module {
             return tabGroups.map(
                 (group, i) => {
                     return (
-                        <div className="list-item-block col-3 m-1 p-3" key={"tg-" + i}>
+                        <div className="list-item-block mx-3 my-2 p-3" key={"tg-" + i}>
                             <div className="list-item-block-header mb-3">
                                 <h6 className="list-item-block-headline float-left pr-2">{group.tabGroupName}</h6>
                                 <div className="list-item-block-options float-right">

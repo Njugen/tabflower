@@ -314,7 +314,7 @@ class Module extends Component {
         */
 
         const { onRaiseToModal } = this.props;
-
+ 
         onRaiseToModal(data);
     }
 

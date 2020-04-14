@@ -205,7 +205,7 @@ class CurrentlyOpenedTabsModule extends Module {
             </Fragment>
         );
    }
-
+ 
    renderFooter = () => {
         return (
             <Fragment>
