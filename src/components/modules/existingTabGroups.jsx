@@ -26,13 +26,14 @@ class ExistingTabGroupsModule extends Module {
     }
 
 
-   launchTabGroup = (tabGroupId) => {
+   launchTabGroup = (tabGroupInfo) => {
         try {
-            const { isString } = validator;
 
-            if(isString(tabGroupId)){
+            const { isObject } = validator;
+           
+            if(isObject(tabGroupInfo)){
           
-                sendToBackground("launch-tab-group", {groupId: tabGroupId});
+                sendToBackground("launch-tab-group", {groupId: tabGroupInfo.groupId, groupCloseAll: tabGroupInfo.groupCloseAll});
             } else {
                 throw ValidatorError("etgm-module-103");
             } 
@@ -164,7 +165,7 @@ class ExistingTabGroupsModule extends Module {
                                 <p>{group.tabGroupDescription}</p>
                             </div>
                             <div className="list-item-block-footer">
-                                <button className="btn btn-tabeon-reverse d-inline-block" onClick={() => this.raiseToModal({ id: "etgmlaunchgroupsmodal", params: { groupId: group.groupId}, action: this.launchTabGroup.bind(this) })}>Launch group</button>
+                                <button className="btn btn-tabeon-reverse d-inline-block" onClick={() => this.raiseToModal({ id: "etgmlaunchgroupsmodal", params: { groupId: group.groupId, groupCloseAll: group.tabGroupCloseAll}, action: this.launchTabGroup.bind(this) })}>Launch group</button>
                             </div>
                         </div>
                     );

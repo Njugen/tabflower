@@ -74,27 +74,51 @@ const saveTabsToStorage = (groupDetails, successCallback, failCallback) => {
 const launchTabGroup = (details, successCallback, failCallback) => {
     const requestedGroupId = details.groupId;
 
-    chrome.storage.local.get(["tabGroups"], (data) => {
-        const storedTabGroup = data.tabGroups.find((item) => requestedGroupId === item.groupId);
-         
+    const openNewTabGroup = () => {
+        chrome.storage.local.get(["tabGroups"], (data) => {
+            const storedTabGroup = data.tabGroups.find((item) => requestedGroupId === item.groupId);
+            
 
-        // Go through all windows and open new ones based on stored information
-        const storedWindows = storedTabGroup.windowAndTabs;
+            // Go through all windows and open new ones based on stored information
+            const storedWindows = storedTabGroup.windowAndTabs;
 
-        storedWindows.map((window) => {
-            let urls = [];
+            storedWindows.map((window) => {
+                let urls = [];
 
-            for(let i = 0; i < window.tabs.length; i++){
-                urls.push(window.tabs[i].url);
-            }
+                for(let i = 0; i < window.tabs.length; i++){
+                    urls.push(window.tabs[i].url);
+                }
 
-            chrome.windows.create({
-                url: urls
-            })
+                chrome.windows.create({
+                    url: urls
+                })
 
-            return null;
+                return null;
+            });
         });
-    });
+    }
+
+    console.log(details);
+    if(details.groupCloseAll && details.groupCloseAll === true){
+        chrome.windows.getAll({ windowTypes: ['normal', 'popup'] }, (windowsArray) => {
+            const currentWindows = windowsArray;
+            
+            currentWindows.map((window, i) => {
+                console.log("i: " + i, "length: " + currentWindows.length);
+                if(i < currentWindows.length-1){
+                    chrome.windows.remove(window.id);
+                } else {
+                    openNewTabGroup();
+                    setTimeout(() => {
+                        chrome.windows.remove(window.id);
+                    }, 500)
+                }
+                
+            });
+        });
+    } else {
+        openNewTabGroup();
+    }
 
 }
 

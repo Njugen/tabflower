@@ -210,9 +210,8 @@ class CurrentlyOpenedTabsModule extends Module {
         return (
             <Fragment>
                 
-                    <p className="tabeon-module-footer-text small d-inline-block">Need to archive these windows and tabs for future browsing? Save them to Tab Flower!</p>
-                    <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "cotmremoveunresponsivetabsmodal", params: {}, action: this.closeUnresponsiveTabs.bind(this) })}>Remove unresponsive tabs</button>
-                    <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", params: { windowAndTabs: this.state.moduleData.openedWindowsAndTabs, type: "currently-opened" }, action: this.createTabGroup.bind(this) })}>Add to group</button>
+                    <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "cotmremoveunresponsivetabsmodal", params: {}, action: this.closeUnresponsiveTabs.bind(this) })}>Delete unresponsive tabs</button>
+                    <button className="btn btn-tabeon d-inline-block" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", params: { windowAndTabs: this.state.moduleData.openedWindowsAndTabs, type: "currently-opened" }, action: this.createTabGroup.bind(this) })}>Create group</button>
               
             </Fragment>
         );

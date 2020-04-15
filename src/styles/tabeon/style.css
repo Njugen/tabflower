@@ -555,11 +555,18 @@ div.container-fluid > .row > div[class^="col-"] {
 
 /* form */
 .tb-form-row > .label {
-    margin: 0rem 1rem 1rem 1rem;
+    margin: 0rem 1rem 0rem 1rem;
     display: block;
     font-size: 0.90rem;
     color: #7a1d8c;
 
+}
+
+.tb-form-row-checkbox > .label {
+    margin: 1rem 1rem 0rem 1rem;
+    display: block;
+    font-size: 0.90rem;
+    color: #7a1d8c;
 }
 
 /* Checkbox */

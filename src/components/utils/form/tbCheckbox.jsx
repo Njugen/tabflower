@@ -67,7 +67,7 @@ class TBCheckBox extends Component {
         const { label } = this.props;
         
         return (
-            <div className="tb-form-row row d-flex justify-content-between">
+            <div className="tb-form-row-checkbox row d-flex justify-content-between">
                 <div className="col-8 label">
                     <span>{typeof label === "string" && label}</span>
                 </div>

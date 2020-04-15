@@ -16,10 +16,9 @@ class ETGMLaunchGroupsModal extends Modal {
     saveModalHandler = (callback) => {
         try {
             const { isFunction } = validator;
-            const { groupId } = this.props.data.params;
 
             if(isFunction(callback)){
-                this.clearModalData(callback(groupId));
+                this.clearModalData(callback(this.props.data.params));
             } else {
                 throw ValidatorError("ETGMLaunchGroupsModal-101");
             }

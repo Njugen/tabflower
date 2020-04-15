@@ -249,7 +249,7 @@ export const ValidatorError = (code) => {
             message = "A moduleTitle key consisting of at least 1 character is missing in the settings object for \"CurrentlyOpenedTabsModule\". This key represents the title of the module, and will be shown as a title to the user.";
             break;   
         case "etgm-module-103":
-            message = "In order to launch a tab group, a target id (also known as \"tabGroupId\") needs to be provided as a text string. No target id/tab group id was correctly provided in this call. As a result, no tab group will be launched.";
+            message = "In order to launch a tab group, an object containing the target id (also known as \"tabGroupId\") needs to be provided. Since no object with the require information was provided, no tab group will be launched.";
             break;
         case "etgm-module-104":
             message = "In order to target a specific tab group for removal through the removeTabGroups() function, an object containing the tab id key \"groupId\" (string) needs to be provided as a parameter to this function. If no object parameter containing this key is provided, all tab groups will be targetted for removal.";
