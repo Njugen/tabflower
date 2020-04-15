@@ -321,13 +321,14 @@ class WindowsList extends Component {
                                         </div>
                                         <ul className={typeof initialShowTabs === "boolean" && initialShowTabs === false ? "tab-listing-hide tab-listing horizontal" : "tab-listing horizontal"}>
                                             {tabList}
+                                            {(type && (type === "existing-group" || type === "new-group") && !isAddingNewTab) && <button className="btn-tabeon-reverse btn" onClick={() => this.addNewTab(windowContainerId)}>Add new Tab</button>}   
                                         </ul>
                                         {isAddingNewTab && this.renderAddNewTabForm(windowContainerId, key)}
-                                        {(type && (type === "existing-group" || type === "new-group") && !isAddingNewTab) && <button className="btn-tabeon-reverse btn" onClick={() => this.addNewTab(windowContainerId)}>Add new Tab</button>}   
+                                        
                                     </li>
                                 </ul>
                                 {newWindow && newWindow === true  && windowArray.length - 1 === key && this.renderAddNewWindowForm()}
-                                {((newWindow && newWindow === false) || !newWindow) && windowArray.length - 1 === key && (type === "existing-group" || type === "new-group") && <button className="btn-tabeon btn" onClick={() => this.addNewWindow(true)}>Add new window</button>}
+                                {((newWindow && newWindow === false) || !newWindow) && windowArray.length - 1 === key && (type === "existing-group" || type === "new-group") && <button className="btn-tabeon-as-only-child btn" onClick={() => this.addNewWindow(true)}>Add new window</button>}
                             </div>
                             
                         );
@@ -339,7 +340,7 @@ class WindowsList extends Component {
             return (
                 <Fragment>
                     {newWindow && newWindow === true && this.renderAddNewWindowForm()}
-                    {((newWindow && newWindow === false) || !newWindow) && type && (type === "new-group" || "existing-group") && <button className="btn-tabeon btn" onClick={() => this.addNewWindow(true)}>Add new window</button>}
+                    {((newWindow && newWindow === false) || !newWindow) && type && (type === "new-group" || "existing-group") && <button className="btn-tabeon-as-only-child btn" onClick={() => this.addNewWindow(true)}>Add new window</button>}
                 </Fragment>
             );
         }

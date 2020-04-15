@@ -185,6 +185,17 @@ class Modal extends Component {
         }
     }
 
+    adjustModalScrollBehaviour = () => {
+        /*
+            This function prevents the modal from following the user when he scrolls vertically. 
+        */
+        document.addEventListener("scroll", () => {
+            const pageYOffset = (window.pageYOffset >= 100 ? window.pageYOffset : -100);
+            document.getElementById("tabeonModal").getElementsByClassName("modal-dialog")[0].style.marginTop = -pageYOffset + "px";
+        })
+
+    }
+
     componentDidMount = () => {
        
         
@@ -198,10 +209,12 @@ class Modal extends Component {
            this.verifyChildProps();
        }
 
+       this.adjustModalScrollBehaviour();
+
         setTimeout(() => {
             this.fadeIn();
         }, 100)
-        
+
         if(this.childComponentDidMount){
             this.childComponentDidMount();
         }
