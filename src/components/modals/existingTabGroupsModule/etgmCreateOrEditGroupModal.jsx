@@ -179,11 +179,6 @@ class ETGMCreateNewGroupModal extends Modal {
         this.saveToState("groupId", this.setGroupId(this.props.data.params.groupId), "tabGroupDetails");
     } 
 
-    componentWillUnmount = () => {
-        
-        
-    }
-
     loadUrl = (url, success, fail) => {
         try {
             const { isString, isFunction } = validator;

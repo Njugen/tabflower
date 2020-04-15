@@ -185,15 +185,19 @@ class Modal extends Component {
         }
     }
 
-    adjustModalScrollBehaviour = () => {
-        /*
-            This function prevents the modal from following the user when he scrolls vertically. 
-        */
-        document.addEventListener("scroll", () => {
-            const pageYOffset = (window.pageYOffset >= 100 ? window.pageYOffset : -100);
-            document.getElementById("tabeonModal").getElementsByClassName("modal-dialog")[0].style.marginTop = -pageYOffset + "px";
-        })
+    scrollHandler = () => {
+        const modalDialogueBox = document.getElementById("tabeonModal").getElementsByClassName("modal-dialog")[0];
 
+        if(window.scrollY >= 100){
+            modalDialogueBox.style.marginTop = -window.scrollY + "px";
+        } else {
+            modalDialogueBox.style.marginTop = -window.scrollY + 100 + "px";
+        }
+    }
+
+    componentWillUnmount = () => {
+        // The scroll event and the behaviour it follows are not needed when the user dismisses the modal. Therefore, it should be removed.
+        document.removeEventListener("scroll", this.scrollHandler);
     }
 
     componentDidMount = () => {
@@ -205,11 +209,15 @@ class Modal extends Component {
             the timeout.
         */
 
-       if(typeof this.verifyChildProps === "function"){
-           this.verifyChildProps();
-       }
+        if(typeof this.verifyChildProps === "function"){
+            this.verifyChildProps();
+        }
 
-       this.adjustModalScrollBehaviour();
+        /*
+            This event listener prevents the modal from following the user when he scrolls vertically. 
+        */
+
+        document.addEventListener("scroll", this.scrollHandler);
 
         setTimeout(() => {
             this.fadeIn();
