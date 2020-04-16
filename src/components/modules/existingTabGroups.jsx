@@ -32,8 +32,8 @@ class ExistingTabGroupsModule extends Module {
             const { isObject } = validator;
            
             if(isObject(tabGroupInfo)){
-          
-                sendToBackground("launch-tab-group", {groupId: tabGroupInfo.groupId, groupCloseAll: tabGroupInfo.groupCloseAll});
+                console.log(tabGroupInfo);
+                sendToBackground("launch-tab-group", tabGroupInfo);
             } else {
                 throw ValidatorError("etgm-module-103");
             } 
@@ -151,12 +151,13 @@ class ExistingTabGroupsModule extends Module {
         if(isPositiveNumber(tabGroups.length)){
             return tabGroups.map(
                 (group, i) => {
+                    console.log(group);
                     return (
                         <div className="list-item-block col-12 my-2 p-3" key={"tg-" + i}>
                             <div className="list-item-block-header mb-3">
                                 <h6 className="list-item-block-headline float-left pr-2">{group.tabGroupName}</h6>
                                 <div className="list-item-block-options float-right">
-                                    <button className="fas fa-cog options-button" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", params: { windowAndTabs: group.windowAndTabs, groupName: group.tabGroupName, groupCloseAll: group.tabGroupCloseAll, groupDescription: group.tabGroupDescription, groupId: group.groupId, type: "existing-group"}, action: this.createOrEditTabGroup.bind(this) })}></button>
+                                    <button className="fas fa-cog options-button" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", params: { windowAndTabs: group.windowAndTabs, groupName: group.tabGroupName, groupCloseAll: group.tabGroupCloseAll, groupCloseInactiveTabs: group.tabGroupCloseInactiveTabs, groupDescription: group.tabGroupDescription, groupId: group.groupId, type: "existing-group"}, action: this.createOrEditTabGroup.bind(this) })}></button>
                                     <button className="fas fa-times options-button" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", params: {groupId: group.groupId, groupName: group.tabGroupName}, action: this.removeTabGroups.bind(this) })}></button>
                                 </div>
                                 <div className="clearfix"></div>
@@ -165,7 +166,7 @@ class ExistingTabGroupsModule extends Module {
                                 <p>{group.tabGroupDescription}</p>
                             </div>
                             <div className="list-item-block-footer">
-                                <button className="btn btn-tabeon-reverse d-inline-block" onClick={() => this.raiseToModal({ id: "etgmlaunchgroupsmodal", params: { groupId: group.groupId, groupCloseAll: group.tabGroupCloseAll}, action: this.launchTabGroup.bind(this) })}>Launch group</button>
+                                <button className="btn btn-tabeon-reverse d-inline-block" onClick={() => this.raiseToModal({ id: "etgmlaunchgroupsmodal", params: { groupId: group.groupId, groupCloseAll: group.tabGroupCloseAll || false, groupCloseInactiveTabs: group.tabGroupCloseInactiveTabs || false, groupDontAskAgain: group.tabGroupDontAskAgain || false}, action: this.launchTabGroup.bind(this) })}>Launch group</button>
                             </div>
                         </div>
                     );

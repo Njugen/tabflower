@@ -10,12 +10,22 @@ export const getAllTabGroups = (successCallback, failCallback) => {
 }
 
 export const saveTabsToStorage = (groupDetails, successCallback, failCallback) => {
-    const { groupId, tabGroupDescription, tabGroupName, tabGroupCloseAll, windowAndTabs } = groupDetails;
+    const { 
+        groupId, 
+        tabGroupDescription, 
+        tabGroupName, 
+        tabGroupCloseAll, 
+        tabGroupCloseInactiveTabs, 
+        tabGroupDontAskAgain,
+        windowAndTabs 
+    } = groupDetails;
 
     importedTabGroups.push(
         {
             "groupId": groupId,
             "tabGroupCloseAll": tabGroupCloseAll,
+            "tabGroupCloseInactiveTabs": tabGroupCloseInactiveTabs,
+            "tabGroupDontAskAgain": tabGroupDontAskAgain,
             "tabGroupDescription": tabGroupDescription,
             "tabGroupName": tabGroupName,
             "windowAndTabs": windowAndTabs

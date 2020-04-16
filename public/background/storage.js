@@ -73,7 +73,7 @@ const saveTabsToStorage = (groupDetails, successCallback, failCallback) => {
 
 const launchTabGroup = (details, successCallback, failCallback) => {
     const requestedGroupId = details.groupId;
-
+    console.log(details);
     const openNewTabGroup = () => {
         chrome.storage.local.get(["tabGroups"], (data) => {
             const storedTabGroup = data.tabGroups.find((item) => requestedGroupId === item.groupId);
@@ -98,13 +98,11 @@ const launchTabGroup = (details, successCallback, failCallback) => {
         });
     }
 
-    console.log(details);
-    if(details.groupCloseAll && details.groupCloseAll === true){
+    if(details.tabGroupCloseAll && details.tabGroupCloseAll === true){
         chrome.windows.getAll({ windowTypes: ['normal', 'popup'] }, (windowsArray) => {
             const currentWindows = windowsArray;
             
             currentWindows.map((window, i) => {
-                console.log("i: " + i, "length: " + currentWindows.length);
                 if(i < currentWindows.length-1){
                     chrome.windows.remove(window.id);
                 } else {

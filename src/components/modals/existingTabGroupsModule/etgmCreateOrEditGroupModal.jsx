@@ -434,6 +434,7 @@ class ETGMCreateNewGroupModal extends Modal {
         const { 
             groupName: name,
             groupCloseAll: closeAll,
+            groupCloseInactiveTabs: closeInactiveTabs,
             groupDescription: description,
             type
         } = this.props.data.params;
@@ -450,7 +451,8 @@ class ETGMCreateNewGroupModal extends Modal {
             <Fragment>
                 <TBTextInput id="tabGroupName" warning={nameErr || null} label="Group Name" value={name ? name : ""} onChange={(id, value) => this.saveToState(id, value, "tabGroupDetails")}></TBTextInput>
                 <TBTextArea id="tabGroupDescription" warning={descErr || null} label="Description (max 170 characters)" value={description ? description : ""} onChange={(id, value) => this.saveToState(id, value, "tabGroupDetails")}></TBTextArea>
-                <TBCheckBox id="tabGroupCloseAll" label="Close everything else before launching this tab group" value={closeAll && closeAll === true ? "true" : "false"} onToggle={(id, value) => this.saveToState(id, value, "tabGroupDetails")} />
+                <TBCheckBox id="tabGroupCloseAll" label="Close everything else before launching this tab group" value={closeAll && closeAll === true ? "true" : "false"} onToggle={(id, value) => this.saveToState(id, value, "tabGroupDetails")} />           
+                <TBCheckBox id="tabGroupCloseInactiveTabs" label="Automatically close all unresponsive tabs after launching the group" value={closeInactiveTabs && closeInactiveTabs === true ? "true" : "false"} onToggle={(id, value) => this.saveToState(id, value, "tabGroupDetails")} />
                 {tabGroupDetails && this.renderWindowsAndTabsSection(tabGroupDetails.windowAndTabs, type, windowErr || null)}
             </Fragment>
         );    

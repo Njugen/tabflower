@@ -281,6 +281,8 @@ export let dummyWindowsAndTabs = [{
 export let dummyTabGroups = [{
         "groupId": "8kvgsvc8ydm",
         "tabGroupCloseAll": false,
+        "tabGroupCloseInactiveTabs": true,
+        "tabGroupDontAskAgain": true,
         "tabGroupDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fringilla at sem sit amet molestie. Suspendisse congue dapibus sem, tempor bibendum neque volutpat eget.",
         "tabGroupName": "Amur Tiger Windows",
         "windowAndTabs": [{
@@ -404,6 +406,8 @@ export let dummyTabGroups = [{
     }, {
         "groupId": "2awzzd6axrk",
         "tabGroupCloseAll": false,
+        "tabGroupCloseInactiveTabs": true,
+        "tabGroupDontAskAgain": true,
         "tabGroupDescription": "Aliquam et iaculis diam. Sed suscipit tincidunt dapibus. Ut maximus nisi ligula, vel tristique sapien mattis ac. Sed lectus neque, blandit id sapien eget",
         "tabGroupName": "Data Science",
         "windowAndTabs": [{
@@ -568,6 +572,8 @@ export let dummyTabGroups = [{
     }, {
         "groupId": "k7pehnhu4vm",
         "tabGroupCloseAll": false,
+        "tabGroupCloseInactiveTabs": true,
+        "tabGroupDontAskAgain": true,
         "tabGroupDescription": "Morbi in elementum sem. Aliquam a diam libero. Phasellus eget faucibus turpis, in gravida quam. Maecenas interdum eget nisi a ullamcorper. Praesent ut sodales risus, sit ",
         "tabGroupName": "Playstation Gaming",
         "windowAndTabs": [{
