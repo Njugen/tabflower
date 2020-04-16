@@ -12,7 +12,7 @@ const getAllTabGroups = (successCallback, failCallback) => {
 }
 
 const saveTabsToStorage = (groupDetails, successCallback, failCallback) => {
-
+    console.log("TABGROUP", groupDetails);
     chrome.storage.local.get(
         ["tabGroups"], (data) => {
             let updatedTabGroups = data.tabGroups;
@@ -75,6 +75,7 @@ const launchTabGroup = (details, successCallback, failCallback) => {
     const requestedGroupId = details.groupId;
     const closeInactiveTabs = details.tabGroupCloseInactiveTabs || false;
 
+    console.log("DE", details);
 
     const openNewTabGroup = () => {
         chrome.storage.local.get(["tabGroups"], (data) => {
@@ -94,7 +95,7 @@ const launchTabGroup = (details, successCallback, failCallback) => {
                 chrome.windows.create({
                     url: urls
                 }, (createdWindow) => {
-                    console.log(closeInactiveTabs);
+                    
                     if(closeInactiveTabs === true){
                         const options = {
                             windowsAndTabs: [createdWindow]
@@ -103,6 +104,10 @@ const launchTabGroup = (details, successCallback, failCallback) => {
                             deleteUnresponsiveTabs(options);
                         }, 500);
                     }
+
+                    saveTabsToStorage(details, () => {
+                        successCallback("A tabgroup has been launched");
+                    });
                 })
 
                 return null;

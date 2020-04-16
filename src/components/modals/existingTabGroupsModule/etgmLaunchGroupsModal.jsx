@@ -23,6 +23,9 @@ class ETGMLaunchGroupsModal extends Modal {
                 //this.clearModalData(callback(this.props.data.params));
                 const tabGroupDetails = {
                     groupId: this.props.data.params.groupId,
+                    windowAndTabs: this.props.data.params.windowAndTabs,
+                    tabGroupName: this.props.data.params.groupName,
+                    tabGroupDescription: this.props.data.params.groupDescription,
                     ...this.state.tabGroupDetails 
                 };
                 this.clearModalData(callback(tabGroupDetails));
@@ -58,11 +61,7 @@ class ETGMLaunchGroupsModal extends Modal {
             groupDontAskAgain
         } = this.props.data.params;
         return (
-            /*<Fragment>
-                <label><input type="checkbox" /> Close all currently opened tabs and windows</label>
-                <label><input type="checkbox" /> Automatically close all unresponsive tabs after launching the group</label>
-                <label><input type="checkbox" /> Save all selected options and do not show this message again</label>
-            </Fragment> */
+
             <Fragment>
                 <TBCheckBox id="tabGroupCloseAll" label="Close all currently opened tabs and windows" value={groupCloseAll && groupCloseAll === true ? "true" : "false"} onToggle={(id, value) => this.saveToState(id, value, "tabGroupDetails")} />
                 <TBCheckBox id="tabGroupCloseInactiveTabs" label="Automatically close all unresponsive tabs opened by this tab group" value={groupCloseInactiveTabs && groupCloseInactiveTabs === true ? "true" : "false"} onToggle={(id, value) => this.saveToState(id, value, "tabGroupDetails")} />

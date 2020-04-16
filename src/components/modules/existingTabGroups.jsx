@@ -32,8 +32,13 @@ class ExistingTabGroupsModule extends Module {
             const { isObject } = validator;
            
             if(isObject(tabGroupInfo)){
-                console.log(tabGroupInfo);
-                sendToBackground("launch-tab-group", tabGroupInfo);
+                sendToBackground("launch-tab-group", tabGroupInfo, (response) => {
+                    const { onRaiseToView } = this.props;
+
+                    if(onRaiseToView){
+                        onRaiseToView("refresh");
+                    }
+                });
             } else {
                 throw ValidatorError("etgm-module-103");
             } 
@@ -166,7 +171,7 @@ class ExistingTabGroupsModule extends Module {
                                 <p>{group.tabGroupDescription}</p>
                             </div>
                             <div className="list-item-block-footer">
-                                <button className="btn btn-tabeon-reverse d-inline-block" onClick={() => this.raiseToModal({ id: "etgmlaunchgroupsmodal", params: { groupId: group.groupId, groupCloseAll: group.tabGroupCloseAll || false, groupCloseInactiveTabs: group.tabGroupCloseInactiveTabs || false, groupDontAskAgain: group.tabGroupDontAskAgain || false}, action: this.launchTabGroup.bind(this) })}>Launch group</button>
+                                <button className="btn btn-tabeon-reverse d-inline-block" onClick={() => this.raiseToModal({ id: "etgmlaunchgroupsmodal", params: { windowAndTabs: group.windowAndTabs, groupName: group.tabGroupName, groupDescription: group.tabGroupDescription, groupId: group.groupId, groupCloseAll: group.tabGroupCloseAll || false, groupCloseInactiveTabs: group.tabGroupCloseInactiveTabs || false, groupDontAskAgain: group.tabGroupDontAskAgain || false}, action: this.launchTabGroup.bind(this) })}>Launch group</button>
                             </div>
                         </div>
                     );
