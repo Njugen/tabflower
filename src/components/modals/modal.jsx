@@ -185,18 +185,32 @@ class Modal extends Component {
         }
     }
 
-    scrollHandler = () => {
-        const modalDialogueBox = document.getElementById("tabeonModal").getElementsByClassName("modal-dialog")[0];
+    scrollHandler = (e) => {
+        const modalWrapper = document.getElementById("tabeonModal");
+        const modalDialogueBox = modalWrapper.getElementsByClassName("modal-dialog")[0];
 
-        if(window.scrollY >= 100){
-            modalDialogueBox.style.marginTop = -window.scrollY + "px";
-        } else {
-            modalDialogueBox.style.marginTop = -window.scrollY + 100 + "px";
-        }
+        modalDialogueBox.style.marginTop = -window.scrollY + 100 + modalDialogueBox.offsetHeight + "px";
+    }
+
+    handleOverflow = (bodyFlow, modalWrapperFlow) => {
+        /*
+            Correct the flow and scroll behaviour of the window when the modal is visible.
+            Call this function in the componentDidMount() hook, and again in the componentWillUnmount() hook
+            to adjust the flows to each situation.
+
+            - bodyFlow ("auto", "scroll" or "hidden")
+            - modalWrapperFlow ("auto", "scroll" or "hidden")
+        */
+
+       const modalWrapper = document.getElementById("tabeonModal");
+       document.body.style.overflow = bodyFlow;
+       modalWrapper.style.overflowY = modalWrapperFlow;
     }
 
     componentWillUnmount = () => {
         // The scroll event and the behaviour it follows are not needed when the user dismisses the modal. Therefore, it should be removed.
+        
+        this.handleOverflow("auto", "auto");
         document.removeEventListener("scroll", this.scrollHandler);
     }
 
@@ -212,6 +226,8 @@ class Modal extends Component {
         if(typeof this.verifyChildProps === "function"){
             this.verifyChildProps();
         }
+
+        this.handleOverflow("hidden", "auto");
 
         /*
             This event listener prevents the modal from following the user when he scrolls vertically. 
