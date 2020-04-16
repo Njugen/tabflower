@@ -40,26 +40,32 @@ const deleteUnresponsiveTabs = (options, successCallback, failCallback) => {
 
     const { windowsAndTabs } = options;
 
+    const evaluateTabs = (tabUrl, tabId) => {
+        fetch(tabUrl).then((response) => {
+            if (!response.ok) {
+                throw Error('Something went wrong');
+            }
+        })
+        .catch((error) => {
+            chrome.tabs.remove(
+                tabId
+            )
+        });
+    }
+
     windowsAndTabs.map(
         (window, i, windowsList) => {
-            
+            console.log(window);
             const mapped = window.tabs.map(
                 (tab) => {
                     
-                    if(tab.url !== "about:blank" && !tab.url.includes("chrome://newtab")){
-                        fetch(tab.url).then((response) => {
-                            if (!response.ok) {
-                                throw Error('Something went wrong');
-                            }
-                        })
-                        .catch((error) => {
-                            chrome.tabs.remove(
-                                tab.id
-                            )
-                        });
+                    if(!tab.pendingUrl && (tab.url !== "about:blank" && !tab.url.includes("chrome://newtab"))){
+                        evaluateTabs(tab.url, tab.id);
+                    } else if(tab.pendingUrl && (tab.pendingUrl !== "about:blank" && !tab.pendingUrl.includes("chrome://newtab"))){
+                        evaluateTabs(tab.pendingUrl, tab.id);
                     }
 
-                    if(tab.url === "about:blank" || tab.url.includes("chrome://newtab")){
+                    if(tab.url === "about:blank" || tab.url.includes("chrome://newtab") || (tab.pendingUrl && tab.pendingUrl.includes("chrome://newtab"))){
                         chrome.tabs.remove(
                             tab.id
                         )

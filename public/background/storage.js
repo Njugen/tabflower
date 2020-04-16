@@ -73,7 +73,9 @@ const saveTabsToStorage = (groupDetails, successCallback, failCallback) => {
 
 const launchTabGroup = (details, successCallback, failCallback) => {
     const requestedGroupId = details.groupId;
-    console.log(details);
+    const closeInactiveTabs = details.tabGroupCloseInactiveTabs || false;
+
+
     const openNewTabGroup = () => {
         chrome.storage.local.get(["tabGroups"], (data) => {
             const storedTabGroup = data.tabGroups.find((item) => requestedGroupId === item.groupId);
@@ -91,6 +93,16 @@ const launchTabGroup = (details, successCallback, failCallback) => {
 
                 chrome.windows.create({
                     url: urls
+                }, (createdWindow) => {
+                    console.log(closeInactiveTabs);
+                    if(closeInactiveTabs === true){
+                        const options = {
+                            windowsAndTabs: [createdWindow]
+                        }
+                        setTimeout(() => {
+                            deleteUnresponsiveTabs(options);
+                        }, 500);
+                    }
                 })
 
                 return null;
