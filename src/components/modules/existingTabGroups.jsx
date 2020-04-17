@@ -156,7 +156,7 @@ class ExistingTabGroupsModule extends Module {
         if(isPositiveNumber(tabGroups.length)){
             return tabGroups.map(
                 (group, i) => {
-                    console.log(group);
+                 
                     return (
                         <div className="list-item-block col-12 my-2 p-3" key={"tg-" + i}>
                             <div className="list-item-block-header mb-3">

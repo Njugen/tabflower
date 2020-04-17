@@ -14,7 +14,7 @@ import { PropTypes } from 'prop-types';
     The contents (the graphical render/user interface) of this class is empty. To use a modal with inserted contents, 
     create a child class inheriting from this component, then import it into src/App.js. The new class will inherit all 
     the basics written in Modal class, including its rendered import { ValidatorError } from './../utils/exceptionsAndHandler';
-user interface. Example:
+    user interface. Example:
 
     modalForAPurpose.jsx:
     class ModalForAPurpose extends Modal {
@@ -45,11 +45,13 @@ class Modal extends Component {
         name which represents the stored information.
 
         All UI related information (data passed to the state only for the purpose of re-rendering the component) should
-        be stored in the ui object. Like this:
+        be stored in the ui object. Similarly, any form field errors in the modal should be stored in the fieldErrors object. 
+        Like this:
 
         state = {
             typeOfInformation: {},
-            ui: { isHidden: false, ... }
+            ui: { isHidden: false, ... },
+            fieldErrors: { field1: "error", ... }
         }
     */
     state = {
@@ -62,28 +64,32 @@ class Modal extends Component {
         this.verifyProps();
     }
 
-    saveFieldErrorsToState = (data) => {
+    saveFieldErrorsToState = (errors) => {
         /*
             saveFieldErrorsToState()
+
+            Parameters:
+            - errors (object, containing the field errors)
 
             Save input field errors to component state. (for use in
             e.g. alert boxes or notifying the user based on the state variables alone) 
             
         */
         this.setState({
-            fieldErrors: data
+            fieldErrors: errors || {}
         })
     }
 
-    raiseToErrorOverlay = (data) => {
+    raiseToErrorOverlay = (err) => {
+
         /*
             Parameters: 
-            -   data (object, containing whatever data that we want the modal to processs. Mandatory)
+            -   err (object, containing whatever error (1 error) that we want the modal to processs. Mandatory)
 
-            Inform the App component to launch a modal (popup), by raising the data provided
-            in this function's parameter. The data parameter will travel through the following components:
+            Inform the App component to launch a modal (popup), by raising the error data provided
+            in this function's parameter. The parameter will travel through the following components:
 
-                Module (any module, this module) > View (any view: this view) > RouteList > App
+            This Modal > Module (any module, this module) > View (any view: this view) > RouteList > App
 
             All components in this chain will have access to the information raised.
         */
@@ -94,7 +100,7 @@ class Modal extends Component {
 
         setTimeout(() => {
                 if(typeof onRaiseToErrorOverlay === "function"){
-                    onRaiseToErrorOverlay(data);
+                    onRaiseToErrorOverlay(err);
                 }
             },
             1000
@@ -109,7 +115,7 @@ class Modal extends Component {
  
         try {
             const { isObject } = validator;
- 
+    
             if(isObject(this.modalRef) && isObject(this.modalRef.current)){
                 let modal = this.modalRef.current;
                 
@@ -186,6 +192,22 @@ class Modal extends Component {
     }
 
     scrollHandler = (e) => {
+        /*
+            scrollHandler(e)
+
+            Parameters:
+            - e (event object, passed to this function by the event caller. This parameter does not need to be used unless necessary).
+
+            This function acts as an event handler for the "scroll" event affecting the document object. 
+            Use this function in the following manner (preferably during component mount and unmount):
+
+            componentDidMount:
+            - document.addEventListener("scroll", this.scrollHandler);
+            
+            componentWillUnmount:
+            - document.removeEventListener("scroll", this.scrollHandler);
+        */
+
         const modalWrapper = document.getElementById("tabeonModal");
         const modalDialogueBox = modalWrapper.getElementsByClassName("modal-dialog")[0];
 
