@@ -5,6 +5,12 @@ import * as validator from './../../utils/inputValidators'
 import { PropTypes } from 'prop-types';
 
 class COTMRemoveTabModal extends Modal {
+    /*
+        verifyChildProps()
+
+        verifyChildProps is run automatically at mount. If necessary, 
+        verify data provided by props (this.props) using this function. 
+    */
     verifyChildProps = () => {
         const { isObject, isNumber, isString } = validator;
         const { tabInfo } = this.props.data.params;
@@ -22,7 +28,41 @@ class COTMRemoveTabModal extends Modal {
         }
     }
 
+    /*
+        childComponentDidMount()
 
+        Set tab info to modal state
+    */
+
+    childComponentDidMount = () => {
+        try {
+            const { isObject} = validator;
+            
+            const data = this.props.data.params.tabInfo;
+
+            if(isObject(data)){ 
+                this.setState(
+                    { data }
+                )
+            } else {
+                throw ValidatorError("COTMRemoveTabModal-102");
+            }
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+        }
+    }
+
+
+    /*
+        saveModalHandler()
+
+        Triggers when the user clicks the #modal-save button located in the modal's user interface. Once clicked
+        the information located in the modal's state will be passed on to the function bound by the caller function, before
+        being deleted.
+
+        Parameters:
+        - callback (function, mandatory. Triggers once the modal state has been cleared after being dismissed by the user)
+    */
     saveModalHandler = (callback) => {
         try {
             const { isFunction } = validator;
@@ -37,6 +77,12 @@ class COTMRemoveTabModal extends Modal {
         }
     }
 
+    /*
+        dismissModalHandler()
+
+        Triggers when the user clicks the #modal-dismiss button located in the modal's user interface. The modal's
+        state will be cleared.
+    */
     dismissModalHandler = () => {
         try{
             this.clearModalData();
@@ -45,37 +91,38 @@ class COTMRemoveTabModal extends Modal {
         }
     }
 
-    childComponentDidMount = () => {
-        const { isObject} = validator;
-        const data = this.props.data.params.tabInfo;
+    /*
+        renderModalBody()
 
-        if(isObject(data)){ 
-            this.setState(
-                { data }
-            )
-        } else {
-            throw ValidatorError("COTMRemoveTabModal-102");
-        }
-        
-    }
-
+        Render the body and the contents of this particular modal
+    */
     renderModalBody(){
-        const { title } = this.props.data.params.tabInfo;
+        try {
+            const { title } = this.props.data.params.tabInfo;
 
-        return (
-            <Fragment>
-                <p>
-                    You are about to close the tab <strong>{ title }</strong>. All ongoing activities will be interrupted and possibly lost.
-                </p>
-                <p>
-                    Are you sure you want to proceed?
-                </p>
-                <p className="small">
-                    You may reopen this tab through the browser's history feature (presuming you have it activated).
-                </p>
-            </Fragment>
-        );    
+            return (
+                <Fragment>
+                    <p>
+                        You are about to close the tab <strong>{ title }</strong>. All ongoing activities will be interrupted and possibly lost.
+                    </p>
+                    <p>
+                        Are you sure you want to proceed?
+                    </p>
+                    <p className="small">
+                        You may reopen this tab through the browser's history feature (presuming you have it activated).
+                    </p>
+                </Fragment>
+            );    
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+        }
     }
+
+    /*
+        renderModalHeadery()
+
+        Render the headline string of this modal
+    */
 
     renderModalHeader(){
         return "Close Tab";    
@@ -86,7 +133,7 @@ COTMRemoveTabModal.propTypes = {
     data: PropTypes.shape({
         params: PropTypes.shape({
             tabInfo: PropTypes.shape({
-                id: PropTypes.string.isRequired,
+                id: PropTypes.number.isRequired,
                 title: PropTypes.string.isRequired
             })
         })

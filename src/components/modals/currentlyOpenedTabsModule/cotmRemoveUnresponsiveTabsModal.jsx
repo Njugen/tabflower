@@ -8,6 +8,16 @@ import Modal from '../modal';
 class COTMRemoveUnresponsiveTabs extends Modal {
     // This modal has no child props
 
+    /*
+        saveModalHandler()
+
+        Triggers when the user clicks the #modal-save button located in the modal's user interface. Once clicked
+        the information located in the modal's state will be passed on to the function bound by the caller function, before
+        being deleted.
+
+        Parameters:
+        - callback (function, mandatory. Triggers once the modal state has been cleared after being dismissed by the user)
+    */
     saveModalHandler = (callback) => {
         try {
             const { isFunction } = validator;
@@ -22,6 +32,12 @@ class COTMRemoveUnresponsiveTabs extends Modal {
         }
     }
 
+    /*
+        dismissModalHandler()
+
+        Triggers when the user clicks the #modal-dismiss button located in the modal's user interface. The modal's
+        state will be cleared.
+    */
     dismissModalHandler = () => {
         try {
             this.clearModalData();
@@ -30,7 +46,13 @@ class COTMRemoveUnresponsiveTabs extends Modal {
         }
     }
 
+    /*
+        renderModalBody()
+
+        Render the body and the contents of this particular modal
+    */
     renderModalBody(){
+        
         return (
             <Fragment>
                 <p>Go through all opened tabs and remove them from the list</p>
@@ -39,6 +61,11 @@ class COTMRemoveUnresponsiveTabs extends Modal {
         );    
     }
 
+    /*
+        renderModalHeader()
+
+        Render the headline string of this modal
+    */
     renderModalHeader(){
         
         return "Close unresponsive tabs";    

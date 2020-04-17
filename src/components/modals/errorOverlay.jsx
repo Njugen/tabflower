@@ -48,7 +48,6 @@ class ErrorOverlay extends Component {
     render = () => {
         const {data, onDismiss} = this.props;
 
-        
         return(
             <div id="tabflower-error-overlay">
                 <div className="contents-wrapper p-3">

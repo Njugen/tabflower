@@ -128,7 +128,7 @@ export const ValidatorError = (code) => {
             break;    
         // COTMRemoveTabModal     
         case "COTMRemoveTabModal-101": 
-            message = "The targetted tab could not be identified since its unique identification number is missing or provided in wrong format. This might be caused if the tab information has been modified per request. Please, make sure the tab information has not been modified after being retrieved directly from the browser. As a result, the requested tab cannot be deleted at this time.";
+            message = "The targetted tab could not be identified since its unique identification number is missing or provided in wrong format. This might be caused if the tab information has been modified per request. Please, make sure the tab information has not been modified after being retrieved directly from the browser. As a result, the targetted tab cannot be deleted at this time.";
             break;  
         case "COTMRemoveTabModal-102": 
             message = "No information about the targetted tab could be retrieved, therefore the tab cannot be closed at this point.";
@@ -139,6 +139,14 @@ export const ValidatorError = (code) => {
         case "COTMRemoveTabModal-104": 
             message = "The title of the targetted tab is missing. As the title is missing, other information related to the targetted tab could be missing or incorrect as well. As a precaution, no tab will be deleted as the extension cannot guarantee that the correct tab is targetted.";
             break;  
+
+        // COTMRemoveWindowModal
+        case "COTMRemoveWindowModal-101": 
+            message = "The targetted window could not be identified since its unique identification number is missing or provided in wrong format. This might be caused if the window information has been modified per request. Please, make sure the window information has not been modified after being retrieved directly from the browser. As a result, the targetted window cannot be deleted at this time.";
+            break;   
+        case "COTMRemoveWindowModal-102": 
+            message = "No information about the targetted window could be retrieved, therefore the window cannot be closed at this point.";
+            break;        
         // COTMRemoveUnresponsiveTabs
         case "COTMRemoveUnresponsiveTabs-101":
             message = "The callback parameter is not a function.";

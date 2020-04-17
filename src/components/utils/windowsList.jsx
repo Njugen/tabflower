@@ -314,7 +314,7 @@ class WindowsList extends Component {
                                                     if(type === "existing-group" || type === "new-group"){
                                                         this.raiseDeleteWindowToModal(key, () => {});
                                                     } else {
-                                                        this.raiseToModal({id: "cotmremovewindowmodal", params: {}, windowInfo: window, action: this.closeWindow.bind(this)})
+                                                        this.raiseToModal({id: "cotmremovewindowmodal", params: { windowInfo: window }, action: this.closeWindow.bind(this)})
                                                     }
                                                 }}></button></li> }
                                             </ul>
