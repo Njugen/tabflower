@@ -1,7 +1,5 @@
 import React, { Fragment } from "react";
 import Modal from '../modal';
-import { sendToBackground } from './../../../services/webextension/APIBridge';
-import { PropTypes } from 'prop-types';
 
 import TBCheckBox from "../../utils/form/tbCheckbox";
 import { ValidatorError, ErrorHandler } from './../../utils/exceptionsAndHandler';

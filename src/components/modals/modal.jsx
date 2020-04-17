@@ -214,19 +214,21 @@ class Modal extends Component {
         modalDialogueBox.style.marginTop = -window.scrollY + 100 + modalDialogueBox.offsetHeight + "px";
     }
 
-    handleOverflow = (bodyFlow, modalWrapperFlow) => {
+    handleOverflow = (bodyOverflow, wrapperOverflow) => {
         /*
+            handleOverflow();
+
             Correct the flow and scroll behaviour of the window when the modal is visible.
             Call this function in the componentDidMount() hook, and again in the componentWillUnmount() hook
             to adjust the flows to each situation.
 
-            - bodyFlow ("auto", "scroll" or "hidden")
-            - modalWrapperFlow ("auto", "scroll" or "hidden")
+            - bodyOverflow ("auto", "scroll" or "hidden")
+            - wrapperOverflow ("auto", "scroll" or "hidden")
         */
 
        const modalWrapper = document.getElementById("tabeonModal");
-       document.body.style.overflow = bodyFlow;
-       modalWrapper.style.overflowY = modalWrapperFlow;
+       document.body.style.overflow = bodyOverflow;
+       modalWrapper.style.overflowY = wrapperOverflow;
     }
 
     componentWillUnmount = () => {
@@ -237,15 +239,23 @@ class Modal extends Component {
     }
 
     componentDidMount = () => {
-       
+       const { isFunction } = validator;
         
         /*
             When a modal is rendered into the DOM, wait 100ms before fading in.
             Apparently, the fade in does not work properly (resulting in immediate visibility of the component) without
             the timeout.
         */
+       
+        setTimeout(() => {
+            this.fadeIn();
+        }, 100);
 
-        if(typeof this.verifyChildProps === "function"){
+        /*
+            Verify props for each individual child modal, if that modal has any props and a verifyChildProps()
+            function to its disposal
+        */
+        if(isFunction(this.verifyChildProps)){
             this.verifyChildProps();
         }
 
@@ -257,11 +267,13 @@ class Modal extends Component {
 
         document.addEventListener("scroll", this.scrollHandler);
 
-        setTimeout(() => {
-            this.fadeIn();
-        }, 100)
 
-        if(this.childComponentDidMount){
+        
+        /*
+            Execute certain features belonging to each individual child modal, when mounting that modal and
+            if a childComponentDidMount() function is defined in that modal class.
+        */
+        if(isFunction(this.childComponentDidMount)){
             this.childComponentDidMount();
         }
         
@@ -274,7 +286,7 @@ class Modal extends Component {
 
             <div ref={this.modalRef} className="modal" id="tabeonModal">
         */
-         //JSON.parse({})
+      
         this.modalRef = createRef();
     }
 
@@ -300,10 +312,23 @@ class Modal extends Component {
             the modal.
 
             The point is to give the caller component the opportunity to execute its internal functions based on what
-            the user does in the modal. This is useful if the user needs to confirm e.g. data saving, money transaction, identity verification etc.
+            the user does in the modal. This is useful if the user needs to confirm e.g. data saving, money transaction, identity verification etc.        
 
             Parameters:
             - data (optional, any datatype: data passed from the modal to the caller component)
+        
+
+            [Example]:
+            
+            In the /src/components/modules/existingTabGroups.jsx module, we launch a modal by running this
+        
+            - this.raiseToModal({ 
+                id: "etgmremovegroupsmodal", 
+                params: {groupId: group.groupId, groupName: group.tabGroupName}, 
+                action: this.removeTabGroups.bind(this) })}
+            
+            Where the function stored in the "action" key gets called whenever the user clicks a button with the id "modal-save" located
+            in the launched modal.
         */
 
         try {
@@ -336,7 +361,7 @@ class Modal extends Component {
 
             E.g. 
             state = {
-                ui: { key1: null }
+                ui: { key1: value1 }
                 dataOnHold: {key2: null}
                 AnotherArea: {key3: null}
             }
@@ -435,10 +460,10 @@ class Modal extends Component {
 
             Main methods/functions to be aware of: 
 
-            - renderModalHeadline()
-            - renderModalContents()
+            - renderModalHeader()
+            - renderModalBody()
             - dismissModalHandler()
-            - saveDataHandler()
+            - saveModalHandler()
 
             These functions add contents and functionalities to the modal's user interface. 
             Add these to the Modal child classes to give them necessary features.

@@ -2,9 +2,20 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 
 class ErrorOverlay extends Component {
+    /*
+        renderErrors()
+
+        Renders a div wrapper for each element found in the errors parameter. These divs inform the user
+        about the errors that were caught and passed to this overlay.
+
+        Parameters:
+        - errors (array of errors represented as objects, mandatory)
+
+
+    */
     renderErrors = (errors) => {
         return errors.map((error, index) => {
-                return <div className="row error-list d-flex justify-content-center pt-3 pb-3">
+                return <div className="row error-list d-flex justify-content-center pt-3 pb-3" key={"e-" + index}>
                     
                     <div className="col-10">
                     
