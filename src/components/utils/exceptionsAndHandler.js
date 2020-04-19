@@ -97,6 +97,9 @@ export const ValidatorError = (code) => {
         case "ETGMCreateNewGroupModal-116":
             message = "The \"groupName\" parameter in this.props.data.params needs to be a text string if given. If a string is not available, remove \"groupName\" from props. As a result of this error, tab groups cannot be added nor edited at this time.";
             break;   
+        case "ETGMCreateNewGroupModal-117":
+            message = "The \"groupDescription\" parameter in this.props.data.params needs to be a text string if given. If a string is not available, remove \"groupDescription\" from props. As a result of this error, tab groups cannot be added nor edited at this time.";
+            break;  
         case "ETGMCreateNewGroupModal-118":
             message = "The \"groupCloseAll\" parameter in this.props.data.params needs to be a boolean value (true or false) if given. If such a value is not available, remove \"groupCloseAll\" from props. As a result of this error, tab groups cannot be added nor edited at this time.";
             break;       
@@ -108,7 +111,10 @@ export const ValidatorError = (code) => {
             break;       
         case "ETGMCreateNewGroupModal-121":
             message = "The predefined tabs and arrays were provided to this modal in an incorrect format. As a result, no tab groups can be created at this moment.";
-            break;                         
+            break;      
+        case "ETGMCreateNewGroupModal-122":
+            message = "The \"groupCloseInactiveTabs\" parameter in this.props.data.params needs to be a boolean value (true or false) if given. If such a value is not available, remove \"groupCloseInactiveTabs\" from props. As a result of this error, tab groups cannot be added nor edited at this time.";
+            break;                               
         // ETGMRemoveGroupsModal
         case "ETGMRemoveGroupsModal-101":
             message = "The callback parameter is not a function.";
@@ -125,7 +131,22 @@ export const ValidatorError = (code) => {
             break;        
         case "ETGMLaunchGroupsModal-102":
             message = "A group id needs to be provided as a text string in order to identify which tab group to launch. As no tab group id has been provided, nothing will be launched by this request.";
+            break;   
+        case "ETGMLaunchGroupsModal-103":
+            message = "The \"groupName\" parameter in this.props.data.params needs to be a text string if given. As a result of this error, the requested tab group cannot be launched at this time.";
+            break;   
+        case "ETGMLaunchGroupsModal-104":
+            message = "The \"groupDescription\" parameter in this.props.data.params needs to be a text string if given. As a result of this error, the requested tab group cannot be launched at this time.";
+            break;     
+        case "ETGMLaunchGroupsModal-105":
+            message = "The \"groupCloseAll\" parameter in this.props.data.params needs to be a boolean value (true or false) if given. As a result of this error, the requested tab group cannot be launched at this time.";
+            break;  
+        case "ETGMLaunchGroupsModal-106":
+            message = "The \"groupCloseInactiveTabs\" parameter in this.props.data.params needs to be a boolean value (true or false) if given. As a result of this error, the requested tab group cannot be launched at this time.";
             break;    
+        case "ETGMLaunchGroupsModal-107":
+            message = "The \"windowAndTabs\" parameter needs to be an object in this.props.data.params, containing information about all windows and tabs in a tab group. If there is no such information available, this parameter should be an empty object. As a result of this error, the requested tab group cannot be launched at this time.";
+            break;  
         // COTMRemoveTabModal     
         case "COTMRemoveTabModal-101": 
             message = "The targetted tab could not be identified since its unique identification number is missing or provided in wrong format. This might be caused if the tab information has been modified per request. Please, make sure the tab information has not been modified after being retrieved directly from the browser. As a result, the targetted tab cannot be deleted at this time.";

@@ -9,13 +9,28 @@ import { ValidatorError, ErrorHandler } from './../../utils/exceptionsAndHandler
 import * as validator from './../../utils/inputValidators'
 
 class ETGMCreateNewGroupModal extends Modal {
+    /*
+        verifyChildProps()
 
+        verifyChildProps is run automatically at mount. If necessary, 
+        verify data provided by props (this.props) using this function 
+        (data which is used exclusively by this modal component, and not used in common 
+        by other modal components). 
+    */
     verifyChildProps = () => {
         /*
             Verify the this.props.data.params object
         */
         const { isBoolean, isString, isUndefined, isArray } = validator;
-        const { windowAndTabs, groupName, groupCloseAll, groupDescription, type, groupId } = this.props.data.params;
+        const { 
+            windowAndTabs, 
+            groupName, 
+            groupCloseAll, 
+            groupCloseInactiveTabs, 
+            groupDescription, 
+            type, 
+            groupId 
+        } = this.props.data.params;
       
         /*
             type (string, mandatory)
@@ -74,6 +89,16 @@ class ETGMCreateNewGroupModal extends Modal {
         */
         if(!isBoolean(groupCloseAll) && !isUndefined(groupCloseAll)){
             throw ValidatorError("ETGMCreateNewGroupModal-118");
+        }
+
+        /*
+            groupCloseInactiveTabs (boolean, optional)
+
+            This parameter is optional and if given, should always be a boolean (either true or false)
+        */
+
+        if(!isBoolean(groupCloseInactiveTabs) && !isUndefined(groupCloseInactiveTabs)){
+            throw ValidatorError("ETGMCreateNewGroupModal-122");
         }
 
         /* 

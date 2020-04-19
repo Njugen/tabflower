@@ -9,7 +9,9 @@ class COTMRemoveTabModal extends Modal {
         verifyChildProps()
 
         verifyChildProps is run automatically at mount. If necessary, 
-        verify data provided by props (this.props) using this function. 
+        verify data provided by props (this.props) using this function 
+        (data which is used exclusively by this modal component, and not used in common 
+        by other modal components). 
     */
     verifyChildProps = () => {
         const { isObject, isNumber, isString } = validator;
