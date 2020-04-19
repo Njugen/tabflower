@@ -1,8 +1,8 @@
 import React, { Fragment } from "react";
 import Modal from '../modal';
 import { PropTypes } from 'prop-types';
-import { ValidatorError, ErrorHandler } from './../../utils/exceptionsAndHandler';
-import * as validator from './../../utils/inputValidators'
+import { ValidatorError, ErrorHandler } from '../../utils/exceptionsAndHandler';
+import * as validator from '../../utils/inputValidators'
 
 class ETGMRemoveGroupsModal extends Modal {
     verifyChildProps = () => {
@@ -26,6 +26,16 @@ class ETGMRemoveGroupsModal extends Modal {
        
     }
 
+    /*
+        saveModalHandler()
+
+        Triggers when the user clicks the #modal-save button located in the modal's user interface. Once clicked
+        the information located in the modal's state will be passed on to the function bound by the caller function, before
+        being deleted.
+
+        Parameters:
+        - callback (function, mandatory. Triggers once the modal state has been cleared after being dismissed by the user)
+    */
     saveModalHandler = (callback) => {
         try {
             const { isFunction } = validator;
@@ -40,6 +50,12 @@ class ETGMRemoveGroupsModal extends Modal {
         }
     }
 
+    /*
+        dismissModalHandler()
+
+        Triggers when the user clicks the #modal-dismiss button located in the modal's user interface. The modal's
+        state will be cleared.
+    */
     dismissModalHandler = () => {
         try{
             this.clearModalData();

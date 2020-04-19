@@ -2,8 +2,8 @@ import React, { Fragment } from "react";
 import Modal from '../modal';
 
 import TBCheckBox from "../../utils/form/tbCheckbox";
-import { ValidatorError, ErrorHandler } from './../../utils/exceptionsAndHandler';
-import * as validator from './../../utils/inputValidators'
+import { ValidatorError, ErrorHandler } from '../../utils/exceptionsAndHandler';
+import * as validator from '../../utils/inputValidators'
 
 class ETGMLaunchGroupsModal extends Modal {
     /*
@@ -130,16 +130,32 @@ class ETGMLaunchGroupsModal extends Modal {
         }
     }
 
-    manyTabsDetected = (numberOfWindows, numberOfTabs) => {
+    /*
+        renderManyTabsDetected()
+
+        Render a warning message to the user, if the number of windows and/or tabs to be opened exceeds the recommended number.
+        The recommended number is up to the app developer to decide. 
+
+        Parameters:
+        - numberOfWindows (optional, number)
+        - numberOfTabs (optional, number)
+    */
+    renderManyTabsDetected = (numberOfWindows, numberOfTabs) => {
         return (
             <p>
-                Warning: You are about to launch a group consisting of 4 windows and 120 tabs. This might stress your computer down in the long run
+                Warning: You are about to launch a group consisting of {numberOfWindows || "undefined number of "} windows and {numberOfTabs || "undefined number of "} tabs. This might stress your computer down in the long run
             </p>
         );
     }
 
-    launchOptions = () => {
-        console.log(this.props.data.params);
+    /*
+        renderLaunchOptions()
+
+        Render a list of checkbox elements, offering the user the possibility to change 
+        the behaviour of the launching tab group.
+    */
+    renderLaunchOptions = () => {
+     
         const {
             groupCloseAll,
             groupCloseInactiveTabs,
@@ -158,8 +174,8 @@ class ETGMLaunchGroupsModal extends Modal {
     renderModalBody(){
         return (
             <Fragment>
-                {this.manyTabsDetected()}
-                {this.launchOptions()}
+                {this.renderManyTabsDetected()}
+                {this.renderLaunchOptions()}
                 
             </Fragment>
         );    

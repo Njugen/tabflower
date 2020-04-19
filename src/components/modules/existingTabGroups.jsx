@@ -163,7 +163,7 @@ class ExistingTabGroupsModule extends Module {
                                 <h6 className="list-item-block-headline float-left pr-2">{group.tabGroupName}</h6>
                                 <div className="list-item-block-options float-right">
                                     <button className="fas fa-cog options-button" onClick={() => this.raiseToModal({ id: "etgmcreateoreditgroupmodal", params: { windowAndTabs: group.windowAndTabs, groupName: group.tabGroupName, groupCloseAll: group.tabGroupCloseAll, groupCloseInactiveTabs: group.tabGroupCloseInactiveTabs, groupDescription: group.tabGroupDescription, groupId: group.groupId, type: "existing-group"}, action: this.createOrEditTabGroup.bind(this) })}></button>
-                                    <button className="fas fa-times options-button" onClick={() => this.raiseToModal({ id: "etgmremovegroupsmodal", params: {groupId: group.groupId, groupName: group.tabGroupName}, action: this.removeTabGroups.bind(this) })}></button>
+                                    <button className="fas fa-times options-button" onClick={() => this.raiseToModal({ id: "etgmremovegroupmodal", params: {groupId: group.groupId, groupName: group.tabGroupName}, action: this.removeTabGroups.bind(this) })}></button>
                                 </div>
                                 <div className="clearfix"></div>
                             </div>
@@ -171,7 +171,7 @@ class ExistingTabGroupsModule extends Module {
                                 <p>{group.tabGroupDescription}</p>
                             </div>
                             <div className="list-item-block-footer">
-                                <button className="btn btn-tabeon-reverse d-inline-block" onClick={() => this.raiseToModal({ id: "etgmlaunchgroupsmodal", params: { windowAndTabs: group.windowAndTabs, groupName: group.tabGroupName, groupDescription: group.tabGroupDescription, groupId: group.groupId, groupCloseAll: group.tabGroupCloseAll || false, groupCloseInactiveTabs: group.tabGroupCloseInactiveTabs || false, groupDontAskAgain: group.tabGroupDontAskAgain || false}, action: this.launchTabGroup.bind(this) })}>Launch group</button>
+                                <button className="btn btn-tabeon-reverse d-inline-block" onClick={() => this.raiseToModal({ id: "etgmlaunchgroupmodal", params: { windowAndTabs: group.windowAndTabs, groupName: group.tabGroupName, groupDescription: group.tabGroupDescription, groupId: group.groupId, groupCloseAll: group.tabGroupCloseAll || false, groupCloseInactiveTabs: group.tabGroupCloseInactiveTabs || false, groupDontAskAgain: group.tabGroupDontAskAgain || false}, action: this.launchTabGroup.bind(this) })}>Launch group</button>
                             </div>
                         </div>
                     );

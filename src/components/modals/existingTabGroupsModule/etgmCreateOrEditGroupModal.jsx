@@ -1,12 +1,12 @@
 import React, { Fragment } from "react";
 import Modal from '../modal';
-import WindowsList from './../../utils/windowsList';
+import WindowsList from '../../utils/windowsList';
 import TBCheckBox from "../../utils/form/tbCheckbox";
-import TBTextInput from './../../utils/form/tbTextInput';
-import TBTextArea from './../../utils/form/tbTextArea';
+import TBTextInput from '../../utils/form/tbTextInput';
+import TBTextArea from '../../utils/form/tbTextArea';
 import { PropTypes } from 'prop-types';
-import { ValidatorError, ErrorHandler } from './../../utils/exceptionsAndHandler';
-import * as validator from './../../utils/inputValidators'
+import { ValidatorError, ErrorHandler } from '../../utils/exceptionsAndHandler';
+import * as validator from '../../utils/inputValidators'
 
 class ETGMCreateNewGroupModal extends Modal {
     /*
@@ -125,6 +125,7 @@ class ETGMCreateNewGroupModal extends Modal {
     */
     saveModalHandler = (callback) => {
         try {
+            console.log("saveModalHandler triggered");
             const { isFunction } = validator;
             
             if(isFunction(callback)){
@@ -150,7 +151,7 @@ class ETGMCreateNewGroupModal extends Modal {
     */
     dismissModalHandler = () => {
         try {
-            this.clearModalData();
+           this.clearModalData();
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay);
         }
@@ -373,31 +374,35 @@ class ETGMCreateNewGroupModal extends Modal {
                         windows = [];
                     }
 
+                    const stringifiedWindows = JSON.stringify(windows);
+                    let parsedWindows = JSON.parse(stringifiedWindows);
 
                     this.loadUrl(
                         inputUrl,
                         (responseText) => {
                             const parsedResponse = (new window.DOMParser()).parseFromString(responseText, "text/html");
                             
-                            windows[index].tabs.push({
+                            parsedWindows[index].tabs.push({
                               
                                     title: parsedResponse.title,
                                     favIconUrl: inputUrl + "/favicon.ico",
                                     url: inputUrl
                             
                             })
-                            this.saveToState("windowAndTabs", windows, "tabGroupDetails")
+    
+                            this.saveToState("windowAndTabs", parsedWindows, "tabGroupDetails")
                         },
                         (err) => {
                             
-                            windows[index].tabs.push({
+                            parsedWindows[index].tabs.push({
            
                                     title: inputUrl,
                                     favIconUrl: inputUrl + "/favicon.ico",
                                     url: inputUrl
                          
-                            });
-                            this.saveToState("windowAndTabs", windows, "tabGroupDetails");
+                            }); 
+             
+                            this.saveToState("windowAndTabs", parsedWindows, "tabGroupDetails");
                         }
                     )
                  
