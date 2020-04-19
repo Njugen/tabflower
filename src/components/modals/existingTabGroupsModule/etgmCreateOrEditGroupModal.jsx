@@ -88,6 +88,16 @@ class ETGMCreateNewGroupModal extends Modal {
         }
     }
 
+    /*
+        saveModalHandler()
+
+        Triggers when the user clicks the #modal-save button located in the modal's user interface. Once clicked
+        the information located in the modal's state will be passed on to the function bound by the caller function, before
+        being deleted.
+
+        Parameters:
+        - callback (function, mandatory. Triggers once the modal state has been cleared after being dismissed by the user)
+    */
     saveModalHandler = (callback) => {
         try {
             const { isFunction } = validator;
@@ -107,6 +117,12 @@ class ETGMCreateNewGroupModal extends Modal {
         }
     }
 
+    /*
+        dismissModalHandler()
+
+        Triggers when the user clicks the #modal-dismiss button located in the modal's user interface. The modal's
+        state will be cleared.
+    */
     dismissModalHandler = () => {
         try {
             this.clearModalData();
@@ -115,6 +131,15 @@ class ETGMCreateNewGroupModal extends Modal {
         }
     }
 
+    /*
+        validateFields()
+
+        Check through all form fields and windows + tabs of this modal form. This function runs the success() parameter
+        if no errors are detected in the fields or in the listed windows/tabs.
+
+        Parameters:
+        - success (function, mandatory. Gets called when no error(s) are thrown by the validateFields() function)
+    */
     validateFields = (success) => {
        try {
             const { tabGroupName, tabGroupDescription, windowAndTabs } = this.state.tabGroupDetails;
@@ -152,6 +177,15 @@ class ETGMCreateNewGroupModal extends Modal {
         }
     }
 
+    /*
+        setGroupId()
+
+        Return the input value as group id, if the input is a string. Otherwise if an id does not exist, 
+        create a brand new string and use THAT as group id.
+
+        Parameters:
+        - id (string, optional. An existing string, if such exists)
+    */
     setGroupId = (id) => {
         try {
             const { isString, isUndefined } = validator;
@@ -179,6 +213,16 @@ class ETGMCreateNewGroupModal extends Modal {
         this.saveToState("groupId", this.setGroupId(this.props.data.params.groupId), "tabGroupDetails");
     } 
 
+    /*
+        loadUrl()
+
+        Load a url, and run one of two available callback functions depending on the result
+
+        Parameters:
+        - url (string, mandatory)
+        - success (callback function, mandatory. Run when the url response is ok)
+        - fail (callback function, mandatory. Run when the url response is not ok)
+    */
     loadUrl = (url, success, fail) => {
         try {
             const { isString, isFunction } = validator;
@@ -214,6 +258,18 @@ class ETGMCreateNewGroupModal extends Modal {
         }
     }
 
+    /*
+        addNewWindow()
+
+        Attempt to add a new window to this tab group, by checking the response of the url. If the response
+        is positive, a new window with this url will be added. Otherwise, do something else... 
+
+        (NOTE: right now, a new window will be added either way... this should be changed later or at least the user should
+            be given the opportunity to change it)
+
+        Parameters:
+        - inputUrl (string, mandatory) - URL of the to be added
+    */
     addNewWindow = (inputUrl) => {
         try {
             const { isString } = validator;
@@ -264,6 +320,19 @@ class ETGMCreateNewGroupModal extends Modal {
         }
     }
 
+    /*
+        addNewTab()
+
+        Attempt to add a new tab to this window, by checking the response of the url. If the response
+        is positive, a new tab with this url will be added. Otherwise, do something else... 
+
+        (NOTE: right now, a new tab will be added to the selected window either way... this should be changed later or at least the user should
+            be given the opportunity to change it)
+
+        Parameters:
+        - inputUrl (string, mandatory) - URL of the to be added
+        - index (number, mandatory) - map id of the targetted window (the window to which the new tab should be added)
+    */
     addNewTab = (inputUrl, index) => {
         try {
             const { isString, isAtLeastZero } = validator;
@@ -318,6 +387,15 @@ class ETGMCreateNewGroupModal extends Modal {
         }
     }
 
+    /*
+        deleteTab()
+
+        Delete a selected tab from the tab group by targetting the window where it is located
+
+        Parameters:
+        - windowIndex (number, mandatory) - The map id of the targetted window
+        - tabIndex (number, mandatory) - The map id of the targetted tab (the tab to be deleted)
+    */
     deleteTab = (windowIndex, tabIndex) => {
         
         try {
@@ -350,6 +428,14 @@ class ETGMCreateNewGroupModal extends Modal {
         
     }
 
+    /*
+        deleteTab()
+
+        Delete a selected window from the tab group by targetting it by id.
+
+        Parameters:
+        - windowIndex (number, mandatory) - The map id of the targetted window (the window to delete)
+    */
     deleteWindow = (windowIndex) => {
         try {
             const { isAtLeastZero } = validator;
@@ -370,6 +456,19 @@ class ETGMCreateNewGroupModal extends Modal {
         }
     }
 
+    /*
+        renderWindowsAndTabsSection()
+
+        Render a list of windows and tabs available in the windowAndTabs parameter.
+
+        Parameters:
+        - windowAndTabs (array of window objects, mandatory): contains a collection of windows retrieved from the browser API
+        - type (string, mandatory), can be either one of the following values. This parameter decides what feature the windowlist should offer:
+            - currently-opened
+            - existing-group
+            - new-group
+        - warning
+    */
     renderWindowsAndTabsSection = (windowAndTabs, type, warning) => {
         /* 
            types:
