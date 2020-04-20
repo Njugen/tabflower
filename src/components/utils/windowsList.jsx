@@ -248,7 +248,7 @@ class WindowsList extends Component {
 
     addNewTab = (containerId) => {
         try {
-            const { isString } = validator;
+            const { isString, isBoolean } = validator;
 
             if(isString(containerId)){
                 let newTabInContainerIds = this.state.newTabInContainerIds;
@@ -261,14 +261,25 @@ class WindowsList extends Component {
                 }
 
                 newTabInContainerIds.push(containerId);
-
+                
                 this.setState(
                     {
                         newTabInContainerIds
                     }
                 );
             } else {
-                throw ValidatorError("windowsList-110");
+                if(isBoolean(containerId)){
+                    const newTabInContainerIds = containerId;
+
+                    this.setState(
+                        {
+                            newTabInContainerIds
+                        }
+                    );
+                } else {
+                    throw ValidatorError("windowsList-110");
+                }
+                
             }
         } catch(err){
             ErrorHandler(err, this.raiseToErrorOverlay); 
@@ -279,7 +290,7 @@ class WindowsList extends Component {
         try {
             const { isString } = validator;
             
-            if(!isString(containerId)){
+            if(isString(containerId)){
                 let newTabInContainerIds = this.state.newTabInContainerIds;
                 
                 if(newTabInContainerIds !== false){
@@ -326,10 +337,7 @@ class WindowsList extends Component {
     }
 
     handleAddNewTabInputChange = (id, value) => {
-        
-        const newTabURL = value;
-        this.setState({ newTabURL });
-        
+
         try {
             const { isString } = validator;
 

@@ -376,7 +376,7 @@ export const ValidatorError = (code) => {
             message = "The parameter \"boolInput\" required by the addNewWindow() function needs to be a boolean value. The request to add a new window to the list was denied.";     
             break;          
         case "windowsList-110":
-            message = "The parameter \"containerId\" required by the addNewTab() function needs to be a string value representing the tab list's container. The request to add a new tab to the window was denied.";     
+            message = "The parameter \"containerId\" required by the addNewTab() function needs to be a string value representing the tab list's container, or a boolean value set to false. The request to add a new tab to the window was denied.";     
             break;   
         case "windowsList-111":
             message = "The parameter \"containerId\" required by the cancelNewTab() function needs to be a string value representing the tab list's container. The request to cancel the new tab was successful, but the handling itself is incorrect.";     
