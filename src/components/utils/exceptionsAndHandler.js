@@ -377,7 +377,22 @@ export const ValidatorError = (code) => {
             break;          
         case "windowsList-110":
             message = "The parameter \"containerId\" required by the addNewTab() function needs to be a string value representing the tab list's container. The request to add a new tab to the window was denied.";     
-            break;                                                                                                                  
+            break;   
+        case "windowsList-111":
+            message = "The parameter \"containerId\" required by the cancelNewTab() function needs to be a string value representing the tab list's container. The request to cancel the new tab was successful, but the handling itself is incorrect.";     
+            break;   
+        case "windowsList-112":
+            message = "The text you typed into the textbox was not processed correctly, because the textbox's id is either missing or not a string.";     
+            break;      
+        case "windowsList-113":
+            message = "The text you typed into the textbox was not processed correctly, because it was not interpreted as a text string.";     
+            break;       
+        case "windowsList-114":
+            message = "The text you typed into the textbox was not processed correctly, because the textbox's id is either missing or not a string.";     
+            break;      
+        case "windowsList-115":
+            message = "The text you typed into the textbox was not processed correctly, because it was not interpreted as a text string.";     
+            break;                                                                                                                       
         default:
             message = "An Unknown Error has occured.";
     }

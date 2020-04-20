@@ -146,7 +146,7 @@ class WindowsList extends Component {
            
             for(let i = 0; i < tabListItems.length; i++){
                 const isChildOfTabListing = tabListItems[i].parentNode.className.includes("tab-listing");
-                
+
                 if(isChildOfTabListing){
                     if(tabListItems[i].classList.contains("col-3")){
                         tabListItems[i].className = "col-12";
@@ -276,28 +276,52 @@ class WindowsList extends Component {
     }
 
     cancelNewTab = (containerId) => {
-        let newTabInContainerIds = this.state.newTabInContainerIds;
+        try {
+            const { isString } = validator;
+            
+            if(!isString(containerId)){
+                let newTabInContainerIds = this.state.newTabInContainerIds;
+                
+                if(newTabInContainerIds !== false){
+                    if(containerId === "all"){
+                        newTabInContainerIds = [];
+                    } else {
+                        const index = newTabInContainerIds.findIndex((item) => item === containerId);
+                        newTabInContainerIds.splice(index, 1);
+                    }
 
-        if(newTabInContainerIds !== false){
-            if(containerId === "all"){
-                newTabInContainerIds = [];
-            } else {
-                const index = newTabInContainerIds.findIndex((item) => item === containerId);
-                newTabInContainerIds.splice(index, 1);
-            }
-
-            this.setState(
-                {
-                    newTabInContainerIds
+                    this.setState(
+                        {
+                            newTabInContainerIds
+                        }
+                    );
                 }
-            );
+            } else {
+                throw ValidatorError("windowsList-111");
+            }
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
     handleAddNewWindowInputChange = (id, value) => {
-        
-        const newWindowURL = value;
-        this.setState({ newWindowURL });
+        try {
+            const { isString } = validator;
+
+            if(isString(id)){
+                if(isString(value)){
+                    const newWindowURL = value;
+                    this.setState({ newWindowURL });
+                } else {
+                    throw ValidatorError("windowsList-113");
+                }
+            } else {
+                throw ValidatorError("windowsList-112");
+            }
+                
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+        }
            
     }
 
@@ -306,6 +330,23 @@ class WindowsList extends Component {
         const newTabURL = value;
         this.setState({ newTabURL });
         
+        try {
+            const { isString } = validator;
+
+            if(isString(id)){
+                if(isString(value)){
+                    const newTabURL = value;
+                    this.setState({ newTabURL });
+                } else {
+                    throw ValidatorError("windowsList-115");
+                }
+            } else {
+                throw ValidatorError("windowsList-114");
+            }
+                
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay);
+        }
     }
 
     raiseNewWindowToModal = (url) => {
