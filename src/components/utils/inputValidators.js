@@ -239,17 +239,17 @@ export const isFunction = (input) => {
 }
 
 /*
-        isBoolean()
+    isBoolean()
 
-        Check wether the input is a boolean or not
+    Check wether the input is a boolean or not
 
-        Params:
-        - input (can be anything)
+    Params:
+    - input (can be anything)
 
-        Returns:
-        - true, if the input is a boolean
-        - false, if the input is not a boolean
-    */
+    Returns:
+    - true, if the input is a boolean
+    - false, if the input is not a boolean
+*/
 
 export const isBoolean = (input) => {
     if(typeof input === "boolean"){
@@ -258,6 +258,19 @@ export const isBoolean = (input) => {
         return false;
     }
 }
+
+/*
+    isUndefined()
+
+    Check wether the input is undefined or not
+
+    Params:
+    - input (can be anything)
+
+    Returns:
+    - true, if the input is undefined
+    - false, if the input is not undefined
+*/
 
 export const isUndefined = (input) => {
     if(typeof input === "undefined"){

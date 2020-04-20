@@ -196,6 +196,7 @@ class CurrentlyOpenedTabsModule extends Module {
                     <WindowsList 
                         windows={this.state.moduleData.openedWindowsAndTabs} 
                         onRaiseToModal={(data) => this.raiseToModal(data)}
+                        onRaiseToErrorOverlay={(data) => this.raiseToErrorOverlay(data)}
                         canCloseItems={true}
                         initialShowTabs={true}
                         initialTabStyle="horizontal"

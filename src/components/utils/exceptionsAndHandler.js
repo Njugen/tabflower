@@ -1,3 +1,19 @@
+/*
+    ValidatorError()
+
+    A function returning an object meant to be used for information purposes in the catch-block of a try-catch sequence.
+    Throw a ValidatorError() when a necessary if-statement does not comply AND if something needs to be done about it.
+
+    Parameters:
+    - code (string, mandatory): A string representing the code of the error occured
+
+    Returns:
+    {
+        name: "ValidatorError", (String, represents the type of error)
+        message: message, (String, An error message to show the user)
+        code: code (String, represents the error. Can be used to find the location of where the error occured)
+    }
+*/
 export const ValidatorError = (code) => {
     let message;
 
@@ -330,7 +346,38 @@ export const ValidatorError = (code) => {
         // views/settings.jsx
         case "settings-view-101":
             message = "An error has occured when attempting to reload the user interface. However, the requested data changes have been made successfully. Please, reload this page manually to see these changes.";
-            break;                                                                                                     
+            break;        
+        // utils/windowsList.jsx 
+        case "windowsList-101":
+            message = "The window element id is not provided to the toggling function as a string. As a result the requested window is unidentified, the visibility of its tab list can therefore not be toggled";     
+            break;     
+        case "windowsList-102":
+            message = "The \"forceVisible\" parameter, if provided to the toggling function, needs to be a boolean value (true or false). If no such value can be provided, please remove it from the function call.";     
+            break;      
+        case "windowsList-103":
+            message = "The event object was either not provided nor was not provided in the correct format to the toggling function. The UI style of the tab list can therefore not be changed.";     
+            break;   
+        case "windowsList-104":
+            message = "The \"windowId\" parameter was not provided to the toggling function. As a result, the requested window cannot be identified, the style of its tab list can therefore not be changed.";     
+            break;   
+        case "windowsList-105":
+            message = "The information (including id etc...) about the targetted window is missing or not provided correctly. As a result, the window cannot be closed at the moment";     
+            break; 
+        case "windowsList-106":
+            message = "The id of the targetted window is missing or not provided as an integer. As a result, the window cannot be closed at the moment";     
+            break;    
+        case "windowsList-107":
+            message = "The information (including id etc...) about the targetted tab is missing or not provided correctly. As a result, the tab cannot be closed at the moment";     
+            break;           
+        case "windowsList-108":
+            message = "The id of the targetted tab is missing or not provided as an integer. As a result, the tab cannot be closed at the moment";     
+            break;
+        case "windowsList-109":
+            message = "The parameter \"boolInput\" required by the addNewWindow() function needs to be a boolean value. The request to add a new window to the list was denied.";     
+            break;          
+        case "windowsList-110":
+            message = "The parameter \"containerId\" required by the addNewTab() function needs to be a string value representing the tab list's container. The request to add a new tab to the window was denied.";     
+            break;                                                                                                                  
         default:
             message = "An Unknown Error has occured.";
     }

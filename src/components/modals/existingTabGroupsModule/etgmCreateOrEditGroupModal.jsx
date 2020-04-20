@@ -547,6 +547,7 @@ class ETGMCreateNewGroupModal extends Modal {
                             onAddNewTab={(data, index) => this.addNewTab(data, index)}
                             onDeleteTab={(windowIndex, tabIndex) => this.deleteTab(windowIndex, tabIndex)}
                             onDeleteWindow={(windowIndex) => this.deleteWindow(windowIndex)}
+                            onRaiseToErrorOverlay={(data) => this.raiseToErrorOverlay(data)}
                             canCloseItems={type === "existing-group" || type === "new-group" ? true : false}
                             initialShowTabs={false}
                             initialTabStyle="vertical"

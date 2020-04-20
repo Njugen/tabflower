@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 
 class FullWidthLoadbar extends Component {
+    /*
+        Contains all default settings for this component. Use this to reset the component state
+        before increasing the width of the filler.
+    */
     origin = {
         fillerWidth: 0,
         loadbarIsFilled: false,
@@ -13,10 +17,18 @@ class FullWidthLoadbar extends Component {
         ...this.origin
     }
 
+    /*
+        Show the loading/filler animation once the component gets mounted
+    */
     componentDidMount = () => {
         this.increaseFillerWidth();
     }
     
+    /*
+        Show the loading/filler animation when a new (or updated) refreshFactor is passed to this component
+        as a prop. This generally happens at each state update of the refreshFactor variable in the parent component 
+        (Check out the updateState() function in App.js for more information about this)
+    */
     componentDidUpdate = (prevProps, prevState) => {
         if(this.props.refreshFactor !== prevState.refreshFactor){
             this.origin.refreshFactor = this.props.refreshFactor;
@@ -25,6 +37,9 @@ class FullWidthLoadbar extends Component {
         }
     }
 
+    /*
+        Reset component state
+    */
     resetState = (callback) => {
         const newState = {
             ...this.origin
@@ -33,8 +48,11 @@ class FullWidthLoadbar extends Component {
         this.setState(newState, callback);
     }
 
+    /*
+        Fill the loadbar by resetting the component's state, and then loop a percentage value using an interval
+    */
     increaseFillerWidth = () => {
-        // Fill the loadbar by resetting the component's state, and then loop a percentage value using an interval
+        
         let fillerWidth = 0;
        
         this.resetState(

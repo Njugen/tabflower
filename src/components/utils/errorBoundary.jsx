@@ -2,12 +2,19 @@ import React, {Component} from "react";
 import ErrorOverlay from '../modals/errorOverlay';
 import { PropTypes } from 'prop-types';
 
+/*
+  Catch errors in child component's lifecycle hooks, during rendering and in 
+  component constructors. For each error caught, show a fallback UI.
+
+  Read more about error boundaries in React:
+  https://reactjs.org/docs/error-boundaries.html
+*/
+
 class ErrorBoundary extends Component {
     state = { errors: [] };
-  
+
+     /* Update state so the next render will show the fallback UI. */
     static getDerivedStateFromError(error) {
-      // Update state so the next render will show the fallback UI.
-      //return { hasError: true };
 
       let currentErrors = [];
       const newError = error;
@@ -15,16 +22,13 @@ class ErrorBoundary extends Component {
 
       return { errors: currentErrors };
     }
-  
+    
+    /*
+      Catch an error and add it as an object in the this.state.error array for later use.
+    */
     componentDidCatch(error, errorInfo) {
-      // You can also log the error to an error reporting service
-        
-        
-
         let currentErrors = this.state.errors;
-
         const newError = Object.assign(error, errorInfo);
-
         currentErrors.push(newError);
         
         this.setState({
@@ -36,7 +40,10 @@ class ErrorBoundary extends Component {
   
     render() {
       if (this.state.errors.length > 0) {
-        // You can render any custom fallback UI
+        /*
+          If errors are stored in the boundary state, render the ErrorOverlay UI component and inform the user about the errors
+          using the information stored in this.state.errors
+        */
         return <ErrorOverlay data={this.state.errors} onSave={() => ""} onDismiss={() => window.location.reload()}></ErrorOverlay>
       }
   

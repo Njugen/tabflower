@@ -1,7 +1,10 @@
 import React, { Component, Fragment } from "react";
 import { sendToBackground } from './../../services/webextension/APIBridge';
 import TBTextInput from './form/tbTextInput';
+import { ValidatorError, ErrorHandler } from './exceptionsAndHandler';
+import * as validator from './inputValidators';
 import PropTypes from 'prop-types';
+
 
 class WindowsList extends Component {
     state = {
@@ -11,147 +14,265 @@ class WindowsList extends Component {
         newTabURL: ""
     }
 
+    /*
+        Parameters: 
+        -   err (object, containing whatever error (1 error) that we want the modal to processs. Mandatory)
+
+        Inform the App component to launch a modal (popup), by raising the error data provided
+        in this function's parameter. The parameter will travel through the following components:
+
+        This Modal > Module (any module, this module) > View (any view: this view) > RouteList > App
+
+        All components in this chain will have access to the information raised.
+    */
+    raiseToErrorOverlay = (err) => {
+
+        const { onRaiseToErrorOverlay } = this.props;
+
+        setTimeout(() => {
+                if(typeof onRaiseToErrorOverlay === "function"){
+                    onRaiseToErrorOverlay(err);
+                }
+            },
+            1000
+        );
+    }
+
+    /*
+        raiseToModal()
+
+        Parameters: 
+        -   data (object, containing whatever data that we want the modal to processs. Mandatory)
+
+        Inform the App component to launch a modal (popup), by raising the data provided
+        in this function's parameter. The data parameter will travel through the following components:
+
+            Module (any module, this module) > View (any view: this view) > RouteList > App
+
+        All components in this chain will have access to the information raised.
+    */
     raiseToModal = (data) => {
-        /*
-            Parameters: 
-            -   data (object, containing whatever data that we want the modal to processs. Mandatory)
-
-            Inform the App component to launch a modal (popup), by raising the data provided
-            in this function's parameter. The data parameter will travel through the following components:
-
-                Module (any module, this module) > View (any view: this view) > RouteList > App
-
-            All components in this chain will have access to the information raised.
-        */
-
         const { onRaiseToModal } = this.props;
 
         onRaiseToModal(data);
     }
 
+    /* 
+
+        toggleTabListVisibility()
+
+        Event handler which toggles the visibility of a tab list located in a certain window component. This function
+        may also be triggered outside an icon-click event, if preferred.
+
+        Parameters:
+        - event (Event object provided by an icon-click event triggering this function. If available, otherwise set to null if run outside an event)
+        - windowId (string, mandatory): the id of the window container where the targetted tab list is located
+        - forceVisible (boolean, optional): Force the targetted tab list to be visible regardless of circumstances 
+    */
     toggleTabListVisibility = (event, windowId, forceVisible) => {
-        /* 
-            Toggle tab list visibility: 
-            - The tab list may be hidden or visible to the user. Useful for better or less oversight
-            depending on user preference.
-        */
-        
-        const windowElement = document.getElementById(windowId);
-        const tabList = windowElement.getElementsByClassName("tab-listing")[0];
-        
-        if(forceVisible && forceVisible === true){
-            tabList.style.display = "block";
-            tabList.classList.remove("tab-listing-hide");
-        } else {
-            if(tabList.style.display === "none" || tabList.classList.contains("tab-listing-hide")){
-                tabList.style.display = "block";
-                tabList.classList.remove("tab-listing-hide");
+        try {
+            const { isString, isUndefined, isBoolean } = validator;
+
+            if(isString(windowId)){
+                const windowElement = document.getElementById(windowId);
+                const tabList = windowElement.getElementsByClassName("tab-listing")[0];
+                
+                if(forceVisible && forceVisible === true){
+                    tabList.style.display = "block";
+                    tabList.classList.remove("tab-listing-hide");
+                } else {
+                    if(!isUndefined(forceVisible) && !isBoolean(forceVisible)){
+                        throw ValidatorError("windowsList-102");
+                    }
+
+                    if(tabList.style.display === "none" || tabList.classList.contains("tab-listing-hide")){
+                        tabList.style.display = "block";
+                        tabList.classList.remove("tab-listing-hide");
+                    } else {
+                        tabList.style.display = "none";
+                        this.cancelNewTab(windowId);
+                    }
+
+                    /* Toggle up/down icon of window bar */
+                    const iconElement = (event !== null && event.target);
+                    
+                    if(iconElement){
+                        if(iconElement.className.includes("fa-chevron-up")){
+                            iconElement.className = "fas fa-chevron-down";
+                        } else {
+                            iconElement.className = "fas fa-chevron-up";
+                        }
+                    }
+                } 
             } else {
-                tabList.style.display = "none";
-                this.cancelNewTab(windowId);
+                throw ValidatorError("windowsList-101");
+            }
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay); 
+        }
+   }
+
+   /* 
+
+        toggleTabListStyle()
+
+        Event handler which toggles a window's tab list in the following manner:
+        List the tabs horizontally or vertically. Change the col- class of the tab list items
+        to accomplish this (no need for css display, as we do want the items to be wider when listed vertically)
+        
+        Unlike toggleTabListVisibility(), this function should only be used in icon-click events until further notice... 
+
+        Parameters:
+        - event (Event object provided by an icon-click event triggering this function. Mandatory)
+        - windowId (string, mandatory): the id of the window container where the targetted tab list is located
+    */
+   toggleTabListStyle = (event, windowId) => {
+        try {
+            const { isObject, isString } = validator; 
+            
+            if(!isObject(event) || (isObject(event) && !isObject(event.target))){
+                throw ValidatorError("windowsList-103");
             }
 
-            /* Toggle up/down icon of window bar */
-            const iconElement = (event !== null && event.target);
-            
-            if(iconElement){
-                if(iconElement.className.includes("fa-chevron-up")){
-                    iconElement.className = "fas fa-chevron-down";
-                } else {
-                    iconElement.className = "fas fa-chevron-up";
+            if(!isString(windowId)){
+                throw ValidatorError("windowsList-104");
+            }
+
+
+            const windowElement = document.getElementById(windowId);
+            const tabList = windowElement.getElementsByClassName("tab-listing")[0];
+            let tabListIsHorizontal = tabList.className.includes("horizontal") || (!tabList.className.includes("horizontal") && !tabList.className.includes("vertical"));
+            const tabListItems = tabList.getElementsByTagName("li");
+           
+            for(let i = 0; i < tabListItems.length; i++){
+                const isChildOfTabListing = tabListItems[i].parentNode.className.includes("tab-listing");
+                
+                if(isChildOfTabListing){
+                    if(tabListItems[i].classList.contains("col-3")){
+                        tabListItems[i].className = "col-12";
+                    } else {
+                        tabListItems[i].className = "col-3";
+                    }
                 }
             }
-        }
-   }
 
-   toggleTabListStyle = (event, windowId) => {
-        /* 
-            Toggle tab list style:
-            - List the tabs horizontally or vertically. Change the col- class of the tab list items
-            to accomplish this (no need for css display, as we do want the items to be wider when listed vertically)
-            
-        */
-        const windowElement = document.getElementById(windowId);
-        const tabList = windowElement.getElementsByClassName("tab-listing")[0];
-        let tabListIsHorizontal = tabList.className.includes("horizontal") || (!tabList.className.includes("horizontal") && !tabList.className.includes("vertical"));
-        const tabListItems = tabList.getElementsByTagName("li");
-        
-        for(let i = 0; i < tabListItems.length; i++){
-            if(tabListItems[i].classList.contains("col-3")){
-                tabListItems[i].className = "col-12";
+            if(tabListIsHorizontal){
+                tabList.className = tabList.className.replace("horizontal", "vertical");
             } else {
-                tabListItems[i].className = "col-3";
+                tabList.className = tabList.className.replace("vertical", "horizontal");
             }
-        }
 
-        if(tabListIsHorizontal){
-            tabList.className = tabList.className.replace("horizontal", "vertical");
-        } else {
-            tabList.className = tabList.className.replace("vertical", "horizontal");
-        }
+            /* Toggle tab style icon of window bar */
+            const iconElement = event.target;
 
-        /* Toggle tab style icon of window bar */
-        const iconElement = event.target;
+            if(iconElement.className.includes("fas fa-align-justify")){
+                iconElement.className = "fas fa-grip-horizontal";
+            } else {
+                iconElement.className = "fas fa-align-justify";
+            }
 
-        if(iconElement.className.includes("fas fa-align-justify")){
-            iconElement.className = "fas fa-grip-horizontal";
-        } else {
-            iconElement.className = "fas fa-align-justify";
-        }
-
-        /* 
-            If the tab list is invisible when changing style, then make it visible at style change. 
-            The user needs to observe the changes for the best user experience
-         */
-        if(tabList.style.display === "none" || tabList.classList.contains("tab-listing-hide")){
-            this.toggleTabListVisibility(null, windowId);
-            tabList.classList.remove("tab-listing-hide");
+            /* 
+                If the tab list is invisible when changing style, then make it visible at style change. 
+                The user needs to observe the changes for the best user experience
+            */
+            if(tabList.style.display === "none" || tabList.classList.contains("tab-listing-hide")){
+                this.toggleTabListVisibility(null, windowId);
+                tabList.classList.remove("tab-listing-hide");
+            }
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay); 
         }
    }
 
-   closeWindow = (window) => {
-       
-        sendToBackground("delete-window", { windowId: window.data.id }, (response) => {
-            this.props.refreshList();
-        }); 
+    closeWindow = (window) => {
+        try {
+            const { isObject, isNumber } = validator;
+            
+            if(isObject(window.data)){
+                if(isNumber(window.data.id)){
+                    sendToBackground("delete-window", { windowId: window.data.id }, (response) => {
+                        this.props.refreshList();
+                    }); 
+                } else {
+                    throw ValidatorError("windowsList-106");
+                }
+            } else {
+                throw ValidatorError("windowsList-105");
+            }
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay); 
+        }
     }
 
     closeTab = (tab) => {
-       
-        sendToBackground("delete-tab", { tabId: tab.data.id }, (response) => {
-            
-            this.props.refreshList();
-            //setTimeout(() => this.getOpenedWindowsAndTabs(), 1500)
-        }); 
+        try {
+            const { isObject, isNumber } = validator;
+
+            if(isObject(tab.data)){
+                if(isNumber(tab.data.id)){
+                    sendToBackground("delete-tab", { tabId: tab.data.id }, (response) => {
+                        this.props.refreshList();
+                        //setTimeout(() => this.getOpenedWindowsAndTabs(), 1500)
+                    }); 
+                } else {
+                    throw ValidatorError("windowsList-108");
+                }
+            } else {
+                throw ValidatorError("windowsList-107");
+            }
+
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay); 
+        }
     }
 
     addNewWindow = (boolInput) => {
-        const newWindow = boolInput;
-        
-        this.setState(
-            {
-                newWindow
+        try {
+            const { isBoolean } = validator;
+            
+            if(isBoolean(boolInput)){
+                const newWindow = boolInput;
+                
+                this.setState(
+                    {
+                        newWindow
+                    }
+                );
+            } else {
+                throw ValidatorError("windowsList-109");
             }
-        );
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay); 
+        }
     }
 
     addNewTab = (containerId) => {
-       let newTabInContainerIds = this.state.newTabInContainerIds;
+        try {
+            const { isString } = validator;
 
-        if(newTabInContainerIds === false){
-            newTabInContainerIds = [];
-        } else {
-            newTabInContainerIds = this.state.newTabInContainerIds;
-            
-        }
+            if(isString(containerId)){
+                let newTabInContainerIds = this.state.newTabInContainerIds;
+        
+                if(newTabInContainerIds === false){
+                    newTabInContainerIds = [];
+                } else {
+                    newTabInContainerIds = this.state.newTabInContainerIds;
+                    
+                }
 
-        newTabInContainerIds.push(containerId);
+                newTabInContainerIds.push(containerId);
 
-        this.setState(
-            {
-                newTabInContainerIds
+                this.setState(
+                    {
+                        newTabInContainerIds
+                    }
+                );
+            } else {
+                throw ValidatorError("windowsList-110");
             }
-        );
+        } catch(err){
+            ErrorHandler(err, this.raiseToErrorOverlay); 
+        }
     }
 
     cancelNewTab = (containerId) => {
@@ -262,7 +383,7 @@ class WindowsList extends Component {
             initialTabStyle,
             type
          } = this.props;
-
+         
          const { newWindow } = this.state;
          const { newTabInContainerIds } = this.state;
 
