@@ -503,7 +503,7 @@ class Modal extends Component {
             </div>
         );
     }
-}
+} 
 
 Modal.propTypes = {
     data: PropTypes.shape({
