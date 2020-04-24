@@ -18,6 +18,13 @@ export const ValidatorError = (code) => {
     let message;
 
     switch(code){
+        // App.js 
+        case "app-101":
+            message = "The \"callback\" parameter in the App component's updateState() function needs to be a function, or undefined.";
+            break;
+        case "app-102":
+            message = "The \"newProps\" parameter in the App component's updateState() function needs to be a an object (but not an array).";
+            break;    
         // modal.js
         case "mp-fadeIn-101" || "mp-fadeOut-101":
             message = "A style object is missing in the modal's jsx component. Style cannot be set";

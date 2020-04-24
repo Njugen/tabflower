@@ -1,26 +1,4 @@
 /*
-    isObject()
-
-    Check if the input is an object, 
-    input = {}
-
-    Params:
-    - input (can be whatever)
-
-    Returns:
-    - true, if the input is an object
-    - false, if the input is not an object
-*/
-
-export const isObject = (input) => {
-    if(typeof input === "object" && input !== null){
-        return true;
-    } else {
-        return false;
-    }
-} 
-
-/*
     isArray
 
     Check if the input is an array.
@@ -40,6 +18,32 @@ export const isArray = (input) => {
         return false;
     }
 }
+
+/*
+    isObject()
+
+    Check if the input is an object (not array), 
+    input = {}
+
+    Params:
+    - input (can be whatever)
+
+    Returns:
+    - true, if the input is an object
+    - false, if the input is not an object
+*/
+
+export const isObject = (input) => {
+    if(!isArray(input)){
+        if(typeof input === "object" && input !== null){
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+} 
 
 /*
     isEmptyString()

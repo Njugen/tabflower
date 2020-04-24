@@ -37,6 +37,10 @@ import './styles/react-generated/App.css';
 /* Import Tabeon app specific CSS */
 import './styles/tabeon/style.css';
 
+/* Import Tabeon */
+import * as validator from './components/utils/inputValidators';
+
+import * as ExceptionsHandler from './components/utils/exceptionsAndHandler';
 
 class App extends Component{
   state = {
@@ -55,28 +59,50 @@ class App extends Component{
       but also increases the refreshFactor (the FullWidthLoadbar uses this to determine whether to launch the loadbar
         or not)
     */
-    let newState = {
-      ...newProps
+    const { isObject, isArray, isFunction, isUndefined } = validator;
+    try {
+      if(isObject(newProps) && !isArray(newProps)){
+        let newState = {
+          ...newProps
+        }
+
+        if(showLoadbar && showLoadbar === true){
+          let { refreshFactor } = this.state;
+          refreshFactor++;
+
+          newState.refreshFactor = refreshFactor;
+        }
+
+        if(isFunction(callback)){
+          this.setState(newState, callback);
+        } else if(isUndefined(callback)) {
+          this.setState(newState);
+        } else {
+          throw ExceptionsHandler.ValidatorError("app-101");
+        }
+      } else {
+        throw ExceptionsHandler.ValidatorError("app-102");
+      }
+    } catch(err){
+        this.launchErrorOverlay(err);
+      }
     }
 
-    if(showLoadbar && showLoadbar === true){
-      let { refreshFactor } = this.state;
-      refreshFactor++;
-
-      newState.refreshFactor = refreshFactor;
-    }
-
-    this.setState(newState, callback);
-  }
   
   handleNavigation = (viewProps) => {
+    const { isObject, isNumber } = validator;
 
-    this.updateState(
-      {
-        currentView: viewProps
-      },
-      true
-    )
+    if(isObject(viewProps)){
+      if(isObject(viewProps.viewData) && isObject(viewProps.metaData) && isNumber(viewProps.refreshFactor)){
+
+        this.updateState(
+          {
+            currentView: viewProps
+          },
+          true
+        )
+      }
+    }
   }
 
   handleMainNavBarClick = (sidebarProps) => {
