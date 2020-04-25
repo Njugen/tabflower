@@ -25,6 +25,12 @@ export const ValidatorError = (code) => {
         case "app-102":
             message = "The \"newProps\" parameter in the App component's updateState() function needs to be a an object (but not an array).";
             break;    
+        case "app-103":
+            message = "The \"viewProps\" parameter in the App component's handleNavigation() function needs to be an object (but not an array), containing the following keys: \"metaData\" (object), \"viewData\" (object) and \"refreshFactor\" (number).";
+            break;   
+        case "app-104":
+            message = "The \"viewProps\" parameter in the App component's handleNavigation() function needs to be a an object (but not an array).";
+            break;   
         // modal.js
         case "mp-fadeIn-101" || "mp-fadeOut-101":
             message = "A style object is missing in the modal's jsx component. Style cannot be set";

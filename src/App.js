@@ -60,6 +60,7 @@ class App extends Component{
         or not)
     */
     const { isObject, isArray, isFunction, isUndefined } = validator;
+    
     try {
       if(isObject(newProps) && !isArray(newProps)){
         let newState = {
@@ -85,23 +86,55 @@ class App extends Component{
       }
     } catch(err){
         this.launchErrorOverlay(err);
-      }
     }
+  }
 
-  
+handleNavigation = (viewProps) => {
+    const { isObject, isNumber } = validator;
+
+    try {
+      if(isObject(viewProps)){
+        if(isObject(viewProps.viewData) && isObject(viewProps.metaData) && isNumber(viewProps.refreshFactor)){
+
+          this.updateState(
+            {
+              currentView: viewProps
+            },
+            true
+          )
+        } else {
+          throw ExceptionsHandler.ValidatorError("app-103");
+        }
+      } else {
+        throw ExceptionsHandler.ValidatorError("app-104");
+      }
+    } catch(err){
+      this.launchErrorOverlay(err);
+    }
+  }
+
+
   handleNavigation = (viewProps) => {
     const { isObject, isNumber } = validator;
 
-    if(isObject(viewProps)){
-      if(isObject(viewProps.viewData) && isObject(viewProps.metaData) && isNumber(viewProps.refreshFactor)){
+    try {
+      if(isObject(viewProps)){
+        if(isObject(viewProps.viewData) && isObject(viewProps.metaData) && isNumber(viewProps.refreshFactor)){
 
-        this.updateState(
-          {
-            currentView: viewProps
-          },
-          true
-        )
+          this.updateState(
+            {
+              currentView: viewProps
+            },
+            true
+          )
+        } else {
+          throw ExceptionsHandler.ValidatorError("app-103");
+        }
+      } else {
+        throw ExceptionsHandler.ValidatorError("app-104");
       }
+    } catch(err){
+      this.launchErrorOverlay(err);
     }
   }
 
