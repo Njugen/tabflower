@@ -22,8 +22,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "test:ci": "react-scripts test --testResultsProcessor ./node_modules/jest-junit",
+    "test": "react-scripts test --coverage --watchAll=true --reporters=jest-html-reporter",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -41,11 +40,22 @@
       "last 1 safari version"
     ]
   },
+  "jest": {
+    "coverageReporters": [
+      "jest-junit",
+      "text-summary",
+      "html"
+    ]
+  },
   "devDependencies": {
     "check-prop-types": "^1.1.2",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
+    "jest-allure": "^0.1.1",
+    "jest-html-reporter": "^3.1.0",
+    "jest-html-reporters": "^1.2.1",
     "jest-junit": "^10.0.0",
+    "jest-stare": "^2.0.0",
     "react-test-renderer": "^16.13.1"
   }
 }

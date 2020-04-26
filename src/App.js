@@ -59,10 +59,10 @@ class App extends Component{
       but also increases the refreshFactor (the FullWidthLoadbar uses this to determine whether to launch the loadbar
         or not)
     */
-    const { isObject, isArray, isFunction, isUndefined } = validator;
+    const { isObject, isFunction, isUndefined } = validator;
     
     try {
-      if(isObject(newProps) && !isArray(newProps)){
+      if(isObject(newProps)){
         let newState = {
           ...newProps
         }
@@ -89,31 +89,6 @@ class App extends Component{
     }
   }
 
-handleNavigation = (viewProps) => {
-    const { isObject, isNumber } = validator;
-
-    try {
-      if(isObject(viewProps)){
-        if(isObject(viewProps.viewData) && isObject(viewProps.metaData) && isNumber(viewProps.refreshFactor)){
-
-          this.updateState(
-            {
-              currentView: viewProps
-            },
-            true
-          )
-        } else {
-          throw ExceptionsHandler.ValidatorError("app-103");
-        }
-      } else {
-        throw ExceptionsHandler.ValidatorError("app-104");
-      }
-    } catch(err){
-      this.launchErrorOverlay(err);
-    }
-  }
-
-
   handleNavigation = (viewProps) => {
     const { isObject, isNumber } = validator;
 
@@ -139,13 +114,27 @@ handleNavigation = (viewProps) => {
   }
 
   handleMainNavBarClick = (sidebarProps) => {
-    this.updateState(
-      {
-        MainNavBar: sidebarProps,
-      
-      },
-      false
-    )
+    const { isObject, isNumber } = validator;
+
+    try {
+      if(isObject(sidebarProps)){
+        if(isNumber(sidebarProps.activeNavLinkKey)){
+          this.updateState(
+            {
+              MainNavBar: sidebarProps,
+            
+            },
+            false
+          );
+        } else {
+          throw ExceptionsHandler.ValidatorError("app-106");
+        }
+      } else {
+        throw ExceptionsHandler.ValidatorError("app-105");
+      }
+    } catch(err){
+      this.launchErrorOverlay(err);
+    }
   }
 
   modalHandler = (data) => {

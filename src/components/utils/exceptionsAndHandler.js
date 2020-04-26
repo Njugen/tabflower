@@ -30,7 +30,13 @@ export const ValidatorError = (code) => {
             break;   
         case "app-104":
             message = "The \"viewProps\" parameter in the App component's handleNavigation() function needs to be a an object (but not an array).";
+            break; 
+        case "app-105":
+            message = "The \"sidebarProps\" parameter in the App component's handleMainNavBarClick() function needs to be a an object (but not an array).";
             break;   
+        case "app-106":
+            message = "The \"sidebarProps\" parameter in the App component's handleMainNavBarClick() function is missing an \"activeNavLinkKey\" key (as an integer) in its object.";
+            break;              
         // modal.js
         case "mp-fadeIn-101" || "mp-fadeOut-101":
             message = "A style object is missing in the modal's jsx component. Style cannot be set";

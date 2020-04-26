@@ -44,9 +44,58 @@ describe("<App />: Unit test of individual methods located in this component", (
         componentInstance.launchErrorOverlay = jest.fn();
 
         ExceptionsHandler.ValidatorError = jest.fn();
+
     });
-     
-    describe("updateState(newProps, showLoadbar, callback): Test this method with various typeof inputs as \"newProps\". Only call this.setState() if the \"newProps\" parameter is an object (excluding arrays), AND if the \"callback\" parameter is a function or undefined. The \"showLoadbar\" parameter does not affect what function gets called", () => {
+    
+    let ExceptionsHandler = jest.requireActual("./../components/utils/exceptionsAndHandler");
+
+    // Copy our error messages from exceptionsAndHandler.js. These messages are to be mocked.
+    const actualErrorReturns = {
+        "app-101": ExceptionsHandler.ValidatorError("app-101"),
+        "app-102": ExceptionsHandler.ValidatorError("app-102"),
+        "app-103": ExceptionsHandler.ValidatorError("app-103"),
+        "app-104": ExceptionsHandler.ValidatorError("app-104"),
+        "app-105": ExceptionsHandler.ValidatorError("app-105"),
+        "app-106": ExceptionsHandler.ValidatorError("app-106")
+    };
+
+    // The error messages we expect to catch and be used as parameter in componentInstance.launchErrorOverlay, if an error has occured
+    const expectedErrorReturns = {
+        "app-101": {
+            name: "ValidatorError",
+            message: "The \"callback\" parameter in the App component's updateState() function needs to be a function, or undefined.",
+            code: "app-101"
+        },
+        "app-102": {
+            name: "ValidatorError",
+            message: "The \"newProps\" parameter in the App component's updateState() function needs to be a an object (but not an array).",
+            code: "app-102"
+        },
+        "app-103": {
+            name: "ValidatorError",
+            message: "The \"viewProps\" parameter in the App component's handleNavigation() function needs to be an object (but not an array), containing the following keys: \"metaData\" (object), \"viewData\" (object) and \"refreshFactor\" (number).",
+            code: "app-103"
+        },
+        "app-104": {
+            name: "ValidatorError",
+            message: "The \"viewProps\" parameter in the App component's handleNavigation() function needs to be a an object (but not an array).",
+            code: "app-104"
+        },
+        "app-105": {
+            name: "ValidatorError",
+            message: "The \"sidebarProps\" parameter in the App component's handleMainNavBarClick() function needs to be a an object (but not an array).",
+            code: "app-105"
+        },
+        "app-106": {
+            name: "ValidatorError",
+            message: "The \"sidebarProps\" parameter in the App component's handleMainNavBarClick() function is missing an \"activeNavLinkKey\" key (as an integer) in its object.",
+            code: "app-106"
+        },
+    }
+
+    ExceptionsHandler.ValidatorError = jest.fn();
+
+    describe("Test updateState(newProps, showLoadbar, callback): Test this method with various typeof inputs as \"newProps\". Only call this.setState() if the \"newProps\" parameter is an object (excluding arrays), AND if the \"callback\" parameter is a function or undefined. The \"showLoadbar\" parameter does not affect what function gets called", () => {
         const various_newProps = [
             ["Test inserting a string"],
             [454],
@@ -77,189 +126,141 @@ describe("<App />: Unit test of individual methods located in this component", (
             [77]
         ];
 
-        for(let i = 0; i < various_showLoadbar.length; i++){
-            test.each(various_newProps)("Run updateState(%p, " + various_showLoadbar[i][0] + "): this.launchErrorOverlay() should be called once, because \"newProps\" is not an object. \"showLoadbar\" does not change the expected result.", (val) => {
+        const various_callback = [
+            [() => {}],
+            [true],
+            [false],
+            ["test inserting another string"],
+            [null],
+            [undefined],
+            [{testkey: 7, testkey2: "text", testkey3: true}],
+            [["apple", "pearch", "pineapple", "berry"]],
+            [241]
+        ];
+
+        describe("Test updateState(newProps, showLoadbar, callback), when \"newProps\" (anything but an object), \"showLoadbar\" (various values) and \"callback\" (various values)", () => {
+            for(let i = 0; i < various_showLoadbar.length; i++){
                 const testComponent = predefinedComponent();
                 const componentInstance = testComponent.instance();
-                componentInstance.launchErrorOverlay = jest.fn();
 
-                componentInstance.updateState(val, various_showLoadbar[i][0]);
-                
-                expect(componentInstance.launchErrorOverlay).toHaveBeenCalledTimes(1);
-            });
-        }
-
-        
-        for(let i = 0; i < various_showLoadbar.length; i++){
-            if(various_showLoadbar[i][0] === true){
-                test.each(various_newProps_objects)("Run updateState(%p, " + various_showLoadbar[i][0] + "): this.setState(%p) should be called, because \"newProps\" is an object and there is no callback specified. \"showLoadbar\" does not change the expected result.", (val) => {
-                    const testComponent = predefinedComponent();
-                    const componentInstance = testComponent.instance();
-                    componentInstance.setState = jest.fn();
-
-                    componentInstance.updateState(val, various_showLoadbar[i][0]);
-                    val.refreshFactor = 1;
-
-                    expect(componentInstance.setState).toHaveBeenCalledWith(val);
-                });
-            } else {
-                test.each(various_newProps_objects)("Run updateState(%p, " + various_showLoadbar[i][0] + "): this.setState(%p) should be called, because \"newProps\" is an object and there is no callback specified. \"showLoadbar\" does not change the expected result.", (val) => {
-                    const testComponent = predefinedComponent();
-                    const componentInstance = testComponent.instance();
-                    componentInstance.setState = jest.fn();
-
+                test.each(various_newProps)("Run updateState(%p, " + various_showLoadbar[i][0] + "): ExceptionsHandler.ValidatorError(\"app-102\") should be called once, because \"newProps\" is not an object. \"showLoadbar\" does not change the expected result.", (val) => {
                     componentInstance.updateState(val, various_showLoadbar[i][0]);
                     
-                    expect(componentInstance.setState).toHaveBeenCalledWith(val);
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-102");
+                });
+
+                test.each(various_newProps)("Run updateState(%p, " + various_showLoadbar[i][0] + ") again: componentInstance.launchErrorOverlay() should be called, using the return value of ExceptionsHandler.ValidatorError(\"app-102\") as its parameter. \"showLoadbar\" does not change the expected result.", (val) => {
+                    componentInstance.launchErrorOverlay = jest.fn();
+                    ExceptionsHandler.ValidatorError.mockReturnValue(actualErrorReturns["app-102"]);
+                    componentInstance.updateState(val, various_showLoadbar[i][0]);
+                    
+                    expect(componentInstance.launchErrorOverlay).toHaveBeenCalledWith(expectedErrorReturns["app-102"]);
                 });
             }
-        };
 
-        test("Run updateState({}, false): this.setState(testParam_newProps) should be called because \"newProps\" is an object, and \"callback\" parameter being undefined.", () => {
-            const testParam_newProps = {};
-            componentInstance.updateState(testParam_newProps, false);
+            for(let i = 0; i < various_showLoadbar.length; i++){
+                for(let j = 0; j < various_callback.length; j++){
+                    const testComponent = predefinedComponent();
+                    const componentInstance = testComponent.instance();
 
-            expect(componentInstance.setState).toHaveBeenCalledWith(testParam_newProps);
+                    test.each(various_newProps)("Run updateState(%p, " + various_showLoadbar[i][0] + ", " + various_callback[j][0] + "): ExceptionsHandler.ValidatorError(\"app-102\") should be called once, because \"newProps\" is not an object. Neither \"showLoadbar\" nor \"callback\" change the expected result.", (val) => {
+                        componentInstance.updateState(val, various_showLoadbar[i][0], various_callback[j][0]);
+                        
+                        expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-102");
+                    });
+
+                    test.each(various_newProps)("Run updateState(%p, " + various_showLoadbar[i][0] + ", " + various_callback[j][0] + ") again: componentInstance.launchErrorOverlay() should be called, using the return value of ExceptionsHandler.ValidatorError(\"app-102\") as its parameter. Neither \"showLoadbar\" nor \"callback\" change the expected result.", (val) => {
+                        componentInstance.launchErrorOverlay = jest.fn();
+                        ExceptionsHandler.ValidatorError.mockReturnValue(actualErrorReturns["app-102"]);
+                        componentInstance.updateState(val, various_showLoadbar[i][0], various_callback[j][0]);
+                    
+                        expect(componentInstance.launchErrorOverlay).toHaveBeenCalledWith(expectedErrorReturns["app-102"]);
+                    });
+                }
+            }
         });
 
-        test("Run updateState({ key1: 1, key2: \"hello\", key3: false }, false): this.setState(testParam_newProps) should be called because \"newProps\" is an object, and \"callback\" parameter being undefined.", () => {
-            const testParam_newProps = { key1: 1, key2: "hello", key3: false };
-            componentInstance.updateState(testParam_newProps, false);
+        describe("Test updateState(newProps, showLoadbar, callback), when \"newProps\" (an object with various keys), \"showLoadbar\" (various values) and \"callback\" (various values)", () => {
+            const { isUndefined, isFunction } = validator;
 
-            expect(componentInstance.setState).toHaveBeenCalledWith(testParam_newProps);
+            for(let i = 0; i < various_showLoadbar.length; i++){
+                for(let j = 0; j < various_callback.length; j++){  
+                    const testComponent = predefinedComponent();
+                    const componentInstance = testComponent.instance();
+
+                    if(various_showLoadbar[i][0] === true){
+                        if(isFunction(various_callback[j][0])){
+                            test.each(various_newProps_objects)("Run updateState(%p, " + various_showLoadbar[i][0] + ", " + various_callback[j][0] + "): this.setState(newProps, callback) should be called, because \"newProps\" is an object and there is a callback specified. Because \"showLoadbar\" is set to true, an \"refreshFactor\" key will be added to \"newProps\" before being passed to setState. The new refreshFactor = [component's current refreshFactor] + 1", (val) => {
+                                componentInstance.setState = jest.fn();
+
+                                componentInstance.updateState(val, various_showLoadbar[i][0], various_callback[j][0]);
+                                val.refreshFactor = componentInstance.state.refreshFactor + 1;
+
+                                expect(componentInstance.setState).toHaveBeenCalledWith(val, various_callback[j][0]);
+                            });
+                        } else if(isUndefined(various_callback[j][0])){
+                            test.each(various_newProps_objects)("Run updateState(%p, " + various_showLoadbar[i][0] + ", " + various_callback[j][0] + "): this.setState(newProps) should be called, because \"newProps\" is an object and there is NO callback specified. Because \"showLoadbar\" is set to true, an \"refreshFactor\" key will be added to \"newProps\" before being passed to setState. The new refreshFactor = [component's current refreshFactor] + 1", (val) => {
+                                componentInstance.setState = jest.fn();
+
+                                componentInstance.updateState(val, various_showLoadbar[i][0], various_callback[j][0]);
+                                val.refreshFactor = componentInstance.state.refreshFactor + 1;
+
+                                expect(componentInstance.setState).toHaveBeenCalledWith(val);
+                            });
+                        } else {
+                            test.each(various_newProps_objects)("Run updateState(%p, " + various_showLoadbar[i][0] + ", " + various_callback[j][0] + "): ExceptionsHandler.ValidatorError(\"app-101\") should be called, because \"newProps\" is an object and the callback is neither undefined nor a function. \"showLoadbar\" does not change this outcome", (val) => {
+                                componentInstance.updateState(val, various_showLoadbar[i][0], various_callback[j][0]);
+                                val.refreshFactor = componentInstance.state.refreshFactor + 1;
+
+                                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-101");
+                            });
+
+                            test.each(various_newProps_objects)("Run updateState(%p, " + various_showLoadbar[i][0] + ", " + various_callback[j][0] + ") again: component.launchErrorOverlay() should be called with the return value of ExceptionsHandler.ValidatorError(\"app-101\") as its input parameter, because \"newProps\" is an object and the callback is neither undefined nor a function. \"showLoadbar\" does not change this outcome", (val) => {
+                                componentInstance.launchErrorOverlay = jest.fn();
+                                ExceptionsHandler.ValidatorError.mockReturnValue(actualErrorReturns["app-101"]);
+
+                                componentInstance.updateState(val, various_showLoadbar[i][0], various_callback[j][0]);
+                                val.refreshFactor = componentInstance.state.refreshFactor + 1;
+
+                                expect(componentInstance.launchErrorOverlay).toHaveBeenCalledWith(expectedErrorReturns["app-101"]);
+                            });
+                        }
+                    } else {
+                        if(isFunction(various_callback[j][0])){
+                            test.each(various_newProps_objects)("Run updateState(%p, " + various_showLoadbar[i][0] + ", " + various_callback[j][0] + "): this.setState(newProps, callback) should be called, because \"newProps\" is an object and there is a callback specified. \"showLoadbar\" does not change the expected result because it is not set to true.", (val) => {
+                                componentInstance.setState = jest.fn();
+
+                                componentInstance.updateState(val, various_showLoadbar[i][0], various_callback[j][0]);
+                                
+                                expect(componentInstance.setState).toHaveBeenCalledWith(val, various_callback[j][0]);
+                            });
+                        } else if(isUndefined(various_callback[j][0])){
+                            test.each(various_newProps_objects)("Run updateState(%p, " + various_showLoadbar[i][0] + ", " + various_callback[j][0] + "): this.setState(newProps) should be called, because \"newProps\" is an object and there is NO callback function specified. \"showLoadbar\" does not change the expected result because it is not set to true.", (val) => {
+                                componentInstance.setState = jest.fn();
+
+                                componentInstance.updateState(val, various_showLoadbar[i][0], various_callback[j][0]);
+                                
+                                expect(componentInstance.setState).toHaveBeenCalledWith(val);
+                            });
+                        } else {
+                            test.each(various_newProps_objects)("Run updateState(%p, " + various_showLoadbar[i][0] + ", " + various_callback[j][0] + "): ExceptionsHandler.ValidatorError(\"app-101\") should be called, because \"newProps\" is an object and the specified callback is neither undefined nor a function. \"showLoadbar\" does not change the expected outcome.", (val) => {
+                                componentInstance.updateState(val, various_showLoadbar[i][0], various_callback[j][0]);
+                                
+                                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-101");
+                            });
+
+                            test.each(various_newProps_objects)("Run updateState(%p, " + various_showLoadbar[i][0] + ", " + various_callback[j][0] + ") again: componentInstance.launchErrorOverlay() should be called with the return value of ExceptionsHandler.ValidatorError(\"app-101\") as its input parameter, because \"newProps\" is an object and the specified callback is neither undefined nor a function. \"showLoadbar\" does not change the expected outcome.", (val) => {
+                                ExceptionsHandler.ValidatorError.mockReturnValue(actualErrorReturns["app-101"])
+                                componentInstance.launchErrorOverlay = jest.fn();
+                                componentInstance.updateState(val, various_showLoadbar[i][0], various_callback[j][0]);
+                                
+                                expect(componentInstance.launchErrorOverlay).toHaveBeenCalledWith(expectedErrorReturns["app-101"]);
+                            });
+                        }
+                    }
+                }
+            };
         });
-
-        test("Run updateState({}, false, () => {}): this.setState(testParam_newProps, testParam_callback) should be called because \"newProps\" is an object, and \"callback\" is a function.", () => {
-            const testParam_newProps = {};
-            const testParam_callback = jest.fn();
-
-            componentInstance.updateState(testParam_newProps, false, testParam_callback);
-
-            expect(componentInstance.setState).toHaveBeenCalledWith(testParam_newProps, testParam_callback);
-        });
-
-        test("Run updateState({ key1: 1, key2: \"hello\", key3: false }, false, () => {}): this.setState(testParam_newProps, testParam_callback) should be called because \"newProps\" is an object, and \"callback\" is a function.", () => {
-            const testParam_newProps = { key1: 1, key2: "hello", key3: false };
-            const testParam_callback = jest.fn();
-
-            componentInstance.updateState(testParam_newProps, false, testParam_callback);
-
-            expect(componentInstance.setState).toHaveBeenCalledWith(testParam_newProps, testParam_callback);
-        });
-
-        test("Run updateState({}, false, \"test\"): this.launchErrorOverlay() should be called because \"newProps\" is an object, but \"callback\" is neither a function nor undefined", () => {
-            componentInstance.updateState({}, false, "test");
-
-            expect(componentInstance.launchErrorOverlay).toHaveBeenCalledTimes(1);
-        });
-
-        test("Run updateState({}, false, 380): this.launchErrorOverlay() should be called because \"newProps\" is an object, but \"callback\" is neither a function nor undefined", () => {
-            componentInstance.updateState({}, false, 380);
-
-            expect(componentInstance.launchErrorOverlay).toHaveBeenCalledTimes(1);
-        });
-
-        test("Run updateState({}, false, true): this.launchErrorOverlay() should be called because \"newProps\" is an object, but \"callback\" is neither a function nor undefined", () => {
-            componentInstance.updateState({}, false, true);
-
-            expect(componentInstance.launchErrorOverlay).toHaveBeenCalledTimes(1);
-        });
-
-        test("Run updateState({}, false, null): this.launchErrorOverlay() should be called because \"newProps\" is an object, but \"callback\" is neither a function nor undefined", () => {
-            componentInstance.updateState({}, false, null);
-
-            expect(componentInstance.launchErrorOverlay).toHaveBeenCalledTimes(1);
-        });
-
-        test("Run updateState({}, false, { testobjectname: \"Just passing by\", age: 20 }): this.launchErrorOverlay() should be called because \"newProps\" is an object, but \"callback\" is neither a function nor undefined", () => {
-            componentInstance.updateState({}, false, { testobjectname: "Just passing by", age: 20 });
-
-            expect(componentInstance.launchErrorOverlay).toHaveBeenCalledTimes(1);
-        });
-
-        test("Run updateState({}, false, [\"testarray\", 14]): this.launchErrorOverlay() should be called because \"newProps\" is an object, but \"callback\" is neither a function nor undefined", () => {
-            componentInstance.updateState({}, false, ["testarray", 14]);
-
-            expect(componentInstance.launchErrorOverlay).toHaveBeenCalledTimes(1);
-        });
-
-        describe("Check that the error ExceptionsHandler.ValidatorError(\"app-101\") is thrown, when \"newProps\" is an object containing anything (excluding array) AND \"callback\" is neither a function nor undefined", () => {
-            test("Run updateState({}, false, \"test string\"): ExceptionsHandler.ValidatorError(\"app-101\") should be called because \"callback\" is neither a function nor undefined, while \"newProps\" being an object", () => {
-                componentInstance.updateState({}, false, "test string");
-                
-                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-101");
-            });
-
-            test("Run updateState({}, false, 22): ExceptionsHandler.ValidatorError(\"app-101\") should be called because \"callback\" is neither a function nor undefined, while \"newProps\" being an object", () => {
-                componentInstance.updateState({}, false, 22);
-                
-                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-101");
-            });
-
-            test("Run updateState({}, false, null): ExceptionsHandler.ValidatorError(\"app-101\") should be called because \"callback\" is neither a function nor undefined, while \"newProps\" being an object", () => {
-                componentInstance.updateState({}, false, null);
-                
-                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-101");
-            });
-
-            test("Run updateState({}, false, [true, false, 12]): ExceptionsHandler.ValidatorError(\"app-101\") should be called because \"callback\" is neither a function nor undefined, while \"newProps\" being an object", () => {
-                componentInstance.updateState({}, false, [true, false, 12]);
-                
-                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-101");
-            });
-
-            test("Run updateState({}, false, { testkey: \"test string input\" }): ExceptionsHandler.ValidatorError(\"app-101\") should be called because \"callback\" is neither a function nor undefined, while \"newProps\" being an object", () => {
-                componentInstance.updateState({}, false, { testkey: "test string input" });
-                
-                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-101");
-            });
-
-            test("Run updateState({}, false, true): ExceptionsHandler.ValidatorError(\"app-101\") should be called because \"callback\" is neither a function nor undefined, while \"newProps\" being an object", () => {
-                componentInstance.updateState({}, false, true);
-                
-                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-101");
-            });
-
-    
-        });
-
-        describe("Check that the error ExceptionsHandler.ValidatorError(\"app-102\") is thrown, when \"newProps\" is not an object, regardless of the \"callback\" parameter", () => {
-            test("Run updateState(12, false): ExceptionsHandler.ValidatorError(\"app-102\") should be called because \"newProps\" is not an object", () => {
-                componentInstance.updateState(12, false);
-                
-                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-102");
-            });
-    
-            test("Run updateState(\"test string\", false, () => {}): ExceptionsHandler.ValidatorError(\"app-102\") should be called because \"newProps\" is not an object", () => {
-                componentInstance.updateState("test string", false, () => {});
-                
-                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-102");
-            });
-    
-            test("Run updateState(true, false, \"test string input\"): ExceptionsHandler.ValidatorError(\"app-102\") should be called because \"newProps\" is not an object", () => {
-                componentInstance.updateState(true, false, "test string input");
-                
-                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-102");
-            });
-    
-            test("Run updateState(null, false, 30): ExceptionsHandler.ValidatorError(\"app-102\") should be called because \"newProps\" is not an object", () => {
-                componentInstance.updateState(null, false, 30);
-                
-                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-102");
-            });
-    
-            test("Run updateState(undefined, false, true): ExceptionsHandler.ValidatorError(\"app-102\") should be called because \"newProps\" is not an object", () => {
-                componentInstance.updateState(undefined, false, true);
-                
-                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-102");
-            });
-    
-            test("Run updateState([12, 20], false, true): ExceptionsHandler.ValidatorError(\"app-102\") should be called because \"newProps\" is not an object", () => {
-                componentInstance.updateState([12, 20], false, true);
-                
-                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-102");
-            });
-        })
     });
 
     describe("Test handleNavigation(viewProps)", () => {
@@ -281,6 +282,14 @@ describe("<App />: Unit test of individual methods located in this component", (
                 expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-104");
             })
             
+            test.each(variousInputs)("Run handleNavigation(%p) again: componentInstance.launchErrorOverlay() should be called with the return value of ExceptionsHandler.ValidatorError(\"app-104\") as its input parameter, because \"viewProps\" is not an object", (val) => {
+                ExceptionsHandler.ValidatorError.mockReturnValue(actualErrorReturns["app-104"]);
+                componentInstance.launchErrorOverlay = jest.fn();
+                componentInstance.handleNavigation(val);
+
+                expect(componentInstance.launchErrorOverlay).toHaveBeenCalledWith(expectedErrorReturns["app-104"]);
+            })
+
             test("Run handleNavigation(): ExceptionsHandler.ValidatorError(\"app-104\") should be called, because \"viewProps\" is not an object", () => {
                 componentInstance.updateState = jest.fn();
                 componentInstance.handleNavigation();
@@ -288,6 +297,13 @@ describe("<App />: Unit test of individual methods located in this component", (
                 expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-104");
             })
 
+            test("Run handleNavigation() again: componentInstance.launchErrorOverlay() should be called with the return value of ExceptionsHandler.ValidatorError(\"app-104\") as its input parameter, because \"viewProps\" is not an object", () => {
+                ExceptionsHandler.ValidatorError.mockReturnValue(actualErrorReturns["app-104"]);
+                componentInstance.launchErrorOverlay = jest.fn();
+                componentInstance.handleNavigation();
+
+                expect(componentInstance.launchErrorOverlay).toHaveBeenCalledWith(expectedErrorReturns["app-104"]);
+            })
         });
 
         describe("Test this method using various non-array objects as \"viewProps\". The objects should vary to cover as many permutations as possible. this.updateState() should get called only if the \"viewProps\" object contains all valid keys (all valid keys being \"viewData\" (object), \"metaData\" (object) and \"refreshFactor\" (number)). Otherwise, throw ExceptionsHandler.ValidatorError(\"app-103\").", () => {
@@ -328,65 +344,108 @@ describe("<App />: Unit test of individual methods located in this component", (
             ];
 
             test.each(various_viewData)("Run handleNavigation({ viewData: %p }): ExceptionsHandler.ValidatorError(\"app-103\") should be called, because \"viewProps\" does not contain all valid keys (valid keys being \"viewData\" (object), \"metaData\" (object) and \"refreshFactor\" (number))", (val) => {
-                componentInstance.updateState = jest.fn();
                 componentInstance.handleNavigation({ viewData: val });
 
                 expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-103");
             });
 
+            test.each(various_viewData)("Run handleNavigation({ viewData: %p }) again: componentInstance.launchErrorOverlay() should be called with the return value of ExceptionsHandler.ValidatorError(\"app-103\") as its input parameter, because \"viewProps\" does not contain all valid keys (valid keys being \"viewData\" (object), \"metaData\" (object) and \"refreshFactor\" (number))", (val) => {
+                componentInstance.launchErrorOverlay = jest.fn();
+                ExceptionsHandler.ValidatorError.mockReturnValue(actualErrorReturns["app-103"]);
+                componentInstance.handleNavigation({ viewData: val });
+
+                expect(componentInstance.launchErrorOverlay).toHaveBeenCalledWith(expectedErrorReturns["app-103"]);
+            });
+
             test.each(various_metaData)("Run handleNavigation({ metaData: %p }): ExceptionsHandler.ValidatorError(\"app-103\") should be called, because \"viewProps\" does not contain all valid keys (valid keys being \"viewData\" (object), \"metaData\" (object) and \"refreshFactor\" (number))", (val) => {
-                componentInstance.updateState = jest.fn();
                 componentInstance.handleNavigation({ metaData: val });
 
                 expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-103");
             });
 
+            test.each(various_metaData)("Run handleNavigation({ metaData: %p }) again: componentInstance.launchErrorOverlay() should be called with the return value of ExceptionsHandler.ValidatorError(\"app-103\") as its input parameter, because \"viewProps\" does not contain all valid keys (valid keys being \"viewData\" (object), \"metaData\" (object) and \"refreshFactor\" (number))", (val) => {
+                componentInstance.launchErrorOverlay = jest.fn();
+                ExceptionsHandler.ValidatorError.mockReturnValue(actualErrorReturns["app-103"]);
+                componentInstance.handleNavigation({ metaData: val });
+
+                expect(componentInstance.launchErrorOverlay).toHaveBeenCalledWith(expectedErrorReturns["app-103"]);
+            });
+
             test.each(various_refreshFactor)("Run handleNavigation({ refreshFactor: %p }): ExceptionsHandler.ValidatorError(\"app-103\") should be called, because \"viewProps\" does not contain all valid keys (valid keys being \"viewData\" (object), \"metaData\" (object) and \"refreshFactor\" (number))", (val) => {
-                componentInstance.updateState = jest.fn();
                 componentInstance.handleNavigation({ refreshFactor: val });
 
                 expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-103");
             });
 
+            test.each(various_refreshFactor)("Run handleNavigation({ refreshFactor: %p }) again: componentInstance.launchErrorOverlay() should be called with the return value of ExceptionsHandler.ValidatorError(\"app-103\") as its input parameter, because \"viewProps\" does not contain all valid keys (valid keys being \"viewData\" (object), \"metaData\" (object) and \"refreshFactor\" (number))", (val) => {
+                componentInstance.launchErrorOverlay = jest.fn();
+                ExceptionsHandler.ValidatorError.mockReturnValue(actualErrorReturns["app-103"]);
+                componentInstance.handleNavigation({ refreshFactor: val });
+
+                expect(componentInstance.launchErrorOverlay).toHaveBeenCalledWith(expectedErrorReturns["app-103"]);
+            });
+
             describe("Test various combinations of \"viewData\" and \"metaData\" provided by \"viewProps\". this.updateState() should not get called since \"viewProps\" does not contain all valid keys in correct format.", () => {
                 for(let i = 0; i < various_metaData.length; i++){
-                    test.each(various_viewData)("Run handleNavigation({ viewData: %p, metaData: " + various_metaData[i][0] + " }): ExceptionsHandler.ValidatorError(\"app-103\") should be called, because \"viewProps\" does not contain all valid keys (valid keys being \"viewData\" (object), \"metaData\" (object) and \"refreshFactor\" (number))", (val) => {
-                        const testComponent = predefinedComponent();
-                        const componentInstance = testComponent.instance();
+                    const testComponent = predefinedComponent();
+                    const componentInstance = testComponent.instance();
 
-                        componentInstance.updateState = jest.fn();
+                    test.each(various_viewData)("Run handleNavigation({ viewData: %p, metaData: " + various_metaData[i][0] + " }): ExceptionsHandler.ValidatorError(\"app-103\") should be called, because \"viewProps\" does not contain all valid keys (valid keys being \"viewData\" (object), \"metaData\" (object) and \"refreshFactor\" (number))", (val) => {
                         componentInstance.handleNavigation({ viewData: val, metaData: various_metaData[i][0] });
 
                         expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-103");
+                    });
+
+                    test.each(various_viewData)("Run handleNavigation({ viewData: %p, metaData: " + various_metaData[i][0] + " }) again: componentInstance.launchErrorOverlay should be called with the return value of ExceptionsHandler.ValidatorError(\"app-103\") as its input parameter, because \"viewProps\" does not contain all valid keys (valid keys being \"viewData\" (object), \"metaData\" (object) and \"refreshFactor\" (number))", (val) => {
+                        ExceptionsHandler.ValidatorError.mockReturnValue(actualErrorReturns["app-103"]);
+
+                        componentInstance.launchErrorOverlay = jest.fn();
+                        componentInstance.handleNavigation({ viewData: val, metaData: various_metaData[i][0] });
+
+                        expect(componentInstance.launchErrorOverlay).toHaveBeenCalledWith(expectedErrorReturns["app-103"]);
                     });
                 }
             });
 
             describe("Test various combinations of \"viewData\" and \"refreshFactor\" provided by \"viewProps\". this.updateState() should not get called since \"viewProps\" does not contain all valid keys in correct format.", () => {
                 for(let i = 0; i < various_refreshFactor.length; i++){
-                    test.each(various_viewData)("Run handleNavigation({ viewData: %p, refreshFactor: " + various_refreshFactor[i][0] + " }): ExceptionsHandler.ValidatorError(\"app-103\") should be called, because \"viewProps\" does not contain all valid keys (valid keys being \"viewData\" (object), \"metaData\" (object) and \"refreshFactor\" (number))", (val) => {
-                        const testComponent = predefinedComponent();
-                        const componentInstance = testComponent.instance();
+                    const testComponent = predefinedComponent();
+                    const componentInstance = testComponent.instance();
 
-                        componentInstance.updateState = jest.fn();
+                    test.each(various_viewData)("Run handleNavigation({ viewData: %p, refreshFactor: " + various_refreshFactor[i][0] + " }): ExceptionsHandler.ValidatorError(\"app-103\") should be called, because \"viewProps\" does not contain all valid keys (valid keys being \"viewData\" (object), \"metaData\" (object) and \"refreshFactor\" (number))", (val) => {
                         componentInstance.handleNavigation({ viewData: val, refreshFactor: various_refreshFactor[i][0] });
 
                         expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-103");
+                    });
+
+                    test.each(various_viewData)("Run handleNavigation({ viewData: %p, refreshFactor: " + various_refreshFactor[i][0] + " }) again: componentInstance.launchErrorOverlay should be called with the return value of ExceptionsHandler.ValidatorError(\"app-103\") as its input parameter, because \"viewProps\" does not contain all valid keys (valid keys being \"viewData\" (object), \"metaData\" (object) and \"refreshFactor\" (number))", (val) => {
+                        ExceptionsHandler.ValidatorError.mockReturnValue(actualErrorReturns["app-103"]);
+                        componentInstance.launchErrorOverlay = jest.fn();
+                        componentInstance.handleNavigation({ viewData: val, refreshFactor: various_refreshFactor[i][0] });
+
+                        expect(componentInstance.launchErrorOverlay).toHaveBeenCalledWith(expectedErrorReturns["app-103"]);
                     });
                 }
             });
 
             describe("Test various combinations of \"metaData\" and \"refreshFactor\" provided by \"viewProps\". this.updateState() should not get called since \"viewProps\" does not contain all valid keys in correct format.", () => {
                 for(let i = 0; i < various_refreshFactor.length; i++){
-                    test.each(various_metaData)("Run handleNavigation({ metaData: %p, refreshFactor: " + various_refreshFactor[i][0] + " }): ExceptionsHandler.ValidatorError(\"app-103\") should be called, because \"viewProps\" does not contain all valid keys (valid keys being \"viewData\" (object), \"metaData\" (object) and \"refreshFactor\" (number))", (val) => {
-                        const testComponent = predefinedComponent();
-                        const componentInstance = testComponent.instance();
+                    const testComponent = predefinedComponent();
+                    const componentInstance = testComponent.instance();
 
-                        componentInstance.updateState = jest.fn();
+                    test.each(various_metaData)("Run handleNavigation({ metaData: %p, refreshFactor: " + various_refreshFactor[i][0] + " }): ExceptionsHandler.ValidatorError(\"app-103\") should be called, because \"viewProps\" does not contain all valid keys (valid keys being \"viewData\" (object), \"metaData\" (object) and \"refreshFactor\" (number))", (val) => {
                         componentInstance.handleNavigation({ metaData: val, refreshFactor: various_refreshFactor[i][0] });
                       
                         expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-103");
                     });
+
+                    test.each(various_metaData)("Run handleNavigation({ metaData: %p, refreshFactor: " + various_refreshFactor[i][0] + " }) again: componentInstance.launchErrorOverlay should be called with the return value of ExceptionsHandler.ValidatorError(\"app-103\") as its input parameter, because \"viewProps\" does not contain all valid keys (valid keys being \"viewData\" (object), \"metaData\" (object) and \"refreshFactor\" (number))", (val) => {
+                        ExceptionsHandler.ValidatorError.mockReturnValue(actualErrorReturns["app-103"])
+                        componentInstance.launchErrorOverlay = jest.fn();
+                        componentInstance.handleNavigation({ metaData: val, refreshFactor: various_refreshFactor[i][0] });
+                      
+                        expect(componentInstance.launchErrorOverlay).toHaveBeenCalledWith(expectedErrorReturns["app-103"]);
+                    }); 
                 }
             });
  
@@ -397,14 +456,21 @@ describe("<App />: Unit test of individual methods located in this component", (
                     for(let k = 0; k < various_viewData.length; k++){
                         for(let j = 0; j < various_refreshFactor.length; j++){
                             if(!(isObject(various_metaData[i][0]) && isObject(various_viewData[k][0]) && isNumber(various_refreshFactor[j][0]))){
-                                test("Run handleNavigation({ metaData: " + various_metaData[i][0] + ", viewData: " + various_viewData[k][0] + ", refreshFactor: " + various_refreshFactor[j][0] + " }): ExceptionsHandler.ValidatorError(\"app-103\") should be called. There are correct keys in the \"viewProps\" object, but one or more of their values are in wrong format", () => {
-                                    const testComponent = predefinedComponent();
-                                    const componentInstance = testComponent.instance();
-
-                                    componentInstance.updateState = jest.fn();
+                                const testComponent = predefinedComponent();
+                                const componentInstance = testComponent.instance();
+                                
+                                test("Run handleNavigation({ metaData: " + various_metaData[i][0] + ", viewData: " + various_viewData[k][0] + ", refreshFactor: " + various_refreshFactor[j][0] + " }): ExceptionsHandler.ValidatorError(\"app-103\") should be called - because there are correct keys in the \"viewProps\" object, but one or more of their values are in wrong format", () => {
                                     componentInstance.handleNavigation({ metaData: various_metaData[i][0], viewData: various_viewData[k][0], refreshFactor: various_refreshFactor[j][0] });
 
                                     expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-103");
+                                });
+
+                                test("Run handleNavigation({ metaData: " + various_metaData[i][0] + ", viewData: " + various_viewData[k][0] + ", refreshFactor: " + various_refreshFactor[j][0] + " }) again: componentInstance.launchErrorOverlay should be called with the return value of ExceptionsHandler.ValidatorError(\"app-103\") as its input parameter - because there are correct keys in the \"viewProps\" object, but one or more of their values are in wrong format", () => {
+                                    ExceptionsHandler.ValidatorError.mockReturnValue(actualErrorReturns["app-103"]);
+                                    componentInstance.launchErrorOverlay = jest.fn();
+                                    componentInstance.handleNavigation({ metaData: various_metaData[i][0], viewData: various_viewData[k][0], refreshFactor: various_refreshFactor[j][0] });
+
+                                    expect(componentInstance.launchErrorOverlay).toHaveBeenCalledWith(expectedErrorReturns["app-103"]);
                                 });
                             }
                         }
@@ -434,5 +500,106 @@ describe("<App />: Unit test of individual methods located in this component", (
             });
 
         })
+    });
+
+    describe("Test handleMainNavBarClick(sidebarProps)", () => {
+
+        describe("Test when \"sidebarProps\" parameter is not an object: In all cases, an error \"app-105\" is expected", () => {
+            const various_sidebarProps = [
+                ["A very random input string"],
+                [2.47],
+                [false],
+                [true],
+                [null],
+                [undefined],
+                [[20, 15, "hello"]],
+                [() => {}]
+            ];
+
+            test("Run handleMainNavBarClick(): componentInstance.launchErrorOverlay() should be called with the return value of ExceptionsHandler.ValidatorError(\"app-105\") as its input parameter, because \"sidebarProps\" is not an object", () => {
+                ExceptionsHandler.ValidatorError.mockReturnValue(actualErrorReturns["app-105"]);
+                componentInstance.launchErrorOverlay = jest.fn();
+                componentInstance.handleMainNavBarClick();
+    
+                expect(componentInstance.launchErrorOverlay).toHaveBeenCalledWith(expectedErrorReturns["app-105"]);
+            })
+    
+            test.each(various_sidebarProps)("Run handleMainNavBarClick(%p): componentInstance.launchErrorOverlay() should be called with the return value of ExceptionsHandler.ValidatorError(\"app-105\") as its input parameter, because \"sidebarProps\" is not an object", (val) => {
+                ExceptionsHandler.ValidatorError.mockReturnValue(actualErrorReturns["app-105"]);
+                componentInstance.launchErrorOverlay = jest.fn();
+                componentInstance.handleMainNavBarClick(val);
+    
+                expect(componentInstance.launchErrorOverlay).toHaveBeenCalledWith(expectedErrorReturns["app-105"]);
+            })
+        });
+
+        describe("Test when \"sidebarProps\" parameter is an object with various keys.", () => {
+            describe("Check that \"sidebarProps\" contains the key \"activeNavLinkKey\" in its first level, and that it contains a number. If not, throw an error", () => {    
+                const various_activeNavLinkKey_notNumbers = [
+                    ["test string"],
+                    [true],
+                    [false],
+                    [undefined],
+                    [null],
+                    [{ anotherSetup: "ofObjects", test: true }],
+                    [[2,3,4,5]],
+                    [() => {}]
+                ];
+
+                test.each(various_activeNavLinkKey_notNumbers)("Run handleMainNavBarClick({ activeNavLinkKey: %p}): ExceptionsHandler.ValidatorError(\"app-106\") should be called, because \"activeNavLinkKey\" is not a number in \"sidebarProps\".", (val) => {
+                    componentInstance.handleMainNavBarClick({ activeNavLinkKey: val });
+        
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-106");
+                });
+
+                test.each(various_activeNavLinkKey_notNumbers)("Run handleMainNavBarClick({ activeNavLinkKey: %p}) again: componentInstance.launchErrorOverlay() should be called with the return value of ExceptionsHandler.ValidatorError(\"app-106\") as its input parameter, because \"activeNavLinkKey\" is not a number in \"sidebarProps\".", (val) => {
+                    ExceptionsHandler.ValidatorError.mockReturnValue(actualErrorReturns["app-106"]);
+                    componentInstance.launchErrorOverlay = jest.fn();
+                    componentInstance.handleMainNavBarClick({ activeNavLinkKey: val });
+        
+                    expect(componentInstance.launchErrorOverlay).toHaveBeenCalledWith(expectedErrorReturns["app-106"]);
+                });
+
+                const various_activeNavLinkKey_numbers = [
+                    [77],
+                    [48],
+                    [120],
+                    [5],
+                    [9]
+                ];
+
+                test.each(various_activeNavLinkKey_numbers)("Run handleMainNavBarClick({ activeNavLinkKey: %p}): componentInstance.updateState should be called, because \"sidebarProps\" contains \"activeNavLinkKey\" with a number in its first level.", (val) => {
+                    componentInstance.updateState = jest.fn();
+                    componentInstance.handleMainNavBarClick({ activeNavLinkKey: val });
+        
+                    expect(componentInstance.updateState).toHaveBeenCalled();
+                });
+            });
+
+            describe("Check that \"sidebarProps\" contains various objects with no valid keys", () => {
+                const various_objects_invalid_keys = [
+                    [{ key1: "abc", key2: "def", key3: 8, key4: "ghi", key5: "jklmnop" }],
+                    [{ key6: false, key7: true, key8: [], key9: undefined, key10: 13 }],
+                    [{ key11: 25, key12: false, key13: 8, key14: "ghasdadi", key15: {} }],
+                    [{ key16: "abc", key17: "def", key18: 8, key19: "ghi", key20: "jklmnop" }]
+                ];
+
+                test.each(various_objects_invalid_keys)("Run handleMainNavBarClick(%p): ExceptionsHandler.ValidatorError(\"app-106\") should be called, because \"activeNavLinkKey\" is missing in the first level of \"sidebarProps\".", (val) => {
+                    componentInstance.handleMainNavBarClick(val);
+        
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-106");
+                });
+
+                test.each(various_objects_invalid_keys)("Run handleMainNavBarClick(%p) again: componentInstance.launchErrorOverlay() should be called with the return value of ExceptionsHandler.ValidatorError(\"app-106\") as its input parameter, because \"activeNavLinkKey\" is missing in the first level of \"sidebarProps\".", (val) => {
+                    ExceptionsHandler.ValidatorError.mockReturnValue(actualErrorReturns["app-106"]);
+                    componentInstance.launchErrorOverlay = jest.fn();
+                    componentInstance.handleMainNavBarClick(val);
+        
+                    expect(componentInstance.launchErrorOverlay).toHaveBeenCalledWith(expectedErrorReturns["app-106"]);
+                });
+            })
+            
+        })
+        
     });
 });
