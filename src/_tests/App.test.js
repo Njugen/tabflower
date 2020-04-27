@@ -531,9 +531,9 @@ describe("Test functions in <App />", () => {
             test("Running handleMainNavBarClick(\"Not an object\") will throw an error and pass it to launchErrorOverlay(err), where err.code = \"app-105\"", () => {
                 componentInstance.launchErrorOverlay = jest.fn();
                 componentInstance.handleMainNavBarClick("Not an object");
-
+                
                 expect(componentInstance.launchErrorOverlay).toHaveBeenCalledWith(expectedErrorReturns["app-105"]);
             })
         })
-    });
+    }); 
 });

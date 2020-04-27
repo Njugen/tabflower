@@ -229,8 +229,6 @@ class ExistingTabGroupsModule extends Module {
     
 }
 
-console.log();
-
 ExistingTabGroupsModule.propTypes = {
     ...Module.propTypes,
     onRaiseToView: PropTypes.func.isRequired,
