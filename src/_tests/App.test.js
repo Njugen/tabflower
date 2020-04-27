@@ -462,60 +462,64 @@ describe("Test functions in <App />", () => {
     
                 expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-105");
             })
+
+            test.each(various_sidebarProps)("Run handldeMainNavBarClick(%p): ExceptionsHandler.ValidatorError(\"app-105\") should be called", (val) => {
+                componentInstance.handleMainNavBarClick(val);
+    
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-105");
+            })
         });
 
-        describe("Test when \"sidebarProps\" parameter is an object with various keys.", () => {
-            describe("Check that \"sidebarProps\" contains the key \"activeNavLinkKey\" in its first level, and that it contains a number. If not, throw an error", () => {    
-                const various_activeNavLinkKey_notNumbers = [
-                    ["test string"],
-                    [true],
-                    [false],
-                    [undefined],
-                    [null],
-                    [{ anotherSetup: "ofObjects", test: true }],
-                    [[2,3,4,5]],
-                    [() => {}]
-                ];
 
-                test.each(various_activeNavLinkKey_notNumbers)("Run handleMainNavBarClick({ activeNavLinkKey: %p}): ExceptionsHandler.ValidatorError(\"app-106\") should be called, because \"activeNavLinkKey\" is not a number in \"sidebarProps\".", (val) => {
-                    componentInstance.handleMainNavBarClick({ activeNavLinkKey: val });
-        
-                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-106");
-                });
+        describe("\"sidebarProps\" contains the key \"activeNavLinkKey\" in its first level.", () => {    
+            const various_activeNavLinkKey_notNumbers = [
+                ["test string"],
+                [true],
+                [false],
+                [undefined],
+                [null],
+                [{ anotherSetup: "ofObjects", test: true }],
+                [[2,3,4,5]],
+                [() => {}]
+            ];
 
-                const various_activeNavLinkKey_numbers = [
-                    [77],
-                    [48],
-                    [120],
-                    [5],
-                    [9]
-                ];
-
-                test.each(various_activeNavLinkKey_numbers)("Run handleMainNavBarClick({ activeNavLinkKey: %p}): componentInstance.updateState should be called, because \"sidebarProps\" contains \"activeNavLinkKey\" with a number in its first level.", (val) => {
-                    componentInstance.updateState = jest.fn();
-                    componentInstance.handleMainNavBarClick({ activeNavLinkKey: val });
-        
-                    expect(componentInstance.updateState).toHaveBeenCalled();
-                });
+            test.each(various_activeNavLinkKey_notNumbers)("Run handleMainNavBarClick({ activeNavLinkKey: %p}): ExceptionsHandler.ValidatorError(\"app-106\") should be called", (val) => {
+                componentInstance.handleMainNavBarClick({ activeNavLinkKey: val });
+    
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-106");
             });
 
-            describe("Check that \"sidebarProps\" contains various objects with no valid keys", () => {
-                const various_objects_invalid_keys = [
-                    [{ key1: "abc", key2: "def", key3: 8, key4: "ghi", key5: "jklmnop" }],
-                    [{ key6: false, key7: true, key8: [], key9: undefined, key10: 13 }],
-                    [{ key11: 25, key12: false, key13: 8, key14: "ghasdadi", key15: {} }],
-                    [{ key16: "abc", key17: "def", key18: 8, key19: "ghi", key20: "jklmnop" }]
-                ];
+            const various_activeNavLinkKey_numbers = [
+                [77],
+                [48],
+                [120],
+                [5],
+                [9]
+            ];
 
-                test.each(various_objects_invalid_keys)("Run handleMainNavBarClick(%p): ExceptionsHandler.ValidatorError(\"app-106\") should be called, because \"activeNavLinkKey\" is missing in the first level of \"sidebarProps\".", (val) => {
-                    componentInstance.handleMainNavBarClick(val);
-        
-                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-106");
-                });
-            })
-            
+            test.each(various_activeNavLinkKey_numbers)("Run handleMainNavBarClick({ activeNavLinkKey: %p}): componentInstance.updateState should be called", (val) => {
+                componentInstance.updateState = jest.fn();
+                componentInstance.handleMainNavBarClick({ activeNavLinkKey: val });
+    
+                expect(componentInstance.updateState).toHaveBeenCalled();
+            });
+        });
+
+        describe("Check when \"sidebarProps\" contains various objects with no valid keys", () => {
+            const various_objects_invalid_keys = [
+                [{ key1: "abc", key2: "def", key3: 8, key4: "ghi", key5: "jklmnop" }],
+                [{ key6: false, key7: true, key8: [], key9: undefined, key10: 13 }],
+                [{ key11: 25, key12: false, key13: 8, key14: "ghasdadi", key15: {} }],
+                [{ key16: "abc", key17: "def", key18: 8, key19: "ghi", key20: "jklmnop" }]
+            ];
+
+            test.each(various_objects_invalid_keys)("Run handleMainNavBarClick(%p): ExceptionsHandler.ValidatorError(\"app-106\") should be called", (val) => {
+                componentInstance.handleMainNavBarClick(val);
+    
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-106");
+            });
         })
-        
+
         describe("Check that correct error messages are caught", () => {
             test("Running handleMainNavBarClick({}) will throw an error and pass it to launchErrorOverlay(err), where err.code = \"app-106\"", () => {
                 componentInstance.launchErrorOverlay = jest.fn();
