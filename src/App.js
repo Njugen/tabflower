@@ -121,8 +121,8 @@ class App extends Component{
         if(isNumber(sidebarProps.activeNavLinkKey)){
           this.updateState(
             {
-              MainNavBar: sidebarProps,
-            
+              MainNavBar: sidebarProps
+             
             },
             false
           );
@@ -136,53 +136,57 @@ class App extends Component{
       this.launchErrorOverlay(err);
     }
   }
+ 
+  launchModal = (data) => {
+    const { isObject, isFunction, isString } = validator;
 
-  modalHandler = (data) => {
-    
-    if(data.clear && data.clear === true){
-      this.clearModal();
-    } else {
-      this.launchModal(data);
+    try {
+      if(isObject(data)){
+        if(isString(data.id) && isFunction(data.action) && isObject(data.params)) {
+              const modal = {
+                launched: true,
+                ...data
+              }
+              
+              this.setState({
+                modal
+              });
+            
+        } else {
+          throw ExceptionsHandler.ValidatorError("app-108");
+        }
+      } else {
+        throw ExceptionsHandler.ValidatorError("app-107");
+      }
+    } catch(err){
+      this.launchErrorOverlay(err);
     }
-  }
 
-  errorOverlayHandler = (data) => {
-    
-    if(data.clear && data.clear === true){
-      this.clearModal();
-    } else {
-      this.launchErrorOverlay(data);
-    }
   }
 
   launchErrorOverlay = (data) => {
-    let errors = this.state.errors;
-    errors.push(data);
-
-    this.setState({
-      errors
-    }, () => {
-      
-    });
-  }
-
-  clearErrors = () => {
-    const errors = [];
+    const { isObject, isString } = validator;
     
-    this.setState({errors});
-  }
- 
-  launchModal = (data) => {
-    const modal = {
-      launched: true,
-      ...data
-    }
+    try {
+      if(isObject(data)){
+        if(isString(data.code) && isString(data.message) && isString(data.name)){
+          let errors = this.state.errors;
+          errors.push(data);
 
-    if(this.state.modal.launched !== true){
-    this.setState({
-      modal
-    });
-  }
+          this.setState({
+            errors
+          });
+        } else {
+          throw ExceptionsHandler.ValidatorError("app-110");
+        }
+      } else {
+        throw ExceptionsHandler.ValidatorError("app-109");
+      }
+    } catch(err){
+      this.setState({
+        errors: [data, err]
+      }); 
+    }
   }
 
   clearModal = () => {
@@ -193,11 +197,43 @@ class App extends Component{
     }, 500)
     
   }
+
+  
+  clearErrors = () => {
+    const errors = [];
+    
+    this.setState({errors});
+  }
   
   handleRouteListReady = (data) => {
-    const routes = data;
+    const { isNumber, isString, isArray, isObject } = validator;
+  
+    try {
+      if(isArray(data) && data.length > 0){
+        const routes = data;
+        let errors = 0;
 
-    this.setState({ routes });
+        for(let i = 0; i < routes.length; i++){
+          if(isObject(routes[i])){
+            if(!isString(routes[i].label) || !isString(routes[i].path) || !isNumber(routes[i].key)){
+              errors++; 
+            }
+          } else {
+            errors++;
+          }
+        }
+
+        if(errors === 0){
+          this.setState({ routes });
+        } else {
+          throw ExceptionsHandler.ValidatorError("app-112");
+        }
+      } else {
+        throw ExceptionsHandler.ValidatorError("app-113");
+      }
+    } catch(err){
+      this.launchErrorOverlay(err);
+    }
   }
   
 
@@ -209,21 +245,21 @@ class App extends Component{
     return (
       <Fragment>
         <ErrorBoundary>
-          {(modalLaunched && modalId === "confirm-action") && <ConfirmationModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></ConfirmationModal>}
-          {(modalLaunched && modalId === "date-settings") && <CalendarDateSettingsModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></CalendarDateSettingsModal>}
-          {(modalLaunched && modalId === "etgmlaunchgroupmodal") && <ETGMLaunchGroupModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></ETGMLaunchGroupModal>}
-          {(modalLaunched && modalId === "etgmremovegroupmodal") && <ETGMRemoveGroupModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></ETGMRemoveGroupModal>}
-          {(modalLaunched && modalId === "etgmcreateoreditgroupmodal") && <ETGMCreateOrEditGroupModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></ETGMCreateOrEditGroupModal>}
-          {(modalLaunched && modalId === "cotmremoveunresponsivetabsmodal") && <COTMRemoveUnresponsiveTabsModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></COTMRemoveUnresponsiveTabsModal>}
-          {(modalLaunched && modalId === "cotmremovewindowmodal") && <COTMRemoveWindowModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></COTMRemoveWindowModal>}
-          {(modalLaunched && modalId === "cotmremovetabmodal") && <COTMRemoveTabModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} onDismiss={() => this.clearModal()}></COTMRemoveTabModal>}
+          {(modalLaunched && modalId === "confirm-action") && <ConfirmationModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)} onDismiss={() => this.clearModal()}></ConfirmationModal>}
+          {(modalLaunched && modalId === "date-settings") && <CalendarDateSettingsModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)} onDismiss={() => this.clearModal()}></CalendarDateSettingsModal>}
+          {(modalLaunched && modalId === "etgmlaunchgroupmodal") && <ETGMLaunchGroupModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)} onDismiss={() => this.clearModal()}></ETGMLaunchGroupModal>}
+          {(modalLaunched && modalId === "etgmremovegroupmodal") && <ETGMRemoveGroupModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)} onDismiss={() => this.clearModal()}></ETGMRemoveGroupModal>}
+          {(modalLaunched && modalId === "etgmcreateoreditgroupmodal") && <ETGMCreateOrEditGroupModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)} onDismiss={() => this.clearModal()}></ETGMCreateOrEditGroupModal>}
+          {(modalLaunched && modalId === "cotmremoveunresponsivetabsmodal") && <COTMRemoveUnresponsiveTabsModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)} onDismiss={() => this.clearModal()}></COTMRemoveUnresponsiveTabsModal>}
+          {(modalLaunched && modalId === "cotmremovewindowmodal") && <COTMRemoveWindowModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)} onDismiss={() => this.clearModal()}></COTMRemoveWindowModal>}
+          {(modalLaunched && modalId === "cotmremovetabmodal") && <COTMRemoveTabModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)} onDismiss={() => this.clearModal()}></COTMRemoveTabModal>}
           {errors.length > 0 && <ErrorOverlay data={errors} onSave={() => ""} onDismiss={() => this.clearErrors()}></ErrorOverlay>}
         
         <div className="container-fluid">
           <MainNavBar routes={this.state.routes} onMainNavBarClick={(data) => this.handleMainNavBarClick(data)} />
           <div className="row">
             <div className="col-md-12 py-2" id="tabeon-view-container">
-                <RouteList onRaisedRoutesInfo={(data) => this.handleRouteListReady(data)} onRaiseToModal={(data) => this.modalHandler(data)} onNavigation={(data) => this.handleNavigation(data)} onRaiseToErrorOverlay={(data) => this.errorOverlayHandler(data)} />
+                <RouteList onRaisedRoutesInfo={(data) => this.handleRouteListReady(data)} onRaiseToModal={(data) => this.launchModal(data)} onNavigation={(data) => this.handleNavigation(data)} onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)} />
                 <ViewFooter />
             </div>
           </div>

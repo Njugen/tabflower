@@ -22,7 +22,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --coverage --watchAll=true",
     "test:report": "react-scripts test --coverage --watchAll=true --reporters=jest-html-reporter",
     "eject": "react-scripts eject"
   },
@@ -39,6 +39,12 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "babel": {
+    "presets": [
+        "@babel/preset-env",
+        "@babel/preset-react"
     ]
   },
   "devDependencies": {

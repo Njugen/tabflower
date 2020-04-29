@@ -38,7 +38,7 @@ class ETGMRemoveGroupsModal extends Modal {
     */
     saveModalHandler = (callback) => {
         try {
-            const { isFunction } = validator;
+            const { isFunction } = validator; 
 
             if(isFunction(callback)){
                 this.clearModalData(callback(this.props.data.params));

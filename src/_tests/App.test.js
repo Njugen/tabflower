@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { shallow } from 'enzyme';
 import App from './../App';
 import * as ExceptionsHandler from './../components/utils/exceptionsAndHandler';
@@ -32,6 +32,12 @@ describe("Test <App /> component behaviour at mount", () => {
         
         expect(componentInstance.state).toStrictEqual(templateState);
     });
+
+    test("<Fragment> is rendered without props", () => {
+        const fragmentComponent = testComponent.find(<Fragment />);
+
+        expect(fragmentComponent).toBeCalled();
+    })
 });
 
 describe("Test functions in <App />", () => {
@@ -44,7 +50,13 @@ describe("Test functions in <App />", () => {
         "app-103": ExceptionsHandler.ValidatorError("app-103"),
         "app-104": ExceptionsHandler.ValidatorError("app-104"),
         "app-105": ExceptionsHandler.ValidatorError("app-105"),
-        "app-106": ExceptionsHandler.ValidatorError("app-106")
+        "app-106": ExceptionsHandler.ValidatorError("app-106"),
+        "app-107": ExceptionsHandler.ValidatorError("app-107"),
+        "app-108": ExceptionsHandler.ValidatorError("app-108"),
+        "app-109": ExceptionsHandler.ValidatorError("app-109"),
+        "app-110": ExceptionsHandler.ValidatorError("app-110"),
+        "app-112": ExceptionsHandler.ValidatorError("app-112"),
+        "app-113": ExceptionsHandler.ValidatorError("app-113")
     };
 
     // The error messages we expect to catch and be used as parameter in componentInstance.launchErrorOverlay, if an error has occured
@@ -78,16 +90,57 @@ describe("Test functions in <App />", () => {
             name: "ValidatorError",
             message: "The \"sidebarProps\" parameter in the App component's handleMainNavBarClick() function is missing an \"activeNavLinkKey\" key (as an integer) in its object.",
             code: "app-106"
+        },
+        "app-107": {
+            name: "ValidatorError",
+            message: "The \"data\" parameter in the App component's launchModal() function needs to be a an object (but not an array).",
+            code: "app-107"
+        },
+        "app-108": {
+            name: "ValidatorError",
+            message: "The \"data\" parameter in the App component's launchModal() function does not contain the necessary keys",
+            code: "app-108"
+        },
+        "app-109": {
+            name: "ValidatorError",
+            message: "The \"data\" parameter in the App component's launchErrorOverlay() function needs to be a an object (but not an array).",
+            code: "app-109"
+        },
+        "app-110": {
+            name: "ValidatorError",
+            message: "The \"data\" parameter in the App component's launchErrorOverlay() function does not contain the necessary keys",
+            code: "app-110"
+        },
+        "app-112": {
+            name: "ValidatorError",
+            message: "The \"routesArray\" parameter in the App component's validateRouteArrayFormat() function needs to be an array, with each element being an object containing at least the following keys: { label: \"name of the route\", path: \"/path of the route\", key: index number }",
+            code: "app-112"
+        },
+        "app-113": {
+            name: "ValidatorError",
+            message: "The \"data\" parameter in the App component's handleRouteListReady() function needs to be an array, containing different route objects",
+            code: "app-113"
         }
     }
 
+    const expectedPossibleModalIds = [
+        "confirm-action",
+        "date-settings",
+        "etgmlaunchgroupmodal",
+        "etgmremovegroupmodal",
+        "cotmremoveunresponsivetabsmodal",
+        "cotmremovewindowmodal",
+        "cotmremovetabmodal"
+    ];
+
     beforeEach(() => {
         jest.clearAllMocks();
+        jest.useRealTimers();
+
         testComponent = predefinedComponent();
         
         componentInstance = testComponent.instance();
         componentInstance.setState = jest.fn();
-        componentInstance.launchErrorOverlay = jest.fn();
 
         ExceptionsHandler.ValidatorError = jest.fn();
         ExceptionsHandler.ValidatorError.mockImplementation(errCode => {
@@ -178,7 +231,7 @@ describe("Test functions in <App />", () => {
 
                     if(various_showLoadbar[i][0] === true){
                         if(isFunction(various_callback[j][0])){
-                            test.each(various_newProps_objects)("Run updateState(%p, " + various_showLoadbar[i][0] + ", " + various_callback[j][0] + "): this.setState(newProps, callback) should be called, refreshFactor increased by 1.", (val) => {
+                            test.each(various_newProps_objects)("Run updateState(%p, " + various_showLoadbar[i][0] + ", " + various_callback[j][0] + "): this.setState(newProps, callback) should be called with correct parameters, refreshFactor increased by 1.", (val) => {
                                 componentInstance.setState = jest.fn();
 
                                 componentInstance.updateState(val, various_showLoadbar[i][0], various_callback[j][0]);
@@ -187,7 +240,7 @@ describe("Test functions in <App />", () => {
                                 expect(componentInstance.setState).toHaveBeenCalledWith(val, various_callback[j][0]);
                             });
                         } else if(isUndefined(various_callback[j][0])){
-                            test.each(various_newProps_objects)("Run updateState(%p, " + various_showLoadbar[i][0] + ", " + various_callback[j][0] + "): this.setState(newProps) should be called, refreshFactor increased by 1.", (val) => {
+                            test.each(various_newProps_objects)("Run updateState(%p, " + various_showLoadbar[i][0] + ", " + various_callback[j][0] + "): this.setState(newProps) should be called with correct parameters, refreshFactor increased by 1.", (val) => {
                                 componentInstance.setState = jest.fn();
 
                                 componentInstance.updateState(val, various_showLoadbar[i][0], various_callback[j][0]);
@@ -205,7 +258,7 @@ describe("Test functions in <App />", () => {
                         }
                     } else {
                         if(isFunction(various_callback[j][0])){
-                            test.each(various_newProps_objects)("Run updateState(%p, " + various_showLoadbar[i][0] + ", " + various_callback[j][0] + "): this.setState(newProps, callback) should be called", (val) => {
+                            test.each(various_newProps_objects)("Run updateState(%p, " + various_showLoadbar[i][0] + ", " + various_callback[j][0] + "): this.setState(newProps, callback) should be called with correct parameters", (val) => {
                                 componentInstance.setState = jest.fn();
 
                                 componentInstance.updateState(val, various_showLoadbar[i][0], various_callback[j][0]);
@@ -413,14 +466,16 @@ describe("Test functions in <App />", () => {
                     [{ metaData: {}, viewData: {}, refreshFactor: 94, randomKey1: false, randomKey2: [3,2,4], randomKey4: ["test string again"], randomKey3: 248 }]
                 ];
 
-                test.each(assumedValid_viewProps_inputs)("Run handleNavigation(%p): this.updateState() should be called", (val) => {
+                test.each(assumedValid_viewProps_inputs)("Run handleNavigation(%p): this.updateState() should be called with correct parameters", (val) => {
                     const testComponent = predefinedComponent();
                     const componentInstance = testComponent.instance();
 
                     componentInstance.updateState = jest.fn();
                     componentInstance.handleNavigation(val);
 
-                    expect(componentInstance.updateState).toHaveBeenCalled();
+                    expect(componentInstance.updateState).toHaveBeenCalledWith({
+                        currentView: val
+                    }, true);
                 }); 
             });
 
@@ -497,11 +552,15 @@ describe("Test functions in <App />", () => {
                 [9]
             ];
 
-            test.each(various_activeNavLinkKey_numbers)("Run handleMainNavBarClick({ activeNavLinkKey: %p}): componentInstance.updateState should be called", (val) => {
+            test.each(various_activeNavLinkKey_numbers)("Run handleMainNavBarClick({ activeNavLinkKey: %p}): componentInstance.updateState should be called with correct parameters", (val) => {
                 componentInstance.updateState = jest.fn();
                 componentInstance.handleMainNavBarClick({ activeNavLinkKey: val });
     
-                expect(componentInstance.updateState).toHaveBeenCalled();
+                expect(componentInstance.updateState).toHaveBeenCalledWith({
+                    MainNavBar: {
+                        "activeNavLinkKey": val
+                    }
+                }, false);
             });
         });
 
@@ -536,4 +595,314 @@ describe("Test functions in <App />", () => {
             })
         })
     }); 
+
+    describe("Test launchModal(data)", () => {
+        describe("\"data\" is not a non-array object", () => {
+            const various_data = [
+                ["This is a test string passed to launchModal through data"],
+                [454],
+                [true],
+                [false],
+                [undefined],
+                [null],
+                [() => {}],
+                [[1, 2 ,3, "4"]]
+            ];  
+                      
+            test.each(various_data)("Run launchModal(%p): ExceptionsHandler.ValidatorError(\"app-107\") should be called", (val) => {
+                componentInstance.launchModal(val);
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-107");
+            });
+        });
+
+        describe("\"data\" is a non-array object with no valid keys", () => {
+            const various_data = [
+                [{orange_amount: 21, apple_amount: 31, perch_amount: false, tomato_amount: null, cucumber_amount: "No info"}],
+                [{orange2_amount: "247", apple_amount2: true, perch_amount2: null, tomato_amount2: 65, cucumber_amount2: false}],
+                [{orange_amount3: false, apple_amount3: "no info", perch_amount3: 7, tomato_amount3: true, cucumber_amount3: null}],
+                [{orange_amount4: null, apple_amount4: false, perch_amount4: "no info provided", tomato_amount4: null, cucumber_amount4: ["empty"]}]
+            ];  
+                      
+            test.each(various_data)("Run launchModal(%p): ExceptionsHandler.ValidatorError(\"app-108\") should be called", (val) => {
+                componentInstance.launchModal(val);
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-108");
+            });
+        })
+
+        describe("\"data\" is a non-array object with valid keys, but invalid value combinations", () => {
+            const various_data = [
+                [{id: false, action: 514, params: ["blablabla"] }],
+                [{id: null, action: () => {}, params: {} }],
+                [{id: 218, action: true, params: null }],
+                [{id: "test", action: "24", params: () => {} }],
+                [{id: "test", action: "24", params: () => {}, tomato_amount4: null, cucumber_amount4: ["empty"]}]
+            ];  
+                      
+            test.each(various_data)("Run launchModal(%p): ExceptionsHandler.ValidatorError(\"app-108\") should be called", (val) => {
+                componentInstance.launchModal(val);
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-108");
+            });
+        });
+
+        describe("\"data\" is a non-array object with valid keys and valid typeof combinations", () => {
+            const various_data = [
+                [{id: "test", action: () => {}, params: { testkey1: "abcd" } }],
+                [{id: "test2", action: () => {}, params: { testkey2: 842, testkey3: "idg", testkey4: null }, tomato_amount4: null, cucumber_amount4: ["empty"]}],
+                [{id: "etgmlaunchgroupmodal", action: () => {}, params: {apple: 1, ign: 2}, tomato_amount4: null, cucumber_amount4: ["empty"]}],
+                [{id: "cotmremovewindowmodal", action: () => {}, params: {apple: 1, ign: 2}, tomato_amount4: false, cucumber_amount4: ["empty"]}]
+            ];  
+                      
+            test.each(various_data)("Run launchModal(%p): this.setState() should be called with correct parameters", (val) => {
+                componentInstance.launchModal(val);
+
+                expect(componentInstance.setState).toHaveBeenCalledWith({ 
+                    modal: {
+                        launched: true,
+                        ...val
+                    }
+                });
+            });
+
+        });
+
+        describe("Check that correct error messages are caught", () => {
+            test("Running launchModal({}) will throw an error and pass it to launchErrorOverlay(err), where err.code = \"app-108\"", () => {
+                componentInstance.launchErrorOverlay = jest.fn();
+                componentInstance.launchModal({});
+
+                expect(componentInstance.launchErrorOverlay).toHaveBeenCalledWith(expectedErrorReturns["app-108"]);
+            })
+
+            test("Running launchModal(\"Not an object\") will throw an error and pass it to launchErrorOverlay(err), where err.code = \"app-107\"", () => {
+                componentInstance.launchErrorOverlay = jest.fn();
+                componentInstance.launchModal("Not an object");
+                
+                expect(componentInstance.launchErrorOverlay).toHaveBeenCalledWith(expectedErrorReturns["app-107"]);
+            })
+        })
+    });
+
+    describe("Test launchErrorOverlay(data)", () => {
+        describe("\"data\" is not a non-array object", () => {
+            const various_data = [
+                [true],
+                ["Passing this to launchErrorOverlay()"],
+                [undefined],
+                [false],
+                [454],
+                [[1, 2 ,3, "4"]],
+                [() => {}],
+                [null]
+            ];  
+
+            test.each(various_data)("Run launchErrorOverlay(%p): ExceptionsHandler.ValidatorError(\"app-109\") should be called", (val) => {
+                componentInstance.launchErrorOverlay(val);
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-109");
+            });
+        }); 
+
+        describe("\"data\" is a non-array object with no valid keys", () => {
+            const various_data = [
+                [{orange_amount: 15, apple_amount: 20, perch_amount: false, tomato_amount: null, cucumber_amount: "No info"}],
+                [{orange2_amount: "247", apple_amount2: true, perch_amount2: null, tomato_amount2: 65, cucumber_amount2: false}],
+                [{orange_amount3: false, apple_amount3: "no info  2", perch_amount3: 7, tomato_amount3: true, cucumber_amount3: null}],
+                [{orange_amount4: null, apple_amount4: false, perch_amount4: "no info provided 2", tomato_amount4: null, cucumber_amount4: ["empty"]}]
+            ];  
+                      
+            test.each(various_data)("Run launchErrorOverlay(%p): ExceptionsHandler.ValidatorError(\"app-110\") should be called", (val) => {
+                componentInstance.launchErrorOverlay(val);
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-110");
+            });
+        });
+
+        describe("\"data\" is a non-array object with valid keys, but invalid value combinations", () => {
+            const various_data = [
+                [{code: false, message: 514, name: ["blablabla"] }],
+                [{code: null, message: () => {}, name: {} }],
+                [{code: 218, message: true, name: null }],
+                [{code: "test", message: "24", name: () => {} }],
+                [{code: "test", message: "24", name: () => {}, tomato_amount8: null, cucumber_amount6: ["empty"]}]
+            ];  
+                      
+            test.each(various_data)("Run launchErrorOverlay(%p): ExceptionsHandler.ValidatorError(\"app-110\") should be called", (val) => {
+                componentInstance.launchErrorOverlay(val);
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-110");
+            });
+        });
+
+        describe("\"data\" is a non-array object with valid keys and valid typeof combinations", () => {
+            const various_data = [
+                [{code: "testCode-101", message: "Lorem ipsum dolor sit amet", name: "Mock Error 1" }],
+                [{code: "testCode-102", message: "consectetur adipiscing elit", name: "Mock Error 2" }],
+                [{code: "testCode-103", message: "facilisis a lacinia sit amet", name: "Mock Error 3" }],
+                [{code: "testCode-104", message: "Sed pretium magna eget", name: "Mock Error 4" }],
+                [{code: "testCode-105", message: "Nunc maximus vitae urna sed", name: "Mock Error 5", tomato_amount8: null, cucumber_amount6: ["empty"]}]
+            ];  
+
+            
+            test.each(various_data)("Run launchErrorOverlay(%p): this.setState() should be called with correct parameters", (val) => {
+                let errors = [];
+                errors.push(val);
+                
+                componentInstance.launchErrorOverlay(val);
+
+                expect(componentInstance.setState).toHaveBeenCalledWith({ 
+                    errors
+                });
+            }); 
+        });
+
+        describe("Check that correct error messages are caught", () => {
+            test("Running launchErrorOverlay({}) will throw an error err object and pass it to setState({errors: [{}, err]}), where err.code = \"app-110\"", () => {
+                componentInstance.launchErrorOverlay({});
+
+                expect(componentInstance.setState).toHaveBeenCalledWith({
+                    errors: [{}, expectedErrorReturns["app-110"]]
+                });
+            })
+
+            test("Running launchErrorOverlay(\"Not an object\") will throw an error object err and pass it to setState({errors: [\"Not an object\", err]}), where err.code = \"app-109\"", () => {
+                componentInstance.launchErrorOverlay("Not an object");
+                
+                expect(componentInstance.setState).toHaveBeenCalledWith({
+                    errors: ["Not an object", expectedErrorReturns["app-109"]]
+                });
+            })
+        })
+    });
+
+    describe("Test clearModal()", () => {
+        const timer = 500;
+
+        test("Run clearModal(): The callback function used in setTimeout() should get called after " + timer + "ms", () => {
+            jest.useFakeTimers();
+            
+            componentInstance.clearModal();
+            
+            expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), timer)
+            jest.useRealTimers();
+        });
+
+        test("Run clearModal(): When the setTimeout callback function triggers so does this.setState({ modal: {} }).", () => {
+            jest.useFakeTimers();
+
+            componentInstance.clearModal();
+            jest.runAllTimers();
+            
+            expect(componentInstance.setState).toHaveBeenCalledWith({ modal: {} });
+            jest.useRealTimers();
+        });
+    });
+
+    describe("Test clearErrors()", () => {
+        test("Run clearErrors(): This should call this.setState({ errors: [] })", () => {
+            componentInstance.clearErrors();
+
+            expect(componentInstance.setState).toHaveBeenCalledWith({ errors: [] });
+        })
+    });
+
+    describe("Test handleRouteListReady(data)", () => {
+        describe("\"data\" is not an array", () => {
+            const various_data = [
+                ["A short text string"],
+                [25],
+                [false],
+                [true],
+                [undefined],
+                [null],
+                [{ isApple: false, isGoldenRetriever: true, age: 5 }],
+                [() => {}]
+            ];
+            
+            test.each(various_data)("Run handleRouteListReady(%p): ExceptionsHandler.Validator(\"app-113\") should be called", (val) => {
+                componentInstance.handleRouteListReady(val);
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-113");
+            });
+
+            test("Run handleRouteListReady(): ExceptionsHandler.Validator(\"app-113\") should be called", () => {
+                componentInstance.handleRouteListReady();
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-113");
+            });
+        });
+        
+        describe("\"data\" is an array", () => {
+            describe("Contains route objects with at least these keys: \"label\" (string), \"path\" (string), \"key\" (number) ", () => {
+                const various_data = [
+                    [{ label: "About", path: "/about", key: 0 }, { label: "Settings", path: "/settings", key: 1 }, { label: "Quit", path: "/quit", key: 2 }],
+                    [{ label: "Settings", path: "/settings", key: 0, randomkey: () => {} }, { label: "Browse Pages", path: "/browse-pages", key: 1, randomkey: true }, { label: "About", path: "/about", key: 3, randomkey: false }],
+                    [{ label: "Browse Pages", path: "/browse-pages", key: 0, randomkey: false }, { label: "Settings", path: "/settings", key: 1 }],
+                    [{ label: "Download", path: "/download", key: 0}, { label: "Browse Pages", path: "/browse-pages", key: 1, randomkey: false }]
+                ];
+
+                for(let i = 0; i < various_data.length; i++){
+                    test("Run handleRouteListReady({ routes: " + JSON.stringify(various_data[i]) + " }): this.setState({ routes: " + JSON.stringify(various_data[i]) + " }) should be called with correct array", () => {
+                        const testComponent = predefinedComponent();
+                        const componentInstance = testComponent.instance();
+                        componentInstance.setState = jest.fn();
+                        componentInstance.handleRouteListReady(various_data[i]);
+
+                        expect(componentInstance.setState).toHaveBeenCalledWith({ routes: various_data[i] });
+                    })
+                }
+            })
+
+            describe("Contains route objects with at least these keys: \"label\", \"path\" and \"key\". But for each object, one or more of those keys being in wrong format ", () => {
+                const various_data = [
+                    [{ label: 30, path: "/about", key: 0 }, { label: "Settings", path: "/settings", key: 1 }, { label: false, path: "/quit", key: 2 }],
+                    [{ label: "Settings", path: 20, key: null, randomkey: () => {} }, { label: true, path: "/browse-pages", key: false, randomkey: true }, { label: "About", path: "/about", key: 3, randomkey: false }],
+                    [{ label: undefined, path: false, key: [], randomkey: false }, { label: {}, path: 9, key: "test" }],
+                    [{ label: "Download", path: "/download", key: "0"}, { label: "Browse Pages", path: "/browse-pages", key: "1", randomkey: false }]
+                ];
+
+                for(let i = 0; i < various_data.length; i++){
+                    test("Run handleRouteListReady({ routes: " + JSON.stringify(various_data[i]) + " }): ExceptionsHandler.ValidatorError(\"app-112\") should be called", () => {
+                        const testComponent = predefinedComponent();
+                        const componentInstance = testComponent.instance();
+                        
+                        componentInstance.handleRouteListReady(various_data[i]);
+
+                        expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-112");
+                    })
+                }
+            })
+
+            describe("Contains route objects with one or more of the following keys missing in each object: \"label\", \"path\" and \"key\"", () => {
+                const various_data = [
+                    [{ apple: "test value", thanos: false, avengers: "endgame" }, { }, { label: false, path: "/quit" }],
+                    [{ label: "Settings", key: null, randomkey: () => {} }, { label: true, path: "/browse-pages", randomkey: true }, { label: "About", path: "/about", key: 3, randomkey: false }],
+                    [{ path: "/download", key: 0}, { label: "Browse Pages", key: 1, randomkey: false }, { label: "About", path: "/about"}],
+                    [{ donkey: "Download", flag: "/download", vm: "0"}, { randomkey: false }]
+                ];
+
+                for(let i = 0; i < various_data.length; i++){
+                    test("Run handleRouteListReady({ routes: " + JSON.stringify(various_data[i]) + " }): ExceptionsHandler.ValidatorError(\"app-112\") should be called", () => {
+                        const testComponent = predefinedComponent();
+                        const componentInstance = testComponent.instance();
+                        
+                        componentInstance.handleRouteListReady(various_data[i]);
+
+                        expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-112");
+                    })
+                }
+            })
+
+            test("Run handleRouteListReady({ routes: [] }): ExceptionsHandler.ValidatorError(\"app-113\") should be called because of the routes array being empty", () => {
+                const testComponent = predefinedComponent();
+                const componentInstance = testComponent.instance();
+                
+                componentInstance.handleRouteListReady({ routes: [] });
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-113");
+            })
+        }); 
+    });
 });

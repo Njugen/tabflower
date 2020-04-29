@@ -36,7 +36,25 @@ export const ValidatorError = (code) => {
             break;   
         case "app-106":
             message = "The \"sidebarProps\" parameter in the App component's handleMainNavBarClick() function is missing an \"activeNavLinkKey\" key (as an integer) in its object.";
-            break;              
+            break; 
+        case "app-107":
+            message = "The \"data\" parameter in the App component's launchModal() function needs to be a an object (but not an array).";
+            break;
+        case "app-108":
+            message = "The \"data\" parameter in the App component's launchModal() function does not contain the necessary keys";    
+            break;  
+        case "app-109":
+            message = "The \"data\" parameter in the App component's launchErrorOverlay() function needs to be a an object (but not an array).";
+            break;    
+        case "app-110":
+            message = "The \"data\" parameter in the App component's launchErrorOverlay() function does not contain the necessary keys";    
+            break;   
+        case "app-112":
+            message = "The \"data\" parameter in the App component's handleRouteListReady() function needs to be an array, with each element being a route object containing at least the following keys: { label: \"name of the route\", path: \"/path of the route\", key: index number }";    
+            break;         
+        case "app-113":
+            message = "The \"data\" parameter in the App component's handleRouteListReady() function needs to be an array, containing different route objects";    
+            break;                      
         // modal.js
         case "mp-fadeIn-101" || "mp-fadeOut-101":
             message = "A style object is missing in the modal's jsx component. Style cannot be set";
