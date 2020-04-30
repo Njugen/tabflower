@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test <App /> component behaviour at mount Test <App /> render <ViewFooter> is rendered without props 1`] = `
+"<Fragment>
+  <ErrorBoundary>
+    <div className=\\"container-fluid\\">
+      <MainNavBar routes={{...}} onMainNavBarClick={[Function: onMainNavBarClick]} />
+      <div className=\\"row\\">
+        <div className=\\"col-md-12 py-2\\" id=\\"tabeon-view-container\\">
+          <RouteList onRaisedRoutesInfo={[Function: onRaisedRoutesInfo]} onRaiseToModal={[Function: onRaiseToModal]} onNavigation={[Function: onNavigation]} onRaiseToErrorOverlay={[Function: onRaiseToErrorOverlay]} />
+          <ViewFooter />
+        </div>
+      </div>
+    </div>
+    <FullWidthLoadbar refreshFactor={0} />
+  </ErrorBoundary>
+</Fragment>"
+`;

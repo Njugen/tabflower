@@ -1,9 +1,13 @@
 import React, { Fragment } from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount, render } from 'enzyme';
 import App from './../App';
 import * as ExceptionsHandler from './../components/utils/exceptionsAndHandler';
 import * as validator from './../components/utils/inputValidators';
-
+import ViewFooter from './../components/views/components/viewFooter';
+import ErrorBoundary from './../components/utils/errorBoundary';
+import MainNavBar from './../components/sidebars/mainNavBar/mainNavBar';
+import RouteList from './../components/routes/routeList';
+import FullWidthLoadbar from './../components/utils/fullWidthLoadbar';
 
 const predefinedComponent = () => {
     const component = shallow(<App />);
@@ -33,11 +37,53 @@ describe("Test <App /> component behaviour at mount", () => {
         expect(componentInstance.state).toStrictEqual(templateState);
     });
 
-    test("<Fragment> is rendered without props", () => {
-        const fragmentComponent = testComponent.find(<Fragment />);
+    describe("Test basic <App /> render", () => {
+        describe("<Fragment> is the root component in this render", () => {
+            test("It occurs as the first component", () => {
+                expect(testComponent.at(0).name()).toBe("Fragment");
+            });
+            
+            test("A sibling component does not exist at index 1 in the render", () => {
+                expect(testComponent.at(1).exists()).toBe(false);
+            }); 
 
-        expect(fragmentComponent).toBeCalled();
-    })
+            test("The first and the last components are strictly identical (\"Fragment\")", () => {
+                expect(testComponent.first()).toStrictEqual(testComponent.last());
+            });
+        });
+
+        describe("<ErrorBoundary> is the only direct child component to <Fragment>", () => {
+            test("It occurs as the first child component", () => {
+                expect(testComponent.childAt(0).name()).toBe("ErrorBoundary");
+            });
+            
+            test("A sibling component does not exist", () => {
+                expect(testComponent.childAt(1).exists()).toBe(false);
+            }); 
+
+            test("The first and the last components are strictly identical (\"ErrorBoundary\")", () => {
+                expect(testComponent.children().first()).toStrictEqual(testComponent.children().last());
+            }); 
+        });
+
+        describe("These components need to be used in the <App> component", () => {
+            test("<MainNavBar /> is being used somewhere", () => {
+                expect(testComponent.find(MainNavBar).exists()).toBe(true);
+            });
+
+            test("<RouteList /> is being used somewhere", () => {
+                expect(testComponent.find(RouteList).exists()).toBe(true);
+            });
+
+            test("<ViewFooter /> is being used somewhere", () => {
+               expect(testComponent.find(ViewFooter).exists()).toBe(true);
+            });
+
+            test("<FullWidthLoadbar /> is being used somewhere", () => {
+                expect(testComponent.find(FullWidthLoadbar).exists()).toBe(true);
+            });
+        });
+    }) 
 });
 
 describe("Test functions in <App />", () => {
@@ -138,8 +184,8 @@ describe("Test functions in <App />", () => {
         jest.useRealTimers();
 
         testComponent = predefinedComponent();
-        
         componentInstance = testComponent.instance();
+        
         componentInstance.setState = jest.fn();
 
         ExceptionsHandler.ValidatorError = jest.fn();
@@ -905,4 +951,4 @@ describe("Test functions in <App />", () => {
             })
         }); 
     });
-});
+}); 

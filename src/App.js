@@ -240,8 +240,7 @@ class App extends Component{
   render = () => {
     const { launched: modalLaunched, id: modalId } = this.state.modal;
     const { errors } = this.state;
-    
-    
+
     return (
       <Fragment>
         <ErrorBoundary>
@@ -255,17 +254,17 @@ class App extends Component{
           {(modalLaunched && modalId === "cotmremovetabmodal") && <COTMRemoveTabModal data={this.state.modal} onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)} onDismiss={() => this.clearModal()}></COTMRemoveTabModal>}
           {errors.length > 0 && <ErrorOverlay data={errors} onSave={() => ""} onDismiss={() => this.clearErrors()}></ErrorOverlay>}
         
-        <div className="container-fluid">
-          <MainNavBar routes={this.state.routes} onMainNavBarClick={(data) => this.handleMainNavBarClick(data)} />
-          <div className="row">
-            <div className="col-md-12 py-2" id="tabeon-view-container">
-                <RouteList onRaisedRoutesInfo={(data) => this.handleRouteListReady(data)} onRaiseToModal={(data) => this.launchModal(data)} onNavigation={(data) => this.handleNavigation(data)} onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)} />
-                <ViewFooter />
+          <div className="container-fluid">
+            <MainNavBar routes={this.state.routes} onMainNavBarClick={(data) => this.handleMainNavBarClick(data)} />
+            <div className="row">
+              <div className="col-md-12 py-2" id="tabeon-view-container">
+                  <RouteList onRaisedRoutesInfo={(data) => this.handleRouteListReady(data)} onRaiseToModal={(data) => this.launchModal(data)} onNavigation={(data) => this.handleNavigation(data)} onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)} />
+                  <ViewFooter />
+              </div>
             </div>
+
           </div>
-          
-        </div>
-        <FullWidthLoadbar refreshFactor={this.state.refreshFactor} />
+          <FullWidthLoadbar refreshFactor={this.state.refreshFactor} />
         </ErrorBoundary>
 
       </Fragment>
