@@ -16,7 +16,6 @@ const predefinedComponent = () => {
 
 let testComponent;
 let componentInstance;
-let nonsenseTest = 0;
 
 
 describe("Test <App /> component behaviour at mount", () => {

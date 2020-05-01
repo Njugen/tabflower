@@ -61,7 +61,6 @@ class Modal extends Component {
 
     constructor(props){
         super(props);
-        this.verifyProps();
     }
 
     saveFieldErrorsToState = (errors) => {
@@ -259,7 +258,7 @@ class Modal extends Component {
             this.verifyChildProps();
         }
 
-        this.handleOverflow("hidden", "auto");
+     //   this.handleOverflow("hidden", "auto");
 
         /*
             This event listener prevents the modal from following the user when he scrolls vertically. 
@@ -277,6 +276,8 @@ class Modal extends Component {
             this.childComponentDidMount();
         }
         
+        //this.verifyProps();
+        //this.verifyState();
     };
 
     componentWillMount = () => {
@@ -430,7 +431,7 @@ class Modal extends Component {
             The data.params object should also be verified for each individual modal. Do this using
             the verifyChildProps function.
         */
-       
+       console.log("IS FREAKING RUNNING");
         const { onDismiss, onRaiseToErrorOverlay, data } = this.props;
         const { isFunction, isObject } = validator;
 
@@ -440,6 +441,19 @@ class Modal extends Component {
             if(!isObject(data.params)){ throw ValidatorError("mp-verifyProps-104"); }
         }
        
+        if(isObject(this.state)){
+            const { ui, fieldErrors } = this.state;
+
+            if(!isObject(ui)){ throw ValidatorError("mp-verifyProps-106"); }
+            if(!isObject(fieldErrors)){ throw ValidatorError("mp-verifyProps-107"); }
+        } else {
+            throw ValidatorError("mp-verifyProps-105");
+        }
+    }
+
+    verifyState = () => {
+        const { isObject } = validator;
+
         if(isObject(this.state)){
             const { ui, fieldErrors } = this.state;
 
@@ -504,13 +518,13 @@ class Modal extends Component {
         );
     }
 } 
-
+/*
 Modal.propTypes = {
     data: PropTypes.shape({
         params: PropTypes.object.isRequired
     }),
     onRaiseToErrorOverlay: PropTypes.func,
     onDismiss: PropTypes.func
-}
+} */
 
 export default Modal;

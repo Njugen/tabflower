@@ -32,7 +32,7 @@
   "browserslist": {
     "production": [
       ">0.2%",
-      "not dead", 
+      "not dead",
       "not op_mini all"
     ],
     "development": [
@@ -43,12 +43,14 @@
   },
   "babel": {
     "presets": [
-        "@babel/preset-env",
-        "@babel/preset-react"
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ],
+    "plugins": [
+      "@babel/plugin-proposal-class-properties"
     ]
   },
   "devDependencies": {
-    "check-prop-types": "^1.1.2",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "jest-html-reporter": "^3.1.0",
