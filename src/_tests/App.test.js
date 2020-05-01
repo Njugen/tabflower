@@ -16,6 +16,8 @@ const predefinedComponent = () => {
 
 let testComponent;
 let componentInstance;
+let nonsenseTest = 0;
+
 
 describe("Test <App /> component behaviour at mount", () => {
     
@@ -239,14 +241,12 @@ describe("Test functions in <App />", () => {
 
         describe("\"newProps\" (not a non-array object), \"showLoadbar\" (various values), \"callback\" (undefined)", () => {
             for(let i = 0; i < various_showLoadbar.length; i++){
-                const testComponent = predefinedComponent();
-                const componentInstance = testComponent.instance();
-
                 test.each(various_newProps)("Run updateState(%p, " + various_showLoadbar[i][0] + "): ExceptionsHandler.ValidatorError(\"app-102\") should be called once", (val) => {
                     componentInstance.updateState(val, various_showLoadbar[i][0]);
                     
                     expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-102");
                 });
+
             }
 
         });
@@ -254,9 +254,6 @@ describe("Test functions in <App />", () => {
         describe("\"newProps\" (not a non-array object), \"showLoadbar\" (various values), \"callback\" (various values)", () => {
             for(let i = 0; i < various_showLoadbar.length; i++){
                 for(let j = 0; j < various_callback.length; j++){
-                    const testComponent = predefinedComponent();
-                    const componentInstance = testComponent.instance();
-
                     test.each(various_newProps)("Run updateState(%p, " + various_showLoadbar[i][0] + ", " + various_callback[j][0] + "): ExceptionsHandler.ValidatorError(\"app-102\") should be called once.", (val) => {
                         componentInstance.updateState(val, various_showLoadbar[i][0], various_callback[j][0]);
                         
@@ -272,14 +269,10 @@ describe("Test functions in <App />", () => {
 
             for(let i = 0; i < various_showLoadbar.length; i++){
                 for(let j = 0; j < various_callback.length; j++){  
-                    const testComponent = predefinedComponent();
-                    const componentInstance = testComponent.instance();
 
                     if(various_showLoadbar[i][0] === true){
                         if(isFunction(various_callback[j][0])){
                             test.each(various_newProps_objects)("Run updateState(%p, " + various_showLoadbar[i][0] + ", " + various_callback[j][0] + "): this.setState(newProps, callback) should be called with correct parameters, refreshFactor increased by 1.", (val) => {
-                                componentInstance.setState = jest.fn();
-
                                 componentInstance.updateState(val, various_showLoadbar[i][0], various_callback[j][0]);
                                 val.refreshFactor = componentInstance.state.refreshFactor + 1;
 
@@ -287,8 +280,6 @@ describe("Test functions in <App />", () => {
                             });
                         } else if(isUndefined(various_callback[j][0])){
                             test.each(various_newProps_objects)("Run updateState(%p, " + various_showLoadbar[i][0] + ", " + various_callback[j][0] + "): this.setState(newProps) should be called with correct parameters, refreshFactor increased by 1.", (val) => {
-                                componentInstance.setState = jest.fn();
-
                                 componentInstance.updateState(val, various_showLoadbar[i][0], various_callback[j][0]);
                                 val.refreshFactor = componentInstance.state.refreshFactor + 1;
 
@@ -305,16 +296,12 @@ describe("Test functions in <App />", () => {
                     } else {
                         if(isFunction(various_callback[j][0])){
                             test.each(various_newProps_objects)("Run updateState(%p, " + various_showLoadbar[i][0] + ", " + various_callback[j][0] + "): this.setState(newProps, callback) should be called with correct parameters", (val) => {
-                                componentInstance.setState = jest.fn();
-
                                 componentInstance.updateState(val, various_showLoadbar[i][0], various_callback[j][0]);
                                 
                                 expect(componentInstance.setState).toHaveBeenCalledWith(val, various_callback[j][0]);
                             });
                         } else if(isUndefined(various_callback[j][0])){
                             test.each(various_newProps_objects)("Run updateState(%p, " + various_showLoadbar[i][0] + ", " + various_callback[j][0] + "): this.setState(newProps) should be called", (val) => {
-                                componentInstance.setState = jest.fn();
-
                                 componentInstance.updateState(val, various_showLoadbar[i][0], various_callback[j][0]);
                                 
                                 expect(componentInstance.setState).toHaveBeenCalledWith(val);
@@ -441,9 +428,6 @@ describe("Test functions in <App />", () => {
 
             describe("\"viewProps\" contains \"viewData\" and \"metaData\" with various values.", () => {
                 for(let i = 0; i < various_metaData.length; i++){
-                    const testComponent = predefinedComponent();
-                    const componentInstance = testComponent.instance();
-
                     test.each(various_viewData)("Run handleNavigation({ viewData: %p, metaData: " + various_metaData[i][0] + " }): ExceptionsHandler.ValidatorError(\"app-103\") should be called", (val) => {
                         componentInstance.handleNavigation({ viewData: val, metaData: various_metaData[i][0] });
 
@@ -455,9 +439,6 @@ describe("Test functions in <App />", () => {
 
             describe("\"viewProps\" contains \"viewData\" and \"refreshFactor\" with various values.", () => {
                 for(let i = 0; i < various_refreshFactor.length; i++){
-                    const testComponent = predefinedComponent();
-                    const componentInstance = testComponent.instance();
-
                     test.each(various_viewData)("Run handleNavigation({ viewData: %p, refreshFactor: " + various_refreshFactor[i][0] + " }): ExceptionsHandler.ValidatorError(\"app-103\") should be called", (val) => {
                         componentInstance.handleNavigation({ viewData: val, refreshFactor: various_refreshFactor[i][0] });
 
@@ -469,9 +450,6 @@ describe("Test functions in <App />", () => {
 
             describe("\"viewProps\" contains \"metaData\" and \"refreshFactor\" with various values.", () => {
                 for(let i = 0; i < various_refreshFactor.length; i++){
-                    const testComponent = predefinedComponent();
-                    const componentInstance = testComponent.instance();
-
                     test.each(various_metaData)("Run handleNavigation({ metaData: %p, refreshFactor: " + various_refreshFactor[i][0] + " }): ExceptionsHandler.ValidatorError(\"app-103\") should be called", (val) => {
                         componentInstance.handleNavigation({ metaData: val, refreshFactor: various_refreshFactor[i][0] });
                       
@@ -487,9 +465,6 @@ describe("Test functions in <App />", () => {
                     for(let k = 0; k < various_viewData.length; k++){
                         for(let j = 0; j < various_refreshFactor.length; j++){
                             if(!(isObject(various_metaData[i][0]) && isObject(various_viewData[k][0]) && isNumber(various_refreshFactor[j][0]))){
-                                const testComponent = predefinedComponent();
-                                const componentInstance = testComponent.instance();
-                                
                                 test("Run handleNavigation({ metaData: " + various_metaData[i][0] + ", viewData: " + various_viewData[k][0] + ", refreshFactor: " + various_refreshFactor[j][0] + " }): ExceptionsHandler.ValidatorError(\"app-103\") should be called", () => {
                                     componentInstance.handleNavigation({ metaData: various_metaData[i][0], viewData: various_viewData[k][0], refreshFactor: various_refreshFactor[j][0] });
 
@@ -513,9 +488,6 @@ describe("Test functions in <App />", () => {
                 ];
 
                 test.each(assumedValid_viewProps_inputs)("Run handleNavigation(%p): this.updateState() should be called with correct parameters", (val) => {
-                    const testComponent = predefinedComponent();
-                    const componentInstance = testComponent.instance();
-
                     componentInstance.updateState = jest.fn();
                     componentInstance.handleNavigation(val);
 
@@ -891,9 +863,6 @@ describe("Test functions in <App />", () => {
 
                 for(let i = 0; i < various_data.length; i++){
                     test("Run handleRouteListReady({ routes: " + JSON.stringify(various_data[i]) + " }): this.setState({ routes: " + JSON.stringify(various_data[i]) + " }) should be called with correct array", () => {
-                        const testComponent = predefinedComponent();
-                        const componentInstance = testComponent.instance();
-                        componentInstance.setState = jest.fn();
                         componentInstance.handleRouteListReady(various_data[i]);
 
                         expect(componentInstance.setState).toHaveBeenCalledWith({ routes: various_data[i] });
@@ -911,9 +880,6 @@ describe("Test functions in <App />", () => {
 
                 for(let i = 0; i < various_data.length; i++){
                     test("Run handleRouteListReady({ routes: " + JSON.stringify(various_data[i]) + " }): ExceptionsHandler.ValidatorError(\"app-112\") should be called", () => {
-                        const testComponent = predefinedComponent();
-                        const componentInstance = testComponent.instance();
-                        
                         componentInstance.handleRouteListReady(various_data[i]);
 
                         expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-112");
@@ -931,9 +897,6 @@ describe("Test functions in <App />", () => {
 
                 for(let i = 0; i < various_data.length; i++){
                     test("Run handleRouteListReady({ routes: " + JSON.stringify(various_data[i]) + " }): ExceptionsHandler.ValidatorError(\"app-112\") should be called", () => {
-                        const testComponent = predefinedComponent();
-                        const componentInstance = testComponent.instance();
-                        
                         componentInstance.handleRouteListReady(various_data[i]);
 
                         expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-112");
@@ -942,9 +905,6 @@ describe("Test functions in <App />", () => {
             })
 
             test("Run handleRouteListReady({ routes: [] }): ExceptionsHandler.ValidatorError(\"app-113\") should be called because of the routes array being empty", () => {
-                const testComponent = predefinedComponent();
-                const componentInstance = testComponent.instance();
-                
                 componentInstance.handleRouteListReady({ routes: [] });
 
                 expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-113");
