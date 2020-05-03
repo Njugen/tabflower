@@ -1,6 +1,6 @@
 import React, { Component, createRef } from "react";
 import * as validator from './../utils/inputValidators';
-import { ValidatorError, ErrorHandler } from '../utils/exceptionsAndHandler';
+import * as ExceptionsHandler from '../utils/exceptionsAndHandler';
 import { PropTypes } from 'prop-types';
 
 
@@ -79,7 +79,7 @@ class Modal extends Component {
         })
     }
 
-    raiseToErrorOverlay = (err) => {
+    raiseToErrorOverlay = (errorData) => {
 
         /*
             Parameters: 
@@ -92,18 +92,25 @@ class Modal extends Component {
 
             All components in this chain will have access to the information raised.
         */
+        
+        const { isObject } = validator;
 
-        const { onRaiseToErrorOverlay } = this.props;
+        try {
+            if(isObject(errorData)){
 
-        this.dismissModalHandler();
+                const { onRaiseToErrorOverlay } = this.props;
 
-        setTimeout(() => {
-                if(typeof onRaiseToErrorOverlay === "function"){
-                    onRaiseToErrorOverlay(err);
-                }
-            },
-            1000
-        );
+                this.dismissModalHandler();
+
+                setTimeout(() => {
+                            onRaiseToErrorOverlay(errorData);
+                }, 1000);
+            } else {
+                throw ExceptionsHandler.ValidatorError("mp-verifyProps-108");
+            }
+        } catch(err){
+            ExceptionsHandler.ErrorHandler(err, () => {}); 
+        }
     }
 
     fadeIn = () => {
@@ -123,14 +130,14 @@ class Modal extends Component {
                     modal.style.zIndex = 10000;
 
                 } else {
-                    throw ValidatorError("mp-fadeIn-101");
+                    throw ExceptionsHandler.ValidatorError("mp-fadeIn-101");
                 }
             } else {
-                throw ValidatorError("mp-fadeIn-102");
+                throw ExceptionsHandler.ValidatorError("mp-fadeIn-102");
             }
             
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay); 
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay); 
         }
     }
 
@@ -152,13 +159,13 @@ class Modal extends Component {
                         modal.style.zIndex = 0;
                     }, 500) 
                 } else {
-                    throw ValidatorError("mp-fadeOut-101")
+                    throw ExceptionsHandler.ValidatorError("mp-fadeOut-101")
                 }
             } else {
-                throw ValidatorError("mp-fadeOut-102")
+                throw ExceptionsHandler.ValidatorError("mp-fadeOut-102")
             }
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay); 
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay); 
         }
     }
 
@@ -181,12 +188,12 @@ class Modal extends Component {
                     if(isFunction(callback)){
                         callback();
                     } else {
-                        throw ValidatorError("mp-clearModalData-103")
+                        throw ExceptionsHandler.ValidatorError("mp-clearModalData-103")
                     }
                 }
             });
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay); 
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay); 
         }
     }
 
@@ -258,7 +265,7 @@ class Modal extends Component {
             this.verifyChildProps();
         }
 
-     //   this.handleOverflow("hidden", "auto");
+        this.handleOverflow("hidden", "auto");
 
         /*
             This event listener prevents the modal from following the user when he scrolls vertically. 
@@ -276,8 +283,8 @@ class Modal extends Component {
             this.childComponentDidMount();
         }
         
-        //this.verifyProps();
-        //this.verifyState();
+        this.verifyProps();
+        this.verifyState();
     };
 
     componentWillMount = () => {
@@ -339,11 +346,11 @@ class Modal extends Component {
                 if(typeof this.props.data.action === "function"){
                     this.props.data.action(data);
                 } else if(typeof this.props.data.action !== "undefined"){
-                    throw ValidatorError("mp-propsAction-101")
+                    throw ExceptionsHandler.ValidatorError("mp-propsAction-101")
                 }
             }
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay); 
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay); 
         }
 
         /*
@@ -384,11 +391,11 @@ class Modal extends Component {
             
             if(isString(area)){
                 if(isUndefined(value)){
-                    throw ValidatorError("mp-saveToState-104") 
+                    throw ExceptionsHandler.ValidatorError("mp-saveToState-104") 
                 }
 
                 if(!isString(key)){
-                    throw ValidatorError("mp-saveToState-105") 
+                    throw ExceptionsHandler.ValidatorError("mp-saveToState-105") 
                 }
 
                 let newInput = this.state;
@@ -404,15 +411,15 @@ class Modal extends Component {
                         if(isFunction(callback)){
                             callback();
                         } else {
-                            throw ValidatorError("mp-saveToState-106") 
+                            throw ExceptionsHandler.ValidatorError("mp-saveToState-106") 
                         }
                     }
                 })
             } else {
-                throw ValidatorError("mp-saveToState-107")
+                throw ExceptionsHandler.ValidatorError("mp-saveToState-107")
             }
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay); 
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay); 
         }
     }
 
@@ -431,23 +438,23 @@ class Modal extends Component {
             The data.params object should also be verified for each individual modal. Do this using
             the verifyChildProps function.
         */
-       console.log("IS FREAKING RUNNING");
+
         const { onDismiss, onRaiseToErrorOverlay, data } = this.props;
         const { isFunction, isObject } = validator;
 
-        if(!isFunction(onDismiss)){ throw ValidatorError("mp-verifyProps-101"); }
-        if(!isFunction(onRaiseToErrorOverlay)){ throw ValidatorError("mp-verifyProps-102"); }
-        if(!isObject(data)){ throw ValidatorError("mp-verifyProps-103"); } else {
-            if(!isObject(data.params)){ throw ValidatorError("mp-verifyProps-104"); }
+        if(!isFunction(onDismiss)){ throw ExceptionsHandler.ValidatorError("mp-verifyProps-101"); }
+        if(!isFunction(onRaiseToErrorOverlay)){ throw ExceptionsHandler.ValidatorError("mp-verifyProps-102"); }
+        if(!isObject(data)){ throw ExceptionsHandler.ValidatorError("mp-verifyProps-103"); } else {
+            if(!isObject(data.params)){ throw ExceptionsHandler.ValidatorError("mp-verifyProps-104"); }
         }
        
         if(isObject(this.state)){
             const { ui, fieldErrors } = this.state;
 
-            if(!isObject(ui)){ throw ValidatorError("mp-verifyProps-106"); }
-            if(!isObject(fieldErrors)){ throw ValidatorError("mp-verifyProps-107"); }
+            if(!isObject(ui)){ throw ExceptionsHandler.ValidatorError("mp-verifyProps-106"); }
+            if(!isObject(fieldErrors)){ throw ExceptionsHandler.ValidatorError("mp-verifyProps-107"); }
         } else {
-            throw ValidatorError("mp-verifyProps-105");
+            throw ExceptionsHandler.ValidatorError("mp-verifyProps-105");
         }
     }
 
@@ -457,10 +464,10 @@ class Modal extends Component {
         if(isObject(this.state)){
             const { ui, fieldErrors } = this.state;
 
-            if(!isObject(ui)){ throw ValidatorError("mp-verifyProps-106"); }
-            if(!isObject(fieldErrors)){ throw ValidatorError("mp-verifyProps-107"); }
+            if(!isObject(ui)){ throw ExceptionsHandler.ValidatorError("mp-verifyProps-106"); }
+            if(!isObject(fieldErrors)){ throw ExceptionsHandler.ValidatorError("mp-verifyProps-107"); }
         } else {
-            throw ValidatorError("mp-verifyProps-105");
+            throw ExceptionsHandler.ValidatorError("mp-verifyProps-105");
         }
     }
 

@@ -100,7 +100,10 @@ export const ValidatorError = (code) => {
             break;       
         case "mp-verifyProps-107": 
             message = "A fieldErrors object is missing in the state object of the \"Modal\" component. Request aborted";    
-            break;                         
+            break;
+        case "mp-verifyProps-108": 
+            message = "The \"errorData\" parameter in the raiseToErrorOverlay() needs to be an object. The attempt to forward the error data failed";    
+            break;                              
         // ETGMCreateNewGroupModal
         case "ETGMCreateNewGroupModal-101": 
             message = "The callback parameter is not a function";
