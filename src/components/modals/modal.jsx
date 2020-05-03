@@ -397,7 +397,7 @@ class Modal extends Component {
                 if(!isString(key)){
                     throw ExceptionsHandler.ValidatorError("mp-saveToState-105") 
                 }
-
+                
                 let newInput = this.state;
                 
                 if(typeof newInput[area] !== "object"){

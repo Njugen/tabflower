@@ -38,7 +38,12 @@ describe("Test <Modal /> component behaviour at mount", () => {
         "mp-fadeIn-102": ExceptionsHandler.ValidatorError("mp-fadeIn-102"),
         
         "mp-fadeOut-101": ExceptionsHandler.ValidatorError("mp-fadeIn-101"),
-        "mp-fadeOut-102": ExceptionsHandler.ValidatorError("mp-fadeIn-102")
+        "mp-fadeOut-102": ExceptionsHandler.ValidatorError("mp-fadeIn-102"),    
+
+        "mp-saveToState-104": ExceptionsHandler.ValidatorError("mp-saveToState-104"),
+        "mp-saveToState-105": ExceptionsHandler.ValidatorError("mp-saveToState-105"),
+        "mp-saveToState-106": ExceptionsHandler.ValidatorError("mp-saveToState-106"),
+        "mp-saveToState-107": ExceptionsHandler.ValidatorError("mp-saveToState-107")
     };
 
     const expectedErrorReturns = {
@@ -103,6 +108,27 @@ describe("Test <Modal /> component behaviour at mount", () => {
             name: "ValidatorError",
             message: "A reference to the JSX element representing the modal is missing or is invalid",
             code: "mp-fadeIn-102"
+        },
+
+        "mp-saveToState-104": {
+            name: "ValidatorError",
+            message: "The \"value\" parameter is undefined. Data was not saved",
+            code: "mp-saveToState-104"
+        },
+        "mp-saveToState-105": {
+            name: "ValidatorError",
+            message: "The \"area\" parameter is not a string. Data was not saved.",
+            code: "mp-saveToState-105"
+        },
+        "mp-saveToState-106": {
+            name: "ValidatorError",
+            message: "The \"callback\" parameter is not a function",
+            code: "mp-saveToState-106"
+        },
+        "mp-saveToState-107": {
+            name: "ValidatorError",
+            message: "The \"area\" parameter is not a string. Data was not saved.",
+            code: "mp-saveToState-107"
         }
     }
 
@@ -198,110 +224,6 @@ describe("Test <Modal /> component behaviour at mount", () => {
             })
         })
     }) */
-
-    describe("Test fadeOut()", () => {
-        describe("this.modalRef is not an object", () => {
-            const various_modalRef = [
-                ["A string representing this.modalRef"],
-                [247],
-                [null],
-                [false],
-                [true],
-                [undefined],
-                [[1,2,3,4]],
-                [() => {}]
-            ];
-
-            test.each(various_modalRef)("Run fadeOut(), when this.modalRef = %p . ExceptionsHandler.ValidatorError(\"mp-fadeOut-102\") should be called", (val) => {
-                componentInstance.modalRef = val;
-                componentInstance.fadeOut();
-
-                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("mp-fadeOut-102");;
-            })
-        });
-
-        describe("this.modalRef is an object, but this.modal.current is not", () => {
-            const various_modalRef_current = [
-                ["A string representing this.modalRef.current"],
-                [2417],
-                [null],
-                [false],
-                [true],
-                [undefined],
-                [[1,2,3,4]],
-                [() => {}]
-            ];
-
-            test.each(various_modalRef_current)("Run fadeOut(), when this.modalRef.current = %p . ExceptionsHandler.ValidatorError(\"mp-fadeOut-102\") should be called", (val) => {
-                componentInstance.modalRef = { 
-                    current: val
-                };
-                
-                componentInstance.fadeOut();
-
-                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("mp-fadeOut-102");
-            })
-        });
-
-        describe("this.modalRef is an object. this.modalRef.current is also an object", () => {
-
-            test("Run fadeOut(): Confirm that both this.modalRef and this.modalRef.current are objects", () => {
-                componentInstance.modalRef = { 
-                    current: {}
-                };
-                componentInstance.fadeOut();
-
-                const condition = (typeof componentInstance.modalRef === "object" && typeof componentInstance.modalRef.current === "object");
-                expect(condition).toBe(true);
-            })
-
-            describe("Check that the \"style\" object exists in this.modalRef.current", () => {
-                const various_style = [
-                    ["A string representing this.modalRef.current.style"],
-                    [2417],
-                    [null],
-                    [false],
-                    [true],
-                    [undefined],
-                    [[1,2,3,4]],
-                    [() => {}]
-                ];
-
-                test("Confirm the existence of the this.modalRef.current.style object", () => {
-                    componentInstance.modalRef = { 
-                        current: {
-                            style: {}
-                        }
-                    };
-                    componentInstance.fadeOut();
-
-                    expect(typeof componentInstance.modalRef.current.style).toBe("object");
-                })
-                
-                test("this.modalRef.current.style does not exist, throw a \"mp-fadeOut-101\" error", () => {
-                    componentInstance.modalRef = { 
-                        current: {
-                            
-                        }
-                    };
-                    componentInstance.fadeOut();
-
-                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("mp-fadeOut-101");
-                })
-
-                test.each(various_style)("this.modalRef.current.style = %p, which is not an object. Throw a \"mp-fadeOut-101\" error", (val) => {
-                    componentInstance.modalRef = { 
-                        current: {
-                            style: val
-                        }
-                    };
-                    componentInstance.fadeOut();
-
-                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("mp-fadeOut-101");
-                })
-            });
-        });
-    })
 
     describe("Test fadeIn()", () => {
         describe("this.modalRef is not an object", () => {
@@ -405,6 +327,349 @@ describe("Test <Modal /> component behaviour at mount", () => {
                 })
             });
         });
+    });
+
+    describe("Test fadeOut()", () => {
+        describe("this.modalRef is not an object", () => {
+            const various_modalRef = [
+                ["A string representing this.modalRef"],
+                [247],
+                [null],
+                [false],
+                [true],
+                [undefined],
+                [[1,2,3,4]],
+                [() => {}]
+            ];
+
+            test.each(various_modalRef)("Run fadeOut(), when this.modalRef = %p . ExceptionsHandler.ValidatorError(\"mp-fadeOut-102\") should be called", (val) => {
+                componentInstance.modalRef = val;
+                componentInstance.fadeOut();
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("mp-fadeOut-102");;
+            })
+        });
+
+        describe("this.modalRef is an object, but this.modal.current is not", () => {
+            const various_modalRef_current = [
+                ["A string representing this.modalRef.current"],
+                [2417],
+                [null],
+                [false],
+                [true],
+                [undefined],
+                [[1,2,3,4]],
+                [() => {}]
+            ];
+
+            test.each(various_modalRef_current)("Run fadeOut(), when this.modalRef.current = %p . ExceptionsHandler.ValidatorError(\"mp-fadeOut-102\") should be called", (val) => {
+                componentInstance.modalRef = { 
+                    current: val
+                };
+                
+                componentInstance.fadeOut();
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("mp-fadeOut-102");
+            })
+        });
+
+        describe("this.modalRef is an object. this.modalRef.current is also an object", () => {
+
+            test("Run fadeOut(): Confirm that both this.modalRef and this.modalRef.current are objects", () => {
+                componentInstance.modalRef = { 
+                    current: {}
+                };
+                componentInstance.fadeOut();
+
+                const condition = (typeof componentInstance.modalRef === "object" && typeof componentInstance.modalRef.current === "object");
+                expect(condition).toBe(true);
+            })
+
+            describe("Check that the \"style\" object exists in this.modalRef.current", () => {
+                const various_style = [
+                    ["A string representing this.modalRef.current.style"],
+                    [2417],
+                    [null],
+                    [false],
+                    [true],
+                    [undefined],
+                    [[1,2,3,4]],
+                    [() => {}]
+                ];
+
+                test("Confirm the existence of the this.modalRef.current.style object", () => {
+                    componentInstance.modalRef = { 
+                        current: {
+                            style: {}
+                        }
+                    };
+                    componentInstance.fadeOut();
+
+                    expect(typeof componentInstance.modalRef.current.style).toBe("object");
+                })
+                
+                test("this.modalRef.current.style does not exist, throw a \"mp-fadeOut-101\" error", () => {
+                    componentInstance.modalRef = { 
+                        current: {
+                            
+                        }
+                    };
+                    componentInstance.fadeOut();
+
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("mp-fadeOut-101");
+                })
+
+                test.each(various_style)("this.modalRef.current.style = %p, which is not an object. Throw a \"mp-fadeOut-101\" error", (val) => {
+                    componentInstance.modalRef = { 
+                        current: {
+                            style: val
+                        }
+                    };
+                    componentInstance.fadeOut();
+
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("mp-fadeOut-101");
+                })
+            });
+        });
+    });
+
+    describe("Test saveToState(key, value, area, callback)", () => {
+        describe("When the \"area\" parameter is not a string, an error \"mp-saveToState-107\" occurs regardless of other parameters", () => {
+            const various_key = [
+                [14],
+                [() => {}],
+                [[1,2,3,4]],
+                [{key1: 12, key2: false}],
+                [null],
+                ["A string representing a value"],
+                [false],
+                [undefined],
+                [true]
+            ];
+    
+            const various_value = [
+                [12],
+                [() => {}],
+                [[3,8,5,4]],
+                [{key3: 1412, key4: false}],
+                [null],
+                ["A string representing another value"],
+                [false],
+                [undefined],
+                [true]
+            ];
+    
+            const various_area = [
+                [122],
+                [() => {}],
+                [[5,2,8,3]],
+                [{key1: 75, key8: false}],
+                [null],
+                [false],
+                [undefined],
+                [true]
+            ];
+
+            for(let i = 0; i < various_key.length; i++){
+                for(let j = 0; j < various_value.length; j++){
+                    test.each(various_area)("Run saveToState(" + various_key[i][0] + ", " + various_value[j][0] + ", %p): ExceptionsHandler.ValidatorError(\"mp-saveToState-107\") should be called", (val) => {
+                        componentInstance.saveToState(various_key[i][0], various_value[j][0], val);
+
+                        expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("mp-saveToState-107");
+                    })
+                }
+            }
+        });
+
+        describe("When the \"area\" parameter is a string, an error \"mp-saveToState-107\" should never occur", () => {
+            const various_key = [
+                [14],
+                [() => {}],
+                [[1,2,3,4]],
+                [{key1: 12, key2: false}],
+                [null],
+                ["A string representing a value"],
+                [false],
+                [undefined],
+                [true]
+            ];
+    
+            const various_value = [
+                [12],
+                [() => {}],
+                [[3,8,5,4]],
+                [{key3: 1412, key4: false}],
+                [null],
+                ["A string representing another value"],
+                [false],
+                [undefined],
+                [true]
+            ];
+
+            const string_area = "A string representing area";
+
+            for(let i = 0; i < various_key.length; i++){
+                for(let j = 0; j < various_value.length; j++){
+                    test("Run saveToState(" + various_key[i][0] + ", " + various_value[j][0] + ", " + string_area + "): ExceptionsHandler.ValidatorError(\"mp-saveToState-107\") should NOT be called", () => {
+                        componentInstance.saveToState(various_key[i][0], various_value[j][0], string_area);
+
+                        expect(ExceptionsHandler.ValidatorError).not.toHaveBeenCalledWith("mp-saveToState-107");
+                    })
+                }
+            }
+        });
+
+        describe("Evaluate the \"key\" and \"value\" parameters, when \"area\" is a string ", () => {
+            describe("\"value\" parameter", () => {
+                const various_value = [
+                    [12],
+                    [() => {}],
+                    [[3,8,5,4]],
+                    [{key3: 1412, key4: false}],
+                    [null],
+                    ["A string representing another value"],
+                    [false],
+                    [true]
+                ];
+
+                const various_key = [
+                    [14],
+                    [() => {}],
+                    [[1,2,3,4]],
+                    [{key1: 12, key2: false}],
+                    [null],
+                    ["A string representing a value"],
+                    [false],
+                    [undefined],
+                    [true]
+                ];
+
+                describe("When \"value\" is undefined, and \"key\" has varying values", () => {
+                    test.each(various_key)("Run saveToState(%p, undefined, \"Area string\"): ExceptionsHandler.ValidatorError(\"mp-saveToState-104\") is called", (val) => {
+                        componentInstance.saveToState(val, undefined, "Area string");
+
+                        expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("mp-saveToState-104");
+                    });
+
+                });
+
+                describe("When \"value\" is not undefined, and \"key\" has varying values", () => {
+                    for(let i = 0; i < various_key.length; i++){
+                        test.each(various_value)("Run saveToState(" + various_key[i][0] + ", %p, \"Area string\"): ExceptionsHandler.ValidatorError(\"mp-saveToState-104\") is NOT called", (val) => {
+                            componentInstance.saveToState(various_key[i][0], val, "Area string");
+
+                            expect(ExceptionsHandler.ValidatorError).not.toHaveBeenCalledWith("mp-saveToState-104");
+                        });
+                    }
+                })
+            });
+
+            describe("\"key\" parameter", () => {
+                const various_value = [
+                    [12],
+                    [() => {}],
+                    [[3,8,5,4]],
+                    [{key3: 1412, key4: false}],
+                    [null],
+                    ["A string representing another value"],
+                    [false],
+                    [true]
+                ];
+
+                const various_key = [
+                    [14],
+                    [() => {}],
+                    [[1,2,3,4]],
+                    [{key1: 12, key2: false}],
+                    [null],
+                    [false],
+                    [undefined],
+                    [true]
+                ];
+
+                describe("When \"key\" is not a string and \"value\" is not undefined", () => {
+                    for(let i = 0; i < various_key.length; i++){
+                        test.each(various_value)("Run saveToState(" + various_key[i][0] + ", %p, \"Area string\"): ExceptionsHandler.ValidatorError(\"mp-saveToState-105\") is NOT called", (val) => {
+                            componentInstance.saveToState(various_key[i][0], val, "Area string");
+
+                            expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("mp-saveToState-105");
+                        });
+                    }
+                });
+
+                describe("When \"key\" is a string and \"value\" is not undefined", () => {
+                    test.each(various_value)("Run saveToState(\"A random text string\", %p, \"Area string\"): ExceptionsHandler.ValidatorError(\"mp-saveToState-105\") is NOT called", (val) => {
+                        componentInstance.saveToState("A random text string", val, "Area string");
+
+                        expect(ExceptionsHandler.ValidatorError).not.toHaveBeenCalledWith("mp-saveToState-105");
+                    });
+                
+                });
+            })
+
+            describe("When either \"key\" or \"value\" (or both) have incorrect values, call error function", () => {
+                test("Run saveToState(77, undefined, \"Area string\"): ExceptionsHandler.ValidatorError() is called", () => {
+                    componentInstance.saveToState(77, undefined, "Area string");
+
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalled();
+                });
+
+                test("Run saveToState(77, \"text string\", \"Area string\"): ExceptionsHandler.ValidatorError() is called", () => {
+                    componentInstance.saveToState(77, "text string", "Area string");
+
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("mp-saveToState-105");
+                });
+
+                test("Run saveToState(\"text string\", undefined, \"Area string\"): ExceptionsHandler.ValidatorError() is called", () => {
+                    componentInstance.saveToState("text string", undefined, "Area string");
+
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("mp-saveToState-104");
+                });
+            });
+
+            describe("When either \"key\" or \"value\" (or both) have incorrect values, don't call this.setState", () => {
+                test("Run saveToState(77, undefined, \"Area string\"): this.setState() is not called", () => {
+                    componentInstance.setState = jest.fn();
+                    componentInstance.saveToState(77, undefined, "Area string");
+
+                    expect(componentInstance.setState).not.toHaveBeenCalled();
+                });
+
+                test("Run saveToState(77, \"text string\", \"Area string\"): this.setState() is not called", () => {
+                    componentInstance.setState = jest.fn();
+                    componentInstance.saveToState(77, "text string", "Area string");
+
+                    expect(componentInstance.setState).not.toHaveBeenCalled();
+                });
+
+                test("Run saveToState(\"text string\", undefined, \"Area string\"): this.setState() is not called", () => {
+                    componentInstance.setState = jest.fn();
+                    componentInstance.saveToState("text string", undefined, "Area string");
+
+                    expect(componentInstance.setState).not.toHaveBeenCalled();
+                });
+            });
+
+            describe("When both \"key\" and \"value\" have correct values, call this.setState", () => {
+                const various_value = [
+                    [12],
+                    [() => {}],
+                    [[3,8,5,4]],
+                    [{key3: 1412, key4: false}],
+                    [null],
+                    ["A string representing another value"],
+                    [false],
+                    [true]
+                ];
+
+                test.each(various_value)("Run saveToState(\"test string\", %p, \"Area string\")", (val) => {
+                    componentInstance.setState = jest.fn();
+                    componentInstance.saveToState("test string", val, "Area string");
+
+                    expect(componentInstance.setState).toHaveBeenCalled();
+                })
+            })
+        })
     })
 
     describe("Test verifyProps()", () => {
