@@ -35,7 +35,10 @@ describe("Test <Modal /> component behaviour at mount", () => {
         "mp-verifyProps-108": ExceptionsHandler.ValidatorError("mp-verifyProps-108"),
 
         "mp-fadeIn-101": ExceptionsHandler.ValidatorError("mp-fadeIn-101"),
-        "mp-fadeIn-102": ExceptionsHandler.ValidatorError("mp-fadeIn-102")
+        "mp-fadeIn-102": ExceptionsHandler.ValidatorError("mp-fadeIn-102"),
+        
+        "mp-fadeOut-101": ExceptionsHandler.ValidatorError("mp-fadeIn-101"),
+        "mp-fadeOut-102": ExceptionsHandler.ValidatorError("mp-fadeIn-102")
     };
 
     const expectedErrorReturns = {
@@ -86,6 +89,17 @@ describe("Test <Modal /> component behaviour at mount", () => {
             code: "mp-fadeIn-101"
         },
         "mp-fadeIn-102": {
+            name: "ValidatorError",
+            message: "A reference to the JSX element representing the modal is missing or is invalid",
+            code: "mp-fadeIn-102"
+        },
+        
+        "mp-fadeOut-101": {
+            name: "ValidatorError",
+            message: "A style object is missing in the modal's jsx component. Style cannot be set",
+            code: "mp-fadeIn-101"
+        },
+        "mp-fadeOut-102": {
             name: "ValidatorError",
             message: "A reference to the JSX element representing the modal is missing or is invalid",
             code: "mp-fadeIn-102"
@@ -185,6 +199,110 @@ describe("Test <Modal /> component behaviour at mount", () => {
         })
     }) */
 
+    describe("Test fadeOut()", () => {
+        describe("this.modalRef is not an object", () => {
+            const various_modalRef = [
+                ["A string representing this.modalRef"],
+                [247],
+                [null],
+                [false],
+                [true],
+                [undefined],
+                [[1,2,3,4]],
+                [() => {}]
+            ];
+
+            test.each(various_modalRef)("Run fadeOut(), when this.modalRef = %p . ExceptionsHandler.ValidatorError(\"mp-fadeOut-102\") should be called", (val) => {
+                componentInstance.modalRef = val;
+                componentInstance.fadeOut();
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("mp-fadeOut-102");;
+            })
+        });
+
+        describe("this.modalRef is an object, but this.modal.current is not", () => {
+            const various_modalRef_current = [
+                ["A string representing this.modalRef.current"],
+                [2417],
+                [null],
+                [false],
+                [true],
+                [undefined],
+                [[1,2,3,4]],
+                [() => {}]
+            ];
+
+            test.each(various_modalRef_current)("Run fadeOut(), when this.modalRef.current = %p . ExceptionsHandler.ValidatorError(\"mp-fadeOut-102\") should be called", (val) => {
+                componentInstance.modalRef = { 
+                    current: val
+                };
+                
+                componentInstance.fadeOut();
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("mp-fadeOut-102");
+            })
+        });
+
+        describe("this.modalRef is an object. this.modalRef.current is also an object", () => {
+
+            test("Run fadeOut(): Confirm that both this.modalRef and this.modalRef.current are objects", () => {
+                componentInstance.modalRef = { 
+                    current: {}
+                };
+                componentInstance.fadeOut();
+
+                const condition = (typeof componentInstance.modalRef === "object" && typeof componentInstance.modalRef.current === "object");
+                expect(condition).toBe(true);
+            })
+
+            describe("Check that the \"style\" object exists in this.modalRef.current", () => {
+                const various_style = [
+                    ["A string representing this.modalRef.current.style"],
+                    [2417],
+                    [null],
+                    [false],
+                    [true],
+                    [undefined],
+                    [[1,2,3,4]],
+                    [() => {}]
+                ];
+
+                test("Confirm the existence of the this.modalRef.current.style object", () => {
+                    componentInstance.modalRef = { 
+                        current: {
+                            style: {}
+                        }
+                    };
+                    componentInstance.fadeOut();
+
+                    expect(typeof componentInstance.modalRef.current.style).toBe("object");
+                })
+                
+                test("this.modalRef.current.style does not exist, throw a \"mp-fadeOut-101\" error", () => {
+                    componentInstance.modalRef = { 
+                        current: {
+                            
+                        }
+                    };
+                    componentInstance.fadeOut();
+
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("mp-fadeOut-101");
+                })
+
+                test.each(various_style)("this.modalRef.current.style = %p, which is not an object. Throw a \"mp-fadeOut-101\" error", (val) => {
+                    componentInstance.modalRef = { 
+                        current: {
+                            style: val
+                        }
+                    };
+                    componentInstance.fadeOut();
+
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("mp-fadeOut-101");
+                })
+            });
+        });
+    })
+
     describe("Test fadeIn()", () => {
         describe("this.modalRef is not an object", () => {
             const various_modalRef = [
@@ -218,7 +336,7 @@ describe("Test <Modal /> component behaviour at mount", () => {
                 [() => {}]
             ];
 
-            test.each(various_modalRef_current)("Run fadeIn(), when this.modalRef.current = %p . ExceptionsHandler.ValidatorError(\"mp-fadeIn-101\") should be called", (val) => {
+            test.each(various_modalRef_current)("Run fadeIn(), when this.modalRef.current = %p . ExceptionsHandler.ValidatorError(\"mp-fadeIn-102\") should be called", (val) => {
                 componentInstance.modalRef = { 
                     current: val
                 };
@@ -252,6 +370,17 @@ describe("Test <Modal /> component behaviour at mount", () => {
                     [[1,2,3,4]],
                     [() => {}]
                 ];
+
+                test("Confirm the existence of the this.modalRef.current.style object", () => {
+                    componentInstance.modalRef = { 
+                        current: {
+                            style: {}
+                        }
+                    };
+                    componentInstance.fadeIn();
+
+                    expect(typeof componentInstance.modalRef.current.style).toBe("object");
+                })
                 
                 test("this.modalRef.current.style does not exist, throw a \"mp-fadeIn-101\" error", () => {
                     componentInstance.modalRef = { 
@@ -274,9 +403,7 @@ describe("Test <Modal /> component behaviour at mount", () => {
 
                     expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("mp-fadeIn-101");
                 })
-            },
-            
-            );
+            });
         });
     })
 
