@@ -650,23 +650,113 @@ describe("Test <Modal /> component behaviour at mount", () => {
                 });
             });
 
-            describe("When both \"key\" and \"value\" have correct values, call this.setState", () => {
-                const various_value = [
-                    [12],
-                    [() => {}],
-                    [[3,8,5,4]],
-                    [{key3: 1412, key4: false}],
-                    [null],
-                    ["A string representing another value"],
-                    [false],
-                    [true]
-                ];
+            describe("When both \"key\" and \"value\" have correct values, call this.setState()", () => {
+                
+                describe("Without callback parameter", () => {
+                    const { isUndefined, isFunction } = validator;
 
-                test.each(various_value)("Run saveToState(\"test string\", %p, \"Area string\")", (val) => {
-                    componentInstance.setState = jest.fn();
-                    componentInstance.saveToState("test string", val, "Area string");
+                    test("Run saveToState(\"test string\", %p, \"Area string\"): call this.setState()", () => {
+                        const callbackMockFn = jest.fn();
+                        componentInstance.setState = jest.fn(({}, () => {
+                            
+                            if(!isUndefined(undefined)){
+                                if(isFunction(undefined)){
+                                    callbackMockFn();
+                                } else {
+                                    throw ExceptionsHandler.ValidatorError("mp-saveToState-106") 
+                                }
+                            }
+                        }));
+                        componentInstance.saveToState("test string", "test value", "Area string");
 
-                    expect(componentInstance.setState).toHaveBeenCalled();
+                        expect(componentInstance.setState).toHaveBeenCalled();
+                    });
+
+                    test("Run saveToState(\"test string\", %p, \"Area string\"): do not call ExceptionsHandler.ValidatorError(\"mp-saveToState-106\")", () => {
+                        const callbackMockFn = jest.fn();
+                        componentInstance.setState = jest.fn(({}, () => {
+                            
+                            if(!isUndefined(undefined)){
+                                if(isFunction(undefined)){
+                                    callbackMockFn();
+                                } else {
+                                    throw ExceptionsHandler.ValidatorError("mp-saveToState-106") 
+                                }
+                            }
+                        }));
+                        componentInstance.saveToState("test string", "test value", "Area string");
+
+                        expect(ExceptionsHandler.ValidatorError).not.toHaveBeenCalledWith("mp-saveToState-106");
+                    });
+
+                    test("Run saveToState(\"test string\", %p, \"Area string\"): do not call the callback function", () => {
+                        const callbackMockFn = jest.fn();
+                        componentInstance.setState = jest.fn(({}, () => {
+                            
+                            if(!isUndefined(undefined)){
+                                if(isFunction(undefined)){
+                                    callbackMockFn();
+                                } else {
+                                    throw ExceptionsHandler.ValidatorError("mp-saveToState-106") 
+                                }
+                            }
+                        }));
+                        componentInstance.saveToState("test string", "test value", "Area string");
+
+                        expect(callbackMockFn).not.toHaveBeenCalled();
+                    })
+                })
+
+                describe("With callback parameter", () => {
+                    const { isUndefined, isFunction } = validator;
+
+                    describe("When callback is a function", () => {
+                        
+
+                        test("Run saveToState(\"test string\", \"test value\", \"Area string\", () => {}): call the callback function", () => {
+                            const callbackMockFn = jest.fn();
+                            componentInstance.setState = jest.fn(({}, () => {
+                           
+                                if(!isUndefined(callbackMockFn)){
+                                    if(isFunction(callbackMockFn)){
+                                        callbackMockFn();
+                                    } else {
+                                        throw ExceptionsHandler.ValidatorError("mp-saveToState-106") 
+                                    }
+                                }
+                            }));
+                            componentInstance.saveToState("test string", "test value", "Area string", callbackMockFn);
+    
+                            expect(callbackMockFn).toHaveBeenCalled();
+                        })
+                    });
+                    
+                    describe("When callback is not function", () => {
+                        const various_callback = [
+                            [14],
+                            ["string"],
+                            [[1,2,3,4]],
+                            [{key1: 12, key2: false}],
+                            [null],
+                            [false],
+                            [true]
+                        ]
+
+                        test.each(various_callback)("Run saveToState(\"test string\", \"test value\", \"Area string\", %p): call ExceptionsHandler.ValidatorError(\"mp-saveToState-106\") ", (val) => {
+                            componentInstance.setState = jest.fn(({}, () => {
+                                if(!isUndefined(val)){
+                                    if(isFunction(val)){
+                                        val();
+                                    } else {
+                                        throw ExceptionsHandler.ValidatorError("mp-saveToState-106") 
+                                    }
+                                }
+                            }));
+                            componentInstance.saveToState("test string", "test value", "Area string", val);
+    
+                            expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("mp-saveToState-106");
+                        })
+                    });
                 })
             })
         })
