@@ -80,6 +80,9 @@ export const ValidatorError = (code) => {
         case "mp-propsAction-101": 
             message = "The modal could not execute the requested action connected to it because it is invalid. The task(s) were ignored.";    
             break;   
+        case "mp-propsAction-102": 
+            message = "The modal could not execute any functions because there is none connected to it. The execution attempt was aborted.";    
+            break;       
         case "mp-verifyProps-101": 
             message = "The \"onDismiss\" props function is missing in the requested modal. Request aborted.";    
             break;      

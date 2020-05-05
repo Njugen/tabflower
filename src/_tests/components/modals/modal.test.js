@@ -43,7 +43,12 @@ describe("Test <Modal /> component behaviour at mount", () => {
         "mp-saveToState-104": ExceptionsHandler.ValidatorError("mp-saveToState-104"),
         "mp-saveToState-105": ExceptionsHandler.ValidatorError("mp-saveToState-105"),
         "mp-saveToState-106": ExceptionsHandler.ValidatorError("mp-saveToState-106"),
-        "mp-saveToState-107": ExceptionsHandler.ValidatorError("mp-saveToState-107")
+        "mp-saveToState-107": ExceptionsHandler.ValidatorError("mp-saveToState-107"),
+
+        "mp-propsAction-101": ExceptionsHandler.ValidatorError("mp-propsAction-101"),
+        "mp-propsAction-102": ExceptionsHandler.ValidatorError("mp-propsAction-102"),
+
+        "mp-clearModalData-103": ExceptionsHandler.ValidatorError("mp-clearModalData-103")
     };
 
     const expectedErrorReturns = {
@@ -129,6 +134,23 @@ describe("Test <Modal /> component behaviour at mount", () => {
             name: "ValidatorError",
             message: "The \"area\" parameter is not a string. Data was not saved.",
             code: "mp-saveToState-107"
+        },
+
+        "mp-propsAction-101": {
+            name: "ValidatorError",
+            message: "The modal could not execute the requested action connected to it because it is invalid. The task(s) were ignored.",
+            code: "mp-propsAction-101"
+        },
+        "mp-propsAction-102": {
+            name: "ValidatorError",
+            message: "The modal could not execute any actions because there is none connected to it. The execution attempt was aborted.",
+            code: "mp-propsAction-102"
+        },
+
+        "mp-clearModalData-103": {
+            name: "ValidatorError",
+            message: "The callback parameter is not a function",
+            code: "mp-clearModalData-103"
         }
     }
 
@@ -431,6 +453,209 @@ describe("Test <Modal /> component behaviour at mount", () => {
                 })
             });
         });
+    });
+
+    // ATTENTION: Figure out how to call mocked props functions...
+    describe("Test clearModalData(callback)", () => {
+        describe("Run clearModalData(callback), which does the following: ", () => {
+            const various_callback = [
+                ["test string"],
+                [{ testKey: 123, testKey2: 456 }],
+                [null],
+                [true],
+                [false],
+                [[1,2,3,4]],
+                [80]
+            ];
+            const mockedCallback = jest.fn();
+            
+            test("triggers this.setState({}, fn), where \"fn\" has to be a function (any function)", () => {
+                componentInstance.setState = jest.fn();
+                componentInstance.clearModalData(mockedCallback);
+    
+                expect(componentInstance.setState).toHaveBeenCalledWith({}, expect.any(Function));
+            })
+
+            describe("this.setState({}, fn) in turn will trigger the \"fn\" function, inside which the following happens:", () => {
+                test("this.fadeOut() gets called", () => {
+                    componentInstance.fadeOut = jest.fn();
+                    componentInstance.clearModalData(mockedCallback);
+
+                    expect(componentInstance.fadeOut).toHaveBeenCalled();
+                });
+
+                test("onDismiss() (local alias onDismissModal()) gets called", () => {
+                    const testComponent = predefinedComponent({ onDismiss: jest.fn() }, { disableLifecycleMethods: true })
+                    const componentInstance = testComponent.instance();
+                    componentInstance.clearModalData(mockedCallback);
+
+                    expect(componentInstance.props.onDismiss).toHaveBeenCalled();
+                });
+
+                test.each(various_callback)("\"callback\" = %p (not a function): trigger ExceptionsHandler.ValidatorError(\"mp-clearModalData-103\")", (val) => {
+                    const testComponent = predefinedComponent({ onDismiss: jest.fn() }, { disableLifecycleMethods: true })
+                    const componentInstance = testComponent.instance();
+                    const mockedCallback = val;
+
+                    componentInstance.fadeOut = jest.fn();
+                    componentInstance.clearModalData(mockedCallback);
+
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("mp-clearModalData-103");
+                });
+
+                test("\"callback\" is a function: trigger it", () => {
+                    const testComponent = predefinedComponent({ onDismiss: jest.fn() }, { disableLifecycleMethods: true })
+                    const componentInstance = testComponent.instance();
+                    const mockedCallback = jest.fn();
+
+                    componentInstance.fadeOut = jest.fn();
+                    componentInstance.clearModalData(mockedCallback);
+
+                    expect(mockedCallback).toHaveBeenCalled();
+                });
+
+                describe("\"callback\" could be missing (undefined): confirm this by mocking this.setState, telling \"callbackExists\" about the situation", () => {
+                    test("\"callback is undefined\": callbackExists should remain false", () => {
+                        const { isUndefined, isFunction } = validator;
+                        const testComponent = predefinedComponent({ onDismiss: jest.fn() }, { disableLifecycleMethods: true })
+                        const componentInstance = testComponent.instance();
+                        const mockedCallback = undefined;
+
+                        let callbackExists = false;
+
+                        componentInstance.fadeOut = jest.fn();
+                        
+                        componentInstance.setState = jest.fn(({}, () => {
+                            if(!isUndefined(mockedCallback)){
+                                if(isFunction(mockedCallback)){
+                                    callbackExists = true;
+                                } else {
+                                    callbackExists = false;
+                                }
+                            }    
+                        }))
+
+                        componentInstance.clearModalData(mockedCallback);
+
+                        expect(callbackExists).toBe(false);
+                    });  
+                    
+                    test("\"callback is a function\": callbackExists should be set to true", () => {
+                        const { isUndefined, isFunction } = validator;
+                        const testComponent = predefinedComponent({ onDismiss: jest.fn() }, { disableLifecycleMethods: true })
+                        const componentInstance = testComponent.instance();
+                        const mockedCallback = () => {};
+
+                        let callbackExists = false;
+
+                        componentInstance.fadeOut = jest.fn();
+                        
+                        componentInstance.setState = jest.fn(({}, () => {
+                            if(!isUndefined(mockedCallback)){
+                                if(isFunction(mockedCallback)){
+                                    callbackExists = true;
+                                } else {
+                                    callbackExists = false;
+                                }
+                            }    
+                        }))
+
+                        componentInstance.clearModalData(mockedCallback);
+
+                        expect(callbackExists).toBe(true);
+                    });  
+                });
+            })
+        })
+        
+
+        
+/*
+        test("Run clearModal(callback): Check that this.setState({}, () => callback()) is called, and the callback() function is triggered", () => {
+            componentInstance.setState = jest.fn();
+            componentInstance.clearModalData();
+
+        }) */
+    });
+
+    // ATTENTION: Figure out how to call mocked props functions...
+    describe("Test executePropsAction(data)", () => {
+
+        describe("props.data is an object", () => {
+            const various_data = [
+                [14],
+                [[1,2,3,4]],
+                [null],
+                ["A string representing a data variable"],
+                [false],
+                [true]
+            ];
+
+            test("Run executePropsAction(): If props.data is an object, do not throw ExceptionsHandler.ValidatorError(\"mp-propsAction-102\")", () => {
+                const presetProps = { 
+                    data: {} 
+                };
+                const testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                const componentInstance = testComponent.instance();
+
+                componentInstance.executePropsAction();
+
+                expect(ExceptionsHandler.ValidatorError).not.toBeCalledWith("mp-propsAction-102");
+                
+            });
+        /*
+            test("Run executePropsAction(): If props.data.action is a function, then call it", () => {
+
+            }) */
+
+            test.each(various_data)("Run executePropsAction(): If props.data.action = %p (not function nor undefined), throw ExceptionsHandler.ValidatorError(\"mp-propsAction-101\")", (val) => {
+                const presetProps = { 
+                    data: val
+                };
+                const testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                const componentInstance = testComponent.instance();
+
+                componentInstance.executePropsAction();
+
+                expect(ExceptionsHandler.ValidatorError).not.toBeCalledWith("mp-propsAction-101");
+            })
+        });
+
+        describe("props.data does not exist or is not an object", () => {
+            const various_data = [
+                [14],
+                [() => {}],
+                [[1,2,3,4]],
+                [null],
+                ["A string representing a data variable"],
+                [false],
+                [undefined],
+                [true]
+            ];
+
+            test("Run executePropsAction(). If props.data object does not exist, throw ExceptionsHandler.ValidatorError(\"mp-propsAction-102\")", () => {
+                const presetProps = { };
+                const testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                const componentInstance = testComponent.instance();
+
+                componentInstance.executePropsAction();
+
+                expect(ExceptionsHandler.ValidatorError).toBeCalledWith("mp-propsAction-102");
+                
+            })
+
+            test.each(various_data)("Run executePropsAction(). If props.data = %p, throw ExceptionsHandler.ValidatorError(\"mp-propsAction-102\")", (val) => {
+                const presetProps = { data: val };
+                const testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                const componentInstance = testComponent.instance();
+
+                componentInstance.executePropsAction();
+
+                expect(ExceptionsHandler.ValidatorError).toBeCalledWith("mp-propsAction-102");
+                
+            })
+        })
+        
     });
 
     describe("Test saveToState(key, value, area, callback)", () => {
