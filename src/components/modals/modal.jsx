@@ -351,7 +351,7 @@ class Modal extends Component {
                 if(typeof this.props.data.action === "function"){
                     this.props.data.action(data);
                 } else if(typeof this.props.data.action !== "undefined"){
-                    throw ExceptionsHandler.ValidatorError("mp-propsAction-101")
+                    throw ExceptionsHandler.ValidatorError("mp-propsAction-101");
                 }
             } else {
                 throw ExceptionsHandler.ValidatorError("mp-propsAction-102")

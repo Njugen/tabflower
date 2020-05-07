@@ -631,6 +631,12 @@ describe("Test <Modal /> component behaviour at mount", () => {
         }) */
     });
 
+    // ??? How should this function's reliability be tested???
+    describe("Test scrollHandler(e)", () => {});
+
+    // ??? How should this function's reliability be tested???
+    describe("Test handleOverflow(bodyOverflow, wrapperOverflow)", () => {})
+
     // ATTENTION: Figure out how to call mocked props functions...
     describe("Test executePropsAction(data)", () => {
 
@@ -656,21 +662,33 @@ describe("Test <Modal /> component behaviour at mount", () => {
                 expect(ExceptionsHandler.ValidatorError).not.toBeCalledWith("mp-propsAction-102");
                 
             });
-        /*
+        
             test("Run executePropsAction(): If props.data.action is a function, then call it", () => {
-
-            }) */
-
-            test.each(various_data)("Run executePropsAction(): If props.data.action = %p (not function nor undefined), throw ExceptionsHandler.ValidatorError(\"mp-propsAction-101\")", (val) => {
                 const presetProps = { 
-                    data: val
+                    data: {
+                        action: jest.fn()
+                    } 
                 };
                 const testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
                 const componentInstance = testComponent.instance();
 
                 componentInstance.executePropsAction();
 
-                expect(ExceptionsHandler.ValidatorError).not.toBeCalledWith("mp-propsAction-101");
+                expect(componentInstance.props.data.action).toHaveBeenCalled();
+            });
+            
+            test.each(various_data)("Run executePropsAction(): If props.data.action = %p (not function nor undefined), throw ExceptionsHandler.ValidatorError(\"mp-propsAction-101\")", (val) => {
+                const presetProps = { 
+                    data: {
+                        action: val
+                    }
+                };
+                const testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                const componentInstance = testComponent.instance();
+
+                componentInstance.executePropsAction();
+
+                expect(ExceptionsHandler.ValidatorError).toBeCalledWith("mp-propsAction-101");
             })
         });
 
