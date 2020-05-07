@@ -34,6 +34,7 @@ describe("Test <Modal /> component behaviour at mount", () => {
         "mp-verifyProps-107": ExceptionsHandler.ValidatorError("mp-verifyProps-107"),
         "mp-verifyProps-108": ExceptionsHandler.ValidatorError("mp-verifyProps-108"),
         "mp-verifyProps-109": ExceptionsHandler.ValidatorError("mp-verifyProps-109"),
+        "mp-verifyProps-110": ExceptionsHandler.ValidatorError("mp-verifyProps-110"),
 
         "mp-fadeIn-101": ExceptionsHandler.ValidatorError("mp-fadeIn-101"),
         "mp-fadeIn-102": ExceptionsHandler.ValidatorError("mp-fadeIn-102"),
@@ -97,6 +98,11 @@ describe("Test <Modal /> component behaviour at mount", () => {
             name: "ValidatorError",
             message: "The \"onRaiseToErrorOverlay\" parameter in the <Modal> or its child component needs to be a function. The attempt to forward the error data failed",
             code: "mp-verifyProps-109"
+        },
+        "mp-verifyProps-110": {
+            name: "ValidatorError",
+            message: "The \"errors\" parameter in saveFieldErrorsToState() needs to be either an non-array object or undefined",
+            code: "mp-verifyProps-110"
         },
 
         "mp-fadeIn-101": {
@@ -201,6 +207,36 @@ describe("Test <Modal /> component behaviour at mount", () => {
         })
     }) */
 
+    describe("Test saveFieldErrorsToState(errors)", () => {
+        const various_errors = [
+            ["A string representing an error variable"],
+            [32],
+            [null],
+            [false],
+            [true],
+            [[12,8,3,7]]
+        ]
+
+        test("Run saveFieldErrorsToState({ error1: \"test\" }): Call this.setState({ fieldErrors: { error1: \"test\" } })", () => {
+            componentInstance.setState = jest.fn();
+
+            const mockInput = { error1: "test" };
+            componentInstance.saveFieldErrorsToState(mockInput);
+
+            const setStateInput = {
+                fieldErrors: mockInput
+            }
+
+            expect(componentInstance.setState).toHaveBeenCalledWith(setStateInput);
+        });
+
+        test.each(various_errors)("Run saveFieldErrorsToState(%p): Call ExceptionsHandler.ValidatorError(\"mp-verifyProps-110\")", (val) => {
+            componentInstance.saveFieldErrorsToState(val);
+
+            expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("mp-verifyProps-110");
+        });
+    });
+
     // ATTENTION: Figure out how to call props mock...
     describe("Test raiseToErrorOverlay(error)", () => {
         describe("When \"errorData\" is not an object", () => {
@@ -260,7 +296,7 @@ describe("Test <Modal /> component behaviour at mount", () => {
                    jest.useRealTimers();
                 });
 
-                test.each(various_onRaiseToErrorOverlay)("Run raiseToErrorOverlay({}): when \"onRaiseToErrorOverlay\" is not a function, call ExceptionsHandler.ValidatorError(\"mp-verifyProps-109\")", (val) => {
+                test.each(various_onRaiseToErrorOverlay)("Run raiseToErrorOverlay(%p): when \"onRaiseToErrorOverlay\" is not a function, call ExceptionsHandler.ValidatorError(\"mp-verifyProps-109\")", (val) => {
 
                     const presetProps = {
                         onRaiseToErrorOverlay: val

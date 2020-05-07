@@ -74,9 +74,19 @@ class Modal extends Component {
             e.g. alert boxes or notifying the user based on the state variables alone) 
             
         */
-        this.setState({
-            fieldErrors: errors || {}
-        })
+        const { isUndefined, isObject } = validator;
+        
+        try {
+            if(isUndefined(errors) || isObject(errors)){
+                this.setState({
+                    fieldErrors: errors || {}
+                });
+            } else {
+                throw ExceptionsHandler.ValidatorError("mp-verifyProps-110");
+            }
+        } catch(err){
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay); 
+        }
     }
 
     raiseToErrorOverlay = (errorData) => {
