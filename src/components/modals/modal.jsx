@@ -93,7 +93,7 @@ class Modal extends Component {
             All components in this chain will have access to the information raised.
         */
         
-        const { isObject } = validator;
+        const { isObject, isFunction } = validator;
 
         try {
             if(isObject(errorData)){
@@ -102,9 +102,13 @@ class Modal extends Component {
 
                 this.dismissModalHandler();
 
-                setTimeout(() => {
-                            onRaiseToErrorOverlay(errorData);
-                }, 1000);
+                if(isFunction(onRaiseToErrorOverlay)){
+                    setTimeout(() => {
+                        onRaiseToErrorOverlay(errorData);
+                    }, 1000);
+                } else {
+                    throw ExceptionsHandler.ValidatorError("mp-verifyProps-109");
+                }
             } else {
                 throw ExceptionsHandler.ValidatorError("mp-verifyProps-108");
             }

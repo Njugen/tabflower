@@ -106,7 +106,10 @@ export const ValidatorError = (code) => {
             break;
         case "mp-verifyProps-108": 
             message = "The \"errorData\" parameter in the raiseToErrorOverlay() needs to be an object. The attempt to forward the error data failed";    
-            break;                              
+            break;  
+        case "mp-verifyProps-109": 
+            message = "The \"onRaiseToErrorOverlay\" parameter in the <Modal> or its child component needs to be a function. The attempt to forward the error data failed";    
+            break;                                 
         // ETGMCreateNewGroupModal
         case "ETGMCreateNewGroupModal-101": 
             message = "The callback parameter is not a function";

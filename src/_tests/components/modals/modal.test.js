@@ -33,6 +33,7 @@ describe("Test <Modal /> component behaviour at mount", () => {
         "mp-verifyProps-106": ExceptionsHandler.ValidatorError("mp-verifyProps-106"),
         "mp-verifyProps-107": ExceptionsHandler.ValidatorError("mp-verifyProps-107"),
         "mp-verifyProps-108": ExceptionsHandler.ValidatorError("mp-verifyProps-108"),
+        "mp-verifyProps-109": ExceptionsHandler.ValidatorError("mp-verifyProps-109"),
 
         "mp-fadeIn-101": ExceptionsHandler.ValidatorError("mp-fadeIn-101"),
         "mp-fadeIn-102": ExceptionsHandler.ValidatorError("mp-fadeIn-102"),
@@ -91,6 +92,11 @@ describe("Test <Modal /> component behaviour at mount", () => {
             name: "ValidatorError",
             message: "The \"errorData\" parameter in the raiseToErrorOverlay() needs to be an object. The attempt to forward the error data failed",
             code: "mp-verifyProps-108"
+        },
+        "mp-verifyProps-109": {
+            name: "ValidatorError",
+            message: "The \"onRaiseToErrorOverlay\" parameter in the <Modal> or its child component needs to be a function. The attempt to forward the error data failed",
+            code: "mp-verifyProps-109"
         },
 
         "mp-fadeIn-101": {
@@ -196,7 +202,7 @@ describe("Test <Modal /> component behaviour at mount", () => {
     }) */
 
     // ATTENTION: Figure out how to call props mock...
-  /*  describe("Test raiseToErrorOverlay(error)", () => {
+    describe("Test raiseToErrorOverlay(error)", () => {
         describe("When \"errorData\" is not an object", () => {
             const various_err = [
                 ["A string representing a dummy err variable"],
@@ -225,27 +231,70 @@ describe("Test <Modal /> component behaviour at mount", () => {
             });
 
             describe("\"onRaiseToErrorOverlay\" as a preset prop", () => {
-                test("Run raiseToErrorOverlay({}), when \"onRaiseToErrorOverlay\" is a function: Call \"onRaiseToErrorOverlay\" after 1 second", () => {
-            
+                const various_onRaiseToErrorOverlay = [
+                    ["A string representing a dummy err variable"],
+                    [32],
+                    [null],
+                    [undefined],
+                    [false],
+                    [true],
+                    [[12,8,3,7]],
+                    [{ item1: 257 }]
+                ];
+                test("Run raiseToErrorOverlay({}): when \"onRaiseToErrorOverlay\" is a function, call \"onRaiseToErrorOverlay\" when timeout triggers", () => {
+                    jest.useFakeTimers();
+
                     const presetProps = {
                         onRaiseToErrorOverlay: jest.fn()
                     };
 
-                    const testMockFunction = jest.fn();
-
-                   // const testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
-                    const testComponent = shallow(<Modal onRaiseToErrorOverlay={testMockFunction} />, { disableLifecycleMethods: true })
+                    const testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
                     const componentInstance = testComponent.instance();
-                   // console.log(componentInstance.props.onRaiseToErrorOverlay);
-                    componentInstance.raiseToErrorOverlay({});
-                  
-                   expect(testMockFunction).toHaveBeenCalledTimes(1);
+                   
+                   componentInstance.dismissModalHandler = jest.fn(); 
+                   componentInstance.raiseToErrorOverlay({});
+                   jest.runAllTimers(); 
 
-                 
+                   expect(componentInstance.props.onRaiseToErrorOverlay).toHaveBeenCalledTimes(1);
+
+                   jest.useRealTimers();
+                });
+
+                test.each(various_onRaiseToErrorOverlay)("Run raiseToErrorOverlay({}): when \"onRaiseToErrorOverlay\" is not a function, call ExceptionsHandler.ValidatorError(\"mp-verifyProps-109\")", (val) => {
+
+                    const presetProps = {
+                        onRaiseToErrorOverlay: val
+                    };
+
+                    const testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    const componentInstance = testComponent.instance();
+                   
+                   componentInstance.dismissModalHandler = jest.fn(); 
+                   componentInstance.raiseToErrorOverlay({});
+
+                   expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("mp-verifyProps-109");
+
                 })
-            })
+
+                describe("Run raiseToErrorOverlay({}). The setTimeout() timer located in it should trigger its function in 1 second", () => {
+                    jest.useFakeTimers();
+
+                    const presetProps = {
+                        onRaiseToErrorOverlay: jest.fn()
+                    };
+                    
+                    const testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    const componentInstance = testComponent.instance();
+
+                    componentInstance.dismissModalHandler = jest.fn();
+                    componentInstance.raiseToErrorOverlay({});
+
+                    expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 1000);
+                    jest.useRealTimers();
+                });
+            });
         })
-    }) */
+    }) 
 
     describe("Test fadeIn()", () => {
         describe("this.modalRef is not an object", () => {
@@ -521,7 +570,7 @@ describe("Test <Modal /> component behaviour at mount", () => {
                         const componentInstance = testComponent.instance();
                         const mockedCallback = undefined;
 
-                        let callbackExists = false;
+                        let callbackExists;
 
                         componentInstance.fadeOut = jest.fn();
                         
@@ -532,6 +581,8 @@ describe("Test <Modal /> component behaviour at mount", () => {
                                 } else {
                                     callbackExists = false;
                                 }
+                            } else {
+                                callbackExists = false;
                             }    
                         }))
 
@@ -546,7 +597,7 @@ describe("Test <Modal /> component behaviour at mount", () => {
                         const componentInstance = testComponent.instance();
                         const mockedCallback = () => {};
 
-                        let callbackExists = false;
+                        let callbackExists;
 
                         componentInstance.fadeOut = jest.fn();
                         
@@ -557,7 +608,9 @@ describe("Test <Modal /> component behaviour at mount", () => {
                                 } else {
                                     callbackExists = false;
                                 }
-                            }    
+                            } else {
+                                callbackExists = false;
+                            }      
                         }))
 
                         componentInstance.clearModalData(mockedCallback);
