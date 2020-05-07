@@ -487,7 +487,7 @@ class Modal extends Component {
             throw ExceptionsHandler.ValidatorError("mp-verifyProps-105");
         }
     }
-
+    
     render = () => {
         /*
             Rendering of the modal's user interface
@@ -513,7 +513,7 @@ class Modal extends Component {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title" id="tabeonModalLabel">
-                                {typeof this.renderModalHeader === "function" &&
+                                {(typeof this.renderModalHeader === "function") &&
                                     this.renderModalHeader()
                                 }
                             </h5>

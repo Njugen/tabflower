@@ -180,6 +180,38 @@ describe("Test <Modal /> component behaviour at mount", () => {
         });
     });
 
+    describe("Test basic <Modal> render", () => {
+        test("Run render(): The this.renderModalHeader() should be called, if such a function exists", () => {
+            componentInstance.renderModalHeader = jest.fn();
+
+            componentInstance.render();
+
+            expect(componentInstance.renderModalHeader).toHaveBeenCalled();
+        });
+
+        test("Run render(): The this.renderModalBody() should be called, if such a function exists", () => {
+            componentInstance.renderModalBody = jest.fn();
+
+            componentInstance.render();
+
+            expect(componentInstance.renderModalBody).toHaveBeenCalled();
+        });
+
+        test("If this.dismissModalHandler() is a function, find a button with the id \"modal-dismiss\"", () => {
+            componentInstance.dismissModalHandler = jest.fn();
+
+            testComponent.setProps({});
+            expect(testComponent.find("button#modal-dismiss").exists()).toBe(true);
+        })
+
+        test("If this.saveModalHandler() is a function, find a button with the id \"modal-save\"", () => {
+            componentInstance.saveModalHandler = jest.fn();
+
+            testComponent.setProps({});
+            expect(testComponent.find("button#modal-save").exists()).toBe(true);
+        })
+    });
+
     /*
     describe("Test componentDidMount() lifecycle method (as a unit)", () => {
         
