@@ -173,7 +173,7 @@ describe("Test <Modal /> component behaviour at mount", () => {
         const presetProps = {};
         testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
         componentInstance = testComponent.instance();
-
+    
         ExceptionsHandler.ValidatorError = jest.fn();
         ExceptionsHandler.ValidatorError.mockImplementation(errCode => {
             return actualErrorReturns[errCode];
@@ -212,32 +212,89 @@ describe("Test <Modal /> component behaviour at mount", () => {
         })
     });
 
-    /*
+    
     describe("Test componentDidMount() lifecycle method (as a unit)", () => {
-        
-        
-        
-        
-        test("this.verifyProps() should be called", () => {
+        beforeEach(() => {
+            jest.clearAllMocks();
+            jest.useRealTimers();
+    
+            const presetProps = {};
+            testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+            componentInstance = testComponent.instance();
             
-
             componentInstance.fadeIn = jest.fn();
             componentInstance.verifyChildProps = jest.fn();
             componentInstance.handleOverflow = jest.fn();
             componentInstance.childComponentDidMount = jest.fn();
+            document.addEventListener = jest.fn();
             componentInstance.verifyProps = jest.fn();
             componentInstance.verifyState = jest.fn();
 
+            ExceptionsHandler.ValidatorError = jest.fn();
+            ExceptionsHandler.ValidatorError.mockImplementation(errCode => {
+                return actualErrorReturns[errCode];
+            });
+        });
+        
+        test("this.verifyProps() should be called", () => {
             componentInstance.componentDidMount();
 
             expect(componentInstance.verifyProps).toHaveBeenCalled();
-        })
+        }) 
 
 
         test("this.verifyState() should be called", () => {
+            componentInstance.componentDidMount();
 
-        })
-    }) */
+            expect(componentInstance.verifyState).toHaveBeenCalled();
+        });
+
+        test("setTimeout (the one with this.fadeIn() in its callback) triggers in 100ms", () => {
+            jest.useFakeTimers();
+
+            componentInstance.componentDidMount();
+
+            expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 100);
+            
+            jest.useRealTimers();
+        });
+
+        test("fadeIn() should get called when its setTimeout wrapper expires", () => {
+            jest.useFakeTimers();
+
+            componentInstance.componentDidMount();
+            jest.runAllTimers();
+
+            expect(componentInstance.fadeIn).toHaveBeenCalled();
+            
+            jest.useRealTimers();
+        });
+
+        test("this.verifyChildProps() should get called if it is a function", () => {
+            componentInstance.componentDidMount();
+
+            expect(componentInstance.verifyChildProps).toHaveBeenCalled();
+        });
+
+        test("document.addEventListener(\"scroll\", any function) should get called", () => {
+            componentInstance.componentDidMount();
+
+            expect(document.addEventListener).toHaveBeenCalledWith("scroll", expect.any(Function));
+        });
+
+        test("this.handleOverflow() should get called", () => {
+            componentInstance.componentDidMount();
+
+            expect(componentInstance.handleOverflow).toHaveBeenCalled();
+        });
+
+        test("this.childComponentDidMount() should get called if it is a function", () => {
+            componentInstance.componentDidMount();
+
+            expect(componentInstance.childComponentDidMount).toHaveBeenCalled();
+        });
+        
+    })
 
     describe("Test saveFieldErrorsToState(errors)", () => {
         const various_errors = [

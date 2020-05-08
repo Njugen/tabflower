@@ -275,6 +275,7 @@ class Modal extends Component {
             Verify props for each individual child modal, if that modal has any props and a verifyChildProps()
             function to its disposal
         */
+     
         if(isFunction(this.verifyChildProps)){
             this.verifyChildProps();
         }
@@ -286,8 +287,6 @@ class Modal extends Component {
         */
 
         document.addEventListener("scroll", this.scrollHandler);
-
-
         
         /*
             Execute certain features belonging to each individual child modal, when mounting that modal and
