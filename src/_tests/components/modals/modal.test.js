@@ -212,8 +212,24 @@ describe("Test <Modal /> component behaviour at mount", () => {
         })
     });
 
-    
-    describe("Test componentDidMount() lifecycle method (as a unit)", () => {
+    describe("Test this.componentWillUnmount() lifesycle method (as a unit)", () => {
+        test("this.handleOverflow(\"auto\", \"auto\") should be called by this.componentWillUnmount()", () => {
+            componentInstance.handleOverflow = jest.fn();
+            componentInstance.componentWillUnmount();
+
+            expect(componentInstance.handleOverflow).toHaveBeenCalledWith("auto", "auto");
+        });
+
+        test("document.removeEventListener(\"scroll\", any function) should be called by this.componentWillUnmount()", () => {
+            componentInstance.handleOverflow = jest.fn();
+            document.removeEventListener = jest.fn();
+            componentInstance.componentWillUnmount();
+
+            expect(document.removeEventListener).toHaveBeenCalledWith("scroll", expect.any(Function));
+        })
+    });
+
+    describe("Test this.componentDidMount() lifecycle method (as a unit)", () => {
         beforeEach(() => {
             jest.clearAllMocks();
             jest.useRealTimers();
@@ -236,20 +252,20 @@ describe("Test <Modal /> component behaviour at mount", () => {
             });
         });
         
-        test("this.verifyProps() should be called", () => {
+        test("this.verifyProps() should be called by this.componentDidMount()", () => {
             componentInstance.componentDidMount();
 
             expect(componentInstance.verifyProps).toHaveBeenCalled();
         }) 
 
 
-        test("this.verifyState() should be called", () => {
+        test("this.verifyState() should be called by this.componentDidMount()", () => {
             componentInstance.componentDidMount();
 
             expect(componentInstance.verifyState).toHaveBeenCalled();
         });
 
-        test("setTimeout (the one with this.fadeIn() in its callback) triggers in 100ms", () => {
+        test("setTimeout (the one with this.fadeIn() in its callback) triggers in 100ms by this.componentDidMount()", () => {
             jest.useFakeTimers();
 
             componentInstance.componentDidMount();
@@ -259,7 +275,7 @@ describe("Test <Modal /> component behaviour at mount", () => {
             jest.useRealTimers();
         });
 
-        test("fadeIn() should get called when its setTimeout wrapper expires", () => {
+        test("fadeIn() should get called by this.componentDidMount(), when its setTimeout wrapper expires", () => {
             jest.useFakeTimers();
 
             componentInstance.componentDidMount();
@@ -270,32 +286,59 @@ describe("Test <Modal /> component behaviour at mount", () => {
             jest.useRealTimers();
         });
 
-        test("this.verifyChildProps() should get called if it is a function", () => {
+        test("this.verifyChildProps() should get called by this.componentDidMount(), if it is a function", () => {
             componentInstance.componentDidMount();
 
             expect(componentInstance.verifyChildProps).toHaveBeenCalled();
         });
 
-        test("document.addEventListener(\"scroll\", any function) should get called", () => {
+        test("document.addEventListener(\"scroll\", any function) should get called by this.componentDidMount()", () => {
             componentInstance.componentDidMount();
 
             expect(document.addEventListener).toHaveBeenCalledWith("scroll", expect.any(Function));
         });
 
-        test("this.handleOverflow() should get called", () => {
+        test("this.handleOverflow(\"hidden\", \"auto\") should get called by this.componentDidMount()", () => {
             componentInstance.componentDidMount();
 
-            expect(componentInstance.handleOverflow).toHaveBeenCalled();
+            expect(componentInstance.handleOverflow).toHaveBeenCalledWith("hidden", "auto");
         });
 
-        test("this.childComponentDidMount() should get called if it is a function", () => {
+        test("this.childComponentDidMount() should get called by this.componentDidMount(), if it is a function", () => {
             componentInstance.componentDidMount();
 
             expect(componentInstance.childComponentDidMount).toHaveBeenCalled();
         });
         
-    })
+    });
 
+    describe("Test this.componentWillMount() lifesycle method (as a unit)", () => {
+        // ATTENTION! This modalRef verification needs rework...
+        test("this.modalRef should be set to an object (preferably using createRef()) by this.componentWillMount()", () => {
+            const { isObject } = validator;
+            componentInstance.componentWillMount();
+
+            expect(isObject(componentInstance.modalRef)).toBe(true);
+        });
+    });
+/*
+    describe("Test this.componentDidUpdate(prevProps, prevState) lifesycle method (as a unit)", () => {
+        test("If prevProps is NOT equal to the modal component's current props, a setTimeout will trigger its callback in 100ms", () => {
+            jest.useFakeTimers();
+
+            const presetProps = {
+                testProp: 1
+            }
+            testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+            componentInstance = testComponent.instance();
+            componentInstance.componentDidUpdate({testProp: 1}, null);
+            
+            expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 100);
+
+            jest.useRealTimers();
+        });
+    });
+*/
     describe("Test saveFieldErrorsToState(errors)", () => {
         const various_errors = [
             ["A string representing an error variable"],
