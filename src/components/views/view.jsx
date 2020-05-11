@@ -104,8 +104,21 @@ class View extends Component {
         */
 
         const { onRaiseToModal } = this.props;
-    
-        onRaiseToModal(data);
+        const { isObject, isFunction } = validator;
+
+        try {
+            if(isObject(data)){
+                if(isFunction(onRaiseToModal)){
+                    onRaiseToModal(data);
+                } else {
+                    ExceptionsHandler.ValidatorError("view-105");
+                }
+            } else {
+                ExceptionsHandler.ValidatorError("view-104");
+            }
+        } catch(err){
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay); 
+        }
     }
 
     componentDidMount = () => {

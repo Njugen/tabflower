@@ -28,7 +28,8 @@ describe("Test <View /> component behaviour at mount", () => {
     const actualErrorReturns = {
         "view-101": ExceptionsHandler.ValidatorError("view-101"),
         "view-102": ExceptionsHandler.ValidatorError("view-102"),
-        "view-103": ExceptionsHandler.ValidatorError("view-103")
+        "view-103": ExceptionsHandler.ValidatorError("view-103"),
+        "view-104": ExceptionsHandler.ValidatorError("view-104")
     };
 
     const expectedErrorReturns = {
@@ -44,8 +45,13 @@ describe("Test <View /> component behaviour at mount", () => {
         },
         "view-103": {
             name: "ValidatorError",
-            message: "The call to the raiseToErrorOverlay() function of the View component could not be fulfilled, because the props onRaiseToErrorOverlay is not a function or is missing.",
+            message: "The features of the raiseToErrorOverlay() function of the View component could not be fully executed, because the props onRaiseToErrorOverlay is not a function or is missing.",
             code: "view-103"
+        },
+        "view-104": {
+            name: "ValidatorError",
+            message: "The \"data\" parameter is not set as an object in raiseToModal() of the View component. Information could not be forwarded to the UI.",
+            code: "view-104"
         }
     }
 
@@ -180,5 +186,88 @@ describe("Test <View /> component behaviour at mount", () => {
             componentInstance.handleViewMount();
             expect(componentInstance.props.onViewMount).toHaveBeenCalledWith(componentInstance.state);
         })
+    });
+
+    describe("Test raiseToModal(data)", () => {
+        describe("Case 1: When the \"data\" parameter is NOT an object", () => {
+            const various_data = [
+                ["A string representing a dummy data variable"],
+                [32],
+                [null],
+                [undefined],
+                [false],
+                [true],
+                [[12,8,3,7]],
+                [() => {}]
+            ];
+
+            test("Run raiseToModal(): Throw an error ExceptionsHandler.ValidatorError(\"view-104\")", () => {
+                componentInstance.raiseToModal();
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("view-104");
+            });
+
+            test.each(various_data)("Run raiseToModal(%p): Throw an error ExceptionsHandler.ValidatorError(\"view-104\")", (val) => {
+                componentInstance.raiseToModal(val);
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("view-104");
+            });
+        });
+        
+    });
+
+    describe("Case 2: When the \"data\" parameter is an object, but the onRaiseToModal props is NOT a function", () => {
+        const various_props_onRaiseToModal = [
+            ["A string representing a dummy data variable"],
+            [32],
+            [null],
+            [undefined],
+            [false],
+            [true],
+            [[12,8,3,7]],
+            [{ testItem: "test" }]
+        ];
+
+        test("Run raiseToModal({ testData: \"test value\" }), while this.props.onRaiseToModal does not exist: Throw an error ExceptionsHandler.ValidatorError(\"view-105\")", () => {
+            const presetProps = {
+              
+            }
+            testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+            componentInstance = testComponent.instance();
+
+            const data_param = { testData: "test value" };
+            componentInstance.raiseToModal(data_param);
+
+            expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("view-105");
+        });
+
+        test.each(various_props_onRaiseToModal)("Run raiseToModal({ testData: \"test value\" }), while this.props.onRaiseToModal does not exist: Throw an error ExceptionsHandler.ValidatorError(\"view-105\")", (val) => {
+            const presetProps = {
+                onRaiseToModal: val
+            }
+            testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+            componentInstance = testComponent.instance();
+
+            const data_param = { testData: "test value" };
+            componentInstance.raiseToModal(data_param);
+
+            expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("view-105");
+        })
+    });
+
+    describe("Case 3: When the \"data\" parameter is an object, and the onRaiseToModal props is a function", () => {
+        test("Run raiseToModal({ testData: \"test value\" }) when this.props.onRaiseToModal is a function: Call this.props.onRaseToModal(data) using the same \"data\" parameter", () => {
+            const presetProps = {
+                onRaiseToModal: jest.fn()
+            };
+            testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+            componentInstance = testComponent.instance();
+
+            const data_param = { testData: "test value" }
+
+            componentInstance.raiseToModal(data_param);
+
+            expect(componentInstance.props.onRaiseToModal).toHaveBeenCalledWith(data_param);
+        });
     });
 }) 
