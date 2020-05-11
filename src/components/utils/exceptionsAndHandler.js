@@ -384,6 +384,12 @@ export const ValidatorError = (code) => {
         case "view-101":
             message = "The \"onViewMount\" parameter is not set in this view. Any view inserted into Tabflower must have this parameter set as a function.";
             break;  
+        case "view-102":
+            message = "The \"data\" parameter is not set in raiseToErrorOverlay() of the View component. Information could not be forwarded to the UI.";
+            break;      
+        case "view-103":
+            message = "The call to the raiseToErrorOverlay() function of the View component could not be fulfilled, because the props onRaiseToErrorOverlay is not a function or is missing.";
+            break;      
         // views/tabManagement.jsx
         case "tabManagement-view-101":
             message = "An error has occured when attempting to reload the user interface. However, the requested data changes have been made successfully. Please, reload this page manually to see these changes.";

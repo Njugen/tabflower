@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { ValidatorError } from './../utils/exceptionsAndHandler';
 import * as validator from './../utils/inputValidators'
+import * as ExceptionsHandler from '../utils/exceptionsAndHandler';
 import PropTypes from 'prop-types';
 
 /*
@@ -47,9 +48,20 @@ class View extends Component {
 
     raiseToErrorOverlay = (data) => {
         const { onRaiseToErrorOverlay } = this.props;
-        
-        if(typeof onRaiseToErrorOverlay === "function"){
-            onRaiseToErrorOverlay(data);
+        const { isObject } = validator;
+
+        try {
+            if(isObject(data)){
+                if(typeof onRaiseToErrorOverlay === "function"){
+                    onRaiseToErrorOverlay(data);
+                } else {
+                    ExceptionsHandler.ValidatorError("view-103");
+                }
+            } else {
+                ExceptionsHandler.ValidatorError("view-102");
+            }
+        } catch(err){
+            ExceptionsHandler.ErrorHandler(err, () => {}); 
         }
     } 
 
@@ -121,11 +133,11 @@ class View extends Component {
         return null;
     }
 }
-
+/*
 View.propTypes = {
     onRaiseToModal: PropTypes.func.isRequired,
     onViewMount: PropTypes.func.isRequired,
     onRaiseToErrorOverlay: PropTypes.func.isRequired
-}
+} */
 
 export default View;
