@@ -145,5 +145,40 @@ describe("Test <View /> component behaviour at mount", () => {
                 expect(componentInstance.props.onRaiseToErrorOverlay).toHaveBeenCalledWith(data_param);
             });
         });
-    })
+    });
+
+    describe("Test handleViewMount()", () => {
+        const various_props_onViewMount = [
+            ["A string representing a dummy data variable"],
+            [32],
+            [null],
+            [undefined],
+            [false],
+            [true],
+            [[12,8,3,7]],
+            [{ item: "test" }]
+        ];
+
+        test.each(various_props_onViewMount)("Run handleViewMount(), when this.props.onViewMount = %p: Throw an error ExceptionsHandler.ValidatorError(\"view-101\")", (val) => {
+            const presetProps = {
+                onViewMount: val
+            }
+            testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+            componentInstance = testComponent.instance();
+
+            componentInstance.handleViewMount();
+            expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("view-101");
+        });
+
+        test("Run handleViewMount(), when this.props.onViewMount is a function: Call this.props.onViewMount() with the component state as input parameter", () => {
+            const presetProps = {
+                onViewMount: jest.fn()
+            }
+            testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+            componentInstance = testComponent.instance();
+
+            componentInstance.handleViewMount();
+            expect(componentInstance.props.onViewMount).toHaveBeenCalledWith(componentInstance.state);
+        })
+    });
 }) 

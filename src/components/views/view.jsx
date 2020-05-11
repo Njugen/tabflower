@@ -76,13 +76,17 @@ class View extends Component {
 
             All components in this chain will have access to the information raised.
         */
-        const { isFunction } = validator;
-        const { onViewMount } = this.props;
+        try {
+            const { isFunction } = validator;
+            const { onViewMount } = this.props;
 
-        if(isFunction(onViewMount)){
-            onViewMount(this.state);
-        } else {
-            throw ValidatorError("view-101");
+            if(isFunction(onViewMount)){
+                onViewMount(this.state);
+            } else {
+                throw ValidatorError("view-101");
+            }
+        } catch(err){
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay); 
         }
     }
 
