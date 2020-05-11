@@ -1,14 +1,15 @@
 import React, { Fragment } from 'react';
 import { shallow, mount, render } from 'enzyme';
-import Modal from './../../../components/modals/modal';
+import View from './../../../components/views/view';
 import * as ExceptionsHandler from './../../../components/utils/exceptionsAndHandler';
 import * as validator from './../../../components/utils/inputValidators';
+
 
 
 const predefinedComponent = (props, options) => {
     props = props || {};
 
-    const component = shallow(<Modal {...props} />, options);
+    const component = shallow(<View {...props} />, options);
     return component;
 }
 
