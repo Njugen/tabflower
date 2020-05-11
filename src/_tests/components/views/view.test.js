@@ -281,4 +281,9 @@ describe("Test <View /> component behaviour at mount", () => {
         });
     })
 
+    describe("Test render()", () => {
+        test("Run render(): Nothing should be rendered at all, no JSX. Nothing. Just return \"null\"", () => {
+            expect(componentInstance.render()).toBeNull();
+        })
+    })
 }) 
