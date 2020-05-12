@@ -5,19 +5,19 @@ import Moduleon from "../utils/moduleon/moduleon";
 import ModuleColumn from '../utils/moduleon/moduleColumn';
 import CurrentlyOpenedTabsModule from "../modules/currentlyOpenedTabs";
 import ExistingTabGroupsModule from '../modules/existingTabGroups';
-import { ValidatorError, ErrorHandler } from '../utils/exceptionsAndHandler';
+import * as ExceptionsHandler from '../utils/exceptionsAndHandler';
 import * as validator from '../utils/inputValidators'
 
 require("../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css")
 
 class TabManagementView extends View {
 
-    handleRaisedData = (obj) => {
+    handleRaisedData = (data) => {
         try {
             const { isString } = validator;
             
-            if(isString(obj)){
-                if(obj === "refresh"){
+            if(isString(data)){
+                if(data === "refresh"){
                     let refreshFactor = this.state.refreshFactor;
                     refreshFactor++;
 
@@ -27,13 +27,15 @@ class TabManagementView extends View {
                 
                         }
                     )
+                } else {
+                    throw ExceptionsHandler.ValidatorError("tabManagement-view-102");
                 }
             } else {
-                throw ValidatorError("tabManagement-view-101");
+                throw ExceptionsHandler.ValidatorError("tabManagement-view-101");
             }
             
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 

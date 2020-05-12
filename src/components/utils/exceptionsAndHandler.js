@@ -399,6 +399,9 @@ export const ValidatorError = (code) => {
         // views/tabManagement.jsx
         case "tabManagement-view-101":
             message = "An error has occured when attempting to reload the user interface. However, the requested data changes have been made successfully. Please, reload this page manually to see these changes.";
+            break;
+        case "tabManagement-view-102":
+            message = "The command raised to the TabManagementView component could not be executed, because it is invalid.";
             break;   
         // views/aboutTabFlower.jsx
         case "aboutTabflower-view-101":
