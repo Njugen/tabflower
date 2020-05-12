@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ValidatorError, ErrorHandler } from '../exceptionsAndHandler';
+import * as ExceptionsHandler from '../exceptionsAndHandler';
 import * as validator from './../../utils/inputValidators';
 import PropTypes from 'prop-types';
 require("../../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
@@ -41,12 +41,31 @@ class Module extends Component {
         - More info to be added...
     */
     settings = {};
-
+/*
     raiseToErrorOverlay = (data) => {
         const { onRaiseToErrorOverlay } = this.props;
 
         if(typeof onRaiseToErrorOverlay === "function"){
             onRaiseToErrorOverlay(data);
+        }
+    } */
+
+    raiseToErrorOverlay = (data) => {
+        const { onRaiseToErrorOverlay } = this.props;
+        const { isObject } = validator;
+
+        try {
+            if(isObject(data)){
+                if(typeof onRaiseToErrorOverlay === "function"){
+                    onRaiseToErrorOverlay(data);
+                } else {
+                    ExceptionsHandler.ValidatorError("module-111");
+                }
+            } else {
+                ExceptionsHandler.ValidatorError("module-110");
+            }
+        } catch(err){
+            ExceptionsHandler.ErrorHandler(err, () => {}); 
         }
     } 
 
@@ -73,13 +92,13 @@ class Module extends Component {
                         return;
                     }
                 } else {
-                    throw ValidatorError("module-101");
+                    throw ExceptionsHandler.ValidatorError("module-101");
                 }
             } else {
-                throw ValidatorError("module-102");
+                throw ExceptionsHandler.ValidatorError("module-102");
             }
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
         
     }
@@ -102,13 +121,13 @@ class Module extends Component {
                 if(isObject(componentEvent.target)){
                     this.props.onDrop(componentEvent.target.parentElement);
                 } else {
-                    throw ValidatorError("module-103");
+                    throw ExceptionsHandler.ValidatorError("module-103");
                 }
             } else {
-                throw ValidatorError("module-104");
+                throw ExceptionsHandler.ValidatorError("module-104");
             }
        } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
        }
     }
 
@@ -128,13 +147,13 @@ class Module extends Component {
                 if(isObject(componentEvent.target)){
                     this.props.onDragStart(componentEvent.target);
                 } else {
-                    throw ValidatorError("module-105");
+                    throw ExceptionsHandler.ValidatorError("module-105");
                 }
             } else {
-                throw ValidatorError("module-106");
+                throw ExceptionsHandler.ValidatorError("module-106");
             }
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
@@ -150,7 +169,7 @@ class Module extends Component {
                 minimized: true
             });
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
@@ -166,7 +185,7 @@ class Module extends Component {
                 minimized: false
             });
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
@@ -189,10 +208,10 @@ class Module extends Component {
                     settings
                 });
             } else {
-                throw ValidatorError("module-107");
+                throw ExceptionsHandler.ValidatorError("module-107");
             }
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
@@ -215,10 +234,10 @@ class Module extends Component {
                     moduleData
                 });
             } else {
-                throw ValidatorError("module-108");
+                throw ExceptionsHandler.ValidatorError("module-108");
             }
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
@@ -253,10 +272,10 @@ class Module extends Component {
                     this.changeStateModuleData(data);
                 }
             } else {
-                throw ValidatorError("module-109");
+                throw ExceptionsHandler.ValidatorError("module-109");
             }
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
     componentDidMount = () => {
@@ -286,6 +305,8 @@ class Module extends Component {
         if(isFunction(this.childComponentDidMount)){
             this.childComponentDidMount();
         }
+
+        this.verifyProps();
     }
 
     componentWillMount = () => {
@@ -338,14 +359,14 @@ class Module extends Component {
 
         const { isFunction, isString, isObject, isEmptyString } = validator;
         
-        if(!isFunction(onRaiseToModal)){ throw ValidatorError("module-verifyProps-101"); }
-        if(!isFunction(onDragOver)){ throw ValidatorError("module-verifyProps-102"); }
-        if(!isFunction(onDrop)){ throw ValidatorError("module-verifyProps-103"); } 
-        if(!isFunction(onDragStart)){ throw ValidatorError("module-verifyProps-104"); }
-        if(!isFunction(onRaiseToErrorOverlay)){ throw ValidatorError("module-verifyProps-106"); }
-        if(!isString(id)){ throw ValidatorError("module-verifyProps-107"); }
+        if(!isFunction(onRaiseToModal)){ throw ExceptionsHandler.ValidatorError("module-verifyProps-101"); }
+        if(!isFunction(onDragOver)){ throw ExceptionsHandler.ValidatorError("module-verifyProps-102"); }
+        if(!isFunction(onDrop)){ throw ExceptionsHandler.ValidatorError("module-verifyProps-103"); } 
+        if(!isFunction(onDragStart)){ throw ExceptionsHandler.ValidatorError("module-verifyProps-104"); }
+        if(!isFunction(onRaiseToErrorOverlay)){ throw ExceptionsHandler.ValidatorError("module-verifyProps-106"); }
+        if(!isString(id)){ throw ExceptionsHandler.ValidatorError("module-verifyProps-107"); }
 
-        if(!isObject(this.settings)){ throw ValidatorError("module-verifyProps-108"); }
+        if(!isObject(this.settings)){ throw ExceptionsHandler.ValidatorError("module-verifyProps-108"); }
         
 
         // Check state
@@ -353,29 +374,28 @@ class Module extends Component {
             const { dropDownGrid, moduleData, settings } = this.state;
 
             if(!isObject(dropDownGrid)){ 
-                throw ValidatorError("module-verifyProps-110");
+                throw ExceptionsHandler.ValidatorError("module-verifyProps-110");
             } else { 
                 const { draggedOverModuleId, moduleBeingDraggedId } = dropDownGrid;
 
                 if(!isString(draggedOverModuleId) && !isEmptyString(draggedOverModuleId)){
-                    throw ValidatorError("module-verifyProps-113");
+                    throw ExceptionsHandler.ValidatorError("module-verifyProps-113");
                 }
 
                 if(!isString(moduleBeingDraggedId) && !isEmptyString(moduleBeingDraggedId)){
-                    throw ValidatorError("module-verifyProps-114");
+                    throw ExceptionsHandler.ValidatorError("module-verifyProps-114");
                 }
             }
 
-            if(!isObject(moduleData)){ throw ValidatorError("module-verifyProps-111"); }
-            if(!isObject(settings)){ throw ValidatorError("module-verifyProps-112"); }
+            if(!isObject(moduleData)){ throw ExceptionsHandler.ValidatorError("module-verifyProps-111"); }
+            if(!isObject(settings)){ throw ExceptionsHandler.ValidatorError("module-verifyProps-112"); }
         } else {
-            throw ValidatorError("module-verifyProps-109");
+            throw ExceptionsHandler.ValidatorError("module-verifyProps-109");
         }
     }
 
     constructor(props){
         super(props);
-        this.verifyProps();
     }
 
     render = () => {

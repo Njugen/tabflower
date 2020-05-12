@@ -265,6 +265,12 @@ export const ValidatorError = (code) => {
         case "module-109":
             message = "The sectionName parameter in createStateModuleDataSection() is not a string consisting of at least 1 character."
             break;
+        case "module-110":
+            message = "The \"data\" parameter is not set as am object in raiseToErrorOverlay() of the Module component. Information could not be forwarded to the UI.";
+            break;      
+        case "module-111":
+            message = "The features of the raiseToErrorOverlay() function of the Module component could not be fully executed, because the props onRaiseToErrorOverlay is not a function or is missing.";
+            break; 
         case "module-verifyProps-101":
             message = "The onRaiseToModal prop of the \"Module\" component is either not a function or is missing."
             break;
