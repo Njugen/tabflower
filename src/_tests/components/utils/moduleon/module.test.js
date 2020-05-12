@@ -3,7 +3,7 @@ import { shallow, mount, render } from 'enzyme';
 import Module from './../../../../components/utils/moduleon/module';
 import * as ExceptionsHandler from './../../../../components/utils/exceptionsAndHandler';
 import * as validator from './../../../../components/utils/inputValidators';
-require("../../../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
+//require("../../../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
 
 const predefinedComponent = (props, options) => {
     props = props || {};
@@ -30,7 +30,8 @@ describe("Test <Module /> component behaviour at mount", () => {
         "module-101": ExceptionsHandler.ValidatorError("module-101"),
         "module-102": ExceptionsHandler.ValidatorError("module-102"),
         "module-110": ExceptionsHandler.ValidatorError("module-110"),
-        "module-111": ExceptionsHandler.ValidatorError("module-111")
+        "module-111": ExceptionsHandler.ValidatorError("module-111"),
+        "module-112": ExceptionsHandler.ValidatorError("module-112")
     };
 
     const expectedErrorReturns = {
@@ -53,6 +54,11 @@ describe("Test <Module /> component behaviour at mount", () => {
             name: "ValidatorError",
             message: "The features of the raiseToErrorOverlay() function of the Module component could not be fully executed, because the props onRaiseToErrorOverlay is not a function or is missing.",
             code: "module-111"
+        },
+        "module-112": {
+            name: "ValidatorError",
+            message: "The ID of the targetted DOM Element was not provided as expected to the handleDragOver() function of the Module component",
+            code: "module-112"
         }
     }
 
@@ -226,13 +232,80 @@ describe("Test <Module /> component behaviour at mount", () => {
             })
 
             describe("Subcase 2: componentEvent.target is an object", () => {
-                test("Run handleDragOver(componentEvent): Trigger this.props.onDragOver() if the target CSS-selector includes \".tabeon-module-container\"", () => {
+                const various_componentEvent_target_children = [
+                    ["A string representing a dummy componentEvent.target variable"],
+                    [32],
+                    [null],
+                    [undefined],
+                    [false],
+                    [true],
+                    [{ options: null }],
+                    [() => {}]
+                ];
+
+                const various_componentEvent_target_children_id = [
+                    [[1,2,3,4]],
+                    [32],
+                    [null],
+                    [undefined],
+                    [false],
+                    [true],
+                    [{ options: null }],
+                    [() => {}]
+                ];
+
+                test("Run handleDragOver(componentEvent): If componentEvent.target.children does not exist, throw an error  ExceptionsHandler.ValidatorError(\"module-112\")", () => {
                     const componentEvent = {
                         preventDefault: jest.fn(),
                         target: {
-                            className: {
-                                includes: jest.fn().mockReturnValue(true)
-                            }
+                            className: "tabeon-module-container"
+                        }
+                    }
+
+                    componentInstance.handleDragOver(componentEvent);
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-112");
+                });
+
+                test.each(various_componentEvent_target_children)("Run handleDragOver(componentEvent): If componentEvent.target.children = %p is not an array, throw an error ExceptionsHandler.ValidatorError(\"module-112\")", (val) => {
+                    const componentEvent = {
+                        preventDefault: jest.fn(),
+                        target: {
+                            className: "tabeon-module-container",
+                            children: val
+                        }
+                    }
+
+                    componentInstance.handleDragOver(componentEvent);
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-112");
+                });
+
+                test.each(various_componentEvent_target_children_id)("Run handleDragOver(componentEvent): If componentEvent.target.children[0].id = %p (not a string), throw an error ExceptionsHandler.ValidatorError(\"module-112\")", (val) => {
+                    const componentEvent = {
+                        preventDefault: jest.fn(),
+                        target: {
+                            className: "tabeon-module-container",
+                            children: [
+                                { 
+                                    id: val
+                                }
+                            ]
+                        }
+                    }
+
+                    componentInstance.handleDragOver(componentEvent);
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-112");
+                });
+
+                test("Run handleDragOver(componentEvent): Trigger this.props.onDragOver(), if the target CSS-selector includes \".tabeon-module-container\" and a target ID is correctly provided", () => {
+                    const componentEvent = {
+                        preventDefault: jest.fn(),
+                        target: {
+                            className: "tabeon-module-container",
+                            children: [
+                                { 
+                                    id: "test-123"
+                                }
+                            ]
                         }
                     }
 
@@ -244,10 +317,62 @@ describe("Test <Module /> component behaviour at mount", () => {
                     componentInstance = testComponent.instance();
                     
                     componentInstance.handleDragOver(componentEvent);
-                    console.log("AAA", componentEvent.target.className.includes());
                     expect(componentInstance.props.onDragOver).toHaveBeenCalled();
-                   // expect(componentEvent.preventDefault).toHaveBeenCalledTimes(2);
                 })
+
+                test("Run handleDragOver(componentEvent): Do NOT trigger this.props.onDragOver(), if the target CSS-selector does not include \".tabeon-module-container\"", () => {
+                    const componentEvent = {
+                        preventDefault: jest.fn(),
+                        target: {
+                            className: {
+                                includes: jest.fn().mockReturnValue(false)
+                            },
+                            children: [
+                                { 
+                                    id: "test-123"
+                                }
+                            ]
+                        }
+                    }
+
+                    const presetProps = {
+                        onDragOver: jest.fn()
+                    }
+ 
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    testComponent.update();
+                    componentInstance = testComponent.instance();
+                    
+                    componentInstance.handleDragOver(componentEvent);
+                    expect(componentInstance.props.onDragOver).not.toHaveBeenCalled();
+                });
+
+                test("Run handleDragOver(componentEvent): Do NOT trigger any ExceptionsHandler.ValidatorError() functions, if the target CSS-selector does not include \".tabeon-module-container\"", () => {
+                    const componentEvent = {
+                        preventDefault: jest.fn(),
+                        target: {
+                            className: {
+                                includes: jest.fn().mockReturnValue(false)
+                            },
+                            children: [
+                                { 
+                                    id: "test-123"
+                                }
+                            ]
+                        }
+                    }
+
+                    const presetProps = {
+                        onDragOver: jest.fn()
+                    }
+ 
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    testComponent.update();
+                    componentInstance = testComponent.instance();
+                    
+                    componentInstance.handleDragOver(componentEvent);
+                    expect(ExceptionsHandler.ValidatorError).not.toHaveBeenCalled();
+                });
             }); 
         })
     });

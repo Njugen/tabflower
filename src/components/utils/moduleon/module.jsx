@@ -77,9 +77,10 @@ class Module extends Component {
             The information is raised through this component chain:
             module > moduleColumn > moduleon
         */
+        const { isObject, isArray, isString } = validator;
+        const { onDragOver } = this.props;
+
         try {
-            const { isObject } = validator;
-            const { onDragOver } = this.props;
             
             if(isObject(componentEvent)){
                 componentEvent.preventDefault();
@@ -89,8 +90,11 @@ class Module extends Component {
                     const isModuleContainer = componentEvent.target.className.includes("tabeon-module-container");
                     
                     if(isModuleContainer){
-                        componentEvent.preventDefault();
-                        onDragOver(componentEvent.target.children[0].id)
+                        if(isArray(componentEvent.target.children) && isString(componentEvent.target.children[0].id)){
+                            onDragOver(componentEvent.target.children[0].id)
+                        } else {
+                            throw ExceptionsHandler.ValidatorError("module-112");
+                        }
                     } else {
                         return;
                     }
@@ -101,7 +105,7 @@ class Module extends Component {
                 throw ExceptionsHandler.ValidatorError("module-102");
             }
         } catch(err){
-           // ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
         
     }
@@ -395,10 +399,6 @@ class Module extends Component {
         } else {
             throw ExceptionsHandler.ValidatorError("module-verifyProps-109");
         }
-    }
-
-    constructor(props){
-        super(props);
     }
 
     render = () => {
