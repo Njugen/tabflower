@@ -79,15 +79,18 @@ class Module extends Component {
         */
         try {
             const { isObject } = validator;
-
+            const { onDragOver } = this.props;
+            
             if(isObject(componentEvent)){
                 componentEvent.preventDefault();
 
                 if(isObject(componentEvent.target)){
-                    const isModuleContainer = componentEvent.target.className.includes("tabeon-module-container");
 
+                    const isModuleContainer = componentEvent.target.className.includes("tabeon-module-container");
+                    
                     if(isModuleContainer){
-                        this.props.onDragOver(componentEvent.target.children[0].id)
+                        componentEvent.preventDefault();
+                        onDragOver(componentEvent.target.children[0].id)
                     } else {
                         return;
                     }
@@ -98,7 +101,7 @@ class Module extends Component {
                 throw ExceptionsHandler.ValidatorError("module-102");
             }
         } catch(err){
-            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+           // ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
         
     }
@@ -436,19 +439,19 @@ class Module extends Component {
     }
 }
 
-
+/*
 Module.propTypes = {
-    /*
+    
         onDragOver, onDrop and onDragStart are all dynamically added handlers, and will not be detected by
         proptypes. Adding handlers dynamically in this manner feels unjustified, and based on how Moduleon works (ridiculously bad performance, just to mention
             one of the issues), these handlers + moduleon's drag drop features should be removed from the project entirely...!
-    */
+    
     onDragOver: PropTypes.func, 
     onDrop: PropTypes.func, 
     onDragStart: PropTypes.func,
     onRaiseToModal: PropTypes.func.isRequired, 
     onRaiseToErrorOverlay: PropTypes.func.isRequired, 
     id: PropTypes.string.isRequired
-}
+} */
 
 export default Module;
