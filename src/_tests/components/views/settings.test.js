@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { shallow, mount, render } from 'enzyme';
-import TabManagementView from './../../../components/views/tabManagement';
+import SettingsView from './../../../components/views/settings';
 import * as ExceptionsHandler from './../../../components/utils/exceptionsAndHandler';
 import * as validator from './../../../components/utils/inputValidators';
 
@@ -8,7 +8,7 @@ import * as validator from './../../../components/utils/inputValidators';
 const predefinedComponent = (props, options) => {
     props = props || {};
 
-    const component = shallow(<TabManagementView {...props} />, options);
+    const component = shallow(<SettingsView {...props} />, options);
     return component;
 }
 
@@ -21,7 +21,7 @@ const presetProps = {
 let testComponent;
 let componentInstance;
 
-describe("Test <View /> component behaviour at mount", () => {
+describe("Test <SettingsView /> component behaviour at mount", () => {
     
 
     const actualErrorReturns = {
@@ -37,7 +37,7 @@ describe("Test <View /> component behaviour at mount", () => {
         },
         "settings-view-102": {
             name: "ValidatorError",
-            message: "The command raised to the TabManagementView component could not be executed, because it is invalid.",
+            message: "The command raised to the SettingsView component could not be executed, because it is invalid.",
             code: "settings-view-102"
         }
     }

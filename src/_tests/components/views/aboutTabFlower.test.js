@@ -1,14 +1,13 @@
 import React, { Fragment } from 'react';
 import { shallow, mount, render } from 'enzyme';
-import TabManagementView from './../../../components/views/tabManagement';
+import AboutTabFlowerView from './../../../components/views/aboutTabFlower';
 import * as ExceptionsHandler from './../../../components/utils/exceptionsAndHandler';
 import * as validator from './../../../components/utils/inputValidators';
-
 
 const predefinedComponent = (props, options) => {
     props = props || {};
 
-    const component = shallow(<TabManagementView {...props} />, options);
+    const component = shallow(<AboutTabFlowerView {...props} />, options);
     return component;
 }
 
@@ -21,24 +20,24 @@ const presetProps = {
 let testComponent;
 let componentInstance;
 
-describe("Test <TabManagementView /> component behaviour at mount", () => {
+describe("Test <AboutTabFlowerView /> component behaviour at mount", () => {
     
 
     const actualErrorReturns = {
-        "tabManagement-view-101": ExceptionsHandler.ValidatorError("tabManagement-view-101"),
-        "tabManagement-view-102": ExceptionsHandler.ValidatorError("tabManagement-view-102")
+        "aboutTabflower-view-101": ExceptionsHandler.ValidatorError("aboutTabflower-view-101"),
+        "aboutTabflower-view-102": ExceptionsHandler.ValidatorError("aboutTabflower-view-102")
     };
 
     const expectedErrorReturns = {
-        "tabManagement-view-101": {
+        "aboutTabflower-view-101": {
             name: "ValidatorError",
             message: "An error has occured when attempting to reload the user interface. However, the requested data changes have been made successfully. Please, reload this page manually to see these changes.",
-            code: "tabManagement-view-101"
+            code: "aboutTabflower-view-101"
         },
-        "tabManagement-view-102": {
+        "aboutTabflower-view-102": {
             name: "ValidatorError",
-            message: "The command raised to the TabManagementView component could not be executed, because it is invalid.",
-            code: "tabManagement-view-102"
+            message: "The command raised to the AboutTabFlowerView component could not be executed, because it is invalid.",
+            code: "aboutTabflower-view-102"
         }
     }
 
@@ -69,16 +68,16 @@ describe("Test <TabManagementView /> component behaviour at mount", () => {
                 [["a", "b", "c"]]
             ];
 
-            test("Run handleRaisedData(): The error ExceptionsHandler.ValidatorError(\"tabManagement-view-101\") should be thrown", () => {
+            test("Run handleRaisedData(): The error ExceptionsHandler.ValidatorError(\"aboutTabflower-view-101\") should be thrown", () => {
                 componentInstance.handleRaisedData();
 
-                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("tabManagement-view-101");
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("aboutTabflower-view-101");
             });
 
-            test.each(various_data)("Run handleRaisedData(%p): The error ExceptionsHandler.ValidatorError(\"tabManagement-view-101\") should be thrown", (val) => {
+            test.each(various_data)("Run handleRaisedData(%p): The error ExceptionsHandler.ValidatorError(\"aboutTabflower-view-101\") should be thrown", (val) => {
                 componentInstance.handleRaisedData(val);
 
-                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("tabManagement-view-101");
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("aboutTabflower-view-101");
             });
         });
 
@@ -102,7 +101,7 @@ describe("Test <TabManagementView /> component behaviour at mount", () => {
             test("Run handleRaisedData(\"buyMeSweets\"): The this.setState() function should be called", () => {
                 componentInstance.handleRaisedData("buyMeSweets");
 
-                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("tabManagement-view-102");
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("aboutTabflower-view-102");
             });
 
         });

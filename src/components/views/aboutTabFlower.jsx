@@ -4,15 +4,16 @@ import AboutTabflowerModule from './../modules/aboutTabflower';
 import Moduleon from './../utils/moduleon/moduleon';
 import ModuleColumn from '../utils/moduleon/moduleColumn';
 import * as validator from './../utils/inputValidators';
-import { ValidatorError, ErrorHandler } from '../utils/exceptionsAndHandler';
+import * as ExceptionsHandler from '../utils/exceptionsAndHandler';
 
 class AboutTabFlowerView extends View {
-    handleRaisedData = (obj) => {
+    handleRaisedData = (data) => {
         try {
             const { isString } = validator;
             
-            if(isString(obj)){
-                if(obj === "refresh"){
+            if(isString(data)){
+                if(data === "refresh"){
+                    
                     let refreshFactor = this.state.refreshFactor;
                     refreshFactor++;
 
@@ -22,13 +23,15 @@ class AboutTabFlowerView extends View {
                 
                         }
                     )
+                } else {
+                    throw ExceptionsHandler.ValidatorError("aboutTabflower-view-102");
                 }
             } else {
-                throw ValidatorError("aboutTabflower-view-101");
+                throw ExceptionsHandler.ValidatorError("aboutTabflower-view-101");
             }
             
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
