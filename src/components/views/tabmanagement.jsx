@@ -18,6 +18,7 @@ class TabManagementView extends View {
             
             if(isString(data)){
                 if(data === "refresh"){
+                    
                     let refreshFactor = this.state.refreshFactor;
                     refreshFactor++;
 

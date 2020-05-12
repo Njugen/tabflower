@@ -410,7 +410,10 @@ export const ValidatorError = (code) => {
         // views/settings.jsx
         case "settings-view-101":
             message = "An error has occured when attempting to reload the user interface. However, the requested data changes have been made successfully. Please, reload this page manually to see these changes.";
-            break;        
+            break;  
+        case "settings-view-102":
+            message = "The command raised to the SettingsView component could not be executed, because it is invalid.";
+            break;         
         // utils/windowsList.jsx 
         case "windowsList-101":
             message = "The window element id is not provided to the toggling function as a string. As a result the requested window is unidentified, the visibility of its tab list can therefore not be toggled";     

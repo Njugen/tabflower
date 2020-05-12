@@ -3,16 +3,17 @@ import View from './view';
 import Moduleon from "../utils/moduleon/moduleon";
 import ModuleColumn from '../utils/moduleon/moduleColumn';
 import ExtensionSettingsModule from './../modules/extensionSettings';
-import { ValidatorError, ErrorHandler } from '../utils/exceptionsAndHandler';
+import * as ExceptionsHandler from '../utils/exceptionsAndHandler';
 import * as validator from '../utils/inputValidators'
 
 class SettingsView extends View {
-    handleRaisedData = (obj) => {
+    handleRaisedData = (data) => {
         try {
             const { isString } = validator;
             
-            if(isString(obj)){
-                if(obj === "refresh"){
+            if(isString(data)){
+                if(data === "refresh"){
+                    
                     let refreshFactor = this.state.refreshFactor;
                     refreshFactor++;
 
@@ -22,13 +23,15 @@ class SettingsView extends View {
                 
                         }
                     )
+                } else {
+                    throw ExceptionsHandler.ValidatorError("settings-view-102");
                 }
             } else {
-                throw ValidatorError("settings-view-101");
+                throw ExceptionsHandler.ValidatorError("settings-view-101");
             }
             
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
