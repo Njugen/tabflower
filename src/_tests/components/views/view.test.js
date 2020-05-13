@@ -69,7 +69,7 @@ describe("Test <View /> component behaviour at mount", () => {
         });
     });
 
-    describe("Test raiseToErorOverlay(data)", () => {
+    describe("Test raiseToErrorOverlay(data)", () => {
         const various_data = [
             ["A string representing a dummy data variable"],
             [32],
@@ -138,6 +138,8 @@ describe("Test <View /> component behaviour at mount", () => {
         
         describe("Case 3: When the \"data\" parameter is an object, and the onRaiseToErrorOverlay props IS a function", () => {
             test("Run raiseToErrorOverlay({ testData: \"test value\" }) when this.props.onRaiseToErrorOverlay is a function: Call this.props.onRaseToErrorOverlay(data) using the same \"data\" parameter", () => {
+                jest.useFakeTimers();
+
                 const presetProps = {
                     onRaiseToErrorOverlay: jest.fn()
                 };
@@ -147,8 +149,10 @@ describe("Test <View /> component behaviour at mount", () => {
                 const data_param = { testData: "test value" }
 
                 componentInstance.raiseToErrorOverlay(data_param);
+                jest.runAllTimers();
 
                 expect(componentInstance.props.onRaiseToErrorOverlay).toHaveBeenCalledWith(data_param);
+                jest.useRealTimers();
             });
         });
     });
@@ -255,6 +259,7 @@ describe("Test <View /> component behaviour at mount", () => {
     
         describe("Case 3: When the \"data\" parameter is an object, and the onRaiseToModal props is a function", () => {
             test("Run raiseToModal({ testData: \"test value\" }) when this.props.onRaiseToModal is a function: Call this.props.onRaseToModal(data) using the same \"data\" parameter", () => {
+
                 const presetProps = {
                     onRaiseToModal: jest.fn()
                 };
@@ -264,8 +269,9 @@ describe("Test <View /> component behaviour at mount", () => {
                 const data_param = { testData: "test value" }
     
                 componentInstance.raiseToModal(data_param);
-    
+
                 expect(componentInstance.props.onRaiseToModal).toHaveBeenCalledWith(data_param);
+
             });
         });
     

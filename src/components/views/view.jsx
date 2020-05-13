@@ -47,18 +47,23 @@ class View extends Component {
     }
 
     raiseToErrorOverlay = (data) => {
-        const { onRaiseToErrorOverlay } = this.props;
-        const { isObject } = validator;
+        
+        const { isObject, isFunction } = validator;
+
 
         try {
             if(isObject(data)){
-                if(typeof onRaiseToErrorOverlay === "function"){
-                    onRaiseToErrorOverlay(data);
+                const { onRaiseToErrorOverlay } = this.props;
+
+                if(isFunction(onRaiseToErrorOverlay)){
+                    setTimeout(() => {
+                        onRaiseToErrorOverlay(data);
+                    }, 1000);
                 } else {
-                    ExceptionsHandler.ValidatorError("view-103");
+                    throw ExceptionsHandler.ValidatorError("view-103");
                 }
             } else {
-                ExceptionsHandler.ValidatorError("view-102");
+                throw ExceptionsHandler.ValidatorError("view-102");
             }
         } catch(err){
             ExceptionsHandler.ErrorHandler(err, () => {}); 

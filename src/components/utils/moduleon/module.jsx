@@ -41,28 +41,24 @@ class Module extends Component {
         - More info to be added...
     */
     settings = {};
-/*
-    raiseToErrorOverlay = (data) => {
-        const { onRaiseToErrorOverlay } = this.props;
-
-        if(typeof onRaiseToErrorOverlay === "function"){
-            onRaiseToErrorOverlay(data);
-        }
-    } */
 
     raiseToErrorOverlay = (data) => {
-        const { onRaiseToErrorOverlay } = this.props;
-        const { isObject } = validator;
+        
+        const { isObject, isFunction } = validator;
 
         try {
             if(isObject(data)){
-                if(typeof onRaiseToErrorOverlay === "function"){
-                    onRaiseToErrorOverlay(data);
+                const { onRaiseToErrorOverlay } = this.props;
+
+                if(isFunction(onRaiseToErrorOverlay)){
+                    setTimeout(() => {
+                        onRaiseToErrorOverlay(data);
+                    }, 1000);
                 } else {
-                    ExceptionsHandler.ValidatorError("module-111");
+                    throw ExceptionsHandler.ValidatorError("module-111");
                 }
             } else {
-                ExceptionsHandler.ValidatorError("module-110");
+                throw ExceptionsHandler.ValidatorError("module-110");
             }
         } catch(err){
             ExceptionsHandler.ErrorHandler(err, () => {}); 
@@ -131,7 +127,7 @@ class Module extends Component {
                     throw ExceptionsHandler.ValidatorError("module-103");
                 }
             } else {
-                throw ExceptionsHandler.ValidatorError("module-104");
+                throw ExceptionsHandler.ValidatorError("module-103");
             }
        } catch(err){
             ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);

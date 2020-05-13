@@ -174,6 +174,7 @@ describe("Test <Modal /> component behaviour at mount", () => {
         testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
         componentInstance = testComponent.instance();
     
+        ExceptionsHandler.ErrorHandler = jest.fn();
         ExceptionsHandler.ValidatorError = jest.fn();
         ExceptionsHandler.ValidatorError.mockImplementation(errCode => {
             return actualErrorReturns[errCode];
@@ -246,6 +247,7 @@ describe("Test <Modal /> component behaviour at mount", () => {
             componentInstance.verifyProps = jest.fn();
             componentInstance.verifyState = jest.fn();
 
+            ExceptionsHandler.ErrorHandler = jest.fn();
             ExceptionsHandler.ValidatorError = jest.fn();
             ExceptionsHandler.ValidatorError.mockImplementation(errCode => {
                 return actualErrorReturns[errCode];
@@ -416,8 +418,8 @@ describe("Test <Modal /> component behaviour at mount", () => {
                         onRaiseToErrorOverlay: jest.fn()
                     };
 
-                    const testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
-                    const componentInstance = testComponent.instance();
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
                    
                    componentInstance.dismissModalHandler = jest.fn(); 
                    componentInstance.raiseToErrorOverlay({});
@@ -434,8 +436,8 @@ describe("Test <Modal /> component behaviour at mount", () => {
                         onRaiseToErrorOverlay: val
                     };
 
-                    const testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
-                    const componentInstance = testComponent.instance();
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
                    
                    componentInstance.dismissModalHandler = jest.fn(); 
                    componentInstance.raiseToErrorOverlay({});
@@ -451,8 +453,8 @@ describe("Test <Modal /> component behaviour at mount", () => {
                         onRaiseToErrorOverlay: jest.fn()
                     };
                     
-                    const testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
-                    const componentInstance = testComponent.instance();
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
 
                     componentInstance.dismissModalHandler = jest.fn();
                     componentInstance.raiseToErrorOverlay({});

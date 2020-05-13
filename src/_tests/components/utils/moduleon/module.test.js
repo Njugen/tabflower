@@ -29,6 +29,8 @@ describe("Test <Module /> component behaviour at mount", () => {
     const actualErrorReturns = {
         "module-101": ExceptionsHandler.ValidatorError("module-101"),
         "module-102": ExceptionsHandler.ValidatorError("module-102"),
+        "module-103": ExceptionsHandler.ValidatorError("module-103"),
+        "module-104": ExceptionsHandler.ValidatorError("module-104"),
         "module-110": ExceptionsHandler.ValidatorError("module-110"),
         "module-111": ExceptionsHandler.ValidatorError("module-111"),
         "module-112": ExceptionsHandler.ValidatorError("module-112")
@@ -44,6 +46,16 @@ describe("Test <Module /> component behaviour at mount", () => {
             name: "ValidatorError",
             message: "The componentEvent parameter in handleDragOver() is not an object.",
             code: "module-102"
+        },
+        "module-103": {
+            name: "ValidatorError",
+            message: "The componentEvent parameter in handleDrop() does not target anything.",
+            code: "module-103"
+        },
+        "module-104": {
+            name: "ValidatorError",
+            message: "The componentEvent parameter in handleDrop() is not an object.",
+            code: "module-104"
         },
         "module-110": {
             name: "ValidatorError",
@@ -66,10 +78,12 @@ describe("Test <Module /> component behaviour at mount", () => {
         jest.clearAllMocks();
         jest.useRealTimers();
 
-        const presetProps = {};
+        const presetProps = {
+          //  onRaiseToErrorOverlay: jest.fn()
+        }
         testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
         componentInstance = testComponent.instance();
-    
+        
         ExceptionsHandler.ValidatorError = jest.fn();
         ExceptionsHandler.ValidatorError.mockImplementation(errCode => {
             return actualErrorReturns[errCode];
@@ -145,6 +159,8 @@ describe("Test <Module /> component behaviour at mount", () => {
         
         describe("Case 3: When the \"data\" parameter is an object, and the onRaiseToErrorOverlay props IS a function", () => {
             test("Run raiseToErrorOverlay({ testData: \"test value\" }) when this.props.onRaiseToErrorOverlay is a function: Call this.props.onRaseToErrorOverlay(data) using the same \"data\" parameter", () => {
+                jest.useFakeTimers();
+                
                 const presetProps = {
                     onRaiseToErrorOverlay: jest.fn()
                 };
@@ -154,8 +170,11 @@ describe("Test <Module /> component behaviour at mount", () => {
                 const data_param = { testData: "test value" }
 
                 componentInstance.raiseToErrorOverlay(data_param);
+                jest.runAllTimers();
 
                 expect(componentInstance.props.onRaiseToErrorOverlay).toHaveBeenCalledWith(data_param);
+
+                jest.useRealTimers();
             });
         });
     });
@@ -347,13 +366,11 @@ describe("Test <Module /> component behaviour at mount", () => {
                     expect(componentInstance.props.onDragOver).not.toHaveBeenCalled();
                 });
 
-                test("Run handleDragOver(componentEvent): Do NOT trigger any ExceptionsHandler.ValidatorError() functions, if the target CSS-selector does not include \".tabeon-module-container\"", () => {
+                test("Run handleDragOver(componentEvent): Do NOT trigger any ExceptionsHandler.ValidatorError() functions, if the target CSS-selector includes \".tabeon-module-container\"", () => {
                     const componentEvent = {
                         preventDefault: jest.fn(),
                         target: {
-                            className: {
-                                includes: jest.fn().mockReturnValue(false)
-                            },
+                            className: "tabeon-module-container",
                             children: [
                                 { 
                                     id: "test-123"
@@ -375,5 +392,32 @@ describe("Test <Module /> component behaviour at mount", () => {
                 });
             }); 
         })
+    });
+
+    describe("Test handleDrop(componentEvent)", () => {
+        describe("Case 1: componentEvent is not an object or is missing", () => {
+            const various_componentEvent = [
+                ["A string representing a dummy componentEvent variable"],
+                [32],
+                [null],
+                [undefined],
+                [false],
+                [true],
+                [[12,8,3,7]],
+                [() => {}]
+            ];
+
+            test("Run handleDrop(): throw an error ExceptionsHandler.ValidatorError(\"module-104\")", () => {
+                componentInstance.handleDrop();
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-104");
+            });
+
+            test.each(various_componentEvent)("Run handleDrop(%p): throw an error ExceptionsHandler.ValidatorError(\"module-104\")", (val) => {
+                componentInstance.handleDrop(val);
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-104");
+            })
+        });
     });
 }) 
