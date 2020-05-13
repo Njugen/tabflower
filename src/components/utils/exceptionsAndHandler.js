@@ -274,6 +274,9 @@ export const ValidatorError = (code) => {
         case "module-112":
             message = "The ID of the targetted DOM Element was not provided as expected to the handleDragOver() function of the Module component";
             break; 
+        case "module-113":
+            message = "The parentElement of the targetted DOM Element was not provided as expected to the handleDrop() function of the Module component";
+            break; 
         case "module-verifyProps-101":
             message = "The onRaiseToModal prop of the \"Module\" component is either not a function or is missing."
             break;

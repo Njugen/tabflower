@@ -122,12 +122,16 @@ class Module extends Component {
                 componentEvent.preventDefault();
 
                 if(isObject(componentEvent.target)){
-                    this.props.onDrop(componentEvent.target.parentElement);
+                    if(isObject(componentEvent.target.parentElement)){
+                        this.props.onDrop(componentEvent.target.parentElement);
+                    } else {
+                        throw ExceptionsHandler.ValidatorError("module-113");
+                    }
                 } else {
                     throw ExceptionsHandler.ValidatorError("module-103");
                 }
             } else {
-                throw ExceptionsHandler.ValidatorError("module-103");
+                throw ExceptionsHandler.ValidatorError("module-104");
             }
        } catch(err){
             ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);

@@ -33,7 +33,8 @@ describe("Test <Module /> component behaviour at mount", () => {
         "module-104": ExceptionsHandler.ValidatorError("module-104"),
         "module-110": ExceptionsHandler.ValidatorError("module-110"),
         "module-111": ExceptionsHandler.ValidatorError("module-111"),
-        "module-112": ExceptionsHandler.ValidatorError("module-112")
+        "module-112": ExceptionsHandler.ValidatorError("module-112"),
+        "module-113": ExceptionsHandler.ValidatorError("module-113")
     };
 
     const expectedErrorReturns = {
@@ -71,6 +72,11 @@ describe("Test <Module /> component behaviour at mount", () => {
             name: "ValidatorError",
             message: "The ID of the targetted DOM Element was not provided as expected to the handleDragOver() function of the Module component",
             code: "module-112"
+        },
+        "module-113": {
+            name: "ValidatorError",
+            message: "The parentElement of the targetted DOM Element was not provided as expected to the handleDrop() function of the Module component",
+            code: "module-113"
         }
     }
 
@@ -84,6 +90,7 @@ describe("Test <Module /> component behaviour at mount", () => {
         testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
         componentInstance = testComponent.instance();
         
+        ExceptionsHandler.ErrorHandler = jest.fn();
         ExceptionsHandler.ValidatorError = jest.fn();
         ExceptionsHandler.ValidatorError.mockImplementation(errCode => {
             return actualErrorReturns[errCode];
@@ -418,6 +425,150 @@ describe("Test <Module /> component behaviour at mount", () => {
 
                 expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-104");
             })
+        });
+
+        describe("Case 2: componentEvent is an object", () => {
+            test("Run handleDrop(componentEvent), with preventDefault() included in componentEvent: componentEvent.preventDefault() should get called", () => {
+                const componentEvent = {
+                    preventDefault: jest.fn()
+                }
+
+                componentInstance.handleDrop(componentEvent);
+
+                expect(componentEvent.preventDefault).toHaveBeenCalled();
+            });
+
+            describe("Subcase 1: componentEvent.target is NOT an object", () => {
+                const various_componentEvent_target = [
+                    ["A string representing a dummy componentEvent.target variable"],
+                    [32],
+                    [null],
+                    [undefined],
+                    [false],
+                    [true],
+                    [[12,8,3,7]],
+                    [() => {}]
+                ];
+
+                test("Run handleDrop(componentEvent), with \"target\" not being included in componentEvent: Throw an error ExceptionsHandler.ValidatorError(\"module-103\")", () => {
+                    const componentEvent = {
+                        preventDefault: jest.fn()
+                    }
+
+                    componentInstance.handleDrop(componentEvent);
+
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-103");
+                });
+
+                test.each(various_componentEvent_target)("Run handleDrop(componentEvent), with \"target\" = %p included in componentEvent: Throw an error ExceptionsHandler.ValidatorError(\"module-103\")", (val) => {
+                    const componentEvent = {
+                        preventDefault: jest.fn(),
+                        target: val
+                    }
+
+                    componentInstance.handleDrop(componentEvent);
+
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-103");
+                });
+            });
+
+            describe("Subcase 2: componentEvent.target is an object", () => {
+                const various_componentEvent_target_parentElement = [
+                    ["A string representing a dummy componentEvent.target.parentElement variable"],
+                    [32],
+                    [null],
+                    [undefined],
+                    [false],
+                    [true],
+                    [[1,2,3,4]],
+                    [() => {}]
+                ];
+
+                test("Run handleDrop(componentEvent): If componentEvent.target.parentElement does not exist, throw an error  ExceptionsHandler.ValidatorError(\"module-113\")", () => {
+                    const componentEvent = {
+                        preventDefault: jest.fn(),
+                        target: {
+                            className: "tabeon-module-container"
+                        }
+                    }
+
+                    componentInstance.handleDrop(componentEvent);
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-113");
+                });
+
+                test.each(various_componentEvent_target_parentElement)("Run handleDrop(componentEvent): If componentEvent.target.parentElement = %p is not an object, throw an error ExceptionsHandler.ValidatorError(\"module-113\")", (val) => {
+                    const componentEvent = {
+                        preventDefault: jest.fn(),
+                        target: {
+                            className: "tabeon-module-container",
+                            parentElement: val
+                        }
+                    }
+
+                    componentInstance.handleDrop(componentEvent);
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-113");
+                });
+                
+                
+                test("Run handleDrop(componentEvent): Trigger this.props.onDrop(), if componentEvent.target.parentelement is provided as an object", () => {
+                    const componentEvent = {
+                        preventDefault: jest.fn(),
+                        target: {
+                            className: "tabeon-module-container",
+                            parentElement: {
+                                info1: "blablabla",
+                                info2: "blablabla"
+                            }
+                        }
+                    }
+
+                    const presetProps = {
+                        onDrop: jest.fn()
+                    }
+ 
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    
+                    componentInstance.handleDrop(componentEvent);
+                    expect(componentInstance.props.onDrop).toHaveBeenCalled();
+                })
+                
+                test.each(various_componentEvent_target_parentElement)("Run handleDrop(componentEvent): If componentEvent.target.parentElement = %p (is not an object), do not call this.props.onDrop()", (val) => {
+                    const componentEvent = {
+                        preventDefault: jest.fn(),
+                        target: {
+                            className: "tabeon-module-container",
+                            parentElement: val
+                        }
+                    }
+
+                    const presetProps = {
+                        onDrop: jest.fn()
+                    }
+ 
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    
+                    componentInstance.handleDrop(componentEvent);
+                    expect(componentInstance.props.onDrop).not.toHaveBeenCalled();
+                });
+
+                test("Run handleDrop(componentEvent): do NOT trigger any ExceptionsHandler.ValidatorError(), if componentEvent.target.parentelement is provided as an object", () => {
+                    const componentEvent = {
+                        preventDefault: jest.fn(),
+                        target: {
+                            className: "tabeon-module-container",
+                            parentElement: {
+                                info1: "blablabla",
+                                info2: "blablabla"
+                            }
+                        }
+                    }
+                    
+                    componentInstance.handleDrop(componentEvent);
+                    expect(ExceptionsHandler.ValidatorError).not.toHaveBeenCalled();
+                })
+            }); 
         });
     });
 }) 
