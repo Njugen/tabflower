@@ -289,6 +289,7 @@ class Module extends Component {
     }
     componentDidMount = () => {
         const { isFunction, isObject } = validator;
+        
         if(isFunction(this.verifyChildProps)){
             this.verifyChildProps();
         }

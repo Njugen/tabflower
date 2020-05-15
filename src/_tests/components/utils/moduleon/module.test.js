@@ -115,7 +115,7 @@ describe("Test <Module /> component behaviour at mount", () => {
         jest.useRealTimers();
 
         const presetProps = {
-          //  onRaiseToErrorOverlay: jest.fn()
+         
         }
         testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
         componentInstance = testComponent.instance();
@@ -879,4 +879,44 @@ describe("Test <Module /> component behaviour at mount", () => {
             })
         });
     });
+
+    describe("Test this.componentDidMount() lifecycle method (as a unit)", () => {
+        beforeEach(() => {
+            jest.clearAllMocks();
+            jest.useRealTimers();
+    
+            const presetProps = {};
+            testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+            componentInstance = testComponent.instance();
+
+            componentInstance.verifyChildProps = jest.fn();
+            componentInstance.childComponentDidMount = jest.fn();
+            componentInstance.verifyProps = jest.fn();
+
+
+            ExceptionsHandler.ErrorHandler = jest.fn();
+            ExceptionsHandler.ValidatorError = jest.fn();
+            ExceptionsHandler.ValidatorError.mockImplementation(errCode => {
+                return actualErrorReturns[errCode];
+            });
+        });
+
+        test("this.verifyChildProps() should be called by this.componentDidMount()", () => {
+            componentInstance.componentDidMount();
+
+            expect(componentInstance.verifyChildProps).toHaveBeenCalledTimes(1);
+        });
+
+        test("this.childComponentDidMount() should be called by this.componentDidMount()", () => {
+            componentInstance.componentDidMount();
+
+            expect(componentInstance.childComponentDidMount).toHaveBeenCalledTimes(1);
+        });
+
+        test("this.verifyProps() should be called by this.componentDidMount()", () => {
+            componentInstance.componentDidMount();
+
+            expect(componentInstance.verifyProps).toHaveBeenCalledTimes(1);
+        })
+    })
 }) 
