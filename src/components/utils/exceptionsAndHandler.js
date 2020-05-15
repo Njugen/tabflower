@@ -277,6 +277,9 @@ export const ValidatorError = (code) => {
         case "module-113":
             message = "The parentElement of the targetted DOM Element was not provided as expected to the handleDrop() function of the Module component";
             break; 
+        case "module-114":
+            message = "The module data section you attempt to add already exists in this component. Attempt aborted.";
+            break;     
         case "module-verifyProps-101":
             message = "The onRaiseToModal prop of the \"Module\" component is either not a function or is missing."
             break;

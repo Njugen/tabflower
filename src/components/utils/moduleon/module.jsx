@@ -268,15 +268,17 @@ class Module extends Component {
             }
         */
         try{
-            const { isString } = validator;
+            const { isString, isObject } = validator;
 
             if(isString(sectionName)){
-                if(!this.state.moduleData[sectionName]){
+                if(!isObject(this.state.moduleData[sectionName])){
                     let data = {
                     };
                     
                     data[sectionName] = {};
                     this.changeStateModuleData(data);
+                } else {
+                    throw ExceptionsHandler.ValidatorError("module-114");
                 }
             } else {
                 throw ExceptionsHandler.ValidatorError("module-109");

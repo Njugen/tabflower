@@ -31,6 +31,11 @@ describe("Test <Module /> component behaviour at mount", () => {
         "module-102": ExceptionsHandler.ValidatorError("module-102"),
         "module-103": ExceptionsHandler.ValidatorError("module-103"),
         "module-104": ExceptionsHandler.ValidatorError("module-104"),
+        "module-105": ExceptionsHandler.ValidatorError("module-105"),
+        "module-106": ExceptionsHandler.ValidatorError("module-106"),
+        "module-107": ExceptionsHandler.ValidatorError("module-107"),
+        "module-108": ExceptionsHandler.ValidatorError("module-108"),
+        "module-109": ExceptionsHandler.ValidatorError("module-109"),
         "module-110": ExceptionsHandler.ValidatorError("module-110"),
         "module-111": ExceptionsHandler.ValidatorError("module-111"),
         "module-112": ExceptionsHandler.ValidatorError("module-112"),
@@ -57,6 +62,31 @@ describe("Test <Module /> component behaviour at mount", () => {
             name: "ValidatorError",
             message: "The componentEvent parameter in handleDrop() is not an object.",
             code: "module-104"
+        },
+        "module-105": {
+            name: "ValidatorError",
+            message: "The componentEvent parameter in handleDragStart() does not target anything.",
+            code: "module-105"
+        },
+        "module-106": {
+            name: "ValidatorError",
+            message: "The componentEvent parameter in handleDragStart() is not an object.",
+            code: "module-106"
+        },
+        "module-107": {
+            name: "ValidatorError",
+            message: "The parameters input in changeStateSettings() is not an object.",
+            code: "module-107"
+        },
+        "module-108": {
+            name: "ValidatorError",
+            message: "The parameters input in changeStateModuleData() is not an object.",
+            code: "module-108"
+        },
+        "module-109": {
+            name: "ValidatorError",
+            message: "The sectionName parameter in createStateModuleDataSection() is not a string consisting of at least 1 character.",
+            code: "module-109"
         },
         "module-110": {
             name: "ValidatorError",
@@ -460,7 +490,7 @@ describe("Test <Module /> component behaviour at mount", () => {
                     expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-103");
                 });
 
-                test.each(various_componentEvent_target)("Run handleDrop(componentEvent), with \"target\" = %p included in componentEvent: Throw an error ExceptionsHandler.ValidatorError(\"module-103\")", (val) => {
+                test.each(various_componentEvent_target)("Run handleDrop(componentEvent), with \"target\" = %p included in componentEvent (not being an object): Throw an error ExceptionsHandler.ValidatorError(\"module-103\")", (val) => {
                     const componentEvent = {
                         preventDefault: jest.fn(),
                         target: val
@@ -510,7 +540,7 @@ describe("Test <Module /> component behaviour at mount", () => {
                 });
                 
                 
-                test("Run handleDrop(componentEvent): Trigger this.props.onDrop(), if componentEvent.target.parentelement is provided as an object", () => {
+                test("Run handleDrop(componentEvent): Trigger this.props.onDrop(), if componentEvent.target.parentElement is provided as an object", () => {
                     const componentEvent = {
                         preventDefault: jest.fn(),
                         target: {
@@ -553,7 +583,7 @@ describe("Test <Module /> component behaviour at mount", () => {
                     expect(componentInstance.props.onDrop).not.toHaveBeenCalled();
                 });
 
-                test("Run handleDrop(componentEvent): do NOT trigger any ExceptionsHandler.ValidatorError(), if componentEvent.target.parentelement is provided as an object", () => {
+                test("Run handleDrop(componentEvent): do NOT trigger any ExceptionsHandler.ValidatorError(), if componentEvent.target.parentElement is provided as an object", () => {
                     const componentEvent = {
                         preventDefault: jest.fn(),
                         target: {
@@ -569,6 +599,284 @@ describe("Test <Module /> component behaviour at mount", () => {
                     expect(ExceptionsHandler.ValidatorError).not.toHaveBeenCalled();
                 })
             }); 
+        });
+    });
+
+    describe("Test handleDragStart(componentEvent)", () => {
+        describe("Case 1: componentEvent is not an object or is missing", () => {
+            const various_componentEvent = [
+                ["A string representing a dummy componentEvent variable"],
+                [32],
+                [null],
+                [undefined],
+                [false],
+                [true],
+                [[12,8,3,7]],
+                [() => {}]
+            ];
+
+            test("Run handleDragStart(): throw an error ExceptionsHandler.ValidatorError(\"module-106\")", () => {
+                componentInstance.handleDragStart();
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-106");
+            });
+
+            test.each(various_componentEvent)("Run handleDragStart(%p): throw an error ExceptionsHandler.ValidatorError(\"module-104\")", (val) => {
+                componentInstance.handleDragStart(val);
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-106");
+            })
+        });
+
+        describe("Case 2: componentEvent is an object", () => {
+            describe("Subcase 1: componentEvent.target is NOT an object", () => {
+                const various_componentEvent_target = [
+                    ["A string representing a dummy componentEvent.target variable"],
+                    [32],
+                    [null],
+                    [undefined],
+                    [false],
+                    [true],
+                    [[12,8,3,7]],
+                    [() => {}]
+                ];
+
+                test("Run handleDragStart(componentEvent), with \"target\" not being included in componentEvent: Throw an error ExceptionsHandler.ValidatorError(\"module-103\")", () => {
+                    const componentEvent = {
+                      
+                    }
+
+                    componentInstance.handleDragStart(componentEvent);
+
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-105");
+                });
+
+                test.each(various_componentEvent_target)("Run handleDragStart(componentEvent), with \"target\" = %p included in componentEvent (not being an object): Throw an error ExceptionsHandler.ValidatorError(\"module-103\")", (val) => {
+                    const componentEvent = {
+                        target: val
+                    }
+
+                    componentInstance.handleDragStart(componentEvent);
+
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-105");
+                });
+            });
+
+            describe("Subcase 2: componentEvent.target is an object", () => {
+
+                test("Run handleDrop(componentEvent): If componentEvent.target is an object, trigger this.propsonDragStart", () => {
+                    const componentEvent = {
+                        target: {
+                          
+                        }
+                    }
+
+                    const presetProps = {
+                        onDragStart: jest.fn()
+                    }
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true })
+                    componentInstance = testComponent.instance();
+
+                    componentInstance.handleDragStart(componentEvent);
+                    expect(componentInstance.props.onDragStart).toHaveBeenCalledWith(componentEvent.target);
+                });
+
+                
+            }); 
+        });
+    })
+    
+    describe("Test handleModuleMinimize()", () => {
+        test("this.changeStateSettings is called with the parameter expected in this test", () => {
+            componentInstance.changeStateSettings = jest.fn();
+
+            componentInstance.handleModuleMinimize();
+
+            const expectedParam = {
+                minimized: true
+            }
+
+            expect(componentInstance.changeStateSettings).toHaveBeenCalledWith(expectedParam)
+        })
+    });
+
+    describe("Test handleModuleExpand()", () => {
+        test("this.changeStateSettings is called with the parameter expected in this test", () => {
+            componentInstance.changeStateSettings = jest.fn();
+
+            componentInstance.handleModuleExpand();
+
+            const expectedParam = {
+                minimized: false
+            }
+
+            expect(componentInstance.changeStateSettings).toHaveBeenCalledWith(expectedParam)
+        })
+    })
+
+    describe("Test changeStateSettings(parameters)", () => {
+        describe("Case 1: \"parameters\" is NOT an object or is missing", () => {
+            const various_parameters = [
+                ["A string representing a dummy parameters variable"],
+                [32],
+                [null],
+                [undefined],
+                [false],
+                [true],
+                [[12,8,3,7]],
+                [() => {}]
+            ]
+            test("Run changeStateSettings(), when \"parameters\" is missing: throw an error ExceptionsHandler.ValidatorError(\"module-107\")", () => {
+                componentInstance.changeStateSettings();
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-107");
+            })
+
+            test.each(various_parameters)("Run changeStateSettings(), when \"parameters\" = %p (is not an object): throw an error ExceptionsHandler.ValidatorError(\"module-107\")", (val) => {
+                componentInstance.changeStateSettings(val);
+                
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-107");
+            })
+        });
+
+        describe("Case 2: \"parameters\" is an object", () => {
+            test("Run changeStateSettings({ option1: \"test\", option2: 20 }). Check that this.setState is called with the same input values as stated in this test", () => {
+                const changeStateSettingsInput = { option1: "test", option2: 20 };
+
+                componentInstance.setState = jest.fn();
+
+                const settings = {
+                    ...componentInstance.state.settings,
+                    ...changeStateSettingsInput
+                }
+
+                componentInstance.changeStateSettings(changeStateSettingsInput);
+                
+                expect(componentInstance.setState).toHaveBeenCalledWith({ settings });
+            })
+        })
+    });
+
+    describe("Test changeStateModuleData(parameters)", () => {
+        describe("Case 1: \"parameters\" is NOT an object or is missing", () => {
+            const various_parameters = [
+                ["A string representing a dummy parameters variable"],
+                [32],
+                [null],
+                [undefined],
+                [false],
+                [true],
+                [[12,8,3,7]],
+                [() => {}]
+            ]
+            test("Run changeStateModuleData(), when \"parameters\" is missing: throw an error ExceptionsHandler.ValidatorError(\"module-107\")", () => {
+                componentInstance.changeStateModuleData();
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-108");
+            })
+
+            test.each(various_parameters)("Run changeStateModuleData(), when \"parameters\" = %p (is not an object): throw an error ExceptionsHandler.ValidatorError(\"module-107\")", (val) => {
+                componentInstance.changeStateModuleData(val);
+                
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-108");
+            })
+        });
+
+        describe("Case 2: \"parameters\" is an object", () => {
+            test("Run changeStateModuleData({ option1: \"test\", option2: 20 }). Check that this.setState is called with the same input values as stated in this test", () => {
+                const changeStateModuleDataInput = { option1: "test", option2: 20 };
+
+                componentInstance.setState = jest.fn();
+
+                const moduleData = {
+                    ...componentInstance.state.moduleData,
+                    ...changeStateModuleDataInput
+                }
+
+                componentInstance.changeStateModuleData(changeStateModuleDataInput);
+
+                expect(componentInstance.setState).toHaveBeenCalledWith({ moduleData });
+            })
+        })
+    });
+
+    describe("Test createStateModuleDataSection(sectionName)", () => {
+        describe("Case 1: \"sectionName\" is NOT a string or is missing", () => {
+            const various_sectionName = [
+                [{ testkey: "test value" }],
+                [32],
+                [null],
+                [undefined],
+                [false],
+                [true],
+                [[12,8,3,7]],
+                [() => {}]
+            ]
+            test("Run createStateModuleDataSection(), when \"sectionName\" is missing: throw an error ExceptionsHandler.ValidatorError(\"module-107\")", () => {
+                componentInstance.createStateModuleDataSection();
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-109");
+            })
+
+            test.each(various_sectionName)("Run createStateModuleDataSection(), when \"sectionName\" = %p (is not an object): throw an error ExceptionsHandler.ValidatorError(\"module-107\")", (val) => {
+                componentInstance.createStateModuleDataSection(val);
+                
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-109");
+            })
+        });
+
+        describe("Case 2: \"sectionName\" is a string", () => {
+            test("Run createStateModuleDataSection(\"finnish_history\") once: call this.changeStateModuleData() with the same parameters specified in this test", () => {
+                componentInstance.changeStateModuleData = jest.fn();
+
+                let data = {};
+
+                componentInstance.createStateModuleDataSection("finnish_history");
+
+                data["finnish_history"] = {};
+
+                expect(componentInstance.changeStateModuleData).toHaveBeenCalledWith(data);
+            })
+
+            test("Run createStateModuleDataSection(\"finnish_history\") more than once: call ExceptionsHandler.ValidatorError(\"module-114\")", () => {
+
+                componentInstance.createStateModuleDataSection("finnish_history");
+
+                componentInstance.changeStateModuleData = jest.fn();
+
+                componentInstance.createStateModuleDataSection("finnish_history");
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-114");
+            });
+
+            test("Run createStateModuleDataSection(\"finnish_history\") more than once: the this.changeStateModuleData() function is only called once", () => {
+                componentInstance.changeStateModuleData = jest.fn((parameters) => {
+                    try {
+                        const { isObject } = validator;
+            
+                        if(isObject(parameters)){
+                            const moduleData = {
+                                ...componentInstance.state.moduleData, ...parameters
+                            }
+            
+                            componentInstance.setState({
+                                moduleData
+                            });
+                        } else {
+                            throw ExceptionsHandler.ValidatorError("module-108");
+                        }
+                    } catch(err){
+                        ExceptionsHandler.ErrorHandler(err, componentInstance.raiseToErrorOverlay);
+                    }
+                });
+
+                componentInstance.createStateModuleDataSection("finnish_history");
+
+                componentInstance.createStateModuleDataSection("finnish_history");
+                componentInstance.createStateModuleDataSection("finnish_history");
+        
+                expect(componentInstance.changeStateModuleData).toHaveBeenCalledTimes(1);
+            })
         });
     });
 }) 
