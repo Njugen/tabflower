@@ -317,6 +317,7 @@ class Module extends Component {
         }
 
         this.verifyProps();
+        this.verifyState();
     }
 
     componentWillMount = () => {
@@ -387,8 +388,12 @@ class Module extends Component {
 
         if(!isObject(this.settings)){ throw ExceptionsHandler.ValidatorError("module-verifyProps-108"); }
         
+    }
 
+    verifyState = () => {
         // Check state
+        const { isString, isObject, isEmptyString } = validator;
+
         if(isObject(this.state)){
             const { dropDownGrid, moduleData, settings } = this.state;
 

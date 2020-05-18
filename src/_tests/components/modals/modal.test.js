@@ -1232,12 +1232,13 @@ describe("Test <Modal /> component behaviour at mount", () => {
 
         describe("Run this.verifyProps() using 2 valid props, and 1 missing", () => {
 
-            const presetProps = { 
-                onRaiseToErrorOverlay: () => {},
-                data: {}
-            };
             
             test("\"onDismiss\" prop is missing (is not a function). Throw an error with this code: \"mp-verifyProps-101\"", () => {
+                const presetProps = { 
+                    onRaiseToErrorOverlay: () => {},
+                    data: {}
+                };
+
                 expect(() => {
                     testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
                     componentInstance = testComponent.instance();

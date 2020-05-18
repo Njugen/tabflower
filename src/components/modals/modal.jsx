@@ -469,15 +469,7 @@ class Modal extends Component {
         if(!isObject(data)){ throw ExceptionsHandler.ValidatorError("mp-verifyProps-103"); } else {
             if(!isObject(data.params)){ throw ExceptionsHandler.ValidatorError("mp-verifyProps-104"); }
         }
-       
-        if(isObject(this.state)){
-            const { ui, fieldErrors } = this.state;
 
-            if(!isObject(ui)){ throw ExceptionsHandler.ValidatorError("mp-verifyProps-106"); }
-            if(!isObject(fieldErrors)){ throw ExceptionsHandler.ValidatorError("mp-verifyProps-107"); }
-        } else {
-            throw ExceptionsHandler.ValidatorError("mp-verifyProps-105");
-        }
     }
 
     verifyState = () => {

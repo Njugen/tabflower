@@ -40,7 +40,23 @@ describe("Test <Module /> component behaviour at mount", () => {
         "module-111": ExceptionsHandler.ValidatorError("module-111"),
         "module-112": ExceptionsHandler.ValidatorError("module-112"),
         "module-113": ExceptionsHandler.ValidatorError("module-113"),
-        "module-115": ExceptionsHandler.ValidatorError("module-115")
+        "module-115": ExceptionsHandler.ValidatorError("module-115"),
+
+
+        "module-verifyProps-101": ExceptionsHandler.ValidatorError("module-verifyProps-101"),
+        "module-verifyProps-102": ExceptionsHandler.ValidatorError("module-verifyProps-102"),
+        "module-verifyProps-103": ExceptionsHandler.ValidatorError("module-verifyProps-103"),
+        "module-verifyProps-104": ExceptionsHandler.ValidatorError("module-verifyProps-104"),
+        "module-verifyProps-105": ExceptionsHandler.ValidatorError("module-verifyProps-105"),
+        "module-verifyProps-106": ExceptionsHandler.ValidatorError("module-verifyProps-106"),
+        "module-verifyProps-107": ExceptionsHandler.ValidatorError("module-verifyProps-107"),
+        "module-verifyProps-108": ExceptionsHandler.ValidatorError("module-verifyProps-108"),
+        "module-verifyProps-109": ExceptionsHandler.ValidatorError("module-verifyProps-109"),
+        "module-verifyProps-110": ExceptionsHandler.ValidatorError("module-verifyProps-110"),
+        "module-verifyProps-111": ExceptionsHandler.ValidatorError("module-verifyProps-111"),
+        "module-verifyProps-112": ExceptionsHandler.ValidatorError("module-verifyProps-112"),
+        "module-verifyProps-113": ExceptionsHandler.ValidatorError("module-verifyProps-113"),
+        "module-verifyProps-114": ExceptionsHandler.ValidatorError("module-verifyProps-114")
     };
 
     const expectedErrorReturns = {
@@ -113,6 +129,77 @@ describe("Test <Module /> component behaviour at mount", () => {
             name: "ValidatorError",
             message: "The data parameter provided to the raiseToModal() function is not an object.",
             code: "module-115"
+        },
+
+        "module-verifyProps-101": {
+            name: "ValidatorError",
+            message: "The onRaiseToModal prop of the \"Module\" component is either not a function or is missing.",
+            code: "module-verifyProps-101"
+        },
+        "module-verifyProps-102": {
+            name: "ValidatorError",
+            message: "The onDragOver prop of the \"Module\" component is either not a function or is missing.",
+            code: "module-verifyProps-102"
+        },
+        "module-verifyProps-103": {
+            name: "ValidatorError",
+            message: "The onDrop prop of the \"Module\" component is either not a function or is missing.",
+            code: "module-verifyProps-103"
+        },
+        "module-verifyProps-104": {
+            name: "ValidatorError",
+            message: "The onDragStart prop of the \"Module\" component is either not a function or is missing.",
+            code: "module-verifyProps-104"
+        },
+        "module-verifyProps-105": {
+            name: "ValidatorError",
+            message: "The onClick prop of the \"Module\" component is either not a function or is missing.",
+            code: "module-verifyProps-105"
+        },
+        "module-verifyProps-106": {
+            name: "ValidatorError",
+            message: "The onRaiseToErrorOverlay prop of the \"Module\" component is either not a function or is missing.",
+            code: "module-verifyProps-106"
+        },
+        "module-verifyProps-107": {
+            name: "ValidatorError",
+            message: "The id prop of the \"Module\" component is either not a string or is missing.",
+            code: "module-verifyProps-107"
+        },
+        "module-verifyProps-108": {
+            name: "ValidatorError",
+            message: "A settings object is missing in the \"Module\" component.",
+            code: "module-verifyProps-108"
+        },
+        "module-verifyProps-109": {
+            name: "ValidatorError",
+            message: "A state object is missing in the \"Module\" component.",
+            code: "module-verifyProps-109"
+        },
+        "module-verifyProps-110": {
+            name: "ValidatorError",
+            message: "A dropDownGrid object is missing in the state of the \"Module\" component.",
+            code: "module-verifyProps-110"
+        },
+        "module-verifyProps-111": {
+            name: "ValidatorError",
+            message: "A moduleData object is missing in the state of the \"Module\" component.",
+            code: "module-verifyProps-111"
+        },
+        "module-verifyProps-112": {
+            name: "ValidatorError",
+            message: "A settings object is missing in the state of the \"Module\" component.",
+            code: "module-verifyProps-112"
+        },
+        "module-verifyProps-113": {
+            name: "ValidatorError",
+            message: "The draggedOverModuleId is missing or is not a string in the dropDownGrid located in the state of \"Module\" component.",
+            code: "module-verifyProps-113"
+        },
+        "module-verifyProps-114": {
+            name: "ValidatorError",
+            message: "The moduleBeingDraggedId is missing or is not a string in the dropDownGrid located in the state of \"Module\" component.",
+            code: "module-verifyProps-114"
         }
     }
 
@@ -977,4 +1064,254 @@ describe("Test <Module /> component behaviour at mount", () => {
             });
         });
     });
+
+    describe("Test verifyProps()", () => {
+        describe("Run this.verifyProps() using 5 valid props, and 1 missing", () => {
+            test("\"onRaiseToModal\" prop is missing (is not a function). Throw an error with this code: \"module-verifyProps-101\"", () => {
+                const presetProps = { 
+                    onDragOver: () => {},
+                    onDrop: () => {},
+                    onDragStart: () => {},
+                    onRaiseToErrorOverlay: () => {},
+                    id: "A string"
+                };
+
+                expect(() => {
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+
+                    componentInstance.verifyProps();
+                }).toThrow(expectedErrorReturns["module-verifyProps-101"]);
+            });
+
+            test("\"onDragOver\" prop is missing (is not a function). Throw an error with this code: \"module-verifyProps-102\"", () => {
+                const presetProps = { 
+                    onRaiseToModal: () => {},
+                    onDrop: () => {},
+                    onDragStart: () => {},
+                    onRaiseToErrorOverlay: () => {},
+                    id: "A string"
+                };
+
+                expect(() => {
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+
+                    componentInstance.verifyProps();
+                }).toThrow(expectedErrorReturns["module-verifyProps-102"]);
+            });
+
+            test("\"onDrop\" prop is missing (is not a function). Throw an error with this code: \"module-verifyProps-103\"", () => {
+                const presetProps = { 
+                    onRaiseToModal: () => {},
+                    onDragOver: () => {},
+                    onDragStart: () => {},
+                    onRaiseToErrorOverlay: () => {},
+                    id: "A string"
+                };
+
+                expect(() => {
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+
+                    componentInstance.verifyProps();
+                }).toThrow(expectedErrorReturns["module-verifyProps-103"]);
+            });
+
+            test("\"onDragStart\" prop is missing (is not a function). Throw an error with this code: \"module-verifyProps-104\"", () => {
+                const presetProps = { 
+                    onRaiseToModal: () => {},
+                    onDragOver: () => {},
+                    onDrop: () => {},
+                    onRaiseToErrorOverlay: () => {},
+                    id: "A string"
+                };
+
+                expect(() => {
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+
+                    componentInstance.verifyProps();
+                }).toThrow(expectedErrorReturns["module-verifyProps-104"]);
+            });
+
+            test("\"onRaiseToErrorOverlay\" prop is missing (is not a function). Throw an error with this code: \"module-verifyProps-106\"", () => {
+                const presetProps = { 
+                    onRaiseToModal: () => {},
+                    onDragOver: () => {},
+                    onDrop: () => {},
+                    onDragStart: () => {},
+                    id: "A string"
+                };
+
+                expect(() => {
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+
+                    componentInstance.verifyProps();
+                }).toThrow(expectedErrorReturns["module-verifyProps-106"]);
+            });
+
+            test("\"id\" prop is missing (is not a string). Throw an error with this code: \"module-verifyProps-107\"", () => {
+                const presetProps = { 
+                    onRaiseToModal: () => {},
+                    onDragOver: () => {},
+                    onDrop: () => {},
+                    onDragStart: () => {},
+                    onRaiseToErrorOverlay: () => {}
+                };
+
+                expect(() => {
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+
+                    componentInstance.verifyProps();
+                }).toThrow(expectedErrorReturns["module-verifyProps-107"]);
+            });
+        });
+
+        describe("Run this.verifyProps() using 5 valid props, and 1 invalid", () => {
+            const various_nonFunctions_variables = [
+                [{ testkey: "test value" }],
+                [32],
+                [null],
+                [undefined],
+                [false],
+                [true],
+                [[12,8,3,7]],
+                ["text string"]
+            ];
+
+            const various_nonString_variables = [
+                [{ testkey: "test value" }],
+                [32],
+                [null],
+                [undefined],
+                [false],
+                [true],
+                [[12,8,3,7]],
+                [() => {}]
+            ];
+
+            describe("\"onRaiseToModal\" prop is invalid (not a function)", () => {
+                test.each(various_nonFunctions_variables)("<Module onRaiseToModal={%p} ... />, throw an error with this code: \"module-verifyProps-101\"", (val) => { 
+                    const presetProps = {
+                        onRaiseToModal: val,
+                        onDragOver: () => {},
+                        onDrop: () => {},
+                        onDragStart: () => {},
+                        onRaiseToErrorOverlay: () => {},
+                        id: "A string"
+                    }
+
+                    expect(() => {
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+    
+                        componentInstance.verifyProps();
+                    }).toThrow(expectedErrorReturns["module-verifyProps-101"]);
+                });
+            });
+
+            describe("\"onDragOver\" prop is invalid (not a function)", () => {
+                test.each(various_nonFunctions_variables)("<Module onDragOver={%p} ... />, throw an error with this code: \"module-verifyProps-102\"", (val) => { 
+                    const presetProps = {
+                        onRaiseToModal: () => {},
+                        onDragOver: val,
+                        onDrop: () => {},
+                        onDragStart: () => {},
+                        onRaiseToErrorOverlay: () => {},
+                        id: "A string"
+                    }
+
+                    expect(() => {
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+    
+                        componentInstance.verifyProps();
+                    }).toThrow(expectedErrorReturns["module-verifyProps-102"]);
+                });
+            });
+
+            describe("\"onDrop\" prop is invalid (not a function)", () => {
+                test.each(various_nonFunctions_variables)("<Module onDrop={%p} ... />, throw an error with this code: \"module-verifyProps-103\"", (val) => { 
+                    const presetProps = {
+                        onRaiseToModal: () => {},
+                        onDragOver: () => {},
+                        onDrop: val,
+                        onDragStart: () => {},
+                        onRaiseToErrorOverlay: () => {},
+                        id: "A string"
+                    }
+
+                    expect(() => {
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+    
+                        componentInstance.verifyProps();
+                    }).toThrow(expectedErrorReturns["module-verifyProps-103"]);
+                });
+            });
+
+            describe("\"onDragStart\" prop is invalid (not a function)", () => {
+                test.each(various_nonFunctions_variables)("<Module onDragStart={%p} ... />, throw an error with this code: \"module-verifyProps-104\"", (val) => { 
+                    const presetProps = {
+                        onRaiseToModal: () => {},
+                        onDragOver: () => {},
+                        onDrop: () => {},
+                        onDragStart: val,
+                        onRaiseToErrorOverlay: () => {},
+                        id: "A string"
+                    }
+
+                    expect(() => {
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+    
+                        componentInstance.verifyProps();
+                    }).toThrow(expectedErrorReturns["module-verifyProps-104"]);
+                });
+            });
+
+            describe("\"onRaiseToErrorOverlay\" prop is invalid (not a function)", () => {
+                test.each(various_nonFunctions_variables)("<Module onRaiseToErrorOverlay={%p} ... />, throw an error with this code: \"module-verifyProps-106\"", (val) => { 
+                    const presetProps = {
+                        onRaiseToModal: () => {},
+                        onDragOver: () => {},
+                        onDrop: () => {},
+                        onDragStart: () => {},
+                        onRaiseToErrorOverlay: val,
+                        id: "A string"
+                    }
+
+                    expect(() => {
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+    
+                        componentInstance.verifyProps();
+                    }).toThrow(expectedErrorReturns["module-verifyProps-106"]);
+                });
+            });
+
+            describe("\"id\" prop is invalid (not a function)", () => {
+                test.each(various_nonString_variables)("<Module id={%p} ... />, throw an error with this code: \"module-verifyProps-107\"", (val) => { 
+                    const presetProps = {
+                        onRaiseToModal: () => {},
+                        onDragOver: () => {},
+                        onDrop: () => {},
+                        onDragStart: () => {},
+                        onRaiseToErrorOverlay: () => {},
+                        id: val
+                    }
+
+                    expect(() => {
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+    
+                        componentInstance.verifyProps();
+                    }).toThrow(expectedErrorReturns["module-verifyProps-107"]);
+                });
+            });
+        });
+    })
 }) 
