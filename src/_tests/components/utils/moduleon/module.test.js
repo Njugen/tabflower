@@ -39,7 +39,8 @@ describe("Test <Module /> component behaviour at mount", () => {
         "module-110": ExceptionsHandler.ValidatorError("module-110"),
         "module-111": ExceptionsHandler.ValidatorError("module-111"),
         "module-112": ExceptionsHandler.ValidatorError("module-112"),
-        "module-113": ExceptionsHandler.ValidatorError("module-113")
+        "module-113": ExceptionsHandler.ValidatorError("module-113"),
+        "module-115": ExceptionsHandler.ValidatorError("module-115")
     };
 
     const expectedErrorReturns = {
@@ -107,6 +108,11 @@ describe("Test <Module /> component behaviour at mount", () => {
             name: "ValidatorError",
             message: "The parentElement of the targetted DOM Element was not provided as expected to the handleDrop() function of the Module component",
             code: "module-113"
+        },
+        "module-115": {
+            name: "ValidatorError",
+            message: "The data parameter provided to the raiseToModal() function is not an object.",
+            code: "module-115"
         }
     }
 
@@ -811,7 +817,8 @@ describe("Test <Module /> component behaviour at mount", () => {
                 [true],
                 [[12,8,3,7]],
                 [() => {}]
-            ]
+            ];
+            
             test("Run createStateModuleDataSection(), when \"sectionName\" is missing: throw an error ExceptionsHandler.ValidatorError(\"module-107\")", () => {
                 componentInstance.createStateModuleDataSection();
 
@@ -893,7 +900,6 @@ describe("Test <Module /> component behaviour at mount", () => {
             componentInstance.childComponentDidMount = jest.fn();
             componentInstance.verifyProps = jest.fn();
 
-
             ExceptionsHandler.ErrorHandler = jest.fn();
             ExceptionsHandler.ValidatorError = jest.fn();
             ExceptionsHandler.ValidatorError.mockImplementation(errCode => {
@@ -919,4 +925,56 @@ describe("Test <Module /> component behaviour at mount", () => {
             expect(componentInstance.verifyProps).toHaveBeenCalledTimes(1);
         })
     })
+
+    describe("Test this.componentWillMount() lifecycle method (as a unit)", () => {
+        test("this.childComponentWillMount() should be called by componentWillMount()", () => {
+            componentInstance.childComponentWillMount = jest.fn();
+            componentInstance.componentWillMount();
+
+            expect(componentInstance.childComponentWillMount).toHaveBeenCalledTimes(1);
+        })
+    })
+
+    describe("Test raiseToModal(data)", () => {
+        describe("Case 1: The data parameter is not an object", () => {
+            const various_data = [
+                ["test value"],
+                [32],
+                [null],
+                [undefined],
+                [false],
+                [true],
+                [[12,8,3,7]],
+                [() => {}]
+            ];
+
+            test.each(various_data)("Run raiseToModal(%p): Throw an error ExceptionsHandler.ValidatorError(\"module-115\")", (val) => {
+                componentInstance.raiseToModal(val);
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-115");
+            });
+
+            test("Run raiseToModal(): Throw an error ExceptionsHandler.ValidatorError(\"module-115\")", () => {
+                componentInstance.raiseToModal();
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-115");
+            });
+        });
+
+        describe("Case 2: The data parameter is an object", () => {
+            test("Run raiseToModal({ abc: 123 }): call onRaiseToModal() with the same input provided", () => {
+                const input = { abc: 123 };
+                const presetProps = {
+                    onRaiseToModal: jest.fn()
+                }
+
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+                
+                componentInstance.raiseToModal(input);
+
+                expect(componentInstance.props.onRaiseToModal).toHaveBeenCalledWith(input);
+            });
+        });
+    });
 }) 

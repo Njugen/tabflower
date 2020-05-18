@@ -343,10 +343,19 @@ class Module extends Component {
 
             All components in this chain will have access to the information raised.
         */
-
+        
+        const { isObject } = validator;
         const { onRaiseToModal } = this.props;
- 
-        onRaiseToModal(data);
+        
+        try {
+            if(isObject(data)){
+                onRaiseToModal(data);
+            } else {
+                throw ExceptionsHandler.ValidatorError("module-115");
+            }
+        } catch(err){
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+        }
     }
 
     renderHeader = () => {

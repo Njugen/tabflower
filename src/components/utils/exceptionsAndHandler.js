@@ -279,7 +279,10 @@ export const ValidatorError = (code) => {
             break; 
         case "module-114":
             message = "The module data section you attempt to add already exists in this component. Attempt aborted.";
-            break;     
+            break;   
+        case "module-115":
+            message = "The data parameter provided to the raiseToModal() function is not an object.";
+            break;           
         case "module-verifyProps-101":
             message = "The onRaiseToModal prop of the \"Module\" component is either not a function or is missing."
             break;
