@@ -388,7 +388,7 @@ describe("Test <Module /> component behaviour at mount", () => {
                     [undefined],
                     [false],
                     [true],
-                    [{ options: null }],
+                    [[1,2,3,4]],
                     [() => {}]
                 ];
 
@@ -415,7 +415,7 @@ describe("Test <Module /> component behaviour at mount", () => {
                     expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("module-112");
                 });
 
-                test.each(various_componentEvent_target_children)("Run handleDragOver(componentEvent): If componentEvent.target.children = %p is not an array, throw an error ExceptionsHandler.ValidatorError(\"module-112\")", (val) => {
+                test.each(various_componentEvent_target_children)("Run handleDragOver(componentEvent): If componentEvent.target.children = %p is not an object, throw an error ExceptionsHandler.ValidatorError(\"module-112\")", (val) => {
                     const componentEvent = {
                         preventDefault: jest.fn(),
                         target: {
@@ -433,11 +433,11 @@ describe("Test <Module /> component behaviour at mount", () => {
                         preventDefault: jest.fn(),
                         target: {
                             className: "tabeon-module-container",
-                            children: [
-                                { 
+                            children: {
+                                0: { 
                                     id: val
                                 }
-                            ]
+                            }
                         }
                     }
 
@@ -450,11 +450,11 @@ describe("Test <Module /> component behaviour at mount", () => {
                         preventDefault: jest.fn(),
                         target: {
                             className: "tabeon-module-container",
-                            children: [
-                                { 
+                            children: {
+                                0: { 
                                     id: "test-123"
                                 }
-                            ]
+                            }
                         }
                     }
 
@@ -476,11 +476,11 @@ describe("Test <Module /> component behaviour at mount", () => {
                             className: {
                                 includes: jest.fn().mockReturnValue(false)
                             },
-                            children: [
-                                { 
+                            children: {
+                                0: { 
                                     id: "test-123"
                                 }
-                            ]
+                            }
                         }
                     }
 
@@ -501,11 +501,11 @@ describe("Test <Module /> component behaviour at mount", () => {
                         preventDefault: jest.fn(),
                         target: {
                             className: "tabeon-module-container",
-                            children: [
-                                { 
+                            children: {
+                                0: { 
                                     id: "test-123"
                                 }
-                            ]
+                            }
                         }
                     }
 
@@ -1310,6 +1310,159 @@ describe("Test <Module /> component behaviour at mount", () => {
     
                         componentInstance.verifyProps();
                     }).toThrow(expectedErrorReturns["module-verifyProps-107"]);
+                });
+            });
+        });
+
+        describe("Run this.verifyProps() using all 6 valid props", () => {
+            const presetProps = { 
+                onRaiseToModal: () => {},
+                onDragOver: () => {},
+                onDrop: () => {},
+                onDragStart: () => {},
+                onRaiseToErrorOverlay: () => {},
+                id: "A string"
+            };
+    
+            test("<Module onRaiseToModal={() => {}} onDragOver={() => {}} onDrop={() => {}} onDragStart={() => {}} onRaiseToErrorOverlay={() => {}} id={\"A string\"} /> runs with no errors", () => {
+                expect(() => {
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+    
+                    componentInstance.verifyProps();
+                }).not.toThrow();
+            })
+        });
+    });
+
+    describe("Test verifyState()", () => {
+        describe("when this.state is not an object", () => {
+            const various_state = [
+                ["a very weird looking text string"],
+                [77],
+                [false],
+                [true],
+                [undefined],
+                [[1,2,3,4]],
+                [() => {}],
+                [null]
+            ];
+            test.each(various_state)("Run verifyState(), when this.state = %p: Error \"module-verifyProps-109\" should be thrown", (val) => {
+                expect(() => {
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    componentInstance.state = val;
+                    componentInstance.verifyState();
+                }).toThrow(expectedErrorReturns["module-verifyProps-109"])
+            })
+        });
+
+        describe("when this.state is an object", () => {
+            describe("when this.state.dropDownGrid is not an object", () => {
+                const various_state = [
+                    ["a very weird looking text string"],
+                    [77],
+                    [false],
+                    [true],
+                    [undefined],
+                    [[1,2,3,4]],
+                    [() => {}],
+                    [null]
+                ];
+
+                test.each(various_state)("Run verifyState(), when this.state.dropDownGrid = %p (is not an object): Error \"module-verifyProps-110\" should be thrown", (val) => {
+                    expect(() => {
+                        componentInstance.state.dropDownGrid = val;
+                        componentInstance.verifyState(); 
+                    }).toThrow(expectedErrorReturns["module-verifyProps-110"]);
+                })
+            });
+
+            describe("when this.state.dropDownGrid is an object", () => {
+                const various_nonString_variable = [
+                    [{item: "1234"}],
+                    [77],
+                    [false],
+                    [true],
+                    [undefined],
+                    [[1,2,3,4]],
+                    [() => {}],
+                    [null]
+                ];
+
+                test("Run verifyState(), when this.state.dropDownGrid = {} (is an object): Error \"module-verifyProps-110\" should NOT be thrown", () => {
+                    expect(() => {
+                        componentInstance.state.dropDownGrid = {};
+                        componentInstance.verifyState(); 
+                    }).not.toThrow(expectedErrorReturns["module-verifyProps-110"]);
+                });
+
+                test.each(various_nonString_variable)("Run verifyState(), when this.state.dropDownGrid.draggedOverModuleId = %p (is not a string): Error \"module-verifyProps-113\" should be thrown", (val) => {
+                    expect(() => {
+                        componentInstance.state.dropDownGrid.draggedOverModuleId = val;
+                        componentInstance.verifyState(); 
+                    }).toThrow(expectedErrorReturns["module-verifyProps-113"]);
+                });
+
+                test("Run verifyState(), when this.state.dropDownGrid.draggedOverModuleId = \"test string\" (is a string): Error \"module-verifyProps-113\" should NOT be thrown", () => {
+                    expect(() => {
+                        componentInstance.state.dropDownGrid.draggedOverModuleId = "test string";
+                        componentInstance.verifyState(); 
+                    }).not.toThrow(expectedErrorReturns["module-verifyProps-113"]);
+                });
+
+                test.each(various_nonString_variable)("Run verifyState(), when this.state.dropDownGrid.moduleBeingDraggedId = %p (is not a string): Error \"module-verifyProps-114\" should be thrown", (val) => {
+                    expect(() => {
+                        componentInstance.state.dropDownGrid.moduleBeingDraggedId = val;
+                        componentInstance.verifyState(); 
+                    }).toThrow(expectedErrorReturns["module-verifyProps-114"]);
+                });
+
+                test("Run verifyState(), when this.state.dropDownGrid.moduleBeingDraggedId = \"test string\" (is a string): Error \"module-verifyProps-114\" should NOT be thrown", () => {
+                    expect(() => {
+                        componentInstance.state.dropDownGrid.moduleBeingDraggedId = "test string";
+                        componentInstance.verifyState(); 
+                    }).not.toThrow(expectedErrorReturns["module-verifyProps-114"]);
+                });
+            });
+
+            describe("when this.state.moduleData is not an object", () => {
+                const various_state = [
+                    ["a very weird looking text string"],
+                    [77],
+                    [false],
+                    [true],
+                    [undefined],
+                    [[1,2,3,4]],
+                    [() => {}],
+                    [null]
+                ];
+
+                test.each(various_state)("Run verifyState(), when this.state.moduleData = %p (is not an object): Error \"module-verifyProps-111\" should be thrown", (val) => {
+                    expect(() => {
+                        componentInstance.state.moduleData = val;
+                        componentInstance.verifyState(); 
+                    }).toThrow(expectedErrorReturns["module-verifyProps-111"]);
+                });
+            });
+
+            describe("when this.state.settings is not an object", () => {
+                const various_state = [
+                    ["a very weird looking text string"],
+                    [77],
+                    [false],
+                    [true],
+                    [undefined],
+                    [[1,2,3,4]],
+                    [() => {}],
+                    [null]
+                ];
+
+                test.each(various_state)("Run verifyState(), when this.state.settings = %p (is not an object): Error \"module-verifyProps-112\" should be thrown", (val) => {
+                    expect(() => {
+                        componentInstance.state.settings = val;
+                        componentInstance.verifyState(); 
+                    }).toThrow(expectedErrorReturns["module-verifyProps-112"]);
                 });
             });
         });

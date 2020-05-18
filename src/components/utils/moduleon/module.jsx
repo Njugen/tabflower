@@ -86,7 +86,8 @@ class Module extends Component {
                     const isModuleContainer = componentEvent.target.className.includes("tabeon-module-container");
                     
                     if(isModuleContainer){
-                        if(isArray(componentEvent.target.children) && isString(componentEvent.target.children[0].id)){
+                       
+                        if(isObject(componentEvent.target.children) && isString(componentEvent.target.children[0].id)){
                             onDragOver(componentEvent.target.children[0].id)
                         } else {
                             throw ExceptionsHandler.ValidatorError("module-112");
@@ -401,7 +402,7 @@ class Module extends Component {
                 throw ExceptionsHandler.ValidatorError("module-verifyProps-110");
             } else { 
                 const { draggedOverModuleId, moduleBeingDraggedId } = dropDownGrid;
-
+             
                 if(!isString(draggedOverModuleId) && !isEmptyString(draggedOverModuleId)){
                     throw ExceptionsHandler.ValidatorError("module-verifyProps-113");
                 }
