@@ -217,7 +217,7 @@ export const ValidatorError = (code) => {
             message = "The targetted tab could not be identified since its unique identification number is missing or provided in wrong format. This might be caused if the tab information has been modified per request. Please, make sure the tab information has not been modified after being retrieved directly from the browser. As a result, the targetted tab cannot be deleted at this time.";
             break;  
         case "COTMRemoveTabModal-102": 
-            message = "No information about the targetted tab could be retrieved, therefore the tab cannot be closed at this point.";
+            message = "No data container nor data parameter containers were found in the props, therefore the tab cannot be closed at this point.";
             break; 
         case "COTMRemoveTabModal-103": 
             message = "The callback parameter is not a function.";

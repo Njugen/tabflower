@@ -32,7 +32,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
     const expectedErrorReturns = {
         "COTMRemoveTabModal-102": {
             name: "ValidatorError",
-            message: "No information about the targetted tab could be retrieved, therefore the tab cannot be closed at this point.",
+            message: "No data container nor data parameter containers were found in the props, therefore the tab cannot be closed at this point.",
             code: "COTMRemoveTabModal-102"
         },
         "COTMRemoveTabModal-105": {
@@ -126,17 +126,21 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
                 }).toThrow(expectedErrorReturns["COTMRemoveTabModal-105"]);
             }); 
             
-        });
+        }); 
 
         describe("Examine the tabInfo of this.props.data.params", () => {
             test.each(various_nonObjects)("Run verifyChildProps(): If tabInfo is not an object in in this.props.data.params, throw an error \"COTMRemoveTabModal-102\"", (val) => {
-                expect(() => {
-                    const testSpecificProps = {
-                        ...presetProps,
-                        data: {
-                            params: val
+                const testSpecificProps = {
+                    ...presetProps,
+                    data: {
+                        params: {
+                            tabInfo: val
                         }
-                    };
+                    }
+                };
+
+                expect(() => {
+                    
                     testComponent = predefinedComponent(testSpecificProps, { disableLifecycleMethods: true });
                     componentInstance = testComponent.instance();
 
