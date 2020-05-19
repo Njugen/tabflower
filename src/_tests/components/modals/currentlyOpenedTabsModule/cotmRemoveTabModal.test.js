@@ -85,7 +85,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
                 }).toThrow(expectedErrorReturns["COTMRemoveTabModal-105"]); 
             });
 
-            test.each(various_nonObjects)("Run verifyChildProps(): If this.props.data is not an object, throw an error \"COTMRemoveTabModal-105\"", (val) => {
+            test.each(various_nonObjects)("Run verifyChildProps(): If this.props.data = %p (is not an object), throw an error \"COTMRemoveTabModal-105\"", (val) => {
                 expect(() => {
                     const presetProps = {
                         data: val
@@ -109,7 +109,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
                 }).toThrow(expectedErrorReturns["COTMRemoveTabModal-105"]);
             });
 
-            test.each(various_nonObjects)("Run verifyChildProps(): If \"params\" is not an object in in this.props.data, throw an error \"COTMRemoveTabModal-105\"", (val) => {
+            test.each(various_nonObjects)("Run verifyChildProps(): If \"params\" = %p (is not an object) in in this.props.data, throw an error \"COTMRemoveTabModal-105\"", (val) => {
                 expect(() => {
                     const presetProps = {
                         data: {
@@ -126,7 +126,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
         }); 
 
         describe("Examine the \"tabinfo\" of this.props.data.params", () => {
-            test.each(various_nonObjects)("Run verifyChildProps(): If \"tabinfo\" is not an object in in this.props.data.params, throw an error \"COTMRemoveTabModal-102\"", (val) => {
+            test.each(various_nonObjects)("Run verifyChildProps(): If \"tabinfo\" = %p (is not an object) in in this.props.data.params, throw an error \"COTMRemoveTabModal-102\"", (val) => {
                 const presetProps = {
                     data: {
                         params: {
@@ -189,7 +189,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
                     }).toThrow(expectedErrorReturns["COTMRemoveTabModal-101"]);
                 });
 
-                test.each(various_nonNumber)("Run verifyChildProps(): If the \"id\" provided by this.props.data.params.tabInfo is not a number, throw an error \"COTMRemoveTabModal-101\"", (val) => {
+                test.each(various_nonNumber)("Run verifyChildProps(): If the \"id\" = %p (provided by this.props.data.params.tabInfo is not a number), throw an error \"COTMRemoveTabModal-101\"", (val) => {
                     const presetProps = {
                         data: {
                             params: {
@@ -238,7 +238,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
                     }).toThrow(expectedErrorReturns["COTMRemoveTabModal-104"]);
                 });
 
-                test.each(various_nonString)("Run verifyChildProps(): If the \"title\" provided by this.props.data.params.tabInfo is not a string, throw an error \"COTMRemoveTabModal-104\"", (val) => {
+                test.each(various_nonString)("Run verifyChildProps(): If the \"title\" = %p (provided by this.props.data.params.tabInfo is not a string), throw an error \"COTMRemoveTabModal-104\"", (val) => {
                     const presetProps = {
                         data: {
                             params: {
@@ -285,7 +285,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
                 expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("COTMRemoveTabModal-105");
             });
     
-            test.each(various_nonObjects)("Run childComponentDidMount(): if this.props.data is not an object, throw an error \"COTMRemoveTabModal-105\"", (val) => {
+            test.each(various_nonObjects)("Run childComponentDidMount(): if this.props.data = %p (is not an object), throw an error \"COTMRemoveTabModal-105\"", (val) => {
                 const presetProps = {
                     data: val
                 };
@@ -308,7 +308,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
                     expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("COTMRemoveTabModal-105");
                 });
         
-                test.each(various_nonObjects)("Run childComponentDidMount(): if this.props.data.params is not an object, throw an error \"COTMRemoveTabModal-105\"", (val) => {
+                test.each(various_nonObjects)("Run childComponentDidMount(): if this.props.data.params = %p (is not an object), throw an error \"COTMRemoveTabModal-105\"", (val) => {
                     const presetProps = {
                         data: {
                             params: val
@@ -338,7 +338,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
                     expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("COTMRemoveTabModal-102");
                 });
 
-                test.each(various_nonObjects)("Run childComponentDidMount(): If this.props.data.params.tabInfo is not an object, throw an error \"COTMRemoveTabModal-102\"", (val) => {
+                test.each(various_nonObjects)("Run childComponentDidMount(): If this.props.data.params.tabInfo = %p (is not an object), throw an error \"COTMRemoveTabModal-102\"", (val) => {
                     const presetProps = {
                         data: {
                             params: {
@@ -376,4 +376,35 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
         
     });
 
+    describe("Test saveModalHandler(callback)", () => {
+        const various_nonFunctions = [
+            ["a very weird looking text string"],
+            [77],
+            [false],
+            [true],
+            [undefined],
+            [[1,2,3,4]],
+            [{ key: "value" }],
+            [null]
+        ];
+
+        test("Run saveModalHandler(): Throw an error \"COTMRemoveTabModal-103\"", () => {
+            componentInstance.saveModalHandler();
+
+            expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("COTMRemoveTabModal-103");
+        });
+
+        test.each(various_nonFunctions)("Run saveModalHandler(%p): Throw an error \"COTMRemoveTabModal-103\"", (val) => {
+            componentInstance.saveModalHandler(val);
+
+            expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("COTMRemoveTabModal-103");
+        });
+
+        test("Run saveModalHandler(callbackFunction), where callbackFunction is a function: The callbackFunction() should get called, with this.state as its payload", () => {
+            const callbackFunction = jest.fn();
+            componentInstance.saveModalHandler(callbackFunction);
+
+            expect(callbackFunction).toHaveBeenCalledWith(componentInstance.state);
+        });
+    });
 }) 
