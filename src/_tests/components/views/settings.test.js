@@ -49,7 +49,8 @@ describe("Test <SettingsView /> component behaviour at mount", () => {
         const presetProps = {};
         testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
         componentInstance = testComponent.instance();
-    
+        
+        ExceptionsHandler.ErrorHandler = jest.fn();
         ExceptionsHandler.ValidatorError = jest.fn();
         ExceptionsHandler.ValidatorError.mockImplementation(errCode => {
             return actualErrorReturns[errCode];

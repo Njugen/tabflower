@@ -116,7 +116,7 @@ class Modal extends Component {
                 // - Find out why onRaiseToErrorModal is a function when this.dismissModalHandler() is called
                 // - Add a mocked ExceptionsHandler.ErrorHandler() in all test suites. Atm, there is no such mock (which could generate false test results)
                 this.dismissModalHandler();
-
+                console.log("ACDC", errorData);
                 if(isFunction(onRaiseToErrorOverlay)){
                     
                     setTimeout(() => {
@@ -202,7 +202,12 @@ class Modal extends Component {
 
             this.setState({ }, () => {
                 this.fadeOut();
-                onDismissModal();
+
+                if(isFunction(onDismissModal)){
+                    onDismissModal();
+                } else {
+                    throw ExceptionsHandler.ValidatorError("mp-verifyProps-101");
+                }
 
                 if(!isUndefined(callback)){
                     if(isFunction(callback)){

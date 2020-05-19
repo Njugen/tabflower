@@ -225,7 +225,9 @@ export const ValidatorError = (code) => {
         case "COTMRemoveTabModal-104": 
             message = "The title of the targetted tab is missing. As the title is missing, other information related to the targetted tab could be missing or incorrect as well. As a precaution, no tab will be deleted as the extension cannot guarantee that the correct tab is targetted.";
             break;  
-
+        case "COTMRemoveTabModal-105": 
+            message = "No information about the targetted tab could be retrieved, therefore the tab cannot be closed at this point.";
+            break; 
         // COTMRemoveWindowModal
         case "COTMRemoveWindowModal-101": 
             message = "The targetted window could not be identified since its unique identification number is missing or provided in wrong format. This might be caused if the window information has been modified per request. Please, make sure the window information has not been modified after being retrieved directly from the browser. As a result, the targetted window cannot be deleted at this time.";

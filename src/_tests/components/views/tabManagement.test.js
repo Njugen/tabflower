@@ -40,7 +40,7 @@ describe("Test <TabManagementView /> component behaviour at mount", () => {
             message: "The command raised to the TabManagementView component could not be executed, because it is invalid.",
             code: "tabManagement-view-102"
         }
-    }
+    } 
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -49,7 +49,8 @@ describe("Test <TabManagementView /> component behaviour at mount", () => {
         const presetProps = {};
         testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
         componentInstance = testComponent.instance();
-    
+        
+        ExceptionsHandler.ErrorHandler = jest.fn();
         ExceptionsHandler.ValidatorError = jest.fn();
         ExceptionsHandler.ValidatorError.mockImplementation(errCode => {
             return actualErrorReturns[errCode];

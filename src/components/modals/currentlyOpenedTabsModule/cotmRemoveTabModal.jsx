@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import Modal from '../modal';
-import { ValidatorError, ErrorHandler } from './../../utils/exceptionsAndHandler';
+//import { ValidatorError, ErrorHandler } from './../../utils/exceptionsAndHandler';
+import * as ExceptionsHandler from './../../utils/exceptionsAndHandler';
 import * as validator from './../../utils/inputValidators'
 import { PropTypes } from 'prop-types';
 
@@ -12,21 +13,27 @@ class COTMRemoveTabModal extends Modal {
         verify data provided by props (this.props) using this function 
         (data which is used exclusively by this modal component, and not used in common 
         by other modal components). 
-    */
+    */ 
     verifyChildProps = () => {
         const { isObject, isNumber, isString } = validator;
-        const { tabInfo } = this.props.data.params;
+        const { data } = this.props;
 
-        if(isObject(tabInfo)){ 
-            if(!isNumber(tabInfo.id)){
-                throw ValidatorError("COTMRemoveTabModal-101");
-            }
+        if(isObject(data) && isObject(data.params)){
+            const { tabInfo } = data.params;
 
-            if(!isString(tabInfo.title)){
-                throw ValidatorError("COTMRemoveTabModal-104");
+            if(isObject(tabInfo)){ 
+                if(!isNumber(tabInfo.id)){
+                    throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-101");
+                }
+
+                if(!isString(tabInfo.title)){
+                    throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-104");
+                }
+            } else {
+                throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-102");
             }
         } else {
-            throw ValidatorError("COTMRemoveTabModal-102");
+            throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-105");
         }
     }
 
@@ -47,10 +54,10 @@ class COTMRemoveTabModal extends Modal {
                     { data }
                 )
             } else {
-                throw ValidatorError("COTMRemoveTabModal-102");
+                throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-102");
             }
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
@@ -72,10 +79,10 @@ class COTMRemoveTabModal extends Modal {
             if(isFunction(callback)){
                 this.clearModalData(callback(this.state));
             } else {
-                throw ValidatorError("COTMRemoveTabModal-103");
+                throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-103");
             }
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
@@ -89,7 +96,7 @@ class COTMRemoveTabModal extends Modal {
         try{
             this.clearModalData();
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
@@ -100,23 +107,35 @@ class COTMRemoveTabModal extends Modal {
     */
     renderModalBody(){
         try {
-            const { title } = this.props.data.params.tabInfo;
+            const { data } = this.props;
+            const { isObject, isString } = validator;
+            
 
-            return (
-                <Fragment>
-                    <p>
-                        You are about to close the tab <strong>{ title }</strong>. All ongoing activities will be interrupted and possibly lost.
-                    </p>
-                    <p>
-                        Are you sure you want to proceed?
-                    </p>
-                    <p className="small">
-                        You may reopen this tab through the browser's history feature (presuming you have it activated).
-                    </p>
-                </Fragment>
-            );    
+            if(isObject(data) && isObject(data.params)){
+                const { tabInfo } = data.params;
+
+                if(isObject(tabInfo)){ 
+                    const { title } = this.props.data.params.tabInfo;
+
+                    if(isString(title)){
+                        return (
+                            <Fragment>
+                                <p>
+                                    You are about to close the tab <strong>{ title }</strong>. All ongoing activities will be interrupted and possibly lost.
+                                </p>
+                                <p>
+                                    Are you sure you want to proceed?
+                                </p>
+                                <p className="small">
+                                    You may reopen this tab through the browser's history feature (presuming you have it activated).
+                                </p>
+                            </Fragment>
+                        );  
+                    }
+                }
+            }
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
@@ -130,7 +149,7 @@ class COTMRemoveTabModal extends Modal {
         return "Close Tab";    
     }
 }
-
+/*
 COTMRemoveTabModal.propTypes = {
     data: PropTypes.shape({
         params: PropTypes.shape({
@@ -143,5 +162,5 @@ COTMRemoveTabModal.propTypes = {
     onRaiseToErrorOverlay: PropTypes.func.isRequired,
     onDismiss: PropTypes.func.isRequired
 }
-
+*/
 export default COTMRemoveTabModal;

@@ -48,7 +48,8 @@ describe("Test <AboutTabFlowerView /> component behaviour at mount", () => {
         const presetProps = {};
         testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
         componentInstance = testComponent.instance();
-    
+        
+        ExceptionsHandler.ErrorHandler = jest.fn();
         ExceptionsHandler.ValidatorError = jest.fn();
         ExceptionsHandler.ValidatorError.mockImplementation(errCode => {
             return actualErrorReturns[errCode];
@@ -98,7 +99,7 @@ describe("Test <AboutTabFlowerView /> component behaviour at mount", () => {
         });
 
         describe("Case 3: When \"data\" is a string, but the string is invalid", () => {
-            test("Run handleRaisedData(\"buyMeSweets\"): The this.setState() function should be called", () => {
+            test("Run handleRaisedData(\"buyMeSweets\"): The error ExceptionsHandler.ValidatorError(\"aboutTabflower-view-102\") should be thrown", () => {
                 componentInstance.handleRaisedData("buyMeSweets");
 
                 expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("aboutTabflower-view-102");
