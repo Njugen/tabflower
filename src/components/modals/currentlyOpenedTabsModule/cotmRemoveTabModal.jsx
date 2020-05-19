@@ -45,17 +45,25 @@ class COTMRemoveTabModal extends Modal {
 
     childComponentDidMount = () => {
         try {
-            const { isObject} = validator;
-            
-            const data = this.props.data.params.tabInfo;
+            const { isObject } = validator;
+            const { data } = this.props;
 
-            if(isObject(data)){ 
-                this.setState(
-                    { data }
-                )
+            if(isObject(data) && isObject(data.params)){
+                const { tabInfo } = data.params;
+
+                if(isObject(tabInfo)){ 
+                    const data = tabInfo;
+
+                    this.setState(
+                        { data }
+                    )
+                } else {
+                    throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-102");
+                }
             } else {
-                throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-102");
+                throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-105");
             }
+    
         } catch(err){
             ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }

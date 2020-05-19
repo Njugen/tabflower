@@ -46,7 +46,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
         jest.clearAllMocks();
         jest.useRealTimers();
 
-        presetProps = {
+        const presetProps = {
            
         };
         testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
@@ -75,10 +75,10 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
         describe("Examine the data object of this.props", () => {
             test("Run verifyChildProps(): If this.props.data is missing, throw an error \"COTMRemoveTabModal-105\"", () => {
                  expect(() => {
-                    const testSpecificProps = {
-                        ...presetProps
+                    const presetProps = {
+                        
                     };
-                    testComponent = predefinedComponent(testSpecificProps, { disableLifecycleMethods: true });
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
                     componentInstance = testComponent.instance();
 
                     componentInstance.verifyChildProps();
@@ -87,11 +87,10 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
 
             test.each(various_nonObjects)("Run verifyChildProps(): If this.props.data is not an object, throw an error \"COTMRemoveTabModal-105\"", (val) => {
                 expect(() => {
-                    const testSpecificProps = {
-                        ...presetProps,
+                    const presetProps = {
                         data: val
                     };
-                    testComponent = predefinedComponent(testSpecificProps, { disableLifecycleMethods: true });
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
                     componentInstance = testComponent.instance();
 
                     componentInstance.verifyChildProps();
@@ -100,11 +99,10 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
 
             test("Run verifyChildProps(): If \"params\" is missing in this.props.data, throw an error \"COTMRemoveTabModal-105\"", () => {
                 expect(() => {
-                    const testSpecificProps = {
-                        ...presetProps,
+                    const presetProps = {
                         data: {}
                     };
-                    testComponent = predefinedComponent(testSpecificProps, { disableLifecycleMethods: true });
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
                     componentInstance = testComponent.instance();
 
                     componentInstance.verifyChildProps();
@@ -113,13 +111,12 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
 
             test.each(various_nonObjects)("Run verifyChildProps(): If \"params\" is not an object in in this.props.data, throw an error \"COTMRemoveTabModal-105\"", (val) => {
                 expect(() => {
-                    const testSpecificProps = {
-                        ...presetProps,
+                    const presetProps = {
                         data: {
                             params: val
                         }
                     };
-                    testComponent = predefinedComponent(testSpecificProps, { disableLifecycleMethods: true });
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
                     componentInstance = testComponent.instance();
 
                     componentInstance.verifyChildProps();
@@ -130,8 +127,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
 
         describe("Examine the \"tabinfo\" of this.props.data.params", () => {
             test.each(various_nonObjects)("Run verifyChildProps(): If \"tabinfo\" is not an object in in this.props.data.params, throw an error \"COTMRemoveTabModal-102\"", (val) => {
-                const testSpecificProps = {
-                    ...presetProps,
+                const presetProps = {
                     data: {
                         params: {
                             tabInfo: val
@@ -140,7 +136,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
                 };
 
                 expect(() => {
-                    testComponent = predefinedComponent(testSpecificProps, { disableLifecycleMethods: true });
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
                     componentInstance = testComponent.instance();
 
                     componentInstance.verifyChildProps();
@@ -148,8 +144,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
             });
 
             test("Run verifyChildProps(): If \"tabinfo\" is missing in this.props.data.params, throw an error \"COTMRemoveTabModal-102\"", () => {
-                const testSpecificProps = {
-                    ...presetProps,
+                const presetProps = {
                     data: {
                         params: {
                       
@@ -158,7 +153,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
                 };
 
                 expect(() => {
-                    testComponent = predefinedComponent(testSpecificProps, { disableLifecycleMethods: true });
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
                     componentInstance = testComponent.instance();
 
                     componentInstance.verifyChildProps();
@@ -178,8 +173,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
                 ]
 
                 test("Run verifyChildProps(): If \"id\" is not provided by this.props.data.params.tabInfo, throw an error \"COTMRemoveTabModal-101\"", () => {
-                    const testSpecificProps = {
-                        ...presetProps,
+                    const presetProps = {
                         data: {
                             params: {
                                 tabInfo: {}
@@ -188,7 +182,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
                     };
     
                     expect(() => {
-                        testComponent = predefinedComponent(testSpecificProps, { disableLifecycleMethods: true });
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
                         componentInstance = testComponent.instance();
     
                         componentInstance.verifyChildProps();
@@ -196,8 +190,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
                 });
 
                 test.each(various_nonNumber)("Run verifyChildProps(): If the \"id\" provided by this.props.data.params.tabInfo is not a number, throw an error \"COTMRemoveTabModal-101\"", (val) => {
-                    const testSpecificProps = {
-                        ...presetProps,
+                    const presetProps = {
                         data: {
                             params: {
                                 tabInfo: {
@@ -208,7 +201,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
                     };
     
                     expect(() => {
-                        testComponent = predefinedComponent(testSpecificProps, { disableLifecycleMethods: true });
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
                         componentInstance = testComponent.instance();
     
                         componentInstance.verifyChildProps();
@@ -229,8 +222,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
                 ]
 
                 test("Run verifyChildProps(): If \"title\" is not provided by this.props.data.params.tabInfo, throw an error \"COTMRemoveTabModal-104\"", () => {
-                    const testSpecificProps = {
-                        ...presetProps,
+                    const presetProps = {
                         data: {
                             params: {
                                 tabInfo: {}
@@ -239,7 +231,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
                     };
     
                     expect(() => {
-                        testComponent = predefinedComponent(testSpecificProps, { disableLifecycleMethods: true });
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
                         componentInstance = testComponent.instance();
     
                         componentInstance.verifyChildProps();
@@ -247,8 +239,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
                 });
 
                 test.each(various_nonString)("Run verifyChildProps(): If the \"title\" provided by this.props.data.params.tabInfo is not a string, throw an error \"COTMRemoveTabModal-104\"", (val) => {
-                    const testSpecificProps = {
-                        ...presetProps,
+                    const presetProps = {
                         data: {
                             params: {
                                 tabInfo: {
@@ -259,7 +250,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
                     };
     
                     expect(() => {
-                        testComponent = predefinedComponent(testSpecificProps, { disableLifecycleMethods: true });
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
                         componentInstance = testComponent.instance();
     
                         componentInstance.verifyChildProps();
@@ -270,6 +261,119 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
         
     });
 
+    describe("Test childComponentDidMount()", () => {
+        const various_nonObjects = [
+            ["a very weird looking text string"],
+            [77],
+            [false],
+            [true],
+            [undefined],
+            [[1,2,3,4]],
+            [() => {}],
+            [null]
+        ];
 
+        describe("Examine the \"data\" object of this.props", () => {
+            test("Run childComponentDidMount(): if this.props.data object is missing, throw an error \"COTMRemoveTabModal-105\"", () => {
+                const presetProps = {
+               
+                };
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+                componentInstance.childComponentDidMount();
+    
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("COTMRemoveTabModal-105");
+            });
+    
+            test.each(various_nonObjects)("Run childComponentDidMount(): if this.props.data is not an object, throw an error \"COTMRemoveTabModal-105\"", (val) => {
+                const presetProps = {
+                    data: val
+                };
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+                componentInstance.childComponentDidMount();
+    
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("COTMRemoveTabModal-105");
+            });
+
+            describe("Examine the \"params\" object of this.props.data", () => {
+                test("Run childComponentDidMount(): if this.props.data.params object is missing, throw an error \"COTMRemoveTabModal-105\"", () => {
+                    const presetProps = {
+                        data: {}
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    componentInstance.childComponentDidMount();
+        
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("COTMRemoveTabModal-105");
+                });
+        
+                test.each(various_nonObjects)("Run childComponentDidMount(): if this.props.data.params is not an object, throw an error \"COTMRemoveTabModal-105\"", (val) => {
+                    const presetProps = {
+                        data: {
+                            params: val
+                        }
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    componentInstance.childComponentDidMount();
+        
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("COTMRemoveTabModal-105");
+                });
+            });
+
+            describe("Examine the \"tabInfo\" object of this.props.data.params", () => {
+                test("Run childComponentDidMount(): If this.props.data.params.tabInfo is missing, throw an error \"COTMRemoveTabModal-102\"", () => {
+                    const presetProps = {
+                        data: {
+                            params: {
+                                
+                            }
+                        }
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    componentInstance.childComponentDidMount();
+        
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("COTMRemoveTabModal-102");
+                });
+
+                test.each(various_nonObjects)("Run childComponentDidMount(): If this.props.data.params.tabInfo is not an object, throw an error \"COTMRemoveTabModal-102\"", (val) => {
+                    const presetProps = {
+                        data: {
+                            params: {
+                                tabInfo: val
+                            }
+                        }
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    componentInstance.childComponentDidMount();
+        
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("COTMRemoveTabModal-102");
+                });
+
+                test.each(various_nonObjects)("Run childComponentDidMount(): If this.props.data.params.tabInfo is an object, pass it to this.setState()", (val) => {
+                    const presetProps = {
+                        data: {
+                            params: {
+                                tabInfo: {}
+                            }
+                        }
+                    };
+
+                    const data = presetProps.data.params.tabInfo;
+
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    componentInstance.setState = jest.fn();
+                    componentInstance.childComponentDidMount();
+        
+                    expect(componentInstance.setState).toHaveBeenCalledWith({ data });
+                });
+            })
+        })
+        
+    });
 
 }) 
