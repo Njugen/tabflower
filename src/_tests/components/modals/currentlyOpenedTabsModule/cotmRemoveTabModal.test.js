@@ -573,6 +573,70 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
     });
 
     describe("Test renderModalHeader()", () => {
+        test("Run renderModalHeader(): The function should return \"Close Tab\"", () => {
+            expect(componentInstance.renderModalHeader()).toBe("Close Tab");
+        });
+    });
 
+    describe("Test render()", () => {
+        /*
+            Currently, the idea of the render() function of any component in this project is superficial.
+            There is no demand for any component to follow any predefined setups by heart, however there may be 
+            a necessity for these renders to contain certain fixed elements and attributes.
+
+            There is still no demand for these necessities to follow any set pattern (like being implemented in certain order etc),
+            as long as they are actually featured in the component and follow their isolated definitions stated in the test. 
+            As long as the individual conditions are met, the overall components' renders may look and feature anything that suits any 
+            situation at any time. If the developer has to take extra considerations of any rendering details in the future, make 
+            a test out of those details so JEST can notify if something goes amiss.
+        */
+        describe("Examine the modal wrapper element", () => {
+            test("Run render(): The element has the class \".modal\"  which exists, and there is only one of it in this component", () => {
+                expect(testComponent.find(".modal").length).toBe(1);
+            })
+
+            test("Run render(): This element has no parent element (it is the start element in the element tree)", () => {
+                expect(testComponent.find(".modal").parent().length).toBe(0);
+            })
+
+            test("Run render(): This element has an id attribute reading \"tabeonModal\"", () => {
+
+                expect(testComponent.find(".modal").at(0).props().id).toBe("tabeonModal");
+            }) 
+
+            test("Run render(): This element should be a <div>", () => {
+
+                expect(testComponent.find(".modal").at(0).name()).toBe("div");
+            }) 
+        });
+
+        describe("Examine the modal title element", () => {
+            test("Run render(): This element has an id selector reading \"#tabeonModalLabel\", and there is only one of it in this component", () => {
+                expect(testComponent.find("#tabeonModalLabel").length).toBe(1);
+            });
+
+            test("Run render(): The title should be identical to the output of this.renderModalHeader()", () => {
+                expect(testComponent.find("#tabeonModalLabel").text()).toBe(componentInstance.renderModalHeader());
+            });
+
+            test("Run render(): This element has an className attribute reading \"modal-title\"", () => {
+
+                expect(testComponent.find("#tabeonModalLabel").at(0).props().className).toBe("modal-title");
+            }) 
+        })
+        
+        describe("Examine the \"close\" / \"dismiss\" modal button element, an icon button used to close the modal", () => {
+            test("Run render(): There should one element with the class \".close\"", () => {
+                expect(testComponent.find(".close").length).toBe(1);
+            });
+
+            test("Run render(): The element with \".close\" should contain an x icon", () => {
+                expect(testComponent.find(".close").at(0).childAt(0).text()).toBe("\u00D7");
+            });
+
+            test("Run render(): The element with \".close\" should be a <button> element", () => {
+                expect(testComponent.find(".close").at(0).name()).toBe("button");
+            });
+        })
     })
 }) 

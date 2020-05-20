@@ -521,7 +521,7 @@ class Modal extends Component {
                             </h5>
                             {typeof this.dismissModalHandler === "function" &&
                                 <button type="button" className="close" onClick={() => this.dismissModalHandler()}>
-                                    <span aria-hidden="true">&times;</span>
+                                    &times;
                                 </button>
                             }   
                         </div>
