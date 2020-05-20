@@ -25,15 +25,33 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
     
 
     const actualErrorReturns = {
+        "COTMRemoveTabModal-101": ExceptionsHandler.ValidatorError("COTMRemoveTabModal-101"),
         "COTMRemoveTabModal-102": ExceptionsHandler.ValidatorError("COTMRemoveTabModal-102"),
+        "COTMRemoveTabModal-103": ExceptionsHandler.ValidatorError("COTMRemoveTabModal-103"),
+        "COTMRemoveTabModal-104": ExceptionsHandler.ValidatorError("COTMRemoveTabModal-104"),
         "COTMRemoveTabModal-105": ExceptionsHandler.ValidatorError("COTMRemoveTabModal-105")
     };
 
     const expectedErrorReturns = {
+        "COTMRemoveTabModal-101": {
+            name: "ValidatorError",
+            message: "The targetted tab could not be identified since its unique identification number is missing or provided in wrong format. This might be caused if the tab information has been modified per request. Please, make sure the tab information has not been modified after being retrieved directly from the browser. As a result, the targetted tab cannot be deleted at this time.",
+            code: "COTMRemoveTabModal-101"
+        },
         "COTMRemoveTabModal-102": {
             name: "ValidatorError",
             message: "No data container nor data parameter containers were found in the props, therefore the tab cannot be closed at this point.",
             code: "COTMRemoveTabModal-102"
+        },
+        "COTMRemoveTabModal-103": {
+            name: "ValidatorError",
+            message: "The callback parameter is not a function.",
+            code: "COTMRemoveTabModal-103"
+        },
+        "COTMRemoveTabModal-104": {
+            name: "ValidatorError",
+            message: "The title of the targetted tab is missing. As the title is missing, other information related to the targetted tab could be missing or incorrect as well. As a precaution, no tab will be deleted as the extension cannot guarantee that the correct tab is targetted.",
+            code: "COTMRemoveTabModal-104"
         },
         "COTMRemoveTabModal-105": {
             name: "ValidatorError",
@@ -47,7 +65,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
         jest.useRealTimers();
 
         const presetProps = {
-           
+          
         };
         testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
         componentInstance = testComponent.instance();
@@ -125,8 +143,8 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
             
         }); 
 
-        describe("Examine the \"tabinfo\" of this.props.data.params", () => {
-            test.each(various_nonObjects)("Run verifyChildProps(): If \"tabinfo\" = %p (is not an object) in in this.props.data.params, throw an error \"COTMRemoveTabModal-102\"", (val) => {
+        describe("Examine the \"tabInfo\" of this.props.data.params", () => {
+            test.each(various_nonObjects)("Run verifyChildProps(): If \"tabInfo\" = %p (is not an object) in in this.props.data.params, throw an error \"COTMRemoveTabModal-102\"", (val) => {
                 const presetProps = {
                     data: {
                         params: {
@@ -143,7 +161,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
                 }).toThrow(expectedErrorReturns["COTMRemoveTabModal-102"]);
             });
 
-            test("Run verifyChildProps(): If \"tabinfo\" is missing in this.props.data.params, throw an error \"COTMRemoveTabModal-102\"", () => {
+            test("Run verifyChildProps(): If \"tabInfo\" is missing in this.props.data.params, throw an error \"COTMRemoveTabModal-102\"", () => {
                 const presetProps = {
                     data: {
                         params: {
@@ -225,7 +243,9 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
                     const presetProps = {
                         data: {
                             params: {
-                                tabInfo: {}
+                                tabInfo: {
+                                    id: 20
+                                }
                             }
                         }
                     };
@@ -243,6 +263,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
                         data: {
                             params: {
                                 tabInfo: {
+                                    id: 20,
                                     title: val
                                 }
                             }
@@ -407,4 +428,151 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
             expect(callbackFunction).toHaveBeenCalledWith(componentInstance.state);
         });
     });
+
+    describe("Test dismissModalHandler()", () => {
+        test("Run dismissModalHandler(): the function this.clearModalData() should be called", () => {
+            componentInstance.clearModalData = jest.fn();
+            componentInstance.dismissModalHandler();
+
+            expect(componentInstance.clearModalData).toHaveBeenCalledTimes(1);
+        })
+    });
+
+    describe("Test renderModalBody()", () => {
+        const various_nonObjects = [
+            ["a very weird looking text string"],
+            [77],
+            [false],
+            [true],
+            [[1,2,3,4]],
+            [() => {}],
+            [null]
+        ];
+        
+        describe("Examine the data object of this.props", () => {
+            test("Run renderModalBody(): If this.props.data is missing, throw an error \"COTMRemoveTabModal-105\"", () => {
+                const presetProps = {
+                        
+                };
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderModalBody()).toBe("The information related to this message is missing. There is no contents to show.");
+            });
+
+            test.each(various_nonObjects)("Run renderModalBody(): If this.props.data = %p (is not an object), throw an error \"COTMRemoveTabModal-105\"", (val) => {
+                const presetProps = {
+                    data: val
+                };
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderModalBody()).toBe("The information related to this message is invalid. The contents cannot be viewed.");
+            });
+
+            test("Run renderModalBody(): If \"params\" is missing in this.props.data, throw an error \"COTMRemoveTabModal-105\"", () => {
+                const presetProps = {
+                    data: {}
+                };
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderModalBody()).toBe("The parameter(s) provided by the information container is missing. There is no contents to show.");
+            });
+
+            test.each(various_nonObjects)("Run renderModalBody(): If \"params\" = %p (is not an object) in in this.props.data, throw an error \"COTMRemoveTabModal-105\"", (val) => {
+                const presetProps = {
+                    data: {
+                        params: val
+                    }
+                };
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderModalBody()).toBe("The parameter(s) provided by the information container is invalid. The contents cannot be viewed.");
+            }); 
+            
+        }); 
+
+        describe("Examine the \"tabInfo\" of this.props.data.params", () => {
+            test.each(various_nonObjects)("Run renderModalBody(): If \"tabInfo\" = %p (is not an object) in in this.props.data.params, throw an error \"COTMRemoveTabModal-102\"", (val) => {
+                const presetProps = {
+                    data: {
+                        params: {
+                            tabInfo: val
+                        }
+                    }
+                };
+
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderModalBody()).toBe("The information about the targetted tab was provided in wrong format. Its contents and settings cannot be shown.");
+            });
+
+            test("Run renderModalBody(): If \"tabInfo\" is missing in this.props.data.params, throw an error \"COTMRemoveTabModal-102\"", () => {
+                const presetProps = {
+                    data: {
+                        params: {
+                      
+                        }
+                    }
+                };
+
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderModalBody()).toBe("The information about the targetted tab is missing. There are no contents nor settings to modify.");
+            });
+            
+            describe("Examine this.props.data.params.tabInfo.title", () => {
+                const various_nonString = [
+                    [20],
+                    [{ item: 123 }],
+                    [false],
+                    [true],
+                    [[1,2,3,4]],
+                    [() => {}],
+                    [null]
+                ]
+
+                test("Run renderModalBody(): If \"title\" is not provided by this.props.data.params.tabInfo, throw an error \"COTMRemoveTabModal-104\"", () => {
+                    const presetProps = {
+                        data: {
+                            params: {
+                                tabInfo: {}
+                            }
+                        }
+                    };
+                    
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+
+                    expect(componentInstance.renderModalBody()).toBe("The targetted tab's title was not provided. Other info about the targetted tab might also be incorrect, therefore no contents nor settings can be modified at the moment");
+                });
+
+                test.each(various_nonString)("Run renderModalBody(): If the \"title\" = %p (provided by this.props.data.params.tabInfo is not a string), throw an error \"COTMRemoveTabModal-104\"", (val) => {
+                    const presetProps = {
+                        data: {
+                            params: {
+                                tabInfo: {
+                                    title: val
+                                }
+                            }
+                        }
+                    };
+
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+
+                    expect(componentInstance.renderModalBody()).toBe("The targetted tab's title was not provided in the correct manner. Other info about the targetted tab might also be incorrect, therefore no contents nor settings can be modified at the moment");
+                  
+                });
+            })
+        }); 
+    });
+
+    describe("Test renderModalHeader()", () => {
+
+    })
 }) 

@@ -508,7 +508,7 @@ class Modal extends Component {
             These functions add contents and functionalities to the modal's user interface. 
             Add these to the Modal child classes to give them necessary features.
         */
-       
+
         return (
             <div ref={this.modalRef} className="modal" id="tabeonModal">
                 <div className="modal-dialog" role="document">
