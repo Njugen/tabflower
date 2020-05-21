@@ -179,7 +179,13 @@ export const ValidatorError = (code) => {
             break;      
         case "ETGMCreateNewGroupModal-122":
             message = "The \"groupCloseInactiveTabs\" parameter in this.props.data.params needs to be a boolean value (true or false) if given. If such a value is not available, remove \"groupCloseInactiveTabs\" from props. As a result of this error, tab groups cannot be added nor edited at this time.";
-            break;                               
+            break;      
+        case "ETGMCreateNewGroupModal-123":
+            message = "The \"data\" variable either does not currently exist, nor is it currently an object, in this.props";
+            break;        
+        case "ETGMCreateNewGroupModal-124":
+            message = "The \"params\" variable either does not currently exist, nor is it currently an object, in this.props.data";
+            break;                                                      
         // ETGMRemoveGroupsModal
         case "ETGMRemoveGroupsModal-101":
             message = "The callback parameter is not a function.";

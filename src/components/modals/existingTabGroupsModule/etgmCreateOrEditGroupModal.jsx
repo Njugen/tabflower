@@ -5,7 +5,7 @@ import TBCheckBox from "../../utils/form/tbCheckbox";
 import TBTextInput from '../../utils/form/tbTextInput';
 import TBTextArea from '../../utils/form/tbTextArea';
 import { PropTypes } from 'prop-types';
-import { ValidatorError, ErrorHandler } from '../../utils/exceptionsAndHandler';
+import * as ExceptionsHandler from '../../utils/exceptionsAndHandler';
 import * as validator from '../../utils/inputValidators'
 
 class ETGMCreateNewGroupModal extends Modal {
@@ -21,95 +21,104 @@ class ETGMCreateNewGroupModal extends Modal {
         /*
             Verify the this.props.data.params object
         */
-        const { isBoolean, isString, isUndefined, isArray } = validator;
-        const { 
-            windowAndTabs, 
-            groupName, 
-            groupCloseAll, 
-            groupCloseInactiveTabs, 
-            groupDescription, 
-            type, 
-            groupId 
-        } = this.props.data.params;
-      
-        /*
-            type (string, mandatory)
-
-            A type is always required and needs to hold either of the following values:
-            - "currently-opened"
-            - "new-group"
-            - "existing-group"
-        */
-        if(!isString(type)){
-            throw ValidatorError("ETGMCreateNewGroupModal-114");
-        } else {
-            if(type !== "currently-opened" && type !== "new-group" && type !== "existing-group"){
-                throw ValidatorError("ETGMCreateNewGroupModal-115");
-            }
-        }
-
-        /*
-            groupId (string, optional)
-
-            A group id is optional and if given, should always be a string. If there is no
-            group id, refrain from using the groupId parameter when calling this modal
-        */
-
-        if(!isString(groupId) && !isUndefined(groupId)){
-            throw ValidatorError("ETGMCreateNewGroupModal-120");
-        }
-
-        /*
-            groupName (string, optional)
-
-            A group name is optional and if given, should always be a string. If there is no
-            group name, refrain from using the groupName parameter when calling this modal
-        */
-
-        if(!isString(groupName) && !isUndefined(groupName)){
-            throw ValidatorError("ETGMCreateNewGroupModal-116");
-        }
-
-
-        /*
-            groupDescription (string, optional)
-
-            A group description is optional and if given, should always be a string. If there is no
-            group description, refrain from using the groupDescription parameter when calling this modal
-        */
-        if(!isString(groupDescription) && !isUndefined(groupDescription)){
-            throw ValidatorError("ETGMCreateNewGroupModal-117");
-        }
-
-        /*
-            groupCloseAll (boolean, optional)
-
-            This parameter is optional and if given, should always be a boolean (either true or false). If there is boolean value, 
-            refrain from using the groupCloseAll parameter when calling this modal
-        */
-        if(!isBoolean(groupCloseAll) && !isUndefined(groupCloseAll)){
-            throw ValidatorError("ETGMCreateNewGroupModal-118");
-        }
-
-        /*
-            groupCloseInactiveTabs (boolean, optional)
-
-            This parameter is optional and if given, should always be a boolean (either true or false)
-        */
-
-        if(!isBoolean(groupCloseInactiveTabs) && !isUndefined(groupCloseInactiveTabs)){
-            throw ValidatorError("ETGMCreateNewGroupModal-122");
-        }
-
-        /* 
-            windowAndTabs (object, mandatory)
-
-            This parameter contains windows and tabs stored into a single array. If there are no windows/tabs, this array
-            is empty e.g. windowAndTabs = []
-        */
+        const { isBoolean, isString, isUndefined, isArray, isObject } = validator;
         
-        if(!isArray(windowAndTabs)){
-            throw ValidatorError("ETGMCreateNewGroupModal-119");
+        if(isObject(this.props.data)){
+            if(isObject(this.props.data.params)){
+                const { 
+                    windowAndTabs, 
+                    groupName, 
+                    groupCloseAll, 
+                    groupCloseInactiveTabs, 
+                    groupDescription, 
+                    type, 
+                    groupId 
+                } = this.props.data.params;
+            
+                /*
+                    type (string, mandatory)
+
+                    A type is always required and needs to hold either of the following values:
+                    - "currently-opened"
+                    - "new-group"
+                    - "existing-group"
+                */
+                if(!isString(type)){
+                    throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-114");
+                } else {
+                    if(type !== "currently-opened" && type !== "new-group" && type !== "existing-group"){
+                        throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-115");
+                    }
+                }
+
+                /*
+                    groupId (string, optional)
+
+                    A group id is optional and if given, should always be a string. If there is no
+                    group id, refrain from using the groupId parameter when calling this modal
+                */
+
+                if(!isString(groupId) && !isUndefined(groupId)){
+                    throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-120");
+                }
+
+                /*
+                    groupName (string, optional)
+
+                    A group name is optional and if given, should always be a string. If there is no
+                    group name, refrain from using the groupName parameter when calling this modal
+                */
+
+                if(!isString(groupName) && !isUndefined(groupName)){
+                    throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-116");
+                }
+
+
+                /*
+                    groupDescription (string, optional)
+
+                    A group description is optional and if given, should always be a string. If there is no
+                    group description, refrain from using the groupDescription parameter when calling this modal
+                */
+                if(!isString(groupDescription) && !isUndefined(groupDescription)){
+                    throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-117");
+                }
+
+                /*
+                    groupCloseAll (boolean, optional)
+
+                    This parameter is optional and if given, should always be a boolean (either true or false). If there is no boolean value, 
+                    refrain from using the groupCloseAll parameter when calling this modal
+                */
+                if(!isBoolean(groupCloseAll) && !isUndefined(groupCloseAll)){
+                    throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-118");
+                }
+
+                /*
+                    groupCloseInactiveTabs (boolean, optional)
+
+                    This parameter is optional and if given, should always be a boolean (either true or false)
+                */
+
+                if(!isBoolean(groupCloseInactiveTabs) && !isUndefined(groupCloseInactiveTabs)){
+                    throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-122");
+                }
+
+                /* 
+                    windowAndTabs (object, mandatory)
+
+                    This parameter contains windows and tabs stored into a single array. If there are no windows/tabs, this array
+                    is empty e.g. windowAndTabs = []
+                */
+                
+                if(!isArray(windowAndTabs) && !isUndefined(windowAndTabs)){
+                    throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-119");
+                }
+            } else {
+                throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-124");
+            }    
+        } else {
+            throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-123");
         }
     }
 
@@ -133,13 +142,13 @@ class ETGMCreateNewGroupModal extends Modal {
                     this.clearModalData(callback(this.state.tabGroupDetails));
                 });
             } else {
-                throw ValidatorError("ETGMCreateNewGroupModal-101");
+                throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-101");
             }
         } catch(err){
             const { groupName } = this.props.data.params;
             const additionalMessage = (!groupName ? "The tab group could not be saved" : "The tab group could not be changed" ) + ". Please try again.";
 
-            ErrorHandler(err, this.raiseToErrorOverlay, additionalMessage);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay, additionalMessage);
         }
     }
 
@@ -153,7 +162,7 @@ class ETGMCreateNewGroupModal extends Modal {
         try {
            this.clearModalData();
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
@@ -198,7 +207,7 @@ class ETGMCreateNewGroupModal extends Modal {
                 const { groupName } = this.props.data.params;
                 const additionalMessage = (!groupName ? "The tab group could not be saved" : "The tab group could not be changed" ) + ". Please try again.";
 
-                ErrorHandler(err, this.raiseToErrorOverlay, additionalMessage);
+                ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay, additionalMessage);
             }
         }
     }
@@ -222,7 +231,7 @@ class ETGMCreateNewGroupModal extends Modal {
                 if(isString(id)){
                     groupId = id;
                 } else {
-                    throw ValidatorError("ETGMCreateNewGroupModal-102")
+                    throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-102")
                 }
             } else {
                 groupId = Math.random().toString(36).slice(2);
@@ -230,7 +239,7 @@ class ETGMCreateNewGroupModal extends Modal {
 
             return groupId;
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
@@ -255,11 +264,11 @@ class ETGMCreateNewGroupModal extends Modal {
             
             if(isString(url)){
                 if(!isFunction(success)){
-                    throw ValidatorError("ETGMCreateNewGroupModal-105");
+                    throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-105");
                 }
 
                 if(!isFunction(fail)){
-                    throw ValidatorError("ETGMCreateNewGroupModal-106");
+                    throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-106");
                 }
 
                 fetch(url)
@@ -267,7 +276,7 @@ class ETGMCreateNewGroupModal extends Modal {
                     if(response.ok){
                         return (response.text())
                     } else {
-                        throw ValidatorError("ETGMCreateNewGroupModal-103")
+                        throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-103")
                     }
                 })
                 .then((responseText) => {
@@ -277,10 +286,10 @@ class ETGMCreateNewGroupModal extends Modal {
                     fail(err);
                 });
             } else {
-                throw ValidatorError("ETGMCreateNewGroupModal-104");
+                throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-104");
             }
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
@@ -339,10 +348,10 @@ class ETGMCreateNewGroupModal extends Modal {
                 )
               
             } else {
-                throw ValidatorError("ETGMCreateNewGroupModal-104")
+                throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-104")
             }
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
@@ -407,13 +416,13 @@ class ETGMCreateNewGroupModal extends Modal {
                     )
                  
                 } else {
-                    throw ValidatorError("ETGMCreateNewGroupModal-107")
+                    throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-107")
                 }
             } else {
-                throw ValidatorError("ETGMCreateNewGroupModal-108")
+                throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-108")
             }
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
@@ -447,13 +456,13 @@ class ETGMCreateNewGroupModal extends Modal {
                         this.saveToState("windowAndTabs", windows, "tabGroupDetails") 
                     }
                 } else {
-                    throw ValidatorError("ETGMCreateNewGroupModal-109")
+                    throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-109")
                 }
             } else {
-                throw ValidatorError("ETGMCreateNewGroupModal-110")
+                throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-110")
             }
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
         
     }
@@ -479,10 +488,10 @@ class ETGMCreateNewGroupModal extends Modal {
                     this.saveToState("windowAndTabs", windows, "tabGroupDetails") 
                 }
             } else {
-                throw ValidatorError("ETGMCreateNewGroupModal-111")
+                throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-111")
             }
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
@@ -510,17 +519,17 @@ class ETGMCreateNewGroupModal extends Modal {
         const { isString, isArray } = validator;
 
         if(!isString(type)){
-            throw ValidatorError("ETGMCreateNewGroupModal-112");
+            throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-112");
         } else {
             if(type !== "currently-opened" && type !== "existing-group" && type !== "new-group"){
-                throw ValidatorError("ETGMCreateNewGroupModal-113");
+                throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-113");
             }
         }
 
         if(isArray(windowAndTabs)){
             windowAndTabs = windowAndTabs || [];
         } else {
-            throw ValidatorError("ETGMCreateNewGroupModal-121");
+            throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-121");
         }
 
         
@@ -560,46 +569,65 @@ class ETGMCreateNewGroupModal extends Modal {
     }
 
     renderModalBody(){
+        const { isObject } = validator;
 
-        const { 
-            groupName: name,
-            groupCloseAll: closeAll,
-            groupCloseInactiveTabs: closeInactiveTabs,
-            groupDescription: description,
-            type
-        } = this.props.data.params;
-        
-        const { 
-            tabGroupName: nameErr,
-            tabGroupDescription: descErr,
-            windowAndTabs: windowErr
-        } = this.state.fieldErrors
-        
-        const { tabGroupDetails } = this.state;
-        
-        return (
-            <Fragment>
-                <TBTextInput id="tabGroupName" warning={nameErr || null} label="Group Name" value={name ? name : ""} onChange={(id, value) => this.saveToState(id, value, "tabGroupDetails")}></TBTextInput>
-                <TBTextArea id="tabGroupDescription" warning={descErr || null} label="Description (max 170 characters)" value={description ? description : ""} onChange={(id, value) => this.saveToState(id, value, "tabGroupDetails")}></TBTextArea>
-                <TBCheckBox id="tabGroupCloseAll" label="Close everything else before launching this tab group" value={closeAll && closeAll === true ? "true" : "false"} onToggle={(id, value) => this.saveToState(id, value, "tabGroupDetails")} />           
-                <TBCheckBox id="tabGroupCloseInactiveTabs" label="Automatically close all unresponsive tabs opened by this tab group" value={closeInactiveTabs && closeInactiveTabs === true ? "true" : "false"} onToggle={(id, value) => this.saveToState(id, value, "tabGroupDetails")} />
-                {tabGroupDetails && this.renderWindowsAndTabsSection(tabGroupDetails.windowAndTabs, type, windowErr || null)}
-            </Fragment>
-        );    
+        if(isObject(this.props.data)){
+            if(isObject(this.props.data.params)){
+                const { 
+                    groupName: name,
+                    groupCloseAll: closeAll,
+                    groupCloseInactiveTabs: closeInactiveTabs,
+                    groupDescription: description,
+                    type
+                } = this.props.data.params;
+                
+                const { 
+                    tabGroupName: nameErr,
+                    tabGroupDescription: descErr,
+                    windowAndTabs: windowErr
+                } = this.state.fieldErrors
+                
+                const { tabGroupDetails } = this.state;
+                
+                return (
+                    <Fragment>
+                        <TBTextInput id="tabGroupName" warning={nameErr || null} label="Group Name" value={name ? name : ""} onChange={(id, value) => this.saveToState(id, value, "tabGroupDetails")}></TBTextInput>
+                        <TBTextArea id="tabGroupDescription" warning={descErr || null} label="Description (max 170 characters)" value={description ? description : ""} onChange={(id, value) => this.saveToState(id, value, "tabGroupDetails")}></TBTextArea>
+                        <TBCheckBox id="tabGroupCloseAll" label="Close everything else before launching this tab group" value={closeAll && closeAll === true ? "true" : "false"} onToggle={(id, value) => this.saveToState(id, value, "tabGroupDetails")} />           
+                        <TBCheckBox id="tabGroupCloseInactiveTabs" label="Automatically close all unresponsive tabs opened by this tab group" value={closeInactiveTabs && closeInactiveTabs === true ? "true" : "false"} onToggle={(id, value) => this.saveToState(id, value, "tabGroupDetails")} />
+                        {tabGroupDetails && this.renderWindowsAndTabsSection(tabGroupDetails.windowAndTabs, type, windowErr || null)}
+                    </Fragment>
+                );    
+            } else {
+                return "Error body";
+            }
+        } else {
+            return "Error Body";
+        }
     }
 
     renderModalHeader(){
-        const { type, groupName } = this.props.data.params;
+        const { isObject } = validator;
 
-        if(type === "currently-opened" || type === "new-group"){
-            return "Create a New Tab Group";
-        } else if(type === "existing-group") {
-            return "Edit the \"" + (groupName || "") + "\" tab group";
+        if(isObject(this.props.data)){
+            if(isObject(this.props.data.params)){
+                const { type, groupName } = this.props.data.params;
+
+                if(type === "currently-opened" || type === "new-group"){
+                    return "Create a New Tab Group";
+                } else if(type === "existing-group") {
+                    return "Edit the \"" + (groupName || "") + "\" tab group";
+                }
+            } else {
+                return "Error";
+            } 
+        } else {
+            return "Error"
         }
     }
 }
 
-
+/*
 ETGMCreateNewGroupModal.propTypes = {
     data: PropTypes.shape({
             params: PropTypes.shape({
@@ -611,6 +639,6 @@ ETGMCreateNewGroupModal.propTypes = {
     }),
     onRaiseToErrorOverlay: PropTypes.func.isRequired,
     onDismiss: PropTypes.func.isRequired
-}
+} */
 
 export default ETGMCreateNewGroupModal;

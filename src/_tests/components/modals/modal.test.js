@@ -1513,7 +1513,7 @@ describe("Test <Modal /> component behaviour at mount", () => {
                     ];
 
                     for(let i = 0; i < various_state_fieldErrors.length; i++){
-                        test.each(various_state_ui)("Run verifyTest(), when \"ui\" = %p and " + various_state_fieldErrors[i][0] + ": An error should be thrown", (val) => {
+                        test.each(various_state_ui)("Run verifyState(), when \"ui\" = %p and " + various_state_fieldErrors[i][0] + ": An error should be thrown", (val) => {
                             expect(() => {
                                 testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
                                 componentInstance = testComponent.instance();
