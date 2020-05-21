@@ -233,8 +233,14 @@ export const ValidatorError = (code) => {
             message = "The targetted window could not be identified since its unique identification number is missing or provided in wrong format. This might be caused if the window information has been modified per request. Please, make sure the window information has not been modified after being retrieved directly from the browser. As a result, the targetted window cannot be deleted at this time.";
             break;   
         case "COTMRemoveWindowModal-102": 
-            message = "No information about the targetted window could be retrieved, therefore the window cannot be closed at this point.";
+            message = "No specific information about the targetted window could be retrieved, therefore the window cannot be closed at this point.";
             break;        
+        case "COTMRemoveWindowModal-103": 
+            message = "The callback function is missing.";
+            break;  
+        case "COTMRemoveWindowModal-104": 
+            message = "No information about the targetted window could be retrieved, therefore the window cannot be closed at this point.";
+            break; 
         // COTMRemoveUnresponsiveTabs
         case "COTMRemoveUnresponsiveTabs-101":
             message = "The callback parameter is not a function.";

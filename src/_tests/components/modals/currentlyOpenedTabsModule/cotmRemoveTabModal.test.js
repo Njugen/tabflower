@@ -606,7 +606,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
 
             test("Run render(): This element should be a <div>", () => {
 
-                expect(testComponent.find(".modal").at(0).name()).toBe("div");
+                expect(testComponent.find(".modal").at(0).type()).toBe("div");
             }) 
         });
 
@@ -635,7 +635,7 @@ describe("Test <COTMRemoveTabModal /> component behaviour at mount", () => {
             });
 
             test("Run render(): The element with \".close\" should be a <button> element", () => {
-                expect(testComponent.find(".close").at(0).name()).toBe("button");
+                expect(testComponent.find(".close").at(0).type()).toBe("button");
             });
         })
     })

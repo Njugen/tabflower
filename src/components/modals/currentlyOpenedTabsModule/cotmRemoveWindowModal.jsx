@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import Modal from '../modal';
-import { ValidatorError, ErrorHandler } from './../../utils/exceptionsAndHandler';
+import * as ExceptionsHandler from './../../utils/exceptionsAndHandler';
 import * as validator from './../../utils/inputValidators';
 
 class COTMRemoveWindowModal extends Modal {
@@ -13,15 +13,23 @@ class COTMRemoveWindowModal extends Modal {
 
     verifyChildProps = () => {
         const { isObject, isNumber } = validator;
-        const { windowInfo } = this.props.data.params;
+        const { data } = this.props;
         
-        if(isObject(windowInfo)){
-            if(!isNumber(windowInfo.id)){
-                throw ValidatorError("COTMRemoveWindowModal-101");
+        if(isObject(data) && isObject(data.params)){
+            const { windowInfo } = data.params;
+
+            if(isObject(windowInfo)){ 
+                if(!isNumber(windowInfo.id)){
+                    throw ExceptionsHandler.ValidatorError("COTMRemoveWindowModal-101");
+                }
+            } else {
+                throw ExceptionsHandler.ValidatorError("COTMRemoveWindowModal-102");
             }
         } else {
-            throw ValidatorError("COTMRemoveWindowModal-102");
+            throw ExceptionsHandler.ValidatorError("COTMRemoveWindowModal-104");
         }
+
+        
     } 
 
     
@@ -34,17 +42,25 @@ class COTMRemoveWindowModal extends Modal {
    childComponentDidMount = () => {
         try {
             const { isObject } = validator;
-            const data = this.props.data.params.windowInfo;
+            const { data } = this.props;
 
-            if(isObject(data)){
-                this.setState(
-                    { data }
-                )
+            if(isObject(data) && isObject(data.params)){
+                const { windowInfo } = data.params;
+
+                if(isObject(windowInfo)){ 
+                    const data = windowInfo;
+
+                    this.setState(
+                        { data }
+                    )
+                } else {
+                    throw ExceptionsHandler.ValidatorError("COTMRemoveWindowModal-102");
+                }
             } else {
-                throw ValidatorError("COTMRemoveWindowModal-102");
+                throw ExceptionsHandler.ValidatorError("COTMRemoveWindowModal-104");
             }
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
@@ -65,10 +81,10 @@ class COTMRemoveWindowModal extends Modal {
             if(isFunction(callback)){
                 this.clearModalData(callback(this.state));
             } else {
-                throw ValidatorError("COTMRemoveWindowModal-103");
+                throw ExceptionsHandler.ValidatorError("COTMRemoveWindowModal-103");
             }
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
@@ -82,7 +98,7 @@ class COTMRemoveWindowModal extends Modal {
         try{
             this.clearModalData();
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 

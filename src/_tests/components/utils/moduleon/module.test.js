@@ -466,7 +466,7 @@ describe("Test <Module /> component behaviour at mount", () => {
                     componentInstance = testComponent.instance();
                     
                     componentInstance.handleDragOver(componentEvent);
-                    expect(componentInstance.props.onDragOver).toHaveBeenCalled();
+                    expect(componentInstance.props.onDragOver).toHaveBeenCalledWith(componentEvent.target.children[0].id);
                 })
 
                 test("Run handleDragOver(componentEvent): Do NOT trigger this.props.onDragOver(), if the target CSS-selector does not include \".tabeon-module-container\"", () => {
@@ -653,7 +653,7 @@ describe("Test <Module /> component behaviour at mount", () => {
                     componentInstance = testComponent.instance();
                     
                     componentInstance.handleDrop(componentEvent);
-                    expect(componentInstance.props.onDrop).toHaveBeenCalled();
+                    expect(componentInstance.props.onDrop).toHaveBeenCalledWith(componentEvent.target.parentElement);
                 })
                 
                 test.each(various_componentEvent_target_parentElement)("Run handleDrop(componentEvent): If componentEvent.target.parentElement = %p (is not an object), do not call this.props.onDrop()", (val) => {
@@ -757,7 +757,7 @@ describe("Test <Module /> component behaviour at mount", () => {
 
             describe("Subcase 2: componentEvent.target is an object", () => {
 
-                test("Run handleDrop(componentEvent): If componentEvent.target is an object, trigger this.propsonDragStart", () => {
+                test("Run handleDragStart(componentEvent): If componentEvent.target is an object, trigger this.propsonDragStart", () => {
                     const componentEvent = {
                         target: {
                           
@@ -986,6 +986,8 @@ describe("Test <Module /> component behaviour at mount", () => {
             componentInstance.verifyChildProps = jest.fn();
             componentInstance.childComponentDidMount = jest.fn();
             componentInstance.verifyProps = jest.fn();
+            componentInstance.changeStateSettings = jest.fn();
+            componentInstance.verifyState = jest.fn();
 
             ExceptionsHandler.ErrorHandler = jest.fn();
             ExceptionsHandler.ValidatorError = jest.fn();
@@ -1000,6 +1002,15 @@ describe("Test <Module /> component behaviour at mount", () => {
             expect(componentInstance.verifyChildProps).toHaveBeenCalledTimes(1);
         });
 
+        test("this.changeStateSettings(this.settings) should be called by this.componentDidMount()", () => {
+            componentInstance.settings = {
+                marshmallow: 123
+            };
+            componentInstance.componentDidMount();
+
+            expect(componentInstance.changeStateSettings).toHaveBeenCalledWith(componentInstance.settings);
+        });
+
         test("this.childComponentDidMount() should be called by this.componentDidMount()", () => {
             componentInstance.componentDidMount();
 
@@ -1010,6 +1021,12 @@ describe("Test <Module /> component behaviour at mount", () => {
             componentInstance.componentDidMount();
 
             expect(componentInstance.verifyProps).toHaveBeenCalledTimes(1);
+        });
+
+        test("this.verifyState() should be called by this.componentDidMount()", () => {
+            componentInstance.componentDidMount();
+
+            expect(componentInstance.verifyState).toHaveBeenCalledTimes(1);
         })
     })
 

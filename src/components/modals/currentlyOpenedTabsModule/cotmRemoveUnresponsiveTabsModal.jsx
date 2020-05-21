@@ -54,10 +54,7 @@ class COTMRemoveUnresponsiveTabs extends Modal {
     renderModalBody(){
         
         return (
-            <Fragment>
-                <p>Go through all opened tabs and remove them from the list</p>
-                
-            </Fragment>
+            <p>Go through all opened tabs and remove them from the list</p>
         );    
     }
 
