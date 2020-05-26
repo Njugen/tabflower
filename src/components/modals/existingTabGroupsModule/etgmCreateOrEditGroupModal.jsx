@@ -321,8 +321,6 @@ class ETGMCreateNewGroupModal extends Modal {
         } catch(err){
             ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
-       // this.saveToState("windowAndTabs", this.props.data.params.windowAndTabs, "tabGroupDetails");
-       // this.saveToState("groupId", this.setGroupId(this.props.data.params.groupId), "tabGroupDetails");
     } 
 
     /*

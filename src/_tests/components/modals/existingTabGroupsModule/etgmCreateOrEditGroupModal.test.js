@@ -1781,5 +1781,75 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
                 });
             });
         });
-    })
+    });
+
+    describe("Test loadUrl(url, success, fail)", () => {
+        describe("Examine the \"url\" parameter, while \"success\" and \"fail\" can be anything", () => {
+            test("Run loadUrl(\"A text string\", ANYTHING, ANYTHING): Do not throw an error \"ETGMCreateNewGroupModal-104\" since \"url\" is a string", () => {
+                componentInstance.loadUrl("A text string", expect.anything(), expect.anything());
+    
+                expect(ExceptionsHandler.ValidatorError).not.toHaveBeenCalledWith("ETGMCreateNewGroupModal-104");
+            })
+
+            test.each(various_nonString)("Run loadUrl(%p, ANYTHING, ANYTHING): Throw an error \"ETGMCreateNewGroupModal-104\" since \"url\" is not a string", (val) => {
+                componentInstance.loadUrl(val, expect.anything(), expect.anything());
+    
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-104");
+            })
+        });
+           
+        describe("Examine the \"success\" parameter, while \"url\" is a string and \"fail\" can be anything", () => {
+            test("Run loadUrl(\"A text string\", () => {}, ANYTHING): Do not throw an error \"ETGMCreateNewGroupModal-105\" since \"success\" is a function", () => {
+                componentInstance.loadUrl("A text string", () => {}, expect.anything());
+    
+                expect(ExceptionsHandler.ValidatorError).not.toHaveBeenCalledWith("ETGMCreateNewGroupModal-105");
+            })
+
+            test.each(various_nonFunctions)("Run loadUrl(\"A text string\", %p, ANYTHING): Throw an error \"ETGMCreateNewGroupModal-105\" since \"success\" is not a function", (val) => {
+                componentInstance.loadUrl("A text string", val, expect.anything());
+    
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-105");
+            })
+        });
+
+        describe("Examine the \"fail\" parameter, while \"url\" is a string and \"success\" is a function", () => {
+            test("Run loadUrl(\"A text string\", () => {}, () => {})): Do not throw an error \"ETGMCreateNewGroupModal-106\" since \"fail\" is a function", () => {
+                componentInstance.loadUrl("A text string", () => {}, () => {});
+    
+                expect(ExceptionsHandler.ValidatorError).not.toHaveBeenCalledWith("ETGMCreateNewGroupModal-106");
+            })
+
+            test.each(various_nonFunctions)("Run loadUrl(\"A text string\", () => {}, %p): Throw an error \"ETGMCreateNewGroupModal-106\" since \"fail\" is not a function", (val) => {
+                componentInstance.loadUrl("A text string", () => {}, val);
+    
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-106");
+            })
+        });
+
+        describe("Examine the ExceptionsHandler.ValidatorError() function, when a parameter is incorrect. That function is only called once when error is thrown", () => {
+            test("Run loadUrl([], () => {}, () => {})): The \"url\" parameter is incorrect, ExceptionsHandler.ValidatorError() is called only once", () => {
+                componentInstance.loadUrl([], () => {}, () => {});
+    
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledTimes(1);
+            })
+
+            test("Run loadUrl([], \"blablabla\", () => {})): The \"url\" and \"success\" parameters are incorrect, ExceptionsHandler.ValidatorError() is called only once", () => {
+                componentInstance.loadUrl([], "blablabla", () => {});
+    
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledTimes(1);
+            });
+
+            test("Run loadUrl([], \"blablabla\", {}): all parameters are incorrect, ExceptionsHandler.ValidatorError() is called only once", () => {
+                componentInstance.loadUrl([], "blablabla", {});
+    
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledTimes(1);
+            });
+
+            test("Run loadUrl\"A text string\", \"blablabla\", {}): only \"url\" parameter is correct, ExceptionsHandler.ValidatorError() is called only once", () => {
+                componentInstance.loadUrl("A text string", "blablabla", {});
+    
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledTimes(1);
+            });
+        })
+    });
 });
