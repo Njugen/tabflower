@@ -337,32 +337,33 @@ class ETGMCreateNewGroupModal extends Modal {
         try {
             const { isString, isFunction } = validator;
             
-            if(isString(url)){
-                if(!isFunction(success)){
-                    throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-105");
-                }
-
-                if(!isFunction(fail)){
-                    throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-106");
-                }
-
-                fetch(url)
-                .then((response) => {
-                    if(response.ok){
-                        return (response.text())
-                    } else {
-                        throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-103")
-                    }
-                })
-                .then((responseText) => {
-                    success(responseText);
-                })
-                .catch((err) => {   
-                    fail(err);
-                });
-            } else {
+            if(!isString(url)){
                 throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-104");
             }
+            
+            if(!isFunction(success)){
+                throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-105");
+            }
+
+            if(!isFunction(fail)){
+                throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-106");
+            }
+
+            fetch(url)
+            .then((response) => {
+                if(response.ok){
+                    return (response.text())
+                } else {
+                    throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-103")
+                }
+            })
+            .then((responseText) => {
+                success(responseText);
+            })
+            .catch((err) => {   
+                fail(err);
+            });
+           
         } catch(err){
             ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }

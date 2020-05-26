@@ -1826,7 +1826,7 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
             })
         });
 
-        describe("Examine the ExceptionsHandler.ValidatorError() function, when a parameter is incorrect. That function is only called once when error is thrown", () => {
+        describe("Examine the ExceptionsHandler.ValidatorError() function, when one or more parameters are incorrect. That function is only called once when error is thrown", () => {
             test("Run loadUrl([], () => {}, () => {})): The \"url\" parameter is incorrect, ExceptionsHandler.ValidatorError() is called only once", () => {
                 componentInstance.loadUrl([], () => {}, () => {});
     
@@ -1850,6 +1850,10 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
     
                 expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledTimes(1);
             });
-        })
+        });
+
+        describe("Examine the fetch() responses, at success and fail", () => {
+
+        });
     });
 });
