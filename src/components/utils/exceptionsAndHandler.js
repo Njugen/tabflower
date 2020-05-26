@@ -185,7 +185,13 @@ export const ValidatorError = (code) => {
             break;        
         case "ETGMCreateNewGroupModal-124":
             message = "The \"params\" variable either does not currently exist, nor is it currently an object, in this.props.data";
-            break;                                                      
+            break;     
+        case "ETGMCreateNewGroupModal-125":
+            message = "The \"tabGroupDetails\" object is missing in the component state, or might already exist but not as a function. Check that this object gets added at component mount.";
+            break;              
+        case "ETGMCreateNewGroupModal-126":
+            message = "The \"success\" callback parameter is not a function. Field validation aborted.";
+            break;                                              
         // ETGMRemoveGroupsModal
         case "ETGMRemoveGroupsModal-101":
             message = "The callback parameter is not a function.";

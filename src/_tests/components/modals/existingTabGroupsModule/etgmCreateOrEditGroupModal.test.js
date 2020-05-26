@@ -8,6 +8,7 @@ const predefinedComponent = (props, options) => {
     props = props || {};
 
     const component = shallow(<ETGMCreateNewGroupModal {...props} />, options);
+    component.instance().render = jest.fn()
     return component;
 }
 
@@ -22,6 +23,7 @@ let componentInstance;
 
 describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => {
     const actualErrorReturns = {
+        "ETGMCreateNewGroupModal-101": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-101"),
         "ETGMCreateNewGroupModal-115": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-115"),
         "ETGMCreateNewGroupModal-116": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-116"),
         "ETGMCreateNewGroupModal-117": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-117"),
@@ -30,10 +32,17 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
         "ETGMCreateNewGroupModal-120": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-120"),
         "ETGMCreateNewGroupModal-122": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-122"),
         "ETGMCreateNewGroupModal-123": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-123"),
-        "ETGMCreateNewGroupModal-124": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-124")
+        "ETGMCreateNewGroupModal-124": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-124"),
+        "ETGMCreateNewGroupModal-125": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-125"),
+        "ETGMCreateNewGroupModal-126": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-126")
     };
 
     const expectedErrorReturns = {
+        "ETGMCreateNewGroupModal-101": {
+            name: "ValidatorError",
+            message: "The callback parameter is not a function",
+            code: "ETGMCreateNewGroupModal-101"
+        },
         "ETGMCreateNewGroupModal-115": {
             name: "ValidatorError",
             message: "The \"type\" parameter in this.props.data.params needs to have either of the following values: \"currently-opened\", \"existing-group\" or \"new-group\". As a result, tab groups cannot be added nor edited at this time.",
@@ -78,6 +87,16 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
             name: "ValidatorError",
             message: "The \"params\" variable either does not currently exist, nor is it currently an object, in this.props.data",
             code: "ETGMCreateNewGroupModal-124"
+        },
+        "ETGMCreateNewGroupModal-125": {
+            name: "ValidatorError",
+            message: "The \"tabGroupDetails\" object is missing in the component state, or might already exist but not as a function. Check that this object gets added at component mount.",
+            code: "ETGMCreateNewGroupModal-125"
+        },
+        "ETGMCreateNewGroupModal-126": {
+            name: "ValidatorError",
+            message: "The \"success\" callback parameter is not a function. Field validation aborted.",
+            code: "ETGMCreateNewGroupModal-126"
         }
     }
 
@@ -91,6 +110,7 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
         testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
         componentInstance = testComponent.instance();
 
+        
         ExceptionsHandler.ErrorHandler = jest.fn();
         ExceptionsHandler.ValidatorError = jest.fn();
         ExceptionsHandler.ValidatorError.mockImplementation(errCode => {
@@ -98,28 +118,53 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
         });
     });
 
-    describe("Test verifyChildProps()", () => {
-        const various_nonObjects = [
-            ["a very weird looking text string"],
-            [77],
-            [false],
-            [true],
-            [undefined],
-            [[1,2,3,4]],
-            [() => {}],
-            [null]
-        ];
+    const various_nonObjects = [
+        ["a very weird looking text string"],
+        [77],
+        [false],
+        [true],
+        [undefined],
+        [[1,2,3,4]],
+        [() => {}],
+        [null]
+    ];
 
-        const various_nonString = [
-            [{ testkey: "test value" }],
-            [32],
-            [null],
-            [undefined],
-            [false],
-            [true],
-            [[12,8,3,7]],
-            [() => {}]
-        ];
+    const various_nonString = [
+        [{ testkey: "test value" }],
+        [32],
+        [null],
+        [undefined],
+        [false],
+        [true],
+        [[12,8,3,7]],
+        [() => {}]
+    ];
+
+    const various_nonFunctions = [
+        [{ testkey: "test value" }],
+        [32],
+        [null],
+        [undefined],
+        [false],
+        [true],
+        [[12,8,3,7]],
+        ["a text string"]
+    ];
+
+    const various_nonArrays = [
+        [{ testkey: "test value" }],
+        [32],
+        [null],
+        [undefined],
+        [false],
+        [true],
+        [() => {}],
+        ["a text string"]
+    ];
+
+
+    describe("Test verifyChildProps()", () => {
+        
 
         const various_nonString_except_undefined = [
             [{ testkey: "test value" }],
@@ -681,5 +726,853 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
             })
         })
         
-    })
+    });
+
+    describe("Test saveModalHandler(callback)", () => {
+        describe("Case 1: if either the \"data\" or \"data.params\" are invalid", () => {
+            describe("Subcase 1: The callback is a function", () => {
+                test("Run saveModalHandler(() => {}): Throw an error \"ETGMCreateNewGroupModal-123\", if this.props.data does not exist", () => {
+                    const presetProps = {
+                        
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    const callback = jest.fn();
+    
+                    componentInstance.saveModalHandler(callback);
+    
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-123");
+                });
+    
+                test.each(various_nonObjects)("Run saveModalHandler(() => {}): Throw an error \"ETGMCreateNewGroupModal-123\", if this.props.data is not an object", (val) => {
+                    const presetProps = {
+                        data: val
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    const callback = jest.fn();
+    
+                    componentInstance.saveModalHandler(callback);
+    
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-123");
+                })
+    
+                test("Run saveModalHandler(() => {}): Throw an error \"ETGMCreateNewGroupModal-124\", if params does not exist in this.props.data", () => {
+                    const presetProps = {
+                        data: {
+                        
+                        }
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    const callback = jest.fn();
+    
+                    componentInstance.saveModalHandler(callback);
+    
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-124");
+                });
+    
+                test.each(various_nonObjects)("Run saveModalHandler(() => {}): Throw an error \"ETGMCreateNewGroupModal-124\", if params is not an object in this.props.data", (val) => {
+                    const presetProps = {
+                        data: {
+                            params: val
+                        }
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    const callback = jest.fn();
+    
+                    componentInstance.saveModalHandler(callback);
+    
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-124");
+                })
+            })
+            
+            describe("Subcase 2: The callback is not a function (there is no callback)", () => {
+                test("Run saveModalHandler(): Throw an error \"ETGMCreateNewGroupModal-123\", if this.props.data does not exist", () => {
+                    const presetProps = {
+                        
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+    
+                    componentInstance.saveModalHandler();
+    
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-123");
+                });
+    
+                test.each(various_nonObjects)("Run saveModalHandler(): Throw an error \"ETGMCreateNewGroupModal-123\", if this.props.data is not an object", (val) => {
+                    const presetProps = {
+                        data: val
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+    
+                    componentInstance.saveModalHandler();
+    
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-123");
+                })
+    
+                test("Run saveModalHandler(): Throw an error \"ETGMCreateNewGroupModal-124\", if params does not exist in this.props.data", () => {
+                    const presetProps = {
+                        data: {
+                        
+                        }
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+    
+                    componentInstance.saveModalHandler();
+    
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-124");
+                });
+    
+                test.each(various_nonObjects)("Run saveModalHandler(): Throw an error \"ETGMCreateNewGroupModal-124\", if params is not an object in this.props.data", (val) => {
+                    const presetProps = {
+                        data: {
+                            params: val
+                        }
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+    
+                    componentInstance.saveModalHandler();
+    
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-124");
+                })
+            })
+        })
+
+        describe("Case 2: if data and data.params are both valid", () => {
+            test("Run saveModalHandler(() => {}): the function this.validateFields() should be called", () => {
+                const presetProps = {
+                    data: {
+                        params: {}
+                    }
+                };
+
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+                componentInstance.validateFields = jest.fn();
+                const callback = jest.fn();
+
+                componentInstance.saveModalHandler(callback);
+
+                expect(componentInstance.validateFields).toHaveBeenCalledWith(expect.any(Function))
+            });
+
+            test("Run saveModalHandler(() => {}): the function this.validateFields() should be called, which runs clearModalData() with certain parameters certain parameters certain parameters  in its callback", (done) => {
+                const presetProps = {
+                    data: {
+                        params: {}
+                    }
+                };
+
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+                
+                const callback = jest.fn();
+                
+
+                componentInstance.validateFields = jest.fn(input => {
+                    componentInstance.clearModalData = jest.fn();
+                    input();
+                    
+                    expect(componentInstance.clearModalData).toHaveBeenCalledWith(callback());
+                    expect(callback).toHaveBeenCalledWith(componentInstance.state.tabGroupDetails);
+                    done();
+                })
+                
+                componentInstance.saveModalHandler(callback);
+            });
+
+            test("Run saveModalHandler(): the error \"ETGMCreateNewGroupModal-101\" should be thrown", () => {
+                const presetProps = {
+                    data: {
+                        params: {}
+                    }
+                };
+
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+                componentInstance.validateFields = jest.fn();
+
+                componentInstance.saveModalHandler();
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-101");
+            })
+
+            test.each(various_nonFunctions)("Run saveModalHandler(%p): the error \"ETGMCreateNewGroupModal-101\" should be thrown", (val) => {
+                const presetProps = {
+                    data: {
+                        params: {}
+                    }
+                };
+
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+                componentInstance.validateFields = jest.fn();
+
+                componentInstance.saveModalHandler(val);
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-101");
+            })
+
+            test("Run saveModalHandler(): If error.issue is an object (when any error occurs), trigger ExceptionsHandler.ErrorHandler()", () => {
+                
+                const presetProps = {
+                    data: {
+                        params: {}
+                    }
+                };
+
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+
+                componentInstance.saveModalHandler();
+                
+                expect(ExceptionsHandler.ErrorHandler).toHaveBeenCalledTimes(1);
+            })
+        })
+    });
+
+    describe("Test dismissModalHandler()", () => {
+        test("Run dismissModalHandler(): the function this.clearModalData() should be called", () => {
+            componentInstance.clearModalData = jest.fn();
+            componentInstance.dismissModalHandler();
+
+            expect(componentInstance.clearModalData).toHaveBeenCalledTimes(1);
+        })
+    });
+
+    describe("Test validateFields(success)", () => {
+        describe("Case 1: if either the \"data\", \"data.params\" or \"success\" parameter are invalid", () => {
+            describe("Subcase 1: The success is a function", () => {
+                test("Run validateFields(() => {}): Throw an error \"ETGMCreateNewGroupModal-123\", if this.props.data does not exist", () => {
+                    const presetProps = {
+                        
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    const success = jest.fn();
+    
+                    componentInstance.validateFields(success);
+    
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-123");
+                });
+    
+                test.each(various_nonObjects)("Run validateFields(() => {}): Throw an error \"ETGMCreateNewGroupModal-123\", if this.props.data is not an object", (val) => {
+                    const presetProps = {
+                        data: val
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    const success = jest.fn();
+    
+                    componentInstance.validateFields(success);
+    
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-123");
+                })
+    
+                test("Run validateFields(() => {}): Throw an error \"ETGMCreateNewGroupModal-124\", if params does not exist in this.props.data", () => {
+                    const presetProps = {
+                        data: {
+                        
+                        }
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    const success = jest.fn();
+    
+                    componentInstance.validateFields(success);
+    
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-124");
+                });
+    
+                test.each(various_nonObjects)("Run validateFields(() => {}): Throw an error \"ETGMCreateNewGroupModal-124\", if params is not an object in this.props.data", (val) => {
+                    const presetProps = {
+                        data: {
+                            params: val
+                        }
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    const success = jest.fn();
+    
+                    componentInstance.validateFields(success);
+    
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-124");
+                })
+            })
+            
+            describe("Subcase 2: The success is not a function (there is no success)", () => {
+                test("Run validateFields(): Throw an error \"ETGMCreateNewGroupModal-126\", if there is no success callback", () => {
+                    const presetProps = {
+                        
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+    
+                    componentInstance.validateFields();
+    
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-126");
+                });
+
+                test.each(various_nonFunctions)("Run validateFields(): Throw an error \"ETGMCreateNewGroupModal-126\", if success = %p (not a function)", (val) => {
+                    const presetProps = {
+                        
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    const success = val
+
+                    componentInstance.validateFields(success);
+    
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-126");
+                });
+            })
+        })
+
+        describe("Case 2: if data and data.params are both valid, and there is a valid success callback() function", () => {
+            describe("Examine the situation when \"tabGroupDetails\" is NOT an object", () => {
+                test("Run validateFields(success): If a \"tabGroupDetails\" object is missing in the component state, throw an error \"ETGMCreateNewGroupModal-125\"", () => {
+                    const presetProps = {
+                        data: {
+                            params: {}
+                        }
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    const success = jest.fn();
+
+                    componentInstance.validateFields(success);
+                
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-125");
+                })
+    
+                test.each(various_nonObjects)("Run validateFields(success): If a \"tabGroupDetails\" = %p (is not an object) component state, throw an error \"ETGMCreateNewGroupModal-125\"", (val) => {
+                    const presetProps = {
+                        data: {
+                            params: {}
+                        }
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    componentInstance.state.tabGroupDetails = val;
+                    const success = jest.fn();
+
+                    componentInstance.validateFields(success);
+                
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-125");
+                })
+            });
+            
+            describe("Examine the situation when \"tabGroupDetails\" is an object", () => {
+                test("Run validateFields(success): If \"tabGroupDetails\" object exists in the component state, do not trigger any ExceptionsHandler.ValidatorError() functions", () => {
+                    const presetProps = {
+                        data: {
+                            params: {
+                                
+                            }
+                        }
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    componentInstance.state.tabGroupDetails = {};
+                    const success = jest.fn();
+
+                    componentInstance.validateFields(success);
+                
+                    expect(ExceptionsHandler.ValidatorError).not.toHaveBeenCalled();
+                })
+
+                describe("Examine the \"tabGroupName\" key located in the \"tabGroupDetails\" state object", () => {
+                    test("Run validateFields(success): If \"tabGroupName\" does not exist in component state, call this.saveFieldErrorsToState()", () => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = {};
+                        componentInstance.saveFieldErrorsToState = jest.fn();
+                        const success = jest.fn();
+
+                        componentInstance.validateFields(success);
+
+                        expect(componentInstance.saveFieldErrorsToState).toHaveBeenCalled();
+                    }); 
+
+                    test.each(various_nonString)("Run validateFields(success): If \"tabGroupName\" = %p (is not a string) in component state, call this.saveFieldErrorsToState()", (val) => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = {
+                            tabGroupName: val
+                        };
+                        componentInstance.saveFieldErrorsToState = jest.fn();
+                        const success = jest.fn();
+
+                        componentInstance.validateFields(success);
+
+                        expect(componentInstance.saveFieldErrorsToState).toHaveBeenCalled();
+                    }); 
+                    
+                    test("Run validateFields(success): If \"tabGroupName\" does not exist in component state, ensure an error is added to fieldErrors[\"tabGroupName\"] in component state", () => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = {};
+                        const success = jest.fn();
+
+                        componentInstance.validateFields(success);
+
+                        expect(componentInstance.state.fieldErrors["tabGroupName"]).toBe("A tab group needs to be given a name or a label before it can be saved.");
+                    }); 
+
+                    test.each(various_nonString)("Run validateFields(success): If \"tabGroupName\" = %p (is not a string) in component state, ensure an error is added to fieldErrors[\"tabGroupName\"] in component state", (val) => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    tabGroupName: val
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = {
+
+                        };
+                        const success = jest.fn();
+
+                        componentInstance.validateFields(success);
+
+                        expect(componentInstance.state.fieldErrors["tabGroupName"]).toBe("A tab group needs to be given a name or a label before it can be saved.");
+                    }); 
+
+                    test("Run validateFields(() => {}): If \"tabGroupName\" exists in component state, verify fieldErrors[\"tabGroupName\"] to be undefind in component state", () => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = {
+                            tabGroupName: "My Tab Group"
+                        };
+                        const success = jest.fn();
+
+                        componentInstance.validateFields(success);
+
+                        expect(componentInstance.state.fieldErrors["tabGroupName"]).toBeUndefined();
+                    });
+
+                });
+
+                describe("Examine the \"tabGroupDescription\" key located in the \"tabGroupDetails\" state object", () => {
+                    test("Run validateFields(success): If \"tabGroupDescription\" does not exist in component state, call this.saveFieldErrorsToState()", () => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = {};
+                        componentInstance.saveFieldErrorsToState = jest.fn();
+                        const success = jest.fn();
+
+                        componentInstance.validateFields(success);
+
+                        expect(componentInstance.saveFieldErrorsToState).toHaveBeenCalled();
+                    }); 
+                    
+                    test.each(various_nonString)("Run validateFields(success): If \"tabGroupDescription\" = %p (is not a string) in component state, call this.saveFieldErrorsToState()", (val) => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = {
+                            tabGroupDescription: val
+                        };
+                        componentInstance.saveFieldErrorsToState = jest.fn();
+                        const success = jest.fn();
+
+                        componentInstance.validateFields(success);
+
+                        expect(componentInstance.saveFieldErrorsToState).toHaveBeenCalled();
+                    }); 
+
+                    test("Run validateFields(success): If \"tabGroupDescription\" does not exist in component state, ensure an error is added to fieldErrors[\"tabGroupDescription\"] in component state", () => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = {};
+                        const success = jest.fn();
+
+                        componentInstance.validateFields(success);
+
+                        expect(componentInstance.state.fieldErrors["tabGroupDescription"]).toBe("A tab group needs to be given a short description before it can be saved.");
+                    }); 
+
+                    test.each(various_nonString)("Run validateFields(success): If \"tabGroupDescription\" = %p (is not a string) in component state, ensure an error is added to fieldErrors[\"tabGroupDescription\"] in component state", (val) => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    tabGroupDescription: val
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = {
+
+                        };
+                        const success = jest.fn();
+
+                        componentInstance.validateFields(success);
+
+                        expect(componentInstance.state.fieldErrors["tabGroupDescription"]).toBe("A tab group needs to be given a short description before it can be saved.");
+                    }); 
+
+                    test("Run validateFields(success): If \"tabGroupDescription\" exists in component state, verify fieldErrors[\"tabGroupDescription\"] to be undefind in component state", () => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = {
+                            tabGroupDescription: "This is a tab group created solely for the test suite"
+                        };
+                        const success = jest.fn();
+
+                        componentInstance.validateFields(success);
+
+                        expect(componentInstance.state.fieldErrors["tabGroupDescription"]).toBeUndefined();
+                    });
+
+                });
+                
+                describe("Examine the \"windowAndTabs\" key located in the \"tabGroupDetails\" state object", () => {
+                    test("Run validateFields(success): If \"windowAndTabs\" does not exist in component state, call this.saveFieldErrorsToState()", () => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = {};
+                        componentInstance.saveFieldErrorsToState = jest.fn();
+                        const success = jest.fn();
+
+                        componentInstance.validateFields(success);
+
+                        expect(componentInstance.saveFieldErrorsToState).toHaveBeenCalled();
+                    }); 
+                    
+                    test.each(various_nonArrays)("Run validateFields(success): If \"windowAndTabs\" = %p (is not an array) in component state, call this.saveFieldErrorsToState()", (val) => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = {
+                            windowAndTabs: val
+                        };
+                        componentInstance.saveFieldErrorsToState = jest.fn();
+                        const success = jest.fn();
+
+                        componentInstance.validateFields(success);
+
+                        expect(componentInstance.saveFieldErrorsToState).toHaveBeenCalled();
+                    }); 
+
+                    test("Run validateFields(success): If \"windowAndTabs\" does not exist in component state, ensure an error is added to fieldErrors[\"windowAndTabs\"] in component state", () => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = {};
+                        const success = jest.fn();
+
+                        componentInstance.validateFields(success);
+
+                        expect(componentInstance.state.fieldErrors["windowAndTabs"]).toBe("A tab group must consist of at least one window.");
+                    }); 
+
+                    test.each(various_nonArrays)("Run validateFields(success): If \"windowAndTabs\" = %p (is not an array) in component state, ensure an error is added to fieldErrors[\"windowAndTabs\"] in component state", (val) => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    windowAndTabs: val
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = {
+
+                        };
+                        const success = jest.fn();
+
+                        componentInstance.validateFields(success);
+
+                        expect(componentInstance.state.fieldErrors["windowAndTabs"]).toBe("A tab group must consist of at least one window.");
+                    }); 
+
+                    test("Run validateFields(success): If \"windowAndTabs\" exists in component state, verify fieldErrors[\"windowAndTabs\"] to be undefind in component state", () => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = {
+                            windowAndTabs: [
+                                { id: 1 }, { id: 2 }
+                            ]
+                        };
+                        const success = jest.fn();
+
+                        componentInstance.validateFields(success);
+
+                        expect(componentInstance.state.fieldErrors["windowAndTabs"]).toBeUndefined();
+                    });
+
+                    test("Run validateFields(success): If \"windowAndTabs\" = [] in component state, ensure an error is added to fieldErrors[\"windowAndTabs\"] in component state", () => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = {
+                            windowAndTabs: [
+                                
+                            ]
+                        };
+                        const success = jest.fn();
+
+                        componentInstance.validateFields(success);
+
+                        expect(componentInstance.state.fieldErrors["windowAndTabs"]).toBe("A tab group must consist of at least one window.");
+                    });
+
+                });
+
+                describe("Examine the situation when there are field errors", () => {
+                    test("Run validateFields(success): Check that this test setup generates 3 field errors", () => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = {};
+                        const success = jest.fn();
+
+                        componentInstance.validateFields(success);
+
+                        expect(Object.keys(componentInstance.state.fieldErrors).length).toBe(3);
+                    });
+                    
+                    test("Run validateFields(success): When there is field error, call this.saveFieldErrorsToState()", () => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = {};
+                        componentInstance.saveFieldErrorsToState = jest.fn();
+                        const success = jest.fn();
+
+                        componentInstance.validateFields(success);
+
+                        expect(componentInstance.saveFieldErrorsToState).toHaveBeenCalled();
+                    }); 
+
+                    test("Run validateFields(success): When there are field errors, call ExceptionsHandler.ErrorHandler()", () => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = {};
+                        const success = jest.fn();
+
+                        componentInstance.validateFields(success);
+
+                        expect(ExceptionsHandler.ErrorHandler).toHaveBeenCalled();
+                    }); 
+
+                    test("Run validateFields(success): When there are field errors, do not call the success() callback", () => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = {};
+                        const success = jest.fn();
+                        componentInstance.validateFields(success);
+
+                        expect(success).not.toHaveBeenCalled();
+                    }); 
+                });
+
+                describe("Examine the situation when there are no field errors", () => {
+                    const tabGroupDetails = {
+                        tabGroupName: "Test Group",
+                        tabGroupDescription: "This is a tab group created for testing purposes",
+                        windowAndTabs: [{ id: 1 }, { id: 2 }]
+                    };
+
+                    test("Run validateFields(success): Check that this test setup generates 0 field errors", () => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = tabGroupDetails;
+                        const success = jest.fn();
+
+                        componentInstance.validateFields(success);
+
+                        expect(Object.keys(componentInstance.state.fieldErrors).length).toBe(0);
+                    });
+                    
+                    test("Run validateFields(success): When there are no field error, do not call this.saveFieldErrorsToState()", () => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = tabGroupDetails;
+                        componentInstance.saveFieldErrorsToState = jest.fn();
+                        const success = jest.fn();
+
+                        componentInstance.validateFields(success);
+
+                        expect(componentInstance.saveFieldErrorsToState).not.toHaveBeenCalled();
+                    }); 
+
+                    test("Run validateFields(success): When there are no field errors, do not call ExceptionsHandler.ErrorHandler()", () => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = tabGroupDetails;
+                        const success = jest.fn();
+
+                        componentInstance.validateFields(success);
+
+                        expect(ExceptionsHandler.ErrorHandler).not.toHaveBeenCalled();
+                    }); 
+
+                    test("Run validateFields(success): When there are no field errors, call the success() callback function", () => {
+                        const presetProps = {
+                            data: {
+                                params: {
+                                    
+                                }
+                            }
+                        };
+                        testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                        componentInstance = testComponent.instance();
+                        componentInstance.state.tabGroupDetails = {
+                            tabGroupName: "Test Group",
+                            tabGroupDescription: "This is a tab group created for testing purposes",
+                            windowAndTabs: [{ id: 1 }, { id: 2 }]
+                        };
+                        const success = jest.fn();
+                        componentInstance.validateFields(success);
+
+                        expect(success).toHaveBeenCalled();
+                    }); 
+
+                })
+            });
+            
+        });
+    }); 
 });
