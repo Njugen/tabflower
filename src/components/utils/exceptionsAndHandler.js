@@ -191,7 +191,13 @@ export const ValidatorError = (code) => {
             break;              
         case "ETGMCreateNewGroupModal-126":
             message = "The \"success\" callback parameter is not a function. Field validation aborted.";
-            break;                                              
+            break;        
+        case "ETGMCreateNewGroupModal-127":
+            message = "No information about the targetted tab group could be found. Task aborted.";
+            break;
+        case "ETGMCreateNewGroupModal-128":
+            message = "No windows nor tabs in the targetted tab group could be retrieved. Task aborted.";
+            break;                                          
         // ETGMRemoveGroupsModal
         case "ETGMRemoveGroupsModal-101":
             message = "The callback parameter is not a function.";

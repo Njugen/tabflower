@@ -24,6 +24,7 @@ let componentInstance;
 describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => {
     const actualErrorReturns = {
         "ETGMCreateNewGroupModal-101": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-101"),
+        "ETGMCreateNewGroupModal-102": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-102"),
         "ETGMCreateNewGroupModal-115": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-115"),
         "ETGMCreateNewGroupModal-116": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-116"),
         "ETGMCreateNewGroupModal-117": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-117"),
@@ -34,7 +35,9 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
         "ETGMCreateNewGroupModal-123": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-123"),
         "ETGMCreateNewGroupModal-124": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-124"),
         "ETGMCreateNewGroupModal-125": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-125"),
-        "ETGMCreateNewGroupModal-126": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-126")
+        "ETGMCreateNewGroupModal-126": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-126"),
+        "ETGMCreateNewGroupModal-127": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-127"),
+        "ETGMCreateNewGroupModal-128": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-128")
     };
 
     const expectedErrorReturns = {
@@ -42,6 +45,11 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
             name: "ValidatorError",
             message: "The callback parameter is not a function",
             code: "ETGMCreateNewGroupModal-101"
+        },
+        "ETGMCreateNewGroupModal-102": {
+            name: "ValidatorError",
+            message: "A tab group id must be a string. The requested tab group could not be retrieved.",
+            code: "ETGMCreateNewGroupModal-102"
         },
         "ETGMCreateNewGroupModal-115": {
             name: "ValidatorError",
@@ -97,6 +105,16 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
             name: "ValidatorError",
             message: "The \"success\" callback parameter is not a function. Field validation aborted.",
             code: "ETGMCreateNewGroupModal-126"
+        },
+        "ETGMCreateNewGroupModal-127": {
+            name: "ValidatorError",
+            message: "No information about the targetted tab group could be found. Task aborted.",
+            code: "ETGMCreateNewGroupModal-127"
+        },
+        "ETGMCreateNewGroupModal-128": {
+            name: "ValidatorError",
+            message: "No windows nor tabs in the targetted tab group could be retrieved. Task aborted.",
+            code: "ETGMCreateNewGroupModal-128"
         }
     }
 
@@ -1575,4 +1593,193 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
             
         });
     }); 
+
+    describe("Test setGroupId(id)", () => {
+        const various_nonString = [
+            [{ testkey: "test value" }],
+            [32],
+            [null],
+            [false],
+            [true],
+            [[12,8,3,7]],
+            [() => {}]
+        ];
+
+        test("Run setGroupId(): There is no input parameter. The function should generate a new string and return it", () => {
+            expect(componentInstance.setGroupId()).toEqual(expect.any(String));
+        });
+
+        test("Run setGroupId(\"test2idString\"): There is a string as input parameter. The same string should be returned by the function", () => {
+            expect(componentInstance.setGroupId("test2idString")).toEqual("test2idString");
+        })
+
+        test.each(various_nonString)("Run setGroupId(%p): The input parameter is not a string, throw an error \"ETGMCreateNewGroupModal-102\"", (val) => {
+            componentInstance.setGroupId(val);
+            expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-102");
+        })
+    });
+
+    describe("Test childComponentDidMount()", () => {
+        const various_nonObjects = [
+            ["a very weird looking text string"],
+            [77],
+            [false],
+            [true],
+            [undefined],
+            [[1,2,3,4]],
+            [() => {}],
+            [null]
+        ];
+
+        describe("Examine the \"data\" object of this.props", () => {
+            test("Run childComponentDidMount(): if this.props.data object is missing, throw an error \"ETGMCreateNewGroupModal-127\"", () => {
+                const presetProps = {
+               
+                };
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+                componentInstance.childComponentDidMount();
+    
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-127");
+            });
+    
+            test.each(various_nonObjects)("Run childComponentDidMount(): if this.props.data = %p (is not an object), throw an error \"ETGMCreateNewGroupModal-127\"", (val) => {
+                const presetProps = {
+                    data: val
+                };
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+                componentInstance.childComponentDidMount();
+    
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-127");
+            });
+
+            describe("Examine the \"params\" object of this.props.data", () => {
+                test("Run childComponentDidMount(): if this.props.data.params object is missing, throw an error \"ETGMCreateNewGroupModal-127\"", () => {
+                    const presetProps = {
+                        data: {}
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    componentInstance.childComponentDidMount();
+        
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-127");
+                });
+        
+                test.each(various_nonObjects)("Run childComponentDidMount(): if this.props.data.params = %p (is not an object), throw an error \"ETGMCreateNewGroupModal-127\"", (val) => {
+                    const presetProps = {
+                        data: {
+                            params: val
+                        }
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    componentInstance.childComponentDidMount();
+        
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-127");
+                });
+            });
+
+            describe("Examine the \"windowAndTabs\" array of this.props.data.params", () => {
+                test("Run childComponentDidMount(): If this.props.data.params.windowAndTabs is missing, throw an error \"ETGMCreateNewGroupModal-128\"", () => {
+                    const presetProps = {
+                        data: {
+                            params: {
+                                
+                            }
+                        }
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    componentInstance.childComponentDidMount();
+        
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-128");
+                });
+
+                test.each(various_nonArrays)("Run childComponentDidMount(): If this.props.data.params.windowAndTabs = %p (is not an array), throw an error \"ETGMCreateNewGroupModal-128\"", (val) => {
+                    const presetProps = {
+                        data: {
+                            params: {
+                                windowAndTabs: val
+                            }
+                        }
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    componentInstance.childComponentDidMount();
+        
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-128");
+                });
+
+                test("Run childComponentDidMount(): If this.props.data.params.windowAndTabs is an array, pass it to this.saveToState() with correct parameters", () => {
+                    const presetProps = {
+                        data: {
+                            params: {
+                                windowAndTabs: []
+                            }
+                        }
+                    };
+
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    componentInstance.saveToState = jest.fn();
+                    componentInstance.childComponentDidMount();
+        
+                    expect(componentInstance.saveToState).toHaveBeenCalledWith("windowAndTabs", presetProps.data.params.windowAndTabs, "tabGroupDetails");
+                });
+
+                test("Run childComponentDidMount(): If this.props.data.params.windowAndTabs is an array, do not throw an error \"ETGMCreateNewGroupModal-128\"", () => {
+                    const presetProps = {
+                        data: {
+                            params: {
+                                windowAndTabs: []
+                            }
+                        }
+                    };
+
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    componentInstance.saveToState = jest.fn();
+                    componentInstance.childComponentDidMount();
+        
+                    expect(ExceptionsHandler.ValidatorError).not.toHaveBeenCalledWith("ETGMCreateNewGroupModal-128");
+                });
+            });
+
+            describe("Examine the \"groupId\" string of this.props.data.params", () => {
+                test("Run childComponentDidMount(): If this.props.data.params.windowAndTabs is missing or is not an array, the this.saveToState function which adds the groupId to component state will never be called", () => {
+                    const presetProps = {
+                        data: {
+                            params: {
+                                
+                            }
+                        }
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    componentInstance.saveToState = jest.fn();
+                    componentInstance.childComponentDidMount();
+        
+                    expect(componentInstance.saveToState).not.toHaveBeenCalledWith("groupId", expect.anything(), "tabGroupDetails");
+                });
+
+                test("Run childComponentDidMount(): If this.props.data.params.windowAndTabs is an array, the this.saveToState function which adds the groupId to component state will be called", () => {
+                    const presetProps = {
+                        data: {
+                            params: {
+                                windowAndTabs: []
+                            }
+                        }
+                    };
+
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    componentInstance.saveToState = jest.fn();
+                    componentInstance.childComponentDidMount();
+        
+                    expect(componentInstance.saveToState).toHaveBeenCalledWith("groupId", expect.anything(), "tabGroupDetails");
+                });
+            });
+        });
+    })
 });

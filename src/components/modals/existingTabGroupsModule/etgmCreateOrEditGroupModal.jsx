@@ -270,7 +270,7 @@ class ETGMCreateNewGroupModal extends Modal {
     }
 
     /*
-        setGroupId()
+        setGroupId(id)
 
         Return the input value as group id, if the input is a string. Otherwise if an id does not exist, 
         create a brand new string and use THAT as group id.
@@ -301,8 +301,28 @@ class ETGMCreateNewGroupModal extends Modal {
     }
 
     childComponentDidMount = () => {
-        this.saveToState("windowAndTabs", this.props.data.params.windowAndTabs, "tabGroupDetails");
-        this.saveToState("groupId", this.setGroupId(this.props.data.params.groupId), "tabGroupDetails");
+        try {
+            const { isObject, isArray } = validator;
+            const { data } = this.props;
+
+            if(isObject(data) && isObject(data.params)){
+                const { windowAndTabs, groupId } = data.params;
+
+                if(isArray(windowAndTabs)){
+                    this.saveToState("windowAndTabs", windowAndTabs, "tabGroupDetails");
+                } else {
+                    throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-128");
+                }
+
+                this.saveToState("groupId", this.setGroupId(groupId), "tabGroupDetails");
+            } else {
+                throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-127");
+            }
+        } catch(err){
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+        }
+       // this.saveToState("windowAndTabs", this.props.data.params.windowAndTabs, "tabGroupDetails");
+       // this.saveToState("groupId", this.setGroupId(this.props.data.params.groupId), "tabGroupDetails");
     } 
 
     /*
