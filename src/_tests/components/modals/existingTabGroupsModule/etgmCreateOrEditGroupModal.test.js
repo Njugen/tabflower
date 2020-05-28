@@ -39,7 +39,8 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
         "ETGMCreateNewGroupModal-125": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-125"),
         "ETGMCreateNewGroupModal-126": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-126"),
         "ETGMCreateNewGroupModal-127": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-127"),
-        "ETGMCreateNewGroupModal-128": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-128")
+        "ETGMCreateNewGroupModal-128": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-128"),
+        "ETGMCreateNewGroupModal-129": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-129")
     };
 
     const expectedErrorReturns = {
@@ -117,6 +118,11 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
             name: "ValidatorError",
             message: "No windows nor tabs in the targetted tab group could be retrieved. Task aborted.",
             code: "ETGMCreateNewGroupModal-128"
+        },
+        "ETGMCreateNewGroupModal-129": {
+            name: "ValidatorError",
+            message: "The tab arrangement could not be fulfilled at the moment. Please contact the developer.",
+            code: "ETGMCreateNewGroupModal-129"
         }
     }
 
@@ -174,6 +180,17 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
     const various_nonArrays = [
         [{ testkey: "test value" }],
         [32],
+        [null],
+        [undefined],
+        [false],
+        [true],
+        [() => {}],
+        ["a text string"]
+    ];
+
+    const various_nonNumber = [
+        [{ testkey: "test value" }],
+        [[12,8,3,7]],
         [null],
         [undefined],
         [false],
@@ -2138,6 +2155,207 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
                   
                 });
             })
+                
+        })
+    });
+
+    describe("Test addNewTab(inputUrl)", () => {
+        describe("Examine inputUrl parameter", () => {
+            test("Run addNewTab(\"https://google.com\"): An error \"ETGMCreateNewGroupModal-104\" should not be thrown, because inputUrl is a string", () => {
+                componentInstance.addNewTab("https://google.com");
+
+                expect(ExceptionsHandler.ValidatorError).not.toHaveBeenCalledWith("ETGMCreateNewGroupModal-108");
+            });
+
+            test.each(various_nonString)("Run addNewTab(%p): An error \"ETGMCreateNewGroupModal-104\" should be thrown, because inputUrl is not a string", (val) => {
+                componentInstance.addNewTab(val);
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-108");
+            });
+
+            test("Run addNewTab(\"https://google.com\", 10): An error \"ETGMCreateNewGroupModal-107\" should not be thrown, because inputUrl is a string and index is a number", () => {
+                componentInstance.addNewTab("https://google.com", 10);
+
+                expect(ExceptionsHandler.ValidatorError).not.toHaveBeenCalledWith("ETGMCreateNewGroupModal-107");
+            })
+
+            test.each(various_nonNumber)("Run addNewTab(\"https://google.com\", %p): An error \"ETGMCreateNewGroupModal-107\" should be thrown, because inputUrl is a string and index is not a number", (val) => {
+                componentInstance.addNewTab("https://google.com", val);
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-107");
+            });
+
+            describe("Examine the situations where inputUrl is a string and index is a number (index = 0 in this test section)", () => {
+                test("Run addNewTab(\"https://google.com\", 0), if \"tabGroupDetails\" is missing in component state: throw the error \"ETGMCreateNewGroupModal-125\"", () => {
+                    componentInstance.loadUrl = jest.fn();
+
+                    const url = "https://google.com";
+                    componentInstance.addNewTab(url, 0);
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-125");
+                })
+
+                test.each(various_nonObjects)("Run addNewTab(\"https://google.com\", 0), if \"tabGroupDetails\" = %p (is not an object) in component state: throw the error \"ETGMCreateNewGroupModal-125\"", (val) => {
+                    componentInstance.loadUrl = jest.fn();
+
+                    const url = "https://google.com";
+                    componentInstance.state.tabGroupDetails = val;
+                    componentInstance.addNewTab(url, 0);
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-125");
+                })
+
+                test("Run addNewTab(\"https://google.com\", 0), if \"tabGroupDetails\" is an empty object in component state: throw an error \"ETGMCreateNewGroupModal-129\"", () => {
+                    componentInstance.loadUrl = jest.fn();
+
+                    const url = "https://google.com";
+                    componentInstance.state.tabGroupDetails = {};
+                    componentInstance.addNewTab(url, 0);
+                    
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-129");
+                    //expect(componentInstance.loadUrl).toHaveBeenCalledWith(url, expect.anything(), expect.anything());
+                });
+
+                test("Run addNewTab(\"https://google.com\", 0), while \"tabGroupDetails\" is an empty object in component state: throw an error \"ETGMCreateNewGroupModal-129\"", () => {
+                    componentInstance.loadUrl = jest.fn();
+
+                    const url = "https://google.com";
+                    
+                    componentInstance.state.tabGroupDetails = {};
+                    
+                    componentInstance.addNewTab(url, 0);
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-129");
+                  
+                });
+
+                test("Run addNewTab(\"https://google.com\", 0), while \"tabGroupDetails\" is an object (which also consists of a filled \"windowAndTabs\" key) in component state: if this.loadUrl(ANY STRING, success, fail) triggers its success callback then this.saveToState(payload) should be triggered with test specified payload", () => {
+                    /*
+                        To note:
+
+                        While tabGroupDetails.windowAndTabs exists as a filled array (each item object in that array represents a window), 
+                        it will be combined with the new window before being used as a parameter when calling saveToState()
+                    */
+                    componentInstance.loadUrl = jest.fn();
+
+                    const url = "https://google.com";
+                    
+                    componentInstance.state.tabGroupDetails = {
+                        windowAndTabs: [{ name: "window 1", tabs: [] }, { name: "window 2", tabs: []  }, { name: "window 3", tabs: []  }]
+                    };
+                    componentInstance.saveToState = jest.fn();
+
+                    const responseText = "A text string acting as responseText for this test";
+
+                    componentInstance.loadUrl = jest.fn((inputUrl, success, fail) => {
+                        success(responseText);
+                    });
+                    componentInstance.addNewTab(url, 0);
+
+                    let parsedWindows = JSON.parse(JSON.stringify(componentInstance.state.tabGroupDetails.windowAndTabs));
+                    parsedWindows[0].tabs.push({
+                        title: expect.anything(),
+                        favIconUrl: url + "/favicon.ico",
+                        url: url
+                    })
+
+                    expect(componentInstance.saveToState).toHaveBeenCalledWith(
+                        "windowAndTabs",
+                        parsedWindows,
+                        "tabGroupDetails"
+                    );
+                  
+                });
+
+                test("Run addNewTab(\"https://google.com\", 0), while \"tabGroupDetails\" is an object (which also consists of an empty \"windowAndTabs\" array key) in component state:  throw an error \"ETGMCreateNewGroupModal-129\"", () => {
+                    /*
+                        To note:
+
+                        While tabGroupDetails.windowAndTabs exists as a filled array (each item object in that array represents a window), 
+                        it will be combined with the new window before being used as a parameter when calling saveToState()
+                    */
+                    componentInstance.loadUrl = jest.fn();
+
+                    const url = "https://google.com";
+                    
+                    componentInstance.state.tabGroupDetails = {
+                        windowAndTabs: []
+                    };
+                    
+                    componentInstance.addNewTab(url, 0);
+
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-129");
+                  
+                });
+
+                test.each(various_nonArrays)("Run addNewTab(\"https://google.com\", 0), while \"tabGroupDetails\" is an object (which also consists of a \"windowAndTabs\" key which is not an array) in component state:  throw an error \"ETGMCreateNewGroupModal-129\"", (val) => {
+                    /*
+                        To note:
+
+                        While tabGroupDetails.windowAndTabs exists as a filled array (each item object in that array represents a window), 
+                        it will be combined with the new window before being used as a parameter when calling saveToState()
+                    */
+                    componentInstance.loadUrl = jest.fn();
+
+                    const url = "https://google.com";
+                    
+                    componentInstance.state.tabGroupDetails = {
+                        windowAndTabs: val
+                    };
+                    
+                    componentInstance.addNewTab(url, 0);
+
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-129");
+                  
+                });
+
+
+                test("Run addNewTab(\"https://google.com\", 0), while \"tabGroupDetails\" is an empty object (which also doesn't have windowAndTabs key) in component state: throw an error \"ETGMCreateNewGroupModal-129\"", () => {
+                    componentInstance.loadUrl = jest.fn();
+
+                    const url = "https://google.com";
+                    
+                    componentInstance.state.tabGroupDetails = {};
+                    
+                    componentInstance.addNewTab(url, 0);
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-129");
+                });
+
+                test("Run addNewTab(\"https://google.com\", 0), while \"tabGroupDetails\" is an object (which also consists of a filled \"windowAndTabs\" key) in component state: if this.loadUrl(ANY STRING, success, fail) triggers its fail callback then this.saveToState(payload) should be triggered with test specified payload", () => {
+                    /*
+                        To note:
+
+                        While tabGroupDetails.windowAndTabs exists as a filled array (each item object in that array represents a window), 
+                        it will be combined with the new window before being used as a parameter when calling saveToState()
+                    */
+                    componentInstance.loadUrl = jest.fn();
+
+                    const url = "https://google.com";
+                    
+                    componentInstance.state.tabGroupDetails = {
+                        windowAndTabs: [{ name: "window 1", tabs: [] }, { name: "window 2", tabs: []  }, { name: "window 3", tabs: []  }]
+                    };
+                    componentInstance.saveToState = jest.fn();
+
+                    const responseText = "A text string acting as responseText for this test";
+
+                    componentInstance.loadUrl = jest.fn((inputUrl, success, fail) => {
+                        fail(responseText);
+                    });
+                    componentInstance.addNewTab(url, 0);
+
+                    let parsedWindows = JSON.parse(JSON.stringify(componentInstance.state.tabGroupDetails.windowAndTabs));
+                    parsedWindows[0].tabs.push({
+                        title: expect.anything(),
+                        favIconUrl: url + "/favicon.ico",
+                        url: url
+                    })
+
+                    expect(componentInstance.saveToState).toHaveBeenCalledWith(
+                        "windowAndTabs",
+                        parsedWindows,
+                        "tabGroupDetails"
+                    );
+                  
+                });
+            }) 
                 
         })
     });

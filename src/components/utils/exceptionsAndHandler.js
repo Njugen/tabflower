@@ -197,7 +197,10 @@ export const ValidatorError = (code) => {
             break;
         case "ETGMCreateNewGroupModal-128":
             message = "No windows nor tabs in the targetted tab group could be retrieved. Task aborted.";
-            break;                                          
+            break;    
+        case "ETGMCreateNewGroupModal-129":
+            message = "The tab arrangement could not be fulfilled at the moment. Please contact the developer.";
+            break;                                               
         // ETGMRemoveGroupsModal
         case "ETGMRemoveGroupsModal-101":
             message = "The callback parameter is not a function.";

@@ -451,51 +451,55 @@ class ETGMCreateNewGroupModal extends Modal {
     */
     addNewTab = (inputUrl, index) => {
         try {
-            const { isString, isAtLeastZero } = validator;
+            const { isString, isAtLeastZero, isObject, isArray } = validator;
 
             if(isString(inputUrl)){
                 if(isAtLeastZero(index)){
+                    if(isObject(this.state.tabGroupDetails)){
+                        let windows;
 
-                    let windows;
+                        const { windowAndTabs } = this.state.tabGroupDetails;
 
-                    if(Object.keys(this.state.tabGroupDetails.windowAndTabs).length > 0){
-                        windows = [...this.state.tabGroupDetails.windowAndTabs];
-                    } else {
-                        windows = [];
-                    }
-
-                    const stringifiedWindows = JSON.stringify(windows);
-                    let parsedWindows = JSON.parse(stringifiedWindows);
-
-                    this.loadUrl(
-                        inputUrl,
-                        (responseText) => {
-                            const parsedResponse = (new window.DOMParser()).parseFromString(responseText, "text/html");
-                            
-                            parsedWindows[index].tabs.push({
-                              
-                                    title: parsedResponse.title,
-                                    favIconUrl: inputUrl + "/favicon.ico",
-                                    url: inputUrl
-                            
-                            })
-    
-                            this.saveToState("windowAndTabs", parsedWindows, "tabGroupDetails")
-                        },
-                        (err) => {
-                            
-                            parsedWindows[index].tabs.push({
-           
-                                    title: inputUrl,
-                                    favIconUrl: inputUrl + "/favicon.ico",
-                                    url: inputUrl
-                         
-                            }); 
-             
-                            this.saveToState("windowAndTabs", parsedWindows, "tabGroupDetails");
+                        if(isArray(windowAndTabs) && windowAndTabs.length > 0){
+                            windows = [...windowAndTabs];
+                        } else {
+                            throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-129");
                         }
-                    )
-                 
+
+                        const stringifiedWindows = JSON.stringify(windows);
+                        let parsedWindows = JSON.parse(stringifiedWindows);
+
+                        this.loadUrl(
+                            inputUrl,
+                            (responseText) => {
+                                const parsedResponse = (new window.DOMParser()).parseFromString(responseText, "text/html");
+                                
+                                parsedWindows[index].tabs.push({
+                                
+                                        title: parsedResponse.title,
+                                        favIconUrl: inputUrl + "/favicon.ico",
+                                        url: inputUrl
+                                
+                                })
+        
+                                this.saveToState("windowAndTabs", parsedWindows, "tabGroupDetails")
+                            },
+                            (err) => {
+                                
+                                parsedWindows[index].tabs.push({
+            
+                                        title: inputUrl,
+                                        favIconUrl: inputUrl + "/favicon.ico",
+                                        url: inputUrl
+                            
+                                }); 
+                
+                                this.saveToState("windowAndTabs", parsedWindows, "tabGroupDetails");
+                            }
+                        )
+                    } else {
+                        throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-125")
+                    } 
                 } else {
                     throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-107")
                 }
