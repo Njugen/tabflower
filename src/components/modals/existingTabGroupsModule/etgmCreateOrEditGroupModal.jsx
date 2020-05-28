@@ -349,7 +349,7 @@ class ETGMCreateNewGroupModal extends Modal {
                 throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-106");
             }
 
-            fetch(url)
+            return global.fetch(url)
             .then((response) => {
                 if(response.ok){
                     return (response.text())
@@ -370,7 +370,7 @@ class ETGMCreateNewGroupModal extends Modal {
     }
 
     /*
-        addNewWindow()
+        addNewWindow(inputUrl)
 
         Attempt to add a new window to this tab group, by checking the response of the url. If the response
         is positive, a new window with this url will be added. Otherwise, do something else... 
@@ -383,50 +383,55 @@ class ETGMCreateNewGroupModal extends Modal {
     */
     addNewWindow = (inputUrl) => {
         try {
-            const { isString } = validator;
+            const { isString, isObject, isArray } = validator;
             
             if(isString(inputUrl)){
-                let windows;
+                if(isObject(this.state.tabGroupDetails)){
+                    let windows;
 
-                const { windowAndTabs } = this.state.tabGroupDetails;
+                    const { windowAndTabs } = this.state.tabGroupDetails;
 
-                if(Object.keys(windowAndTabs).length > 0){
-                    windows = [...windowAndTabs];
-                } else {
-                    windows = [];
-                }
-
-                this.loadUrl(
-                    inputUrl,
-                    (responseText) => {
-                        const parsedResponse = (new window.DOMParser()).parseFromString(responseText, "text/html");
-                        
-                        windows.push({
-                            tabs: [{
-                                title: parsedResponse.title,
-                                favIconUrl: inputUrl + "/favicon.ico",
-                                url: inputUrl
-                            }]
-                        })
-                        this.saveToState("windowAndTabs", windows, "tabGroupDetails")
-                    },
-                    (err) => {
-                        
-                        windows.push({
-                            tabs: [{
-                                title: inputUrl,
-                                favIconUrl: inputUrl + "/favicon.ico",
-                                url: inputUrl
-                            }]
-                        });
-                        this.saveToState("windowAndTabs", windows, "tabGroupDetails");
+                    if(isArray(windowAndTabs) && windowAndTabs.length > 0){
+                        windows = [...windowAndTabs];
+                    } else {
+                        windows = [];
                     }
-                )
-              
+
+                    this.loadUrl(
+                        inputUrl,
+                        (responseText) => {
+                            const parsedResponse = (new window.DOMParser()).parseFromString(responseText, "text/html");
+                            
+                            windows.push({
+                                tabs: [{
+                                    title: parsedResponse.title,
+                                    favIconUrl: inputUrl + "/favicon.ico",
+                                    url: inputUrl
+                                }]
+                            })
+                            this.saveToState("windowAndTabs", windows, "tabGroupDetails")
+                        },
+                        (err) => {
+                            
+                            windows.push({
+                                tabs: [{
+                                    title: inputUrl,
+                                    favIconUrl: inputUrl + "/favicon.ico",
+                                    url: inputUrl
+                                }]
+                            });
+                            
+                            this.saveToState("windowAndTabs", windows, "tabGroupDetails");
+                        }
+                    )
+                } else {
+                    throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-125")
+                } 
             } else {
                 throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-104")
             }
         } catch(err){
+            console.log("IDG", err);
             ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }

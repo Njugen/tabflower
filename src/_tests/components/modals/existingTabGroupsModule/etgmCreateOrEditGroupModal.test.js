@@ -21,6 +21,8 @@ let presetProps = {
 let testComponent;
 let componentInstance;
 
+//jest.mock("./__mocks__/fetch");
+
 describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => {
     const actualErrorReturns = {
         "ETGMCreateNewGroupModal-101": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-101"),
@@ -1845,15 +1847,298 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
                 expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledTimes(1);
             });
 
-            test("Run loadUrl\"A text string\", \"blablabla\", {}): only \"url\" parameter is correct, ExceptionsHandler.ValidatorError() is called only once", () => {
+            test("Run loadUrl(\"A text string\", \"blablabla\", {}): only \"url\" parameter is correct, ExceptionsHandler.ValidatorError() is called only once", () => {
                 componentInstance.loadUrl("A text string", "blablabla", {});
     
                 expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledTimes(1);
             });
         });
 
-        describe("Examine the fetch() responses, at success and fail", () => {
+        describe("Examine the fetch() response, and check that success/fail is correctly called depending on the circumstances", () => {
+            global.fetch = jest.fn((url) => {
+                console.log("ACDC", url);
+                return new Promise((resolve, reject) => {
+                    const response = {
+                        ok: true,
+                        text: () => {
+                            return "This is a mocked response text";
+                        }
+                    };
 
+                    process.nextTick(() => {
+                        if(response.ok === true){
+                            resolve(response);
+                        } else {
+                            reject(ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-103"));   
+                        }
+                    }) 
+                    
+                })
+            });
+
+            test("Run loadUrl(\"A text string\", success, fail), where \"success\" and \"fail\" are both functions: call \"success\" with response.text() as parameter, if response.ok is truthy", () => {
+                
+                const success = jest.fn();
+                const fail = jest.fn();
+                
+                global.fetch = jest.fn((url) => {
+                    return new Promise((resolve, reject) => {
+                        const response = {
+                            ok: true,
+                            text: () => {
+                                return "This is a mocked response text";
+                            }
+                        };
+    
+                        process.nextTick(() => {
+                            if(response.ok === true){
+                                resolve(response);
+                            } else {
+                                reject(ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-103"));   
+                            }
+                        }) 
+                        
+                    })
+                });
+
+                expect.assertions(1);
+
+                return componentInstance.loadUrl("A text string", success, fail).then(() => {
+                    expect(success).toHaveBeenCalledWith("This is a mocked response text");
+                });
+                
+            }); 
+            
+            test("Run loadUrl(\"A text string\", success, fail), where \"success\" and \"fail\" are both functions: call \"fail\" with response.text() as parameter, if response.ok is truthy", () => {
+                
+                const success = jest.fn();
+                const fail = jest.fn();
+                
+                global.fetch = jest.fn((url) => {
+                    return new Promise((resolve, reject) => {
+                        const response = {
+                            ok: false,
+                            text: () => {
+                                return "This is a mocked response text";
+                            }
+                        };
+    
+                        process.nextTick(() => {
+                            if(response.ok === true){
+                                resolve(response);
+                            } else {
+                                reject(ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-103"));   
+                            }
+                        }) 
+                        
+                    })
+                });
+
+                expect.assertions(1);
+
+                return componentInstance.loadUrl("A text string", success, fail).then(() => {
+                    expect(fail).toHaveBeenCalledWith(ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-103"));
+                });
+                
+            }); 
+     
         });
+    });
+
+    describe("Test addNewWindow(inputUrl)", () => {
+        describe("Examine inputUrl parameter", () => {
+            test("Run addNewWindow(\"https://google.com\"): An error \"ETGMCreateNewGroupModal-104\" should not be thrown, because inputUrl is a string", () => {
+                componentInstance.addNewWindow("https://google.com");
+
+                expect(ExceptionsHandler.ValidatorError).not.toHaveBeenCalledWith("ETGMCreateNewGroupModal-104");
+            });
+
+            test.each(various_nonString)("Run addNewWindow(%p): An error \"ETGMCreateNewGroupModal-104\" should be thrown, because inputUrl is not a string", (val) => {
+                componentInstance.addNewWindow(val);
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-104");
+            });
+
+            describe("Examine the situations where inputUrl is a string", () => {
+                test("Run addNewWindow(\"https://google.com\"), if \"tabGroupDetails\" is missing in component state: throw the error \"ETGMCreateNewGroupModal-125\"", () => {
+                    componentInstance.loadUrl = jest.fn();
+
+                    const url = "https://google.com";
+                    componentInstance.addNewWindow(url);
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-125");
+                })
+
+                test.each(various_nonObjects)("Run addNewWindow(\"https://google.com\"), if \"tabGroupDetails\" = %p (is not an object) in component state: throw the error \"ETGMCreateNewGroupModal-125\"", (val) => {
+                    componentInstance.loadUrl = jest.fn();
+
+                    const url = "https://google.com";
+                    componentInstance.state.tabGroupDetails = val;
+                    componentInstance.addNewWindow(url);
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-125");
+                })
+
+                test("Run addNewWindow(\"https://google.com\"), if \"tabGroupDetails\" is an object in component state: call this.loadUrl(\"https://google.com\", ANYTHING, ANYTHING)", () => {
+                    componentInstance.loadUrl = jest.fn();
+
+                    const url = "https://google.com";
+                    componentInstance.state.tabGroupDetails = {};
+                    componentInstance.addNewWindow(url);
+                    
+                    expect(componentInstance.loadUrl).toHaveBeenCalledWith(url, expect.anything(), expect.anything());
+                });
+
+                test("Run addNewWindow(\"https://google.com\"), while \"tabGroupDetails\" is an empty object in component state: if this.loadUrl(ANY STRING, success, fail) triggers its success callback then this.saveToState(payload) should be triggered with test specified payload", () => {
+                    /*
+                        To note:
+
+                        While tabGroupDetails is an empty object, only the new window will used as a parameter when calling
+                        saveToState().
+                    */
+                    componentInstance.loadUrl = jest.fn();
+
+                    const url = "https://google.com";
+                    
+                    componentInstance.state.tabGroupDetails = {};
+                    componentInstance.saveToState = jest.fn();
+
+                    const responseText = "A text string acting as responseText for this test";
+
+                    componentInstance.loadUrl = jest.fn((inputUrl, success, fail) => {
+                        success(responseText);
+                    });
+                    componentInstance.addNewWindow(url);
+                    expect(componentInstance.saveToState).toHaveBeenCalledWith(
+                        "windowAndTabs",
+                        [
+                            {
+                                tabs: [
+                                    {
+                                        title: expect.anything(),
+                                        favIconUrl: url + "/favicon.ico",
+                                        url: url
+                                    }
+                                ]
+                            }
+                        ],
+                        "tabGroupDetails"
+                    );
+                  
+                });
+
+                test("Run addNewWindow(\"https://google.com\"), while \"tabGroupDetails\" is an object (which also consists of a filled \"windowAndTabs\" key) in component state: if this.loadUrl(ANY STRING, success, fail) triggers its success callback then this.saveToState(payload) should be triggered with test specified payload", () => {
+                    /*
+                        To note:
+
+                        While tabGroupDetails.windowAndTabs exists as a filled array (each item object in that array represents a window), 
+                        it will be combined with the new window before being used as a parameter when calling saveToState()
+                    */
+                    componentInstance.loadUrl = jest.fn();
+
+                    const url = "https://google.com";
+                    
+                    componentInstance.state.tabGroupDetails = {
+                        windowAndTabs: [{ name: "window 1" }, { name: "window 2" }, { name: "window 3" }]
+                    };
+                    componentInstance.saveToState = jest.fn();
+
+                    const responseText = "A text string acting as responseText for this test";
+
+                    componentInstance.loadUrl = jest.fn((inputUrl, success, fail) => {
+                        success(responseText);
+                    });
+                    componentInstance.addNewWindow(url);
+                    expect(componentInstance.saveToState).toHaveBeenCalledWith(
+                        "windowAndTabs",
+                        [
+                            ...componentInstance.state.tabGroupDetails.windowAndTabs,
+                            {
+                                tabs: [
+                                    {
+                                        title: expect.anything(),
+                                        favIconUrl: url + "/favicon.ico",
+                                        url: url
+                                    }
+                                ]
+                            }
+                        ],
+                        "tabGroupDetails"
+                    );
+                  
+                });
+
+                test("Run addNewWindow(\"https://google.com\"), while \"tabGroupDetails\" is an empty object in component state: if this.loadUrl(ANY STRING, success, fail) triggers its fail callback then this.saveToState(payload) should be triggered with test specified payload", () => {
+                    componentInstance.loadUrl = jest.fn();
+
+                    const url = "https://google.com";
+                    
+                    componentInstance.state.tabGroupDetails = {};
+                    componentInstance.saveToState = jest.fn();
+
+                    
+                    componentInstance.loadUrl = jest.fn((inputUrl, success, fail) => {
+                        fail();
+                    });
+                    componentInstance.addNewWindow(url);
+                    expect(componentInstance.saveToState).toHaveBeenCalledWith(
+                        "windowAndTabs",
+                        [
+                            {
+                                tabs: [
+                                    {
+                                        title: url,
+                                        favIconUrl: url + "/favicon.ico",
+                                        url: url
+                                    }
+                                ]
+                            }
+                        ],
+                        "tabGroupDetails"
+                    );
+                  
+                });
+
+                test("Run addNewWindow(\"https://google.com\"), while \"tabGroupDetails\" is an object (which also consists of a filled \"windowAndTabs\" key) in component state: if this.loadUrl(ANY STRING, success, fail) triggers its fail callback then this.saveToState(payload) should be triggered with test specified payload", () => {
+                    /*
+                        To note:
+
+                        While tabGroupDetails.windowAndTabs exists as a filled array (each item object in that array represents a window), 
+                        it will be combined with the new window before being used as a parameter when calling saveToState()
+                    */
+                    componentInstance.loadUrl = jest.fn();
+
+                    const url = "https://google.com";
+                    
+                    componentInstance.state.tabGroupDetails = {
+                        windowAndTabs: [{ name: "window 1" }, { name: "window 2" }, { name: "window 3" }]
+                    };
+                    componentInstance.saveToState = jest.fn();
+
+                    const responseText = "A text string acting as responseText for this test";
+
+                    componentInstance.loadUrl = jest.fn((inputUrl, success, fail) => {
+                        fail(responseText);
+                    });
+                    componentInstance.addNewWindow(url);
+                    expect(componentInstance.saveToState).toHaveBeenCalledWith(
+                        "windowAndTabs",
+                        [
+                            ...componentInstance.state.tabGroupDetails.windowAndTabs,
+                            {
+                                tabs: [
+                                    {
+                                        title: url,
+                                        favIconUrl: url + "/favicon.ico",
+                                        url: url
+                                    }
+                                ]
+                            }
+                        ],
+                        "tabGroupDetails"
+                    );
+                  
+                });
+            })
+                
+        })
     });
 });
