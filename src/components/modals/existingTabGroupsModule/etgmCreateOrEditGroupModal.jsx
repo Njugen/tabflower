@@ -523,7 +523,8 @@ class ETGMCreateNewGroupModal extends Modal {
     deleteTab = (windowIndex, tabIndex) => {
         
         try {
-            const { isAtLeastZero } = validator;
+
+            const { isAtLeastZero, isObject } = validator;
             
             if(isAtLeastZero(windowIndex)){ 
                 if(isAtLeastZero(tabIndex)){
@@ -532,13 +533,23 @@ class ETGMCreateNewGroupModal extends Modal {
                     if(Object.keys(this.state.tabGroupDetails.windowAndTabs).length > 0){
                         windows = [...this.state.tabGroupDetails.windowAndTabs];
                         
-                        windows[windowIndex].tabs.splice(tabIndex, 1);
 
-                        if(windowIndex === 0 && windows[windowIndex].tabs.length < 1){
-                            windows.splice(windowIndex, 1);
+                        if(isObject(windows[windowIndex])){
+                            if(isObject(windows[windowIndex].tabs[tabIndex])){
+                                windows[windowIndex].tabs.splice(tabIndex, 1);
+                            }
+                            
+                            if(windows[windowIndex].tabs.length < 1){
+                                windows.splice(windowIndex, 1);
+                            }
+    
+                            this.saveToState("windowAndTabs", windows, "tabGroupDetails") 
+                            
+                        } else {
+                            throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-131")
                         }
- 
-                        this.saveToState("windowAndTabs", windows, "tabGroupDetails") 
+                    } else {
+                        throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-130")
                     }
                 } else {
                     throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-109")
@@ -553,7 +564,7 @@ class ETGMCreateNewGroupModal extends Modal {
     }
 
     /*
-        deleteTab()
+        deleteWindow()
 
         Delete a selected window from the tab group by targetting it by id.
 

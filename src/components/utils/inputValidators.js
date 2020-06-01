@@ -211,7 +211,7 @@ export const isZero = (input) => {
 
 export const isAtLeastZero = (input) => {
     if(typeof input === "number"){
-        if(input => 0){
+        if(input >= 0){
             return true;
         } else {
             return false;

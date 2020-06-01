@@ -40,7 +40,9 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
         "ETGMCreateNewGroupModal-126": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-126"),
         "ETGMCreateNewGroupModal-127": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-127"),
         "ETGMCreateNewGroupModal-128": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-128"),
-        "ETGMCreateNewGroupModal-129": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-129")
+        "ETGMCreateNewGroupModal-129": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-129"),
+        "ETGMCreateNewGroupModal-130": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-130"),
+        "ETGMCreateNewGroupModal-131": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-131")
     };
 
     const expectedErrorReturns = {
@@ -123,6 +125,21 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
             name: "ValidatorError",
             message: "The tab arrangement could not be fulfilled at the moment. Please contact the developer.",
             code: "ETGMCreateNewGroupModal-129"
+        },
+        "ETGMCreateNewGroupModal-130": {
+            name: "ValidatorError",
+            message: "There are no stored windows to work with.",
+            code: "ETGMCreateNewGroupModal-130"
+        },
+        "ETGMCreateNewGroupModal-131": {
+            name: "ValidatorError",
+            message: "The targetted window does not exist.",
+            code: "ETGMCreateNewGroupModal-131"
+        },
+        "ETGMCreateNewGroupModal-132": {
+            name: "ValidatorError",
+            message: "The targetted tab does not exist.",
+            code: "ETGMCreateNewGroupModal-132"
         }
     }
 
@@ -2159,7 +2176,7 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
         })
     });
 
-    describe("Test addNewTab(inputUrl)", () => {
+    describe("Test addNewTab(inputUrl, index)", () => {
         describe("Examine inputUrl parameter", () => {
             test("Run addNewTab(\"https://google.com\"): An error \"ETGMCreateNewGroupModal-104\" should not be thrown, because inputUrl is a string", () => {
                 componentInstance.addNewTab("https://google.com");
@@ -2343,7 +2360,7 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
 
                     let parsedWindows = JSON.parse(JSON.stringify(componentInstance.state.tabGroupDetails.windowAndTabs));
                     parsedWindows[0].tabs.push({
-                        title: expect.anything(),
+                        title: url,
                         favIconUrl: url + "/favicon.ico",
                         url: url
                     })
@@ -2359,4 +2376,375 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
                 
         })
     });
+
+    describe("Test deleteTab(windowIndex, tabIndex)", () => {
+        describe("Examine the windowIndex parameter", () => {
+
+            test.each(various_nonNumber)("Run deleteTab(%p): Throw an error \"ETGMCreateNewGroupModal-110\", because windowIndex is NOT a number", (val) => {
+                componentInstance.deleteTab(val);
+                
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-110");
+            });
+
+            test("Run deleteTab(): Throw an error \"ETGMCreateNewGroupModal-110\", because windowIndex is missing/undefined", () => {
+                componentInstance.deleteTab();
+                
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-110");
+            });
+
+            test("Run deleteTab(-1): Throw an error \"ETGMCreateNewGroupModal-110\", because windowIndex is a negative number", () => {
+                componentInstance.deleteTab(-1);
+                
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-110");
+            });
+
+            test("Run deleteTab(0): do not throw an \"ETGMCreateNewGroupModal-110\" error, windowIndex is a number and is not negative", () => {
+                componentInstance.deleteTab(0);
+                
+                expect(ExceptionsHandler.ValidatorError).not.toHaveBeenCalledWith("ETGMCreateNewGroupModal-110");
+            });
+        });
+
+        describe("Examine the tabIndex parameter", () => {
+            test("Run deleteTab(0): throw an error \"ETGMCreateNewGroupModal-109\", because tabIndex is missing/undefined", () => {
+                componentInstance.deleteTab(0);
+                
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-109");
+            })
+
+            test.each(various_nonNumber)("Run deleteTab(0, %p): throw an error \"ETGMCreateNewGroupModal-109\", because tabIndex is not a number", (val) => {
+                componentInstance.deleteTab(0, val);
+                
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-109");
+            })
+
+            test("Run deleteTab(0, -1): throw an error \"ETGMCreateNewGroupModal-109\", because tabIndex is a negative number", () => {
+                componentInstance.deleteTab(0, -1);
+                
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-109");
+            });
+
+            test("Run deleteTab(0, 0): do not throw an error \"ETGMCreateNewGroupModal-109\", because tabIndex is not a negative number", () => {
+                componentInstance.deleteTab(0, 0);
+                
+                expect(ExceptionsHandler.ValidatorError).not.toHaveBeenCalledWith("ETGMCreateNewGroupModal-109");
+            });
+        });
+
+        describe("Examine various function scenarios using valid combinations of windowIndex and tabIndex", () => {
+            describe("Examine the function, when windowIndex = 0", () => {    
+                test("Run deleteTab(0, 0), when windowAndTabs array in component state is not filled: throw an error \"ETGMCreateNewGroupModal-130\"", () => {
+                    componentInstance.state.tabGroupDetails = {
+                        windowAndTabs: []
+                    };
+
+                    componentInstance.deleteTab(0, 0);
+
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-130");
+                });
+
+                test("Run deleteTab(0, 0), when windowAndTabs array in component state is filled (targetted window has no tabs): call this.saveToState() with parameters conditioned in this this test", () => {
+                    /*
+                        Checking test:
+                        1. A tab is targetted and closed based on windowIndex and tabIndex
+                        2. If the targetted window does not have any more tabs after the targetted tab being closed, shut the window down
+                        3. Check that saveToState is called with correctly manufactured parameters
+                    */
+            
+                    const windowIndex = 0;
+                    const tabIndex = 0;
+
+                    componentInstance.state.tabGroupDetails = {
+                        windowAndTabs: [
+                            { name: "window 1", tabs: [] }, 
+                            { name: "window 2", tabs: [{ name: "tab 1" }] }, 
+                            { name: "window 3", tabs: [{ name: "tab 1" }] }
+                        ]
+                    };
+
+                    let windows = JSON.stringify(componentInstance.state.tabGroupDetails.windowAndTabs.map(value => value));
+                    let testWindows = JSON.parse(windows);
+
+                    componentInstance.saveToState = jest.fn();
+                    componentInstance.deleteTab(windowIndex, tabIndex);
+
+                    testWindows[windowIndex].tabs.splice(tabIndex, 1);
+
+                    testWindows.splice(windowIndex, 1);
+
+
+                    expect(componentInstance.saveToState).toHaveBeenCalledWith("windowAndTabs", testWindows, "tabGroupDetails");
+                })
+
+                test("Run deleteTab(0, 0), when windowAndTabs array in component state is filled (targetted window has one tab): call this.saveToState() with parameters conditioned in this this test", () => {
+                    /*
+                        Checking test:
+                        1. A tab is targetted and closed based on windowIndex and tabIndex
+                        2. If the targetted window does not have any more tabs after the targetted tab being closed, shut the window down
+                        3. Check that saveToState is called with correctly manufactured parameters
+                    */
+            
+                    const windowIndex = 0;
+                    const tabIndex = 0;
+
+                    componentInstance.state.tabGroupDetails = {
+                        windowAndTabs: [
+                            { name: "window 1", tabs: [{ name: "tab 1" }] }, 
+                            { name: "window 2", tabs: [{ name: "tab 1" }] }, 
+                            { name: "window 3", tabs: [{ name: "tab 1" }] }
+                        ]
+                    };
+
+                    let windows = JSON.stringify(componentInstance.state.tabGroupDetails.windowAndTabs.map(value => value));
+                    let testWindows = JSON.parse(windows);
+
+                    componentInstance.saveToState = jest.fn();
+                    componentInstance.deleteTab(windowIndex, tabIndex);
+
+                    testWindows[windowIndex].tabs.splice(tabIndex, 1);
+
+                    testWindows.splice(windowIndex, 1);
+
+                    expect(componentInstance.saveToState).toHaveBeenCalledWith("windowAndTabs", testWindows, "tabGroupDetails");
+                })
+
+                test("Run deleteTab(0, 0), when windowAndTabs array in component state is filled (targetted window has multiple tabs): call this.saveToState() with parameters conditioned in this test", () => {
+                    /*
+                        Checking test:
+                        1. A tab is targetted and closed based on windowIndex and tabIndex
+                        2. If the targetted window still has tabs after the targetted tab being closed, do not splice any windows
+                        3. Check that saveToState is called with correctly manufactured parameters
+                    */
+
+                    const windowIndex = 0;
+                    const tabIndex = 0;
+
+                    componentInstance.state.tabGroupDetails = {
+                        windowAndTabs: [
+                            { name: "window 1", tabs: [{ name: "tab 1" }, { name: "tab 2" }, { name: "tab 3" }] }, 
+                            { name: "window 2", tabs: [{ name: "tab 1" }] }, 
+                            { name: "window 3", tabs: [{ name: "tab 1" }] }
+                        ]
+                    };
+
+                    let windows = JSON.stringify(componentInstance.state.tabGroupDetails.windowAndTabs.map(value => value));
+                    let testWindows = JSON.parse(windows);
+                    componentInstance.saveToState = jest.fn();
+                    
+                    componentInstance.deleteTab(windowIndex, tabIndex);
+
+                    testWindows[windowIndex].tabs.splice(tabIndex, 1);
+
+                    expect(componentInstance.saveToState).toHaveBeenCalledWith("windowAndTabs", testWindows, "tabGroupDetails");
+                }); 
+
+                test("Run deleteTab(20, 0), when windowAndTabs array in component state is filled: throw error \"ETGMCreateNewGroupModal-131\" because the targetted window does not exist", () => {
+                    /*
+                        Checking test:
+                        1. A tab is targetted and closed based on windowIndex and tabIndex
+                        2. If the targetted window still has tabs after the targetted tab being closed, do not splice any windows
+                        3. Check that saveToState is called with correctly manufactured parameters
+                    */
+
+                    const windowIndex = 20;
+                    const tabIndex = 0;
+
+                    componentInstance.state.tabGroupDetails = {
+                        windowAndTabs: [
+                            { name: "window 1", tabs: [{ name: "tab 1" }, { name: "tab 2" }, { name: "tab 3" }] }, 
+                            { name: "window 2", tabs: [{ name: "tab 1" }] }, 
+                            { name: "window 3", tabs: [{ name: "tab 1" }] }
+                        ]
+                    };
+
+                    componentInstance.deleteTab(windowIndex, tabIndex);
+
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-131");
+                }); 
+
+                test("Run deleteTab(0, 20), when windowAndTabs array in component state is filled (targetted window has multiple tabs): call this.saveToState() with parameters conditioned in this test", () => {
+                    /*
+                        Checking test:
+                        1. A tab is targetted, but it does not exist. Save all the existing windowAndTabs to state unmodified
+                    */
+
+                    const windowIndex = 0;
+                    const tabIndex = 20;
+
+                    componentInstance.state.tabGroupDetails = {
+                        windowAndTabs: [
+                            { name: "window 1", tabs: [{ name: "tab 1" }, { name: "tab 2" }, { name: "tab 3" }] }, 
+                            { name: "window 2", tabs: [{ name: "tab 1" }] }, 
+                            { name: "window 3", tabs: [{ name: "tab 1" }] }
+                        ]
+                    };
+
+                    let windows = JSON.stringify(componentInstance.state.tabGroupDetails.windowAndTabs.map(value => value));
+                    let testWindows = JSON.parse(windows);
+                    componentInstance.saveToState = jest.fn();
+                    
+                    componentInstance.deleteTab(windowIndex, tabIndex);
+
+                    expect(componentInstance.saveToState).toHaveBeenCalledWith("windowAndTabs", testWindows, "tabGroupDetails");
+                }); 
+            });
+
+            describe("Examine the function, when windowIndex = 1", () => {    
+                test("Run deleteTab(1, 0), when windowAndTabs array in component state is not filled: throw an error \"ETGMCreateNewGroupModal-130\"", () => {
+                    componentInstance.state.tabGroupDetails = {
+                        windowAndTabs: []
+                    };
+
+                    componentInstance.deleteTab(1, 0);
+
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-130");
+                });
+
+                test("Run deleteTab(1, 0), when windowAndTabs array in component state is filled (targetted window has no tabs): call this.saveToState() with parameters conditioned in this this test", () => {
+                    /*
+                        Checking test:
+                        1. A tab is targetted and closed based on windowIndex and tabIndex
+                        2. If the targetted window does not have any more tabs after the targetted tab being closed, shut the window down
+                        3. Check that saveToState is called with correctly manufactured parameters
+                    */
+            
+                    const windowIndex = 1;
+                    const tabIndex = 0;
+
+                    componentInstance.state.tabGroupDetails = {
+                        windowAndTabs: [
+                            { name: "window 1", tabs: [{ name: "tab 1" }] }, 
+                            { name: "window 2", tabs: [] }, 
+                            { name: "window 3", tabs: [{ name: "tab 1" }] }
+                        ]
+                    };
+
+                    let windows = JSON.stringify(componentInstance.state.tabGroupDetails.windowAndTabs.map(value => value));
+                    let testWindows = JSON.parse(windows);
+
+                    componentInstance.saveToState = jest.fn();
+                    componentInstance.deleteTab(windowIndex, tabIndex);
+
+                    testWindows[windowIndex].tabs.splice(tabIndex, 1);
+
+                    testWindows.splice(windowIndex, 1);
+
+
+                    expect(componentInstance.saveToState).toHaveBeenCalledWith("windowAndTabs", testWindows, "tabGroupDetails");
+                })
+
+                test("Run deleteTab(1, 0), when windowAndTabs array in component state is filled (targetted window has one tab): call this.saveToState() with parameters conditioned in this this test", () => {
+                    /*
+                        Checking test:
+                        1. A tab is targetted and closed based on windowIndex and tabIndex
+                        2. If the targetted window does not have any more tabs after the targetted tab being closed, shut the window down
+                        3. Check that saveToState is called with correctly manufactured parameters
+                    */
+            
+                    const windowIndex = 1;
+                    const tabIndex = 0;
+
+                    componentInstance.state.tabGroupDetails = {
+                        windowAndTabs: [
+                            { name: "window 1", tabs: [{ name: "tab 1" }] }, 
+                            { name: "window 2", tabs: [{ name: "tab 1" }] }, 
+                            { name: "window 3", tabs: [{ name: "tab 1" }] }
+                        ]
+                    };
+
+                    let windows = JSON.stringify(componentInstance.state.tabGroupDetails.windowAndTabs.map(value => value));
+                    let testWindows = JSON.parse(windows);
+
+                    componentInstance.saveToState = jest.fn();
+                    componentInstance.deleteTab(windowIndex, tabIndex);
+
+                    testWindows[windowIndex].tabs.splice(tabIndex, 1);
+
+                    testWindows.splice(windowIndex, 1);
+
+                    expect(componentInstance.saveToState).toHaveBeenCalledWith("windowAndTabs", testWindows, "tabGroupDetails");
+                })
+
+                test("Run deleteTab(1, 0), when windowAndTabs array in component state is filled (targetted window has multiple tabs): call this.saveToState() with parameters conditioned in this test", () => {
+                    /*
+                        Checking test:
+                        1. A tab is targetted and closed based on windowIndex and tabIndex
+                        2. If the targetted window still has tabs after the targetted tab being closed, do not splice any windows
+                        3. Check that saveToState is called with correctly manufactured parameters
+                    */
+
+                    const windowIndex = 1;
+                    const tabIndex = 0;
+
+                    componentInstance.state.tabGroupDetails = {
+                        windowAndTabs: [
+                            { name: "window 2", tabs: [{ name: "tab 1" }] }, 
+                            { name: "window 1", tabs: [{ name: "tab 1" }, { name: "tab 2" }, { name: "tab 3" }] }, 
+                            { name: "window 3", tabs: [{ name: "tab 1" }] }
+                        ]
+                    };
+
+                    let windows = JSON.stringify(componentInstance.state.tabGroupDetails.windowAndTabs.map(value => value));
+                    let testWindows = JSON.parse(windows);
+                    componentInstance.saveToState = jest.fn();
+                    
+                    componentInstance.deleteTab(windowIndex, tabIndex);
+
+                    testWindows[windowIndex].tabs.splice(tabIndex, 1);
+
+                    expect(componentInstance.saveToState).toHaveBeenCalledWith("windowAndTabs", testWindows, "tabGroupDetails");
+                }); 
+
+                test("Run deleteTab(20, 0), when windowAndTabs array in component state is filled: throw error \"ETGMCreateNewGroupModal-131\" because the targetted window does not exist", () => {
+                    /*
+                        Checking test:
+                        1. A tab is targetted and closed based on windowIndex and tabIndex
+                        2. If the targetted window still has tabs after the targetted tab being closed, do not splice any windows
+                        3. Check that saveToState is called with correctly manufactured parameters
+                    */
+
+                    const windowIndex = 20;
+                    const tabIndex = 0;
+
+                    componentInstance.state.tabGroupDetails = {
+                        windowAndTabs: [
+                            { name: "window 2", tabs: [{ name: "tab 1" }] },
+                            { name: "window 1", tabs: [{ name: "tab 1" }, { name: "tab 2" }, { name: "tab 3" }] }, 
+                            { name: "window 3", tabs: [{ name: "tab 1" }] }
+                        ]
+                    };
+
+                    componentInstance.deleteTab(windowIndex, tabIndex);
+
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-131");
+                }); 
+
+                test("Run deleteTab(1, 20), when windowAndTabs array in component state is filled (targetted window has multiple tabs): call this.saveToState() with parameters conditioned in this test", () => {
+                    /*
+                        Checking test:
+                        1. A tab is targetted, but it does not exist. Save all the existing windowAndTabs to state unmodified
+                    */
+
+                    const windowIndex = 1;
+                    const tabIndex = 20;
+
+                    componentInstance.state.tabGroupDetails = {
+                        windowAndTabs: [
+                            { name: "window 1", tabs: [{ name: "tab 1" }, { name: "tab 2" }, { name: "tab 3" }] }, 
+                            { name: "window 2", tabs: [{ name: "tab 1" }] }, 
+                            { name: "window 3", tabs: [{ name: "tab 1" }] }
+                        ]
+                    };
+
+                    let windows = JSON.stringify(componentInstance.state.tabGroupDetails.windowAndTabs.map(value => value));
+                    let testWindows = JSON.parse(windows);
+                    componentInstance.saveToState = jest.fn();
+                    
+                    componentInstance.deleteTab(windowIndex, tabIndex);
+
+                    expect(componentInstance.saveToState).toHaveBeenCalledWith("windowAndTabs", testWindows, "tabGroupDetails");
+                }); 
+            });
+        })
+    })
 });

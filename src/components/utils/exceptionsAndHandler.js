@@ -200,7 +200,16 @@ export const ValidatorError = (code) => {
             break;    
         case "ETGMCreateNewGroupModal-129":
             message = "The tab arrangement could not be fulfilled at the moment. Please contact the developer.";
-            break;                                               
+            break;            
+        case "ETGMCreateNewGroupModal-130":
+            message = "There are no stored windows to work with.";
+            break;        
+        case "ETGMCreateNewGroupModal-131":
+            message = "The targetted window does not exist.";
+            break;  
+        case "ETGMCreateNewGroupModal-132":
+            message = "The targetted tab does not exist.";
+            break;                                         
         // ETGMRemoveGroupsModal
         case "ETGMRemoveGroupsModal-101":
             message = "The callback parameter is not a function.";
