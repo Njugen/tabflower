@@ -42,7 +42,10 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
         "ETGMCreateNewGroupModal-128": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-128"),
         "ETGMCreateNewGroupModal-129": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-129"),
         "ETGMCreateNewGroupModal-130": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-130"),
-        "ETGMCreateNewGroupModal-131": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-131")
+        "ETGMCreateNewGroupModal-131": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-131"),
+        "ETGMCreateNewGroupModal-132": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-132"),
+        "ETGMCreateNewGroupModal-133": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-133"),
+        "ETGMCreateNewGroupModal-134": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-134")
     };
 
     const expectedErrorReturns = {
@@ -140,6 +143,16 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
             name: "ValidatorError",
             message: "The targetted tab does not exist.",
             code: "ETGMCreateNewGroupModal-132"
+        },
+        "ETGMCreateNewGroupModal-133": {
+            name: "ValidatorError",
+            message: "The targetted tab does not exist.",
+            code: "ETGMCreateNewGroupModal-133"
+        },
+        "ETGMCreateNewGroupModal-134": {
+            name: "ValidatorError",
+            message: "The targetted window does not exist.",
+            code: "ETGMCreateNewGroupModal-134"
         }
     }
 
@@ -2745,6 +2758,98 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
                     expect(componentInstance.saveToState).toHaveBeenCalledWith("windowAndTabs", testWindows, "tabGroupDetails");
                 }); 
             });
+        })
+    })
+
+    describe("Test deleteWindow(windowIndex)", () => {
+        describe("Examine the windowIndex parameter", () => {
+            test("Run deleteWindow(): Throw an error \"ETGMCreateNewGroupModal-111\", windowIndex is missing", () => {
+                componentInstance.deleteWindow();
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-111");
+            })
+
+            test.each(various_nonNumber)("Run deleteWindow(%p): Throw an error \"ETGMCreateNewGroupModal-111\", windowIndex is not a number", (val) => {
+                componentInstance.deleteWindow(val);
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-111");
+            })
+
+            test("Run deleteWindow(0): Do not throw an error \"ETGMCreateNewGroupModal-111\", windowIndex is 0", () => {
+                componentInstance.deleteWindow(0);
+
+                expect(ExceptionsHandler.ValidatorError).not.toHaveBeenCalledWith("ETGMCreateNewGroupModal-111");
+            })
+
+            test("Run deleteWindow(-1): Throw an error \"ETGMCreateNewGroupModal-111\", windowIndex is -1", () => {
+                componentInstance.deleteWindow(-1);
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-111");
+            })
+
+            test("Run deleteWindow(0): Throw an error \"ETGMCreateNewGroupModal-133\", if there are no windows stored in windowAndTabs in component state", () => {
+                componentInstance.state.tabGroupDetails = {
+                    windowAndTabs: []
+                };
+                componentInstance.deleteWindow(0);
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-133");
+            })
+
+            test("Run deleteWindow(20): Throw an error \"ETGMCreateNewGroupModal-134\", if the targetted window does not exist in windowAndTabs section of component state", () => {
+                componentInstance.state.tabGroupDetails = {
+                    windowAndTabs: [
+                        { name: "window 1", tabs: [{ name: "tab 1" }] }, 
+                        { name: "window 2", tabs: [{ name: "tab 1" }] }, 
+                        { name: "window 3", tabs: [{ name: "tab 1" }] }
+                    ]
+                };
+                componentInstance.deleteWindow(20);
+
+                expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMCreateNewGroupModal-134");
+            })
+
+            test("Run deleteWindow(0): call this.saveToState() with parameters conditioned in this test ", () => {
+                const windowIndex = 0;
+                
+                componentInstance.state.tabGroupDetails = {
+                    windowAndTabs: [
+                        { name: "window 1", tabs: [{ name: "tab 1" }] }, 
+                        { name: "window 2", tabs: [{ name: "tab 1" }] }, 
+                        { name: "window 3", tabs: [{ name: "tab 1" }] }
+                    ]
+                };
+
+                let testWindows = componentInstance.state.tabGroupDetails.windowAndTabs.map(value => value);
+
+                componentInstance.saveToState = jest.fn();
+                componentInstance.deleteWindow(windowIndex);
+
+                testWindows.splice(windowIndex, 1);
+
+                expect(componentInstance.saveToState).toHaveBeenCalledWith("windowAndTabs", testWindows, "tabGroupDetails");
+            })
+
+            test("Run deleteWindow(1): call this.saveToState() with parameters conditioned in this test ", () => {
+                const windowIndex = 1;
+                
+                componentInstance.state.tabGroupDetails = {
+                    windowAndTabs: [
+                        { name: "window 1", tabs: [{ name: "tab 1" }] }, 
+                        { name: "window 2", tabs: [{ name: "tab 1" }] }, 
+                        { name: "window 3", tabs: [{ name: "tab 1" }] }
+                    ]
+                };
+
+                let testWindows = componentInstance.state.tabGroupDetails.windowAndTabs.map(value => value);
+
+                componentInstance.saveToState = jest.fn();
+                componentInstance.deleteWindow(windowIndex);
+
+                testWindows.splice(windowIndex, 1);
+
+                expect(componentInstance.saveToState).toHaveBeenCalledWith("windowAndTabs", testWindows, "tabGroupDetails");
+            })
         })
     })
 });

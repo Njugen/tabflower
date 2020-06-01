@@ -209,7 +209,13 @@ export const ValidatorError = (code) => {
             break;  
         case "ETGMCreateNewGroupModal-132":
             message = "The targetted tab does not exist.";
-            break;                                         
+            break;     
+        case "ETGMCreateNewGroupModal-133":
+            message = "There are no stored windows to work with.";
+            break;  
+        case "ETGMCreateNewGroupModal-134":
+            message = "The targetted window does not exist.";
+            break;                                      
         // ETGMRemoveGroupsModal
         case "ETGMRemoveGroupsModal-101":
             message = "The callback parameter is not a function.";

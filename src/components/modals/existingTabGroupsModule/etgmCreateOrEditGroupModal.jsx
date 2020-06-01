@@ -573,15 +573,22 @@ class ETGMCreateNewGroupModal extends Modal {
     */
     deleteWindow = (windowIndex) => {
         try {
-            const { isAtLeastZero } = validator;
+            const { isAtLeastZero, isObject } = validator;
             let windows;
 
             if(isAtLeastZero(windowIndex)){
                 if(Object.keys(this.state.tabGroupDetails.windowAndTabs).length > 0){
                     windows = [...this.state.tabGroupDetails.windowAndTabs];
-                    windows.splice(windowIndex, 1);
+                    
+                    if(isObject(windows[windowIndex])){
+                        windows.splice(windowIndex, 1);
 
-                    this.saveToState("windowAndTabs", windows, "tabGroupDetails") 
+                        this.saveToState("windowAndTabs", windows, "tabGroupDetails") 
+                    } else {
+                        throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-134")
+                    }
+                } else {
+                    throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-133")
                 }
             } else {
                 throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-111")
