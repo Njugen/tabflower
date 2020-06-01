@@ -33,6 +33,7 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
         "ETGMCreateNewGroupModal-118": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-118"),
         "ETGMCreateNewGroupModal-119": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-119"),
         "ETGMCreateNewGroupModal-120": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-120"),
+        "ETGMCreateNewGroupModal-121": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-121"),
         "ETGMCreateNewGroupModal-122": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-122"),
         "ETGMCreateNewGroupModal-123": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-123"),
         "ETGMCreateNewGroupModal-124": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-124"),
@@ -88,6 +89,11 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
             name: "ValidatorError",
             message: "The \"groupId\" parameter needs to be a string in this.props.data.params, containing an id string of the requested tab group. If such an id does not exist as a text string, refrain from providing the groupId variable when calling this modal. As a result of this error, the requested tab group cannot be identified and can therefore not be edited.",
             code: "ETGMCreateNewGroupModal-120"
+        },
+        "ETGMCreateNewGroupModal-121": {
+            name: "ValidatorError",
+            message: "The predefined tabs and arrays were provided to this modal in an incorrect format. As a result, no tab groups can be created at this moment.",
+            code: "ETGMCreateNewGroupModal-121"
         },
         "ETGMCreateNewGroupModal-122": {
             name: "ValidatorError",
@@ -2850,6 +2856,15 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
 
                 expect(componentInstance.saveToState).toHaveBeenCalledWith("windowAndTabs", testWindows, "tabGroupDetails");
             })
+        })
+    })
+
+    describe("Test renderWindowsAndTabsSection(windowAndTabs, type, warning)", () => {
+        test.each(various_nonArrays)("Run renderWindowsAndTabsSection(%p, ANYTHING, ANYTHING): throw an error \"ETGMCreateNewGroupModal-121\", because windowAndTabs is not an array", (val) => {
+            expect(() => {
+                componentInstance.renderWindowsAndTabsSection(val, expect.anything(), expect.anything());
+            }).toThrow(ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-121"))
+
         })
     })
 });

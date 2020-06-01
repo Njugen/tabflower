@@ -621,6 +621,12 @@ class ETGMCreateNewGroupModal extends Modal {
        
         const { isString, isArray } = validator;
 
+        if(isArray(windowAndTabs)){
+            windowAndTabs = windowAndTabs || [];
+        } else {
+            throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-121");
+        }
+
         if(!isString(type)){
             throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-112");
         } else {
@@ -628,14 +634,6 @@ class ETGMCreateNewGroupModal extends Modal {
                 throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-113");
             }
         }
-
-        if(isArray(windowAndTabs)){
-            windowAndTabs = windowAndTabs || [];
-        } else {
-            throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-121");
-        }
-
-        
 
         return (
             <div className="tb-windowlist-container">
