@@ -665,22 +665,25 @@ class ETGMCreateNewGroupModal extends Modal {
                         />
                     </div>
                 </div>    
-            </div>
-        )
+            </div> 
+        ) 
     }
 
     renderModalBody(){
         const { isObject } = validator;
+        const { data } = this.props;
 
-        if(isObject(this.props.data)){
-            if(isObject(this.props.data.params)){
+        if(isObject(data)){
+            const { params } = data;
+
+            if(isObject(params)){
                 const { 
                     groupName: name,
                     groupCloseAll: closeAll,
                     groupCloseInactiveTabs: closeInactiveTabs,
                     groupDescription: description,
                     type
-                } = this.props.data.params;
+                } = params;
                 
                 const { 
                     tabGroupName: nameErr,
@@ -700,18 +703,23 @@ class ETGMCreateNewGroupModal extends Modal {
                     </Fragment>
                 );    
             } else {
-                return "Error body";
+                return ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-135").message;
+                
             }
         } else {
-            return "Error Body";
+            return ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-136").message;
+         
         }
     }
 
     renderModalHeader(){
         const { isObject } = validator;
+        const { data } = this.props;
 
-        if(isObject(this.props.data)){
-            if(isObject(this.props.data.params)){
+        if(isObject(data)){
+            const { params } = data;
+
+            if(isObject(params)){
                 const { type, groupName } = this.props.data.params;
 
                 if(type === "currently-opened" || type === "new-group"){
@@ -720,10 +728,10 @@ class ETGMCreateNewGroupModal extends Modal {
                     return "Edit the \"" + (groupName || "") + "\" tab group";
                 }
             } else {
-                return "Error";
+                return "Data parameters are missing";
             } 
         } else {
-            return "Error"
+            return "Data section is missing in component props";
         }
     }
 }

@@ -215,7 +215,13 @@ export const ValidatorError = (code) => {
             break;  
         case "ETGMCreateNewGroupModal-134":
             message = "The targetted window does not exist.";
-            break;                                      
+            break; 
+        case "ETGMCreateNewGroupModal-135":
+            message = "The required parameters were not provided to the data props of this modal. The attempt to add/modify a tab group is neglected.";
+            break;
+        case "ETGMCreateNewGroupModal-136":
+            message = "The data props section is missing or not an object when attempting to add/modify a tab group. The attempt to add/modify a tab group is neglected.";
+            break;                                                  
         // ETGMRemoveGroupsModal
         case "ETGMRemoveGroupsModal-101":
             message = "The callback parameter is not a function.";

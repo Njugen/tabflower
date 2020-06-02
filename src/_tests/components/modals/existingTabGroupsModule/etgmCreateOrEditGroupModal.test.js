@@ -46,7 +46,9 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
         "ETGMCreateNewGroupModal-131": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-131"),
         "ETGMCreateNewGroupModal-132": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-132"),
         "ETGMCreateNewGroupModal-133": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-133"),
-        "ETGMCreateNewGroupModal-134": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-134")
+        "ETGMCreateNewGroupModal-134": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-134"),
+        "ETGMCreateNewGroupModal-135": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-135"),
+        "ETGMCreateNewGroupModal-136": ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-136")
     };
 
     const expectedErrorReturns = {
@@ -159,6 +161,16 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
             name: "ValidatorError",
             message: "The targetted window does not exist.",
             code: "ETGMCreateNewGroupModal-134"
+        },
+        "ETGMCreateNewGroupModal-135": {
+            name: "ValidatorError",
+            message: "The required parameters were not provided to the data props of this modal. The attempt to add/modify a tab group is neglected.",
+            code: "ETGMCreateNewGroupModal-135"
+        },
+        "ETGMCreateNewGroupModal-136": {
+            name: "ValidatorError",
+            message: "The data props section is missing or not an object when attempting to add/modify a tab group. The attempt to add/modify a tab group is neglected.",
+            code: "ETGMCreateNewGroupModal-136"
         }
     }
 
@@ -2860,91 +2872,140 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
     })
 
     describe("Test renderWindowsAndTabsSection(windowAndTabs, type, warning)", () => {
-        test.each(various_nonArrays)("Run renderWindowsAndTabsSection(%p, ANYTHING, ANYTHING): throw an error \"ETGMCreateNewGroupModal-121\", because \"windowAndTabs\" is not an array", (val) => {
-            expect(() => {
-                const presetProps = {
-                    data: {
-                        params: {
-                            type: "currently-opened"
+        describe("Examine the function as unit test", () => {
+            test.each(various_nonArrays)("Run renderWindowsAndTabsSection(%p, ANYTHING, ANYTHING): throw an error \"ETGMCreateNewGroupModal-121\", because \"windowAndTabs\" is not an array", (val) => {
+                expect(() => {
+                    const presetProps = {
+                        data: {
+                            params: {
+                                type: "currently-opened"
+                            }
                         }
-                    }
-                };
-                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
-                componentInstance = testComponent.instance();
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
 
-                componentInstance.renderWindowsAndTabsSection(val, expect.anything(), expect.anything());
-            }).toThrow(ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-121"))
+                    componentInstance.renderWindowsAndTabsSection(val, expect.anything(), expect.anything());
+                }).toThrow(ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-121"))
 
-        })
+            })
 
-        test("Run renderWindowsAndTabsSection([], ANYTHING, ANYTHING): do not throw an error \"ETGMCreateNewGroupModal-121\", because windowAndTabs is an array", () => {
-            expect(() => {
-                const presetProps = {
-                    data: {
-                        params: {
-                            type: "currently-opened"
+            test("Run renderWindowsAndTabsSection([], ANYTHING, ANYTHING): do not throw an error \"ETGMCreateNewGroupModal-121\", because windowAndTabs is an array", () => {
+                expect(() => {
+                    const presetProps = {
+                        data: {
+                            params: {
+                                type: "currently-opened"
+                            }
                         }
-                    }
-                };
-                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
-                componentInstance = testComponent.instance();
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
 
-                componentInstance.renderWindowsAndTabsSection([], expect.anything(), expect.anything());
-            }).not.toThrow(ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-121"))
+                    componentInstance.renderWindowsAndTabsSection([], expect.anything(), expect.anything());
+                }).not.toThrow(ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-121"))
 
-        })
+            })
 
-        test.each(various_nonString)("Run renderWindowsAndTabsSection([], %p, ANYTHING): throw an error \"ETGMCreateNewGroupModal-112\", because \"type\" is not a string", (val) => {
-            expect(() => {
-                const presetProps = {
-                    data: {
-                        params: {
-                            type: "currently-opened"
+            test.each(various_nonString)("Run renderWindowsAndTabsSection([], %p, ANYTHING): throw an error \"ETGMCreateNewGroupModal-112\", because \"type\" is not a string", (val) => {
+                expect(() => {
+                    const presetProps = {
+                        data: {
+                            params: {
+                                type: val
+                            }
                         }
-                    }
-                };
-                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
-                componentInstance = testComponent.instance();
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
 
-                componentInstance.renderWindowsAndTabsSection([], val, expect.anything());
-            }).toThrow(ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-112"))
+                    componentInstance.renderWindowsAndTabsSection([], presetProps.data.params.type, expect.anything());
+                }).toThrow(ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-112"))
 
-        })
+            })
 
-        test("Run renderWindowsAndTabsSection([], \"currently-opened\", ANYTHING): do not throw an error \"ETGMCreateNewGroupModal-113\", because \"type\" is one of the three valid strings", () => {
-            expect(() => {
-                const presetProps = {
-                    data: {
-                        params: {
-                            type: "currently-opened"
+            test("Run renderWindowsAndTabsSection([], undefined, ANYTHING): throw an error \"ETGMCreateNewGroupModal-112\", because \"type\" is explicitly missing as parameter", () => {
+                expect(() => {
+                    const presetProps = {
+                        data: {
+                            params: {
+                                
+                            }
                         }
-                    }
-                };
-                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
-                componentInstance = testComponent.instance();
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
 
-                componentInstance.renderWindowsAndTabsSection([], presetProps.data.params.type, expect.anything());
-            }).not.toThrow(ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-113"))
-        })
+                    componentInstance.renderWindowsAndTabsSection([], presetProps.data.params.type, expect.anything());
+                }).toThrow(ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-112"))
 
-        test("Run renderWindowsAndTabsSection([], \"existing-group\", ANYTHING): do not throw an error \"ETGMCreateNewGroupModal-113\", because \"type\" is one of the three valid strings", () => {
-            expect(() => {
-                const presetProps = {
-                    data: {
-                        params: {
-                            type: "existing-group"
+            })
+
+            test("Run renderWindowsAndTabsSection([], \"currently-opened\", ANYTHING): do not throw an error \"ETGMCreateNewGroupModal-113\", because \"type\" is one of the three valid strings", () => {
+                expect(() => {
+                    const presetProps = {
+                        data: {
+                            params: {
+                                type: "currently-opened"
+                            }
                         }
-                    }
-                };
-                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
-                componentInstance = testComponent.instance();
-                
-                componentInstance.renderWindowsAndTabsSection([], presetProps.data.params.type, expect.anything());
-            }).not.toThrow(ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-113"))
-        })
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
 
-        test("Run renderWindowsAndTabsSection([], \"new-group\", ANYTHING): do not throw an error \"ETGMCreateNewGroupModal-113\", because \"type\" is one of the three valid strings", () => {
-            expect(() => {
+                    componentInstance.renderWindowsAndTabsSection([], presetProps.data.params.type, expect.anything());
+                }).not.toThrow(ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-113"))
+            })
+
+            test("Run renderWindowsAndTabsSection([], \"existing-group\", ANYTHING): do not throw an error \"ETGMCreateNewGroupModal-113\", because \"type\" is one of the three valid strings", () => {
+                expect(() => {
+                    const presetProps = {
+                        data: {
+                            params: {
+                                type: "existing-group"
+                            }
+                        }
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    
+                    componentInstance.renderWindowsAndTabsSection([], presetProps.data.params.type, expect.anything());
+                }).not.toThrow(ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-113"))
+            })
+
+            test("Run renderWindowsAndTabsSection([], \"new-group\", ANYTHING): do not throw an error \"ETGMCreateNewGroupModal-113\", because \"type\" is one of the three valid strings", () => {
+                expect(() => {
+                    const presetProps = {
+                        data: {
+                            params: {
+                                type: "new-group"
+                            }
+                        }
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    
+                    componentInstance.renderWindowsAndTabsSection([], presetProps.data.params.type, expect.anything());
+                }).not.toThrow(ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-113"))
+            })
+
+            test("Run renderWindowsAndTabsSection([], \"donald duck\", ANYTHING): throw an error \"ETGMCreateNewGroupModal-113\", because \"type\" is NOT either one of the three valid strings", () => {
+                expect(() => {
+                    const presetProps = {
+                        data: {
+                            params: {
+                                type: "donald duck"
+                            }
+                        }
+                    };
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    
+                    componentInstance.renderWindowsAndTabsSection([], presetProps.data.params.type, expect.anything());
+                }).toThrow(ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-113"))
+            })
+
+            test("Run renderWindowsAndTabsSection([], \"new-group\", ANYTHING): The function should not return undefined", () => {
                 const presetProps = {
                     data: {
                         params: {
@@ -2954,25 +3015,309 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
                 };
                 testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
                 componentInstance = testComponent.instance();
-                
-                componentInstance.renderWindowsAndTabsSection([], presetProps.data.params.type, expect.anything());
-            }).not.toThrow(ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-113"))
+
+                expect(componentInstance.renderWindowsAndTabsSection([], presetProps.data.params.type, expect.anything())).not.toBeUndefined();
+            })
         })
 
-        test("Run renderWindowsAndTabsSection([], \"donald duck\", ANYTHING): throw an error \"ETGMCreateNewGroupModal-113\", because \"type\" is NOT either one of the three valid strings", () => {
-            expect(() => {
+        describe("Examine the function as a snapshot of return statement (snapshot test):", () => {
+            test("Run renderWindowsAndTabsSection([], \"new-group\", ANYTHING): The returned function should match this test snapshot", () => {
                 const presetProps = {
                     data: {
                         params: {
-                            type: "donald duck"
+                            type: "new-group"
                         }
                     }
                 };
                 testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
                 componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderWindowsAndTabsSection([], presetProps.data.params.type, expect.anything())).toMatchSnapshot();
+            })
+
+            test("Run renderWindowsAndTabsSection([], \"existing-group\", ANYTHING): The returned function should match this test snapshot", () => {
+                const presetProps = {
+                    data: {
+                        params: {
+                            type: "existing-group"
+                        }
+                    }
+                };
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderWindowsAndTabsSection([], presetProps.data.params.type, expect.anything())).toMatchSnapshot();
+            })
+
+            test("Run renderWindowsAndTabsSection([], \"currently-opened\", ANYTHING): The returned function should match this test snapshot", () => {
+                const presetProps = {
+                    data: {
+                        params: {
+                            type: "currently-opened"
+                        }
+                    }
+                };
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderWindowsAndTabsSection([], presetProps.data.params.type, expect.anything())).toMatchSnapshot();
+            })
+        })
+    })
+
+    describe("Test renderModalBody()", () => {
+        describe("Examine \"data\" key of this.props", () => {
+            test("Run renderModalBody(): If \"data\" props is undefined, return the error message of \"ETGMCreateNewGroupModal-136\"", () => {
+                const presetProps = {
+
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true })
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderModalBody()).toBe(expectedErrorReturns["ETGMCreateNewGroupModal-136"].message);
+                    
+            });
+
+            test.each(various_nonObjects)("Run renderModalBody(): If \"data\" = %p (not an object) in props, return the error message of \"ETGMCreateNewGroupModal-136\"", (val) => {
+                const presetProps = {
+                    data: val
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true })
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderModalBody()).toBe(expectedErrorReturns["ETGMCreateNewGroupModal-136"].message);
+                    
+            });
+
+            test("Run renderModalBody(): If \"data\" props is an object, do not return the error message of \"ETGMCreateNewGroupModal-136\"", () => {
+                const presetProps = {
+                    data: {}
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true })
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderModalBody()).not.toBe(expectedErrorReturns["ETGMCreateNewGroupModal-136"].message);
+                    
+            });
+        })
+
+        describe("Examine \"params\" key of this.props.data, assuming data is an object", () => {
+            test("Run renderModalBody(): If data.params is undefined, return the error message of \"ETGMCreateNewGroupModal-135\"", () => {
+                const presetProps = {
+                    data: {}
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true })
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderModalBody()).toBe(expectedErrorReturns["ETGMCreateNewGroupModal-135"].message);
+                    
+            });
+
+            test.each(various_nonObjects)("Run renderModalBody(): If data.parans = %p (not an object) in props, return the error message of \"ETGMCreateNewGroupModal-135\"", (val) => {
+                const presetProps = {
+                    data: {
+                        params: val
+                    }
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true })
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderModalBody()).toBe(expectedErrorReturns["ETGMCreateNewGroupModal-135"].message);
+                    
+            });
+
+            test("Run renderModalBody(): If data.params props is an object, do not return the error message of \"ETGMCreateNewGroupModal-135\"", () => {
+                const presetProps = {
+                    data: {
+                        params: {}
+                    }
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true })
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderModalBody()).not.toBe(expectedErrorReturns["ETGMCreateNewGroupModal-135"].message);
+                    
+            });
+        })
+
+        describe("Snapshot test of renderModalBody(), assuming information is available in this.props.data", () => {
+            test("Run renderModalBody(), with all parameters intact: Check that the snapshot matches the example set by the first test run", () => {
+                const presetProps = {
+                    data : {
+                        params: {
+                            groupName: "Test suite specific tab group",
+                            groupCloseAll: false,
+                            groupCloseInactiveTabs: true,
+                            groupDescription: "A tab group preset ub a test suite. This tab group is not real and is not actually stored anywhere.",
+                            type: "new-group"
+                        }
+                    }
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true })
+                componentInstance = testComponent.instance();
+                componentInstance.state.tabGroupDetails = {
+                    windowAndTabs: []
+                }
+
+                // Build a list of window and tabs
+                let windows = [...componentInstance.state.tabGroupDetails.windowAndTabs];
+                const inputUrl = "http://google.com";
                 
-                componentInstance.renderWindowsAndTabsSection([], presetProps.data.params.type, expect.anything());
-            }).toThrow(ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-113"))
+                windows.push({
+                    tabs: [{
+                        title: "A test tab in a test window",
+                        favIconUrl: inputUrl + "/favicon.ico",
+                        url: inputUrl
+                    },
+                    {
+                        title: "Another test tab in a test window",
+                        favIconUrl: inputUrl + "/favicon.ico",
+                        url: inputUrl
+                    }]
+                })
+
+                componentInstance.saveToState("windowAndTabs", windows, "tabGroupDetails");
+
+                expect(componentInstance.renderModalBody()).toMatchSnapshot();
+                    
+            });
+        }) 
+    })
+
+    describe("Test renderModalHeader()", () => {
+        describe("Examine \"data\" key of this.props", () => {
+            test("Run renderModalHeader(): If \"data\" props is undefined, return the error message stated in this test case", () => {
+                const presetProps = {
+
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true })
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderModalHeader()).toBe("Data section is missing in component props");
+                    
+            });
+
+            test.each(various_nonObjects)("Run renderModalHeader(): If \"data\" = %p (not an object) in props, return the error message of \"ETGMCreateNewGroupModal-136\"", (val) => {
+                const presetProps = {
+                    data: val
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true })
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderModalHeader()).toBe("Data section is missing in component props");
+                    
+            });
+
+            test("Run renderModalHeader(): If \"data\" props is an object, do not return the error message of \"ETGMCreateNewGroupModal-136\"", () => {
+                const presetProps = {
+                    data: {}
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true })
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderModalHeader()).not.toBe("Data section is missing in component props");
+                    
+            });
+        });
+
+        describe("Examine \"params\" key of this.props.data, assuming data is an object", () => {
+            test("Run renderModalHeader(): If data.params is undefined, return the error message stated in this test case", () => {
+                const presetProps = {
+                    data: {}
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true })
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderModalHeader()).toBe("Data parameters are missing");
+                    
+            });
+
+            test.each(various_nonObjects)("Run renderModalHeader(): If data.parans = %p (not an object) in props, return the error message stated in this test case", (val) => {
+                const presetProps = {
+                    data: {
+                        params: val
+                    }
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true })
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderModalHeader()).toBe("Data parameters are missing");
+                    
+            });
+
+            test("Run renderModalHeader(): If data.params props is an object, do not return the error message stated in this test case", () => {
+                const presetProps = {
+                    data: {
+                        params: {}
+                    }
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true })
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderModalHeader()).not.toBe("Data parameters are missing");
+                    
+            });
+
+            test("Run renderModalHeader(): If data.params.type = \"new-group\", return the error message given in this test case", () => {
+                const presetProps = {
+                    data: {
+                        params: {
+                            type: "new-group"
+                        }
+                    }
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true })
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderModalHeader()).toBe("Create a New Tab Group");
+                    
+            });
+
+            test("Run renderModalHeader(): If data.params.type = \"currently-opened\", return the error message given in this test case", () => {
+                const presetProps = {
+                    data: {
+                        params: {
+                            type: "currently-opened"
+                        }
+                    }
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true })
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderModalHeader()).toBe("Create a New Tab Group");
+                    
+            });
+
+            test("Run renderModalHeader(): If data.params.type = \"existing-group\", return the error message given in this test case", () => {
+                const presetProps = {
+                    data: {
+                        params: {
+                            type: "existing-group"
+                        }
+                    }
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true })
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderModalHeader()).toBe("Edit the \"" + (presetProps.data.params.groupName || "") + "\" tab group");
+                    
+            });
+
+            test("Run renderModalHeader(): If data.params.type = \"existing-group\", return the error message given in this test case", () => {
+                const presetProps = {
+                    data: {
+                        params: {
+                            type: "existing-group",
+                            groupName: "Testing tab group header title"
+                        }
+                    }
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true })
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderModalHeader()).toBe("Edit the \"" + (presetProps.data.params.groupName || "") + "\" tab group");
+                    
+            });
         })
     })
 });
