@@ -940,4 +940,91 @@ describe("Test <ETGMLaunchGroupsModal /> component behaviour at mount", () => {
             expect(componentInstance.clearModalData).toHaveBeenCalledTimes(1);
         })
     });
+
+    describe("Test renderManyTabsDetected(numberOfWindows, numberOfTabs)", () => {});
+
+    describe("Test renderLaunchOptions()", () => {
+        describe("Examine the function based on the value of this.props.data", () => {
+                
+            test("Run renderLaunchOptions(): If \"data\" is missing in this.props, return a string informing the user about this", () => {
+
+                const presetProps = {
+                     
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+
+
+                expect(componentInstance.renderLaunchOptions()).toBe("Information about the requested tab group was not provided to this modal. Please, contact the developer.");
+            })
+    
+            test.each(various_nonObjects)("Run renderLaunchOptions(): If \"data\" = %p (is not an object) in this.props, return a string informing the user about this", (val) => {
+                const presetProps = {
+                    data: val
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+
+                
+                expect(componentInstance.renderLaunchOptions()).toBe("Information about the requested tab group was not provided to this modal. Please, contact the developer.");
+            })
+
+            test("Run renderLaunchOptions(): If \"data\" is an object, do not trigger error handling", () => {
+                const presetProps = {
+                    data: {}
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+
+                
+                expect(componentInstance.renderLaunchOptions()).not.toBe("Information about the requested tab group was not provided to this modal. Please, contact the developer.");
+            })
+        })
+        
+        describe("Examine the function based on the value of this.props.data.params", () => {
+            test("Run renderLaunchOptions(): If \"params\" is missing in this.props.data, return a string informing the user about this", () => {
+                const presetProps = {
+                    data: {
+
+                    }
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+
+                
+                expect(componentInstance.renderLaunchOptions()).toBe("The options could not be loaded because the relevant parameters were not provided with the group data. Please, contact the developer.");
+            })
+    
+            test.each(various_nonObjects)("Run renderLaunchOptions(): If \"params\" = %p (is not an object) in this.props.data, return a string informing the user about this", (val) => {
+                const presetProps = {
+                    data: {
+                        params: val
+                    }
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+
+                
+
+                expect(componentInstance.renderLaunchOptions()).toBe("The options could not be loaded because the relevant parameters were not provided with the group data. Please, contact the developer.");
+            })
+
+            test("Run renderLaunchOptions(): If \"data\" is an object, do not trigger error handling", () => {
+                const presetProps = {
+                    data: {
+                        params: {}
+                    }
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                componentInstance = testComponent.instance();
+
+                
+                expect(componentInstance.renderLaunchOptions()).not.toBe("The options could not be loaded because the relevant parameters were not provided with the group data. Please, contact the developer.");   
+            })
+        });
+
+        describe("Examine the function, when this.props.data and this.props.data.params are valid", () => {
+            // To Be Continue...
+        })
+    });
 });

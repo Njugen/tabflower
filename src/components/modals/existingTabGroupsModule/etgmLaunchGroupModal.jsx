@@ -168,6 +168,7 @@ class ETGMLaunchGroupsModal extends Modal {
         - numberOfTabs (optional, number)
     */
     renderManyTabsDetected = (numberOfWindows, numberOfTabs) => {
+   
         return (
             <p>
                 Warning: You are about to launch a group consisting of {numberOfWindows || "undefined number of "} windows and {numberOfTabs || "undefined number of "} tabs. This might stress your computer down in the long run
