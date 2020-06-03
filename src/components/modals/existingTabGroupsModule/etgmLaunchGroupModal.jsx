@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import Modal from '../modal';
 
 import TBCheckBox from "../../utils/form/tbCheckbox";
-import { ValidatorError, ErrorHandler } from '../../utils/exceptionsAndHandler';
+import * as ExceptionsHandler from '../../utils/exceptionsAndHandler';
 import * as validator from '../../utils/inputValidators'
 
 class ETGMLaunchGroupsModal extends Modal {
@@ -15,73 +15,86 @@ class ETGMLaunchGroupsModal extends Modal {
         by other modal components). 
     */
     verifyChildProps = () => {
-        const { isString, isUndefined, isBoolean, isArray } = validator;
-        const { 
-            groupId, 
-            groupName, 
-            groupCloseAll, 
-            groupCloseInactiveTabs,
-            groupDescription, 
-            windowAndTabs 
-        } = this.props.data.params;
-
-        /*
-            groupId (string, optional)
-
-            A group id is necessary when attempting to launch a tab group. If there is no group to target,
-            then throw an error
-        */
-        if(!isString(groupId)){ 
-            throw ValidatorError("ETGMLaunchGroupsModal-102"); 
-        }
-
-        /*
-            groupName (string, optional)
-
-            A group name is optional and if given, should always be a string.
-        */
-
-        if(!isString(groupName) && !isUndefined(groupName)){
-            throw ValidatorError("ETGMLaunchGroupsModal-103");
-        }
-
-        /*
-            groupDescription (string, optional)
-
-            A group description is optional and if given, should always be a string. 
-        */
-        if(!isString(groupDescription) && !isUndefined(groupDescription)){
-            throw ValidatorError("ETGMLaunchGroupsModal-104");
-        }
-
-        /*
-            groupCloseAll (boolean, optional)
-
-            This parameter is optional and if given, should always be a boolean (either true or false).
-        */
-        if(!isBoolean(groupCloseAll) && !isUndefined(groupCloseAll)){
-            throw ValidatorError("ETGMLaunchGroupsModal-105");
-        }
-
-        /*
-            groupCloseInactiveTabs (boolean, optional)
-
-            This parameter is optional and if given, should always be a boolean (either true or false)
-        */
-        if(!isBoolean(groupCloseInactiveTabs) && !isUndefined(groupCloseInactiveTabs)){
-            throw ValidatorError("ETGMLaunchGroupsModal-106");
-        }
-
-        /* 
-            windowAndTabs (object, mandatory)
-
-            This parameter contains windows and tabs stored into a single array. If there are no windows/tabs, this array
-            is empty e.g. windowAndTabs = []
-        */
+        const { isString, isUndefined, isBoolean, isArray, isObject } = validator;
+        const { data } = this.props;
         
-       if(!isArray(windowAndTabs)){
-        throw ValidatorError("ETGMLaunchGroupsModal-107");
-    }
+        if(isObject(data)){
+            const { params } = this.props.data;
+
+            if(isObject(params)){
+                const { 
+                    groupId, 
+                    groupName, 
+                    groupCloseAll, 
+                    groupCloseInactiveTabs,
+                    groupDescription, 
+                    windowAndTabs 
+                } = this.props.data.params;
+                
+                /*
+                    groupId (string, optional)
+        
+                    A group id is necessary when attempting to launch a tab group. If there is no group to target,
+                    then throw an error
+                */
+                if(!isString(groupId)){ 
+                    throw ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-102"); 
+                }
+        
+                /*
+                    groupName (string, optional)
+        
+                    A group name is optional and if given, should always be a string.
+                */
+        
+                if(!isString(groupName) && !isUndefined(groupName)){
+                    throw ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-103");
+                }
+        
+                /*
+                    groupDescription (string, optional)
+        
+                    A group description is optional and if given, should always be a string. 
+                */
+                if(!isString(groupDescription) && !isUndefined(groupDescription)){
+                    throw ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-104");
+                }
+        
+                /*
+                    groupCloseAll (boolean, optional)
+        
+                    This parameter is optional and if given, should always be a boolean (either true or false).
+                */
+                if(!isBoolean(groupCloseAll) && !isUndefined(groupCloseAll)){
+                    throw ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-105");
+                }
+        
+                /*
+                    groupCloseInactiveTabs (boolean, optional)
+        
+                    This parameter is optional and if given, should always be a boolean (either true or false)
+                */
+                if(!isBoolean(groupCloseInactiveTabs) && !isUndefined(groupCloseInactiveTabs)){
+                    throw ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-106");
+                }
+        
+                /* 
+                    windowAndTabs (object, mandatory)
+        
+                    This parameter contains windows and tabs stored into a single array. If there are no windows/tabs, this array
+                    is empty e.g. windowAndTabs = []
+                */
+                
+                if(!isArray(windowAndTabs)){
+                    throw ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-107");
+                }
+            } else {
+                throw ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-108");
+            }
+        } else {
+            throw ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-109");
+        }
+        
     }
 
     /*
@@ -109,10 +122,10 @@ class ETGMLaunchGroupsModal extends Modal {
                 };
                 this.clearModalData(callback(tabGroupDetails));
             } else {
-                throw ValidatorError("ETGMLaunchGroupsModal-101");
+                throw ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-101");
             }
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
@@ -126,7 +139,7 @@ class ETGMLaunchGroupsModal extends Modal {
         try {
             this.clearModalData();
         } catch(err){
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
     }
 
@@ -155,20 +168,34 @@ class ETGMLaunchGroupsModal extends Modal {
         the behaviour of the launching tab group.
     */
     renderLaunchOptions = () => {
-     
-        const {
-            groupCloseAll,
-            groupCloseInactiveTabs,
-            groupDontAskAgain
-        } = this.props.data.params;
-        return (
+        const { data } = this.props;
+        const { isObject } = validator;
 
-            <Fragment>
-                <TBCheckBox id="tabGroupCloseAll" label="Close all currently opened tabs and windows" value={groupCloseAll && groupCloseAll === true ? "true" : "false"} onToggle={(id, value) => this.saveToState(id, value, "tabGroupDetails")} />
-                <TBCheckBox id="tabGroupCloseInactiveTabs" label="Automatically close all unresponsive tabs opened by this tab group" value={groupCloseInactiveTabs && groupCloseInactiveTabs === true ? "true" : "false"} onToggle={(id, value) => this.saveToState(id, value, "tabGroupDetails")} />
-                <TBCheckBox id="tabGroupDontAskAgain" label="Save all selected options and do not show this message again (All settings offered in this popup can still be changed for any tab group. Just click the cog wheel for the tab group you want to change)." value={groupDontAskAgain && groupDontAskAgain === true ? "true" : "false"} onToggle={(id, value) => this.saveToState(id, value, "tabGroupDetails")} />
-            </Fragment>
-        );
+        if(isObject(data)){
+            const { params } = this.props.data;
+
+            if(isObject(params)){
+                const {
+                    groupCloseAll,
+                    groupCloseInactiveTabs,
+                    groupDontAskAgain
+                } = this.props.data.params;
+                
+                return (
+
+                    <Fragment>
+                        <TBCheckBox id="tabGroupCloseAll" label="Close all currently opened tabs and windows" value={groupCloseAll && groupCloseAll === true ? "true" : "false"} onToggle={(id, value) => this.saveToState(id, value, "tabGroupDetails")} />
+                        <TBCheckBox id="tabGroupCloseInactiveTabs" label="Automatically close all unresponsive tabs opened by this tab group" value={groupCloseInactiveTabs && groupCloseInactiveTabs === true ? "true" : "false"} onToggle={(id, value) => this.saveToState(id, value, "tabGroupDetails")} />
+                        <TBCheckBox id="tabGroupDontAskAgain" label="Save all selected options and do not show this message again (All settings offered in this popup can still be changed for any tab group. Just click the cog wheel for the tab group you want to change)." value={groupDontAskAgain && groupDontAskAgain === true ? "true" : "false"} onToggle={(id, value) => this.saveToState(id, value, "tabGroupDetails")} />
+                    </Fragment>
+                );
+            } else {
+                return "The options could not be loaded because the relevant parameters were not provided with the group data. Please, contact the developer.";
+            }
+        } else {
+            return "Information about the requested tab group was not provided to this modal. Please, contact the developer.";
+        }
+            
     }
 
     renderModalBody(){

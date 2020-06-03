@@ -254,6 +254,12 @@ export const ValidatorError = (code) => {
         case "ETGMLaunchGroupsModal-107":
             message = "The \"windowAndTabs\" parameter needs to be an object in this.props.data.params, containing information about all windows and tabs in a tab group. If there is no such information available, this parameter should be an empty object. As a result of this error, the requested tab group cannot be launched at this time.";
             break;  
+        case "ETGMLaunchGroupsModal-108":
+            message = "The \"params\" key in this.props.data is not an object. The required parameters could not be read.";
+            break;  
+        case "ETGMLaunchGroupsModal-109":
+            message = "The \"data\" key in this.props is not an object. The data key needs to be an object, which provides parameters and other data required by the modal";
+            break;  
         // COTMRemoveTabModal     
         case "COTMRemoveTabModal-101": 
             message = "The targetted tab could not be identified since its unique identification number is missing or provided in wrong format. This might be caused if the tab information has been modified per request. Please, make sure the tab information has not been modified after being retrieved directly from the browser. As a result, the targetted tab cannot be deleted at this time.";

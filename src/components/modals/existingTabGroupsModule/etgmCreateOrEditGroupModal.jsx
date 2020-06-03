@@ -531,19 +531,20 @@ class ETGMCreateNewGroupModal extends Modal {
                     let windows;
 
                     if(Object.keys(this.state.tabGroupDetails.windowAndTabs).length > 0){
-                        windows = [...this.state.tabGroupDetails.windowAndTabs];
-                        
+                        //windows = [...this.state.tabGroupDetails.windowAndTabs];
+                        windows = JSON.stringify(this.state.tabGroupDetails.windowAndTabs);
+                        const parsedWindows = JSON.parse(windows);
 
-                        if(isObject(windows[windowIndex])){
-                            if(isObject(windows[windowIndex].tabs[tabIndex])){
-                                windows[windowIndex].tabs.splice(tabIndex, 1);
+                        if(isObject(parsedWindows[windowIndex])){
+                            if(isObject(parsedWindows[windowIndex].tabs[tabIndex])){
+                                parsedWindows[windowIndex].tabs.splice(tabIndex, 1);
                             }
                             
-                            if(windows[windowIndex].tabs.length < 1){
-                                windows.splice(windowIndex, 1);
+                            if(parsedWindows[windowIndex].tabs.length < 1){
+                                parsedWindows.splice(windowIndex, 1);
                             }
     
-                            this.saveToState("windowAndTabs", windows, "tabGroupDetails") 
+                            this.saveToState("windowAndTabs", parsedWindows, "tabGroupDetails") 
                             
                         } else {
                             throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-131")
@@ -578,12 +579,13 @@ class ETGMCreateNewGroupModal extends Modal {
 
             if(isAtLeastZero(windowIndex)){
                 if(Object.keys(this.state.tabGroupDetails.windowAndTabs).length > 0){
-                    windows = [...this.state.tabGroupDetails.windowAndTabs];
+                    windows = JSON.stringify(this.state.tabGroupDetails.windowAndTabs);
+                    const parsedWindows = JSON.parse(windows);
                     
-                    if(isObject(windows[windowIndex])){
-                        windows.splice(windowIndex, 1);
+                    if(isObject(parsedWindows[windowIndex])){
+                        parsedWindows.splice(windowIndex, 1);
 
-                        this.saveToState("windowAndTabs", windows, "tabGroupDetails") 
+                        this.saveToState("windowAndTabs", parsedWindows, "tabGroupDetails") 
                     } else {
                         throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-134")
                     }
