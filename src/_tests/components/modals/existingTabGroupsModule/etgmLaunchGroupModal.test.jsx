@@ -671,4 +671,264 @@ describe("Test <ETGMLaunchGroupsModal /> component behaviour at mount", () => {
 
 
     });
+
+    describe("Test saveModalHandler(callback)", () => {
+        describe("Case 1: When callback is a function", () => {
+            const callback = () => {};
+
+            describe("Examine the function based on the value of this.props.data", () => {
+                
+                test("Run saveModalHandler(callback): If \"data\" is missing in this.props, throw an error \"ETGMLaunchGroupsModal-109\"", () => {
+
+                    const presetProps = {
+                         
+                    }
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+    
+                    componentInstance.saveModalHandler(callback);
+
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMLaunchGroupsModal-109");
+                })
+        
+                test.each(various_nonObjects)("Run saveModalHandler(callback): If \"data\" = %p (is not an object) in this.props, throw an error \"ETGMLaunchGroupsModal-109\"", (val) => {
+                    const presetProps = {
+                        data: val
+                    }
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+    
+                    componentInstance.saveModalHandler(callback);
+                    
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMLaunchGroupsModal-109");
+                })
+    
+                test("Run saveModalHandler(callback): If \"data\" is an object, do NOT throw error \"ETGMLaunchGroupsModal-109\"", () => {
+                    const presetProps = {
+                        data: {}
+                    }
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+    
+                    componentInstance.saveModalHandler(callback);
+                    
+                    expect(ExceptionsHandler.ValidatorError).not.toHaveBeenCalledWith("ETGMLaunchGroupsModal-109");
+                })
+            })
+            
+            describe("Examine the function based on the value of this.props.data.params", () => {
+                test("Run saveModalHandler(callback): If \"params\" is missing in this.props.data, throw an error \"ETGMLaunchGroupsModal-108\"", () => {
+                    const presetProps = {
+                        data: {
+
+                        }
+                    }
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+    
+                    componentInstance.saveModalHandler(callback);
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMLaunchGroupsModal-108");
+                })
+        
+                test.each(various_nonObjects)("Run saveModalHandler(callback): If \"params\" = %p (is not an object) in this.props.data, throw an error \"ETGMLaunchGroupsModal-108\"", (val) => {
+                    const presetProps = {
+                        data: {
+                            params: val
+                        }
+                    }
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+    
+                    componentInstance.saveModalHandler(callback);
+
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMLaunchGroupsModal-108");
+                })
+    
+                test("Run saveModalHandler(callback): If \"data\" is an object, do NOT throw error \"ETGMLaunchGroupsModal-108\"", () => {
+                    const presetProps = {
+                        data: {
+                            params: {}
+                        }
+                    }
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+    
+                    componentInstance.saveModalHandler(callback);
+                    expect(ExceptionsHandler.ValidatorError).not.toHaveBeenCalledWith("ETGMLaunchGroupsModal-108");   
+                })
+            });
+
+            describe("Examine the function based on the value of \"callback\" input parameter", () => {
+                test("Run saveModalHandler(callback): If this.props.data and this.props.data.params are valid, call this.clearModalData()", () => {
+                    const presetProps = {
+                        data: {
+                            params: {}
+                        }
+                    }
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    componentInstance.clearModalData = jest.fn();
+
+                    componentInstance.saveModalHandler(callback); 
+
+                    expect(componentInstance.clearModalData).toHaveBeenCalled();
+                })
+
+                test("Run saveModalHandler(callback): If this.props.data and this.props.data.params are valid, call this.clearModalData(callback) which in turns calls the callback function", () => {
+                    const presetProps = {
+                        data: {
+                            params: {}
+                        }
+                    }
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+
+                    const callback = jest.fn();
+
+                    componentInstance.clearModalData = jest.fn();
+
+                    componentInstance.saveModalHandler(callback); 
+
+                    expect(componentInstance.clearModalData).toHaveBeenCalledWith(callback(expect.anything()));
+                })
+
+                test("Run saveModalHandler(callback): If this.props.data and this.props.data.params are valid, call this.clearModalData(callback) which in turns calls the callback function (the callback function receives an object input defined in this test case)", () => {
+                    const presetProps = {
+                        data: {
+                            params: {
+                                groupId: "ABCD-1234",
+                                groupName: "Test Group for ETGM Launch Group Modal",
+                                groupDescription: "This test group is only preset in the test suite. It is not preset in the real extension.",
+                                groupCloseAll: false,
+                                groupCloseInactiveTabs: false,
+                                windowAndTabs: []
+                            }
+                        }
+                    }
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+
+                    const tabGroupDetails = {
+                        groupId: componentInstance.props.data.params.groupId,
+                        windowAndTabs: componentInstance.props.data.params.windowAndTabs,
+                        tabGroupName: componentInstance.props.data.params.groupName,
+                        tabGroupDescription: componentInstance.props.data.params.groupDescription,
+                        ...componentInstance.state.tabGroupDetails 
+                    }
+
+                    const callback = jest.fn();
+
+                    componentInstance.clearModalData = jest.fn();
+
+                    componentInstance.saveModalHandler(callback); 
+
+                    expect(componentInstance.clearModalData).toHaveBeenCalledWith(callback());
+                    expect(callback).toHaveBeenCalledWith(tabGroupDetails);
+                })
+            });
+        })
+        
+        describe("Case 2: When callback is NOT a function", () => {
+            const callback = "Test non function variable string";
+
+            describe("Examine the function based on the value of this.props.data", () => {
+                
+                test("Run saveModalHandler(callback): If \"data\" is missing in this.props, throw an error \"ETGMLaunchGroupsModal-109\"", () => {
+
+                    const presetProps = {
+                         
+                    }
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+    
+                    componentInstance.saveModalHandler(callback);
+
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMLaunchGroupsModal-109");
+                })
+        
+                test.each(various_nonObjects)("Run saveModalHandler(callback): If \"data\" = %p (is not an object) in this.props, throw an error \"ETGMLaunchGroupsModal-109\"", (val) => {
+                    const presetProps = {
+                        data: val
+                    }
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+    
+                    componentInstance.saveModalHandler(callback);
+                    
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMLaunchGroupsModal-109");
+                })
+    
+                test("Run saveModalHandler(callback): If \"data\" is an object, do NOT throw error \"ETGMLaunchGroupsModal-109\"", () => {
+                    const presetProps = {
+                        data: {}
+                    }
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+    
+                    componentInstance.saveModalHandler(callback);
+                    
+                    expect(ExceptionsHandler.ValidatorError).not.toHaveBeenCalledWith("ETGMLaunchGroupsModal-109");
+                })
+            })
+            
+            describe("Examine the function based on the value of this.props.data.params", () => {
+                test("Run saveModalHandler(callback): If \"params\" is missing in this.props.data, throw an error \"ETGMLaunchGroupsModal-108\"", () => {
+                    const presetProps = {
+                        data: {
+
+                        }
+                    }
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+    
+                    componentInstance.saveModalHandler(callback);
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMLaunchGroupsModal-108");
+                })
+        
+                test.each(various_nonObjects)("Run saveModalHandler(callback): If \"params\" = %p (is not an object) in this.props.data, throw an error \"ETGMLaunchGroupsModal-108\"", (val) => {
+                    const presetProps = {
+                        data: {
+                            params: val
+                        }
+                    }
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+    
+                    componentInstance.saveModalHandler(callback);
+
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMLaunchGroupsModal-108");
+                })
+    
+                test("Run saveModalHandler(callback): If \"data\" is an object, do NOT throw error \"ETGMLaunchGroupsModal-108\"", () => {
+                    const presetProps = {
+                        data: {
+                            params: {}
+                        }
+                    }
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+    
+                    componentInstance.saveModalHandler(callback);
+                    expect(ExceptionsHandler.ValidatorError).not.toHaveBeenCalledWith("ETGMLaunchGroupsModal-108");   
+                })
+            });
+
+            describe("Examine the function based on the value of \"callback\" input parameter", () => {
+                test("Run saveModalHandler(callback): If this.props.data and this.props.data.params are valid, throw an error \"ETGMLaunchGroupsModal-101\"", () => {
+                    const presetProps = {
+                        data: {
+                            params: {}
+                        }
+                    }
+                    testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+                    componentInstance = testComponent.instance();
+                    componentInstance.clearModalData = jest.fn();
+
+                    componentInstance.saveModalHandler(callback); 
+
+                    expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("ETGMLaunchGroupsModal-101");
+                })
+            });
+        })
+    });
 });

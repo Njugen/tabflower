@@ -109,21 +109,35 @@ class ETGMLaunchGroupsModal extends Modal {
     */
     saveModalHandler = (callback) => {
         try {
-            const { isFunction } = validator;
+            const { isFunction, isObject } = validator;
+            const { data } = this.props;
 
-            if(isFunction(callback)){
-                //this.clearModalData(callback(this.props.data.params));
-                const tabGroupDetails = {
-                    groupId: this.props.data.params.groupId,
-                    windowAndTabs: this.props.data.params.windowAndTabs,
-                    tabGroupName: this.props.data.params.groupName,
-                    tabGroupDescription: this.props.data.params.groupDescription,
-                    ...this.state.tabGroupDetails 
-                };
-                this.clearModalData(callback(tabGroupDetails));
+            if(isObject(data)){
+                const { params } = this.props.data;
+    
+                if(isObject(params)){
+
+
+                    if(isFunction(callback)){
+                        //this.clearModalData(callback(this.props.data.params));
+                        const tabGroupDetails = {
+                            groupId: this.props.data.params.groupId,
+                            windowAndTabs: this.props.data.params.windowAndTabs,
+                            tabGroupName: this.props.data.params.groupName,
+                            tabGroupDescription: this.props.data.params.groupDescription,
+                            ...this.state.tabGroupDetails 
+                        };
+                        this.clearModalData(callback(tabGroupDetails));
+                    } else {
+                        throw ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-101");
+                    }
+                } else {
+                    throw ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-108");
+                }
             } else {
-                throw ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-101");
+                throw ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-109");
             }
+            
         } catch(err){
             ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
         }
