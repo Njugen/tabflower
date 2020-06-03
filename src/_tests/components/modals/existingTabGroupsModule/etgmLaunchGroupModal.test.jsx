@@ -931,4 +931,13 @@ describe("Test <ETGMLaunchGroupsModal /> component behaviour at mount", () => {
             });
         })
     });
+
+    describe("Test dismissModalHandler()", () => {
+        test("Run dismissModalHandler(): the function this.clearModalData() should be called", () => {
+            componentInstance.clearModalData = jest.fn();
+            componentInstance.dismissModalHandler();
+
+            expect(componentInstance.clearModalData).toHaveBeenCalledTimes(1);
+        })
+    });
 });

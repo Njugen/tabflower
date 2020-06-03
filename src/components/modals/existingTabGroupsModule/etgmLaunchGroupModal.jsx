@@ -17,7 +17,7 @@ class ETGMLaunchGroupsModal extends Modal {
     verifyChildProps = () => {
         const { isString, isUndefined, isBoolean, isArray, isObject } = validator;
         const { data } = this.props;
-        
+
         if(isObject(data)){
             const { params } = this.props.data;
 
