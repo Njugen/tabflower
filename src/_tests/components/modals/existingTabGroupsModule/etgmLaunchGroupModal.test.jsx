@@ -1024,7 +1024,45 @@ describe("Test <ETGMLaunchGroupsModal /> component behaviour at mount", () => {
         });
 
         describe("Examine the function, when this.props.data and this.props.data.params are valid", () => {
-            // To Be Continue...
+            test("Run renderLaunchOptions(): The output based on the preset props should match the snapshot. Evaluate the snapshot after every run of this test case.", () => {
+                const presetProps = {
+                    data: {
+                        params: {
+                            groupCloseAll: false,
+                            groupCloseInactiveTabs: true,
+                            groupDontAskAgain: true
+                        }
+                    }
+                }
+                testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true })
+                componentInstance = testComponent.instance();
+
+                expect(componentInstance.renderLaunchOptions()).toMatchSnapshot();
+            });
         })
     });
+
+    describe("Test renderModalBody()", () => {
+        test("Run renderModalBody():  The output based on the preset props should match the snapshot. Evaluate the snapshot after every run of this test case.", () => {
+            const presetProps = {
+                data: {
+                    params: {
+                        groupCloseAll: false,
+                        groupCloseInactiveTabs: true,
+                        groupDontAskAgain: true
+                    }
+                }
+            }
+            testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true })
+            componentInstance = testComponent.instance();
+
+            expect(componentInstance.renderModalBody()).toMatchSnapshot();
+        })
+    })
+
+    describe("Test renderModalHeader()", () => {
+        test("Run renderModalBody(): It should return a text string representing the header of the modal", () => {
+            expect(componentInstance.renderModalHeader()).toBe("Confirm launch of selected tabs");
+        })
+    })
 });
