@@ -232,6 +232,12 @@ export const ValidatorError = (code) => {
         case "ETGMRemoveGroupsModal-103":
             message = "A tab group name needs to be provided to this modal for user convenience. The tab group name needs to be a text string";
             break;         
+        case "ETGMRemoveGroupsModal-104":
+            message = "The \"params\" key in this.props.data is not an object. The required parameters could not be read.";
+            break;       
+        case "ETGMRemoveGroupsModal-105":
+            message = "The \"data\" key in this.props is not an object. The data key needs to be an object, which provides parameters and other data required by the modal";
+            break;           
         // ETGMLaunchGroupsModal
         case "ETGMLaunchGroupsModal-101":
             message = "The callback parameter is not a function.";
