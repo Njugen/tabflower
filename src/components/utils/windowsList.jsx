@@ -408,11 +408,14 @@ class WindowsList extends Component {
 
         return (
             <div className="addNewTabForm">
+                <h5>Add new tab to Window {windowIndex + 1}</h5>
                 <TBTextInput id="newTabURL" label="URL" value={this.state.newWindowURL || "https://"} onChange={(id, value) => this.handleAddNewTabInputChange(id, value)}></TBTextInput>
-                <button onClick={() => this.cancelNewTab(containerId)}>Cancel</button>
-                <button onClick={() => this.raiseNewTabToModal(this.state.newTabURL, windowIndex, () =>{
-                    this.cancelNewTab(containerId)
-                })}>Add tab to window</button>
+                <div className="text-aligner p-3">
+                    <button className="btn btn-secondary" onClick={() => this.cancelNewTab(containerId)}>Cancel</button>
+                    <button className="btn-tabeon btn" onClick={() => this.raiseNewTabToModal(this.state.newTabURL, windowIndex, () =>{
+                        this.cancelNewTab(containerId)
+                    })}>Add tab to window</button>
+                </div>
             </div>
         )
     }

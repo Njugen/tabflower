@@ -631,9 +631,24 @@ div.container-fluid > .row > div[class^="col-"] {
 
 .addNewWindowForm > h5 {
     display: inline-block;
-    margin: 1rem 0rem 0rem 0rem;
-    text-align: center;
+    margin: 1rem 0rem 0rem 1rem;
+    text-align: left;
     width: 100%;
+    color: #242424;
+}
+
+/* Add New Tab Form Area */
+
+.addNewTabForm {
+    background: #e2e2e2;
+}
+
+.addNewTabForm > h5 {
+    display: inline-block;
+    margin: 1rem 0rem 0rem 1rem;
+    text-align: left;
+    width: 100%;
+    color: #242424;
 }
 
 /* other */

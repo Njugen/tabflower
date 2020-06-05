@@ -27,6 +27,7 @@ class ETGMRemoveGroupsModal extends Modal {
 
                     // If this variable is provided and true, the task will be to delete all tab groups.
                     // groupId and groupName will be ignored
+                    
                 }
             } else {
                 throw ExceptionsHandler.ValidatorError("ETGMRemoveGroupsModal-104");
@@ -49,12 +50,23 @@ class ETGMRemoveGroupsModal extends Modal {
     */
     saveModalHandler = (callback) => {
         try {
-            const { isFunction } = validator; 
+            const { isFunction, isObject } = validator;
+            const { data } = this.props;
 
-            if(isFunction(callback)){
-                this.clearModalData(callback(this.props.data.params));
+            if(isObject(data)){
+                const { params } = this.props.data;
+    
+                if(isObject(params)){
+                    if(isFunction(callback)){
+                        this.clearModalData(callback(this.props.data.params));
+                    } else {
+                        throw ExceptionsHandler.ValidatorError("ETGMRemoveGroupsModal-101");
+                    }
+                } else {
+                    throw ExceptionsHandler.ValidatorError("ETGMRemoveGroupsModal-104");
+                }
             } else {
-                throw ExceptionsHandler.ValidatorError("ETGMRemoveGroupsModal-101");
+                throw ExceptionsHandler.ValidatorError("ETGMRemoveGroupsModal-105");
             }
         } catch(err){
             ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
@@ -93,8 +105,10 @@ class ETGMRemoveGroupsModal extends Modal {
                     </Fragment>
                 );  
             } else {
-
+                return "ETGMRemoveGroupsModal-104";
             }
+        } else {
+            return "ETGMRemoveGroupsModal-105";
         }
           
     }
@@ -116,7 +130,7 @@ class ETGMRemoveGroupsModal extends Modal {
         
     }
 }
-
+/*
 ETGMRemoveGroupsModal.propTypes = {
     data: PropTypes.shape({
             params: PropTypes.shape({
@@ -127,5 +141,5 @@ ETGMRemoveGroupsModal.propTypes = {
     onRaiseToErrorOverlay: PropTypes.func.isRequired,
     onDismiss: PropTypes.func.isRequired
 }
-
+*/
 export default ETGMRemoveGroupsModal;
