@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { NavLink } from "react-router-dom";
 import PropTypes from 'prop-types';
 
@@ -27,18 +27,24 @@ class NavSection extends Component {
         } = this.props;
 
         return(
-            <div className="tabeon-nav-section">
-                <div className="row">
-                    <div className="col-md-2">
-                        <h4 className="tabeon-nav-section-title p-2 pb-3 mb-0">{title}</h4>
-                    </div>
-                    <div className="col-md-10 tabeon-nav-link-container">
-                        {
-                            this.mapLinks(links, onNavClick)
-                        }
+            <Fragment>
+                <div className="row d-flex justify-content-center">
+                    <div className="row">
+                        <div className="col-md-2">
+                            <h4 className="tabeon-nav-section-title p-2 pb-3 mb-0">{title}</h4>
+                        </div>
                     </div>
                 </div>
-            </div>
+                <div className="row d-flex justify-content-center">    
+                    <div className="row">    
+                        <div className="col-md-12 tabeon-nav-link-container">
+                            {
+                                this.mapLinks(links, onNavClick)
+                            }
+                        </div>
+                    </div>
+                </div>
+            </Fragment>
         )
     }
 }

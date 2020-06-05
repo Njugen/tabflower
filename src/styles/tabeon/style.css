@@ -19,6 +19,9 @@ div.container-fluid > .row > div[class^="col-"] {
 #tabeon-main-nav-column {
     background: #ffffff;
     box-shadow: 5px 0px 0px 0px #ffffff;
+    border-bottom: 1px solid #a0a0a0;
+
+    margin-bottom: 1.5rem;
 }
 
 
@@ -35,6 +38,9 @@ div.container-fluid > .row > div[class^="col-"] {
         border-bottom: 0px solid #7a1d8c;
         color: #525252;
         text-align: left;
+        font-size: 2rem;
+        margin: 1.5rem;
+        display: inline-block;
     }
 
 .tabeon-nav-link-container {

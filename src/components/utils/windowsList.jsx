@@ -94,9 +94,11 @@ class WindowsList extends Component {
                     }
 
                     /* Toggle up/down icon of window bar */
-                    const iconElement = (event !== null && event.target);
+                    
+                    const iconElement = (event !== null && (event.target.parentElement.parentElement.children[1].children[0]));
                     
                     if(iconElement){
+                        console.log(event ? event.target.parentElement.parentElement.children[1].children[0].className.includes("fa-chevron-up") : "");
                         if(iconElement.className.includes("fa-chevron-up")){
                             iconElement.className = "fas fa-chevron-down";
                         } else {
@@ -143,7 +145,7 @@ class WindowsList extends Component {
             const tabList = windowElement.getElementsByClassName("tab-listing")[0];
             let tabListIsHorizontal = tabList.className.includes("horizontal") || (!tabList.className.includes("horizontal") && !tabList.className.includes("vertical"));
             const tabListItems = tabList.getElementsByTagName("li");
-           
+
             for(let i = 0; i < tabListItems.length; i++){
                 const isChildOfTabListing = tabListItems[i].parentNode.className.includes("tab-listing");
 
@@ -156,11 +158,18 @@ class WindowsList extends Component {
                 }
             }
 
+            /*
             if(tabListIsHorizontal){
                 tabList.className = tabList.className.replace("horizontal", "vertical");
             } else {
                 tabList.className = tabList.className.replace("vertical", "horizontal");
+            } */
+
+            if(tabList.style.display === "none" || tabList.classList.contains("tab-listing-hide")){
+                this.toggleTabListVisibility(event, windowId, false);
             }
+
+            
 
             /* Toggle tab style icon of window bar */
             const iconElement = event.target;
