@@ -179,7 +179,7 @@ class COTMRemoveTabModal extends Modal {
         return "Close Tab";    
     }
 }
-/*
+
 COTMRemoveTabModal.propTypes = {
     data: PropTypes.shape({
         params: PropTypes.shape({
@@ -192,5 +192,5 @@ COTMRemoveTabModal.propTypes = {
     onRaiseToErrorOverlay: PropTypes.func.isRequired,
     onDismiss: PropTypes.func.isRequired
 }
-*/
+
 export default COTMRemoveTabModal;

@@ -68,10 +68,10 @@ class TBCheckBox extends Component {
         
         return (
             <div className="tb-form-row-checkbox row d-flex justify-content-between">
-                <div className="col-8 label">
+                <div className="col-9 label">
                     <span>{typeof label === "string" && label}</span>
                 </div>
-                <div className="col-3">
+                <div className="col-2">
                     <div ref={this.checkboxRef} className="tb-checkbox-container" onClick={(e) => this.toggleCheckbox(e.target)}>
                         <span className="tb-checkbox-ball"></span>
                     </div>

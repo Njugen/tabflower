@@ -155,11 +155,11 @@ class View extends Component {
         return null;
     }
 }
-/*
+
 View.propTypes = {
     onRaiseToModal: PropTypes.func.isRequired,
     onViewMount: PropTypes.func.isRequired,
     onRaiseToErrorOverlay: PropTypes.func.isRequired
-} */
+} 
 
 export default View;

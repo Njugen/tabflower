@@ -738,7 +738,7 @@ class ETGMCreateNewGroupModal extends Modal {
     }
 }
 
-/*
+
 ETGMCreateNewGroupModal.propTypes = {
     data: PropTypes.shape({
             params: PropTypes.shape({
@@ -750,6 +750,6 @@ ETGMCreateNewGroupModal.propTypes = {
     }),
     onRaiseToErrorOverlay: PropTypes.func.isRequired,
     onDismiss: PropTypes.func.isRequired
-} */
+} 
 
 export default ETGMCreateNewGroupModal;

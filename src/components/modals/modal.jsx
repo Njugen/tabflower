@@ -59,10 +59,6 @@ class Modal extends Component {
        fieldErrors: {}
     }
 
-    constructor(props){
-        super(props);
-    }
-
     saveFieldErrorsToState = (errors) => {
         /*
             saveFieldErrorsToState()
@@ -544,13 +540,13 @@ class Modal extends Component {
         );
     }
 } 
-/*
+
 Modal.propTypes = {
     data: PropTypes.shape({
         params: PropTypes.object.isRequired
     }),
     onRaiseToErrorOverlay: PropTypes.func,
     onDismiss: PropTypes.func
-} */
+} 
 
 export default Modal;

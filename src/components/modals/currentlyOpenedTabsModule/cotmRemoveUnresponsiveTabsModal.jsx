@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { PropTypes } from 'prop-types';
 import { ValidatorError, ErrorHandler } from './../../utils/exceptionsAndHandler';
 import * as validator from './../../utils/inputValidators'

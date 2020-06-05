@@ -73,7 +73,7 @@ class Module extends Component {
             The information is raised through this component chain:
             module > moduleColumn > moduleon
         */
-        const { isObject, isArray, isString } = validator;
+        const { isObject, isString } = validator;
         const { onDragOver } = this.props;
 
         try {
@@ -321,18 +321,6 @@ class Module extends Component {
         this.verifyState();
     }
 
-    componentWillMount = () => {
-        /*
-            A module may need to run its own special tasks before being mounted. To do this, add
-            childComponentWillMount() into the module, which will be executed if it exists
-        */
-        const { isFunction } = validator;
-
-        if(isFunction(this.childComponentWillMount)){
-            this.childComponentWillMount();
-        }
-    }
-
     raiseToModal = (data) => {
         /*
             Parameters: 
@@ -378,7 +366,7 @@ class Module extends Component {
             id
         } = this.props;
 
-        const { isFunction, isString, isObject, isEmptyString } = validator;
+        const { isFunction, isString, isObject } = validator;
         
         if(!isFunction(onRaiseToModal)){ throw ExceptionsHandler.ValidatorError("module-verifyProps-101"); }
         if(!isFunction(onDragOver)){ throw ExceptionsHandler.ValidatorError("module-verifyProps-102"); }
@@ -419,6 +407,19 @@ class Module extends Component {
         }
     }
 
+    constructor(props){
+        super(props);
+        /*
+            A module may need to run its own special tasks before being mounted. To do this, add
+            childComponentWillMount() into the module, which will be executed if it exists
+        */
+       const { isFunction } = validator;
+
+       if(isFunction(this.childComponentWillMount)){
+           this.childComponentWillMount();
+       }
+    }
+
     render = () => {
         return (
             <div id={"tabeon-module-container-id" + this.props.id} droppable="true" onDragOver={(e) => this.handleDragOver(e)} onDrop={(e) => this.handleDrop(e)} className={"tabeon-module-container col-12"}>
@@ -457,19 +458,15 @@ class Module extends Component {
     }
 }
 
-/*
+
 Module.propTypes = {
-    
-        onDragOver, onDrop and onDragStart are all dynamically added handlers, and will not be detected by
-        proptypes. Adding handlers dynamically in this manner feels unjustified, and based on how Moduleon works (ridiculously bad performance, just to mention
-            one of the issues), these handlers + moduleon's drag drop features should be removed from the project entirely...!
-    
+
     onDragOver: PropTypes.func, 
     onDrop: PropTypes.func, 
     onDragStart: PropTypes.func,
     onRaiseToModal: PropTypes.func.isRequired, 
     onRaiseToErrorOverlay: PropTypes.func.isRequired, 
     id: PropTypes.string.isRequired
-} */
+} 
 
 export default Module;

@@ -143,7 +143,7 @@ class WindowsList extends Component {
 
             const windowElement = document.getElementById(windowId);
             const tabList = windowElement.getElementsByClassName("tab-listing")[0];
-            let tabListIsHorizontal = tabList.className.includes("horizontal") || (!tabList.className.includes("horizontal") && !tabList.className.includes("vertical"));
+            
             const tabListItems = tabList.getElementsByTagName("li");
 
             for(let i = 0; i < tabListItems.length; i++){

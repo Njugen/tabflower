@@ -101,7 +101,7 @@ class ETGMRemoveGroupsModal extends Modal {
                 return (
                     <Fragment>
                         {!groupId && <p>Are you sure you want to remove all existing groups? You will lose all saved windows and tabs. This cannot be undone.</p>}
-                        {groupId && <p>Are you sure you want to remove this tab group? You will lose all windows and tabs saved in it. This cannot be undone.</p>}
+                        {groupId && <p>Are you sure you want to remove the tab group {groupName ? <strong>{groupName}</strong> : ""}? You will lose all windows and tabs saved in it. This cannot be undone.</p>}
                     </Fragment>
                 );  
             } else {
@@ -130,7 +130,7 @@ class ETGMRemoveGroupsModal extends Modal {
         
     }
 }
-/*
+
 ETGMRemoveGroupsModal.propTypes = {
     data: PropTypes.shape({
             params: PropTypes.shape({
@@ -141,5 +141,5 @@ ETGMRemoveGroupsModal.propTypes = {
     onRaiseToErrorOverlay: PropTypes.func.isRequired,
     onDismiss: PropTypes.func.isRequired
 }
-*/
+
 export default ETGMRemoveGroupsModal;
