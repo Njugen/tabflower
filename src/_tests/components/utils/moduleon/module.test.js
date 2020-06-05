@@ -1031,10 +1031,13 @@ describe("Test <Module /> component behaviour at mount", () => {
     })
 
     describe("Test this.componentWillMount() lifecycle method (as a unit)", () => {
-        test("this.childComponentWillMount() should be called by componentWillMount()", () => {
-            componentInstance.childComponentWillMount = jest.fn();
-            componentInstance.componentWillMount();
-
+        test("this.childComponentWillMount() should be called by constructor", () => {
+            const presetProps = {
+         
+            }
+            testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
+            componentInstance = testComponent.instance();
+            
             expect(componentInstance.childComponentWillMount).toHaveBeenCalledTimes(1);
         })
     })
