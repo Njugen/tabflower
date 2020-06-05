@@ -494,7 +494,7 @@ class WindowsList extends Component {
                                         </div>
                                         <ul className={typeof initialShowTabs === "boolean" && initialShowTabs === false ? "tab-listing-hide tab-listing horizontal" : "tab-listing horizontal"}>
                                             {tabList}
-                                            {(type && (type === "existing-group" || type === "new-group") && !isAddingNewTab) && <button className="btn-tabeon-reverse btn" onClick={() => this.addNewTab(windowContainerId)}>Add new Tab</button>}   
+                                            {(type && (type === "existing-group" || type === "new-group") && !isAddingNewTab) && <button className="btn-tabeon-reverse btn add-new-tab-button" onClick={() => this.addNewTab(windowContainerId)}>Add new Tab</button>}   
                                         </ul>
                                         {isAddingNewTab && this.renderAddNewTabForm(windowContainerId, key)}
                                         

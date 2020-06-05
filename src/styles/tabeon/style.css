@@ -517,6 +517,12 @@ div.container-fluid > .row > div[class^="col-"] {
     white-space: no-wrap;
 }
 
+.btn-tabeon-reverse.add-new-tab-button {
+    display: block;
+    margin: 2rem auto;
+    width: 100%;
+}
+
 .btn-tabeon:last-child {
     margin-left: 0.5rem;
 }
