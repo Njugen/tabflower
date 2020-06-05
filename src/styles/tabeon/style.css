@@ -501,6 +501,7 @@ div.container-fluid > .row > div[class^="col-"] {
     background: #7a1d8c;
     border-color: #7a1d8c;
     white-space: no-wrap;
+    
 }
 
 .btn-tabeon-reverse {
@@ -517,7 +518,13 @@ div.container-fluid > .row > div[class^="col-"] {
     white-space: no-wrap;
 }
 
-.btn-tabeon-reverse.add-new-tab-button {
+.btn-tabeon-as-only-child:hover {
+    background: #c95cdf;
+    border-color: #c95cdf;
+    color: #ffffff
+}
+
+.btn-tabeon-reverse.add-new-tab-button, .add-new-window-button {
     display: block;
     margin: 2rem auto;
     width: 100%;

@@ -501,7 +501,7 @@ class WindowsList extends Component {
                                     </li>
                                 </ul>
                                 {newWindow && newWindow === true  && windowArray.length - 1 === key && this.renderAddNewWindowForm()}
-                                {((newWindow && newWindow === false) || !newWindow) && windowArray.length - 1 === key && (type === "existing-group" || type === "new-group") && <button className="btn-tabeon-as-only-child btn" onClick={() => this.addNewWindow(true)}>Add new window</button>}
+                                {((newWindow && newWindow === false) || !newWindow) && windowArray.length - 1 === key && (type === "existing-group" || type === "new-group") && <button className="btn-tabeon-as-only-child btn add-new-window-button" onClick={() => this.addNewWindow(true)}>Add new window</button>}
                             </div>
                             
                         );
