@@ -1,8 +1,7 @@
 import React, { Component, createRef } from "react";
-import * as validator from './../utils/inputValidators';
-import * as ExceptionsHandler from '../utils/exceptionsAndHandler';
-import { PropTypes } from 'prop-types';
-
+import * as validator from "./../utils/inputValidators";
+import * as ExceptionsHandler from "../utils/exceptionsAndHandler";
+import { PropTypes } from "prop-types";
 
 /*
     The Modal component
@@ -33,7 +32,7 @@ import { PropTypes } from 'prop-types';
 */
 
 class Modal extends Component {
-    /*
+  /*
         The modal state consists of information to be passed to
         other components. E.g. 
         
@@ -54,13 +53,13 @@ class Modal extends Component {
             fieldErrors: { field1: "error", ... }
         }
     */
-    state = {
-       ui: {},
-       fieldErrors: {}
-    }
+  state = {
+    ui: {},
+    fieldErrors: {},
+  };
 
-    saveFieldErrorsToState = (errors) => {
-        /*
+  saveFieldErrorsToState = (errors) => {
+    /*
             saveFieldErrorsToState()
 
             Parameters:
@@ -70,24 +69,23 @@ class Modal extends Component {
             e.g. alert boxes or notifying the user based on the state variables alone) 
             
         */
-        const { isUndefined, isObject } = validator;
-        
-        try {
-            if(isUndefined(errors) || isObject(errors)){
-                this.setState({
-                    fieldErrors: errors || {}
-                });
-            } else {
-                throw ExceptionsHandler.ValidatorError("mp-verifyProps-110");
-            }
-        } catch(err){
-            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay); 
-        }
+    const { isUndefined, isObject } = validator;
+
+    try {
+      if (isUndefined(errors) || isObject(errors)) {
+        this.setState({
+          fieldErrors: errors || {},
+        });
+      } else {
+        throw ExceptionsHandler.ValidatorError("mp-verifyProps-110");
+      }
+    } catch (err) {
+      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
     }
+  };
 
-    raiseToErrorOverlay = (errorData) => {
-
-        /*
+  raiseToErrorOverlay = (errorData) => {
+    /*
             Parameters: 
             -   err (object, containing whatever error (1 error) that we want the modal to processs. Mandatory)
 
@@ -98,128 +96,123 @@ class Modal extends Component {
 
             All components in this chain will have access to the information raised.
         */
-        
-        const { isObject, isFunction } = validator;
 
-        try {
-            if(isObject(errorData)){
+    const { isObject, isFunction } = validator;
 
-                const { onRaiseToErrorOverlay } = this.props;
-                
-                // NOTE: Removing this.dismissModalHandler will make it look like the 
-                // onRaiseToErrorOverlay variable not being a real function. Why?
-                // Tasks:
-                // - Find out why onRaiseToErrorModal is a function when this.dismissModalHandler() is called
-                // - Add a mocked ExceptionsHandler.ErrorHandler() in all test suites. Atm, there is no such mock (which could generate false test results)
-                this.dismissModalHandler();
-            
-                if(isFunction(onRaiseToErrorOverlay)){
-                    
-                    setTimeout(() => {
-                        onRaiseToErrorOverlay(errorData);
-                    }, 1000);
-                } else {
-                    throw ExceptionsHandler.ValidatorError("mp-verifyProps-109");
-                }
-            } else {
-                throw ExceptionsHandler.ValidatorError("mp-verifyProps-108");
-            }
-        } catch(err){
-            ExceptionsHandler.ErrorHandler(err, () => {}); 
+    try {
+      if (isObject(errorData)) {
+        const { onRaiseToErrorOverlay } = this.props;
+
+        // NOTE: Removing this.dismissModalHandler will make it look like the
+        // onRaiseToErrorOverlay variable not being a real function. Why?
+        // Tasks:
+        // - Find out why onRaiseToErrorModal is a function when this.dismissModalHandler() is called
+        // - Add a mocked ExceptionsHandler.ErrorHandler() in all test suites. Atm, there is no such mock (which could generate false test results)
+        this.dismissModalHandler();
+
+        if (isFunction(onRaiseToErrorOverlay)) {
+          setTimeout(() => {
+            onRaiseToErrorOverlay(errorData);
+          }, 1000);
+        } else {
+          throw ExceptionsHandler.ValidatorError("mp-verifyProps-109");
         }
+      } else {
+        throw ExceptionsHandler.ValidatorError("mp-verifyProps-108");
+      }
+    } catch (err) {
+      ExceptionsHandler.ErrorHandler(err, () => {});
     }
+  };
 
-    fadeIn = () => {
-        /*
+  fadeIn = () => {
+    /*
             Fading in the modal by accessing its tag by react ref (https://reactjs.org/docs/refs-and-the-dom.html).
             Check the CSS set in src/styles/tabeon/style.css
         */
- 
-        try {
-            const { isObject } = validator;
-    
-            if(isObject(this.modalRef) && isObject(this.modalRef.current)){
-                let modal = this.modalRef.current;
-                
-                if(isObject(modal.style)){
-                    modal.style.opacity = 1;
-                    modal.style.zIndex = 10000;
 
-                } else {
-                    throw ExceptionsHandler.ValidatorError("mp-fadeIn-101");
-                }
-            } else {
-                throw ExceptionsHandler.ValidatorError("mp-fadeIn-102");
-            }
-            
-        } catch(err){
-            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay); 
+    try {
+      const { isObject } = validator;
+
+      if (isObject(this.modalRef) && isObject(this.modalRef.current)) {
+        let modal = this.modalRef.current;
+
+        if (isObject(modal.style)) {
+          modal.style.opacity = 1;
+          modal.style.zIndex = 10000;
+        } else {
+          throw ExceptionsHandler.ValidatorError("mp-fadeIn-101");
         }
+      } else {
+        throw ExceptionsHandler.ValidatorError("mp-fadeIn-102");
+      }
+    } catch (err) {
+      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
     }
+  };
 
-    fadeOut = () => {
-        /*
+  fadeOut = () => {
+    /*
             Fading out the modal by accessing its tag by react ref (https://reactjs.org/docs/refs-and-the-dom.html).
             Check the CSS set under #tabeonModal in src/styles/tabeon/style.css
         */
-       const { isObject } = validator;
-       
-        try {
-            if(isObject(this.modalRef) && isObject(this.modalRef.current)){
-     
-                let modal = this.modalRef.current;
+    const { isObject } = validator;
 
-                if(isObject(modal.style)){
-                    modal.style.opacity = 0;
-                    setTimeout(() => {
-                        modal.style.zIndex = 0;
-                    }, 500) 
-                } else {
-                    throw ExceptionsHandler.ValidatorError("mp-fadeOut-101")
-                }
-            } else {
-                throw ExceptionsHandler.ValidatorError("mp-fadeOut-102")
-            }
-        } catch(err){
-            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay); 
+    try {
+      if (isObject(this.modalRef) && isObject(this.modalRef.current)) {
+        let modal = this.modalRef.current;
+
+        if (isObject(modal.style)) {
+          modal.style.opacity = 0;
+          setTimeout(() => {
+            modal.style.zIndex = 0;
+          }, 500);
+        } else {
+          throw ExceptionsHandler.ValidatorError("mp-fadeOut-101");
         }
+      } else {
+        throw ExceptionsHandler.ValidatorError("mp-fadeOut-102");
+      }
+    } catch (err) {
+      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
     }
+  };
 
-    clearModalData = (callback) => {
-        /*
+  clearModalData = (callback) => {
+    /*
             This function removes all data from the modal's state.
             
             Parameter:
             - callback (function, optional: can be used to execute more functions after the modal has faded out and dismissed)
         */
-        try {
-            const { onDismiss: onDismissModal } = this.props;
-            const { isUndefined, isFunction } = validator;
+    try {
+      const { onDismiss: onDismissModal } = this.props;
+      const { isUndefined, isFunction } = validator;
 
-            this.setState({ }, () => {
-                this.fadeOut();
+      this.setState({}, () => {
+        this.fadeOut();
 
-                if(isFunction(onDismissModal)){
-                    onDismissModal();
-                } else {
-                    throw ExceptionsHandler.ValidatorError("mp-verifyProps-101");
-                }
-
-                if(!isUndefined(callback)){
-                    if(isFunction(callback)){
-                        callback();
-                    } else {
-                        throw ExceptionsHandler.ValidatorError("mp-clearModalData-103")
-                    }
-                }
-            });
-        } catch(err){
-            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay); 
+        if (isFunction(onDismissModal)) {
+          onDismissModal();
+        } else {
+          throw ExceptionsHandler.ValidatorError("mp-verifyProps-101");
         }
-    }
 
-    scrollHandler = (e) => {
-        /*
+        if (!isUndefined(callback)) {
+          if (isFunction(callback)) {
+            callback();
+          } else {
+            throw ExceptionsHandler.ValidatorError("mp-clearModalData-103");
+          }
+        }
+      });
+    } catch (err) {
+      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+    }
+  };
+
+  scrollHandler = (e) => {
+    /*
             scrollHandler(e)
 
             Parameters:
@@ -235,14 +228,17 @@ class Modal extends Component {
             - document.removeEventListener("scroll", this.scrollHandler);
         */
 
-        const modalWrapper = document.getElementById("tabeonModal");
-        const modalDialogueBox = modalWrapper.getElementsByClassName("modal-dialog")[0];
+    const modalWrapper = document.getElementById("tabeonModal");
+    const modalDialogueBox = modalWrapper.getElementsByClassName(
+      "modal-dialog"
+    )[0];
 
-        modalDialogueBox.style.marginTop = -window.scrollY + 100 + modalDialogueBox.offsetHeight + "px";
-    }
+    modalDialogueBox.style.marginTop =
+      -window.scrollY + 100 + modalDialogueBox.offsetHeight + "px";
+  };
 
-    handleOverflow = (bodyOverflow, wrapperOverflow) => {
-        /*
+  handleOverflow = (bodyOverflow, wrapperOverflow) => {
+    /*
             handleOverflow();
 
             Correct the flow and scroll behaviour of the window when the modal is visible.
@@ -253,86 +249,86 @@ class Modal extends Component {
             - wrapperOverflow ("auto", "scroll" or "hidden")
         */
 
-       const modalWrapper = document.getElementById("tabeonModal");
-       document.body.style.overflow = bodyOverflow;
-       modalWrapper.style.overflowY = wrapperOverflow;
-    }
+    const modalWrapper = document.getElementById("tabeonModal");
+    document.body.style.overflow = bodyOverflow;
+    modalWrapper.style.overflowY = wrapperOverflow;
+  };
 
-    componentWillUnmount = () => {
-        // The scroll event and the behaviour it follows are not needed when the user dismisses the modal. Therefore, it should be removed.
-        
-        this.handleOverflow("auto", "auto");
-        document.removeEventListener("scroll", this.scrollHandler);
-    }
+  componentWillUnmount = () => {
+    // The scroll event and the behaviour it follows are not needed when the user dismisses the modal. Therefore, it should be removed.
 
-    componentDidMount = () => {
-       const { isFunction } = validator;
-        
-        /*
+    this.handleOverflow("auto", "auto");
+    document.removeEventListener("scroll", this.scrollHandler);
+  };
+
+  componentDidMount = () => {
+    const { isFunction } = validator;
+
+    /*
             When a modal is rendered into the DOM, wait 100ms before fading in.
             Apparently, the fade in does not work properly (resulting in immediate visibility of the component) without
             the timeout.
         */
-       
-        setTimeout(() => {
-            this.fadeIn();
-        }, 100);
 
-        /*
+    setTimeout(() => {
+      this.fadeIn();
+    }, 100);
+
+    /*
             Verify props for each individual child modal, if that modal has any props and a verifyChildProps()
             function to its disposal
         */
-     
-        if(isFunction(this.verifyChildProps)){
-            this.verifyChildProps();
-        }
 
-        this.handleOverflow("hidden", "auto");
+    if (isFunction(this.verifyChildProps)) {
+      this.verifyChildProps();
+    }
 
-        /*
+    this.handleOverflow("hidden", "auto");
+
+    /*
             This event listener prevents the modal from following the user when he scrolls vertically. 
         */
 
-        document.addEventListener("scroll", this.scrollHandler);
-        
-        /*
+    document.addEventListener("scroll", this.scrollHandler);
+
+    /*
             Execute certain features belonging to each individual child modal, when mounting that modal and
             if a childComponentDidMount() function is defined in that modal class.
         */
-        if(isFunction(this.childComponentDidMount)){
-            this.childComponentDidMount();
-        }
-        
-        this.verifyProps();
-        this.verifyState();
-    };
+    if (isFunction(this.childComponentDidMount)) {
+      this.childComponentDidMount();
+    }
 
-    componentWillMount = () => {
-        /*
+    this.verifyProps();
+    this.verifyState();
+  };
+
+  componentWillMount = () => {
+    /*
             Before the modal is mounted (meaning render() is executed), set modalRef
             to provide access to the modal container in the DOM (using this.modalRef.current).
 
             <div ref={this.modalRef} className="modal" id="tabeonModal">
         */
-      
-        this.modalRef = createRef();
-    }
 
-    componentDidUpdate = (prevProps, prevState) => {
-        /*
+    this.modalRef = createRef();
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    /*
             Fade in the modal component if the props changes (this is meant to check props.data, which are
             bound to change as data raised by these modals will always differ)
-        */    
+        */
 
-        if(prevProps !== this.props){
-            setTimeout(() => {
-                this.fadeIn();
-            }, 100)
-        }
+    if (prevProps !== this.props) {
+      setTimeout(() => {
+        this.fadeIn();
+      }, 100);
     }
+  };
 
-    executePropsAction = (data) => {
-        /*
+  executePropsAction = (data) => {
+    /*
             The executePropsAction function
 
             This function is automatically triggered when the user clicks the #modal-save button. This function
@@ -359,30 +355,30 @@ class Modal extends Component {
             in the launched modal.
         */
 
-        try {
-            data = data || null;
-            const { isObject } = validator;
+    try {
+      data = data || null;
+      const { isObject } = validator;
 
-            if(this.props && isObject(this.props.data)){
-                if(typeof this.props.data.action === "function"){
-                    this.props.data.action(data);
-                } else if(typeof this.props.data.action !== "undefined"){
-                    throw ExceptionsHandler.ValidatorError("mp-propsAction-101");
-                }
-            } else {
-                throw ExceptionsHandler.ValidatorError("mp-propsAction-102")
-            }
-        } catch(err){
-            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay); 
+      if (this.props && isObject(this.props.data)) {
+        if (typeof this.props.data.action === "function") {
+          this.props.data.action(data);
+        } else if (typeof this.props.data.action !== "undefined") {
+          throw ExceptionsHandler.ValidatorError("mp-propsAction-101");
         }
-
-        /*
-            If there is no function in the this.props.data.action, nothing will happen beyond this point.
-        */
+      } else {
+        throw ExceptionsHandler.ValidatorError("mp-propsAction-102");
+      }
+    } catch (err) {
+      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
     }
 
-    saveToState = (key, value, area, callback) => {
-        /*
+    /*
+            If there is no function in the this.props.data.action, nothing will happen beyond this point.
+        */
+  };
+
+  saveToState = (key, value, area, callback) => {
+    /*
             The saveToState function
 
             This function saves information to a categorized/area section of the state. The
@@ -409,45 +405,45 @@ class Modal extends Component {
             - area (string): Where in the state to store the value
             - callback (function, optional): Function to execute once the data has been stored 
         */
-        try {
-            const { isString, isUndefined, isFunction } = validator;
-            
-            if(isString(area)){
-                if(isUndefined(value)){
-                    throw ExceptionsHandler.ValidatorError("mp-saveToState-104") 
-                }
+    try {
+      const { isString, isUndefined, isFunction } = validator;
 
-                if(!isString(key)){
-                    throw ExceptionsHandler.ValidatorError("mp-saveToState-105") 
-                }
-                
-                let newInput = this.state;
-                
-                if(typeof newInput[area] !== "object"){
-                    newInput[area] = {}
-                }
-
-                newInput[area][key] = value;
-
-                this.setState(newInput, () => {
-                    if(!isUndefined(callback)){
-                        if(isFunction(callback)){
-                            callback();
-                        } else {
-                            throw ExceptionsHandler.ValidatorError("mp-saveToState-106") 
-                        }
-                    }
-                })
-            } else {
-                throw ExceptionsHandler.ValidatorError("mp-saveToState-107")
-            }
-        } catch(err){
-            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay); 
+      if (isString(area)) {
+        if (isUndefined(value)) {
+          throw ExceptionsHandler.ValidatorError("mp-saveToState-104");
         }
-    }
 
-    verifyProps = () => {
-        /*
+        if (!isString(key)) {
+          throw ExceptionsHandler.ValidatorError("mp-saveToState-105");
+        }
+
+        let newInput = this.state;
+
+        if (typeof newInput[area] !== "object") {
+          newInput[area] = {};
+        }
+
+        newInput[area][key] = value;
+
+        this.setState(newInput, () => {
+          if (!isUndefined(callback)) {
+            if (isFunction(callback)) {
+              callback();
+            } else {
+              throw ExceptionsHandler.ValidatorError("mp-saveToState-106");
+            }
+          }
+        });
+      } else {
+        throw ExceptionsHandler.ValidatorError("mp-saveToState-107");
+      }
+    } catch (err) {
+      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+    }
+  };
+
+  verifyProps = () => {
+    /*
             verifyProps
             
             All modals need to have a mandatory set of props:
@@ -462,32 +458,43 @@ class Modal extends Component {
             the verifyChildProps function.
         */
 
-        const { onDismiss, onRaiseToErrorOverlay, data } = this.props;
-        const { isFunction, isObject } = validator;
+    const { onDismiss, onRaiseToErrorOverlay, data } = this.props;
+    const { isFunction, isObject } = validator;
 
-        if(!isFunction(onDismiss)){ throw ExceptionsHandler.ValidatorError("mp-verifyProps-101"); }
-        if(!isFunction(onRaiseToErrorOverlay)){ throw ExceptionsHandler.ValidatorError("mp-verifyProps-102"); }
-        if(!isObject(data)){ throw ExceptionsHandler.ValidatorError("mp-verifyProps-103"); } else {
-            if(!isObject(data.params)){ throw ExceptionsHandler.ValidatorError("mp-verifyProps-104"); }
-        }
-
+    if (!isFunction(onDismiss)) {
+      throw ExceptionsHandler.ValidatorError("mp-verifyProps-101");
     }
-
-    verifyState = () => {
-        const { isObject } = validator;
-
-        if(isObject(this.state)){
-            const { ui, fieldErrors } = this.state;
-
-            if(!isObject(ui)){ throw ExceptionsHandler.ValidatorError("mp-verifyProps-106"); }
-            if(!isObject(fieldErrors)){ throw ExceptionsHandler.ValidatorError("mp-verifyProps-107"); }
-        } else {
-            throw ExceptionsHandler.ValidatorError("mp-verifyProps-105");
-        }
+    if (!isFunction(onRaiseToErrorOverlay)) {
+      throw ExceptionsHandler.ValidatorError("mp-verifyProps-102");
     }
-    
-    render = () => {
-        /*
+    if (!isObject(data)) {
+      throw ExceptionsHandler.ValidatorError("mp-verifyProps-103");
+    } else {
+      if (!isObject(data.params)) {
+        throw ExceptionsHandler.ValidatorError("mp-verifyProps-104");
+      }
+    }
+  };
+
+  verifyState = () => {
+    const { isObject } = validator;
+
+    if (isObject(this.state)) {
+      const { ui, fieldErrors } = this.state;
+
+      if (!isObject(ui)) {
+        throw ExceptionsHandler.ValidatorError("mp-verifyProps-106");
+      }
+      if (!isObject(fieldErrors)) {
+        throw ExceptionsHandler.ValidatorError("mp-verifyProps-107");
+      }
+    } else {
+      throw ExceptionsHandler.ValidatorError("mp-verifyProps-105");
+    }
+  };
+
+  render = () => {
+    /*
             Rendering of the modal's user interface
 
             This render is a copy-paste of Bootstrap's modal feature, exluding jQuery.
@@ -505,48 +512,68 @@ class Modal extends Component {
             Add these to the Modal child classes to give them necessary features.
         */
 
-        return (
-            <div ref={this.modalRef} className="modal" id="tabeonModal">
-                <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title" id="tabeonModalLabel">
-                                {(typeof this.renderModalHeader === "function") &&
-                                    this.renderModalHeader()
-                                }
-                            </h5>
-                            {typeof this.dismissModalHandler === "function" &&
-                                <button type="button" className="close" onClick={() => this.dismissModalHandler()}>
-                                    &times;
-                                </button>
-                            }   
-                        </div>
-                        <div className="modal-body">
-                            {typeof this.renderModalBody === "function" &&
-                                this.renderModalBody()
-                            }
-                        </div>
-                        <div className="modal-footer">
-                            {typeof this.dismissModalHandler === "function" &&
-                                <button type="button" id="modal-dismiss" className="btn btn-secondary" onClick={() => this.dismissModalHandler()}>Close</button>
-                            }
-                            {typeof this.saveModalHandler === "function" &&
-                                <button type="button" id="modal-save" className="btn btn-tabeon"  onClick={() => this.saveModalHandler((data) => { this.executePropsAction(data)})}>Save changes</button>
-                            }
-                        </div>
-                    </div>
-                </div>
+    return (
+      <div ref={this.modalRef} className="modal" id="tabeonModal">
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="tabeonModalLabel">
+                {typeof this.renderModalHeader === "function" &&
+                  this.renderModalHeader()}
+              </h5>
+              {typeof this.dismissModalHandler === "function" && (
+                <button
+                  type="button"
+                  className="close"
+                  onClick={() => this.dismissModalHandler()}
+                >
+                  &times;
+                </button>
+              )}
             </div>
-        );
-    }
-} 
+            <div className="modal-body">
+              {typeof this.renderModalBody === "function" &&
+                this.renderModalBody()}
+            </div>
+            <div className="modal-footer">
+              {typeof this.dismissModalHandler === "function" && (
+                <button
+                  type="button"
+                  id="modal-dismiss"
+                  className="btn btn-secondary"
+                  onClick={() => this.dismissModalHandler()}
+                >
+                  Close
+                </button>
+              )}
+              {typeof this.saveModalHandler === "function" && (
+                <button
+                  type="button"
+                  id="modal-save"
+                  className="btn btn-tabeon"
+                  onClick={() =>
+                    this.saveModalHandler((data) => {
+                      this.executePropsAction(data);
+                    })
+                  }
+                >
+                  Save changes
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+}
 
 Modal.propTypes = {
-    data: PropTypes.shape({
-        params: PropTypes.object.isRequired
-    }),
-    onRaiseToErrorOverlay: PropTypes.func,
-    onDismiss: PropTypes.func
-} 
+  data: PropTypes.shape({
+    params: PropTypes.object.isRequired,
+  }),
+  onRaiseToErrorOverlay: PropTypes.func,
+  onDismiss: PropTypes.func,
+};
 
 export default Modal;

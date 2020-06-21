@@ -165,7 +165,7 @@ describe("Test functions in <App />", () => {
         },
         "app-113": {
             name: "ValidatorError",
-            message: "The \"data\" parameter in the App component's handleRouteListReady() function needs to be an array, containing different route objects",
+            message: "The \"data\" parameter in the App component's handleRaisedRoutesInfo() function needs to be an array, containing different route objects",
             code: "app-113"
         }
     }
@@ -825,7 +825,7 @@ describe("Test functions in <App />", () => {
         })
     });
 
-    describe("Test handleRouteListReady(data)", () => {
+    describe("Test handleRaisedRoutesInfo(data)", () => {
         describe("\"data\" is not an array", () => {
             const various_data = [
                 ["A short text string"],
@@ -838,14 +838,14 @@ describe("Test functions in <App />", () => {
                 [() => {}]
             ];
             
-            test.each(various_data)("Run handleRouteListReady(%p): ExceptionsHandler.Validator(\"app-113\") should be called", (val) => {
-                componentInstance.handleRouteListReady(val);
+            test.each(various_data)("Run handleRaisedRoutesInfo(%p): ExceptionsHandler.Validator(\"app-113\") should be called", (val) => {
+                componentInstance.handleRaisedRoutesInfo(val);
 
                 expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-113");
             });
 
-            test("Run handleRouteListReady(): ExceptionsHandler.Validator(\"app-113\") should be called", () => {
-                componentInstance.handleRouteListReady();
+            test("Run handleRaisedRoutesInfo(): ExceptionsHandler.Validator(\"app-113\") should be called", () => {
+                componentInstance.handleRaisedRoutesInfo();
 
                 expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-113");
             });
@@ -861,8 +861,8 @@ describe("Test functions in <App />", () => {
                 ];
 
                 for(let i = 0; i < various_data.length; i++){
-                    test("Run handleRouteListReady({ routes: " + JSON.stringify(various_data[i]) + " }): this.setState({ routes: " + JSON.stringify(various_data[i]) + " }) should be called with correct array", () => {
-                        componentInstance.handleRouteListReady(various_data[i]);
+                    test("Run handleRaisedRoutesInfo({ routes: " + JSON.stringify(various_data[i]) + " }): this.setState({ routes: " + JSON.stringify(various_data[i]) + " }) should be called with correct array", () => {
+                        componentInstance.handleRaisedRoutesInfo(various_data[i]);
 
                         expect(componentInstance.setState).toHaveBeenCalledWith({ routes: various_data[i] });
                     })
@@ -878,8 +878,8 @@ describe("Test functions in <App />", () => {
                 ];
 
                 for(let i = 0; i < various_data.length; i++){
-                    test("Run handleRouteListReady({ routes: " + JSON.stringify(various_data[i]) + " }): ExceptionsHandler.ValidatorError(\"app-112\") should be called", () => {
-                        componentInstance.handleRouteListReady(various_data[i]);
+                    test("Run handleRaisedRoutesInfo({ routes: " + JSON.stringify(various_data[i]) + " }): ExceptionsHandler.ValidatorError(\"app-112\") should be called", () => {
+                        componentInstance.handleRaisedRoutesInfo(various_data[i]);
 
                         expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-112");
                     })
@@ -895,16 +895,16 @@ describe("Test functions in <App />", () => {
                 ];
 
                 for(let i = 0; i < various_data.length; i++){
-                    test("Run handleRouteListReady({ routes: " + JSON.stringify(various_data[i]) + " }): ExceptionsHandler.ValidatorError(\"app-112\") should be called", () => {
-                        componentInstance.handleRouteListReady(various_data[i]);
+                    test("Run handleRaisedRoutesInfo({ routes: " + JSON.stringify(various_data[i]) + " }): ExceptionsHandler.ValidatorError(\"app-112\") should be called", () => {
+                        componentInstance.handleRaisedRoutesInfo(various_data[i]);
 
                         expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-112");
                     })
                 }
             })
 
-            test("Run handleRouteListReady({ routes: [] }): ExceptionsHandler.ValidatorError(\"app-113\") should be called because of the routes array being empty", () => {
-                componentInstance.handleRouteListReady({ routes: [] });
+            test("Run handleRaisedRoutesInfo({ routes: [] }): ExceptionsHandler.ValidatorError(\"app-113\") should be called because of the routes array being empty", () => {
+                componentInstance.handleRaisedRoutesInfo({ routes: [] });
 
                 expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith("app-113");
             })
