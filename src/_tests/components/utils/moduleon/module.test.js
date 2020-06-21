@@ -1037,6 +1037,7 @@ describe("Test <Module /> component behaviour at mount", () => {
             }
             testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
             componentInstance = testComponent.instance();
+            componentInstance.childComponentWillMount = jest.fn();
 
             expect(componentInstance.childComponentWillMount).toHaveBeenCalledTimes(1);
         })
