@@ -41,9 +41,7 @@ import "./styles/tabeon/style.css";
 import * as validator from "./components/utils/inputValidators";
 
 import * as ExceptionsHandler from "./components/utils/exceptionsAndHandler";
-import AppContext, {
-  AppContextProvider,
-} from "./components/contexts/AppContextProvider";
+import AppContext from "./components/contexts/AppContextProvider";
 
 class App extends Component {
   static contextType = AppContext;
@@ -92,7 +90,7 @@ class App extends Component {
       this.launchErrorOverlay(err);
     }
   };
-
+  /*
   handleNavigation = (viewProps) => {
     const { isObject, isNumber } = validator;
     const { setValueToState, getValueFromState } = this.context;
@@ -104,13 +102,13 @@ class App extends Component {
           isObject(viewProps.metaData) &&
           isNumber(viewProps.refreshFactor)
         ) {
-          /*
+        
           this.updateState(
             {
               currentView: viewProps,
             },
             true
-          ); */
+          ); 
 
           setValueToState("currentView", viewProps, true, () => {
             console.log("RR", getValueFromState("refreshFactor"));
@@ -124,7 +122,7 @@ class App extends Component {
     } catch (err) {
       this.launchErrorOverlay(err);
     }
-  };
+  }; */
 
   handleMainNavBarClick = (sidebarProps) => {
     const { isObject, isNumber } = validator;
@@ -152,6 +150,7 @@ class App extends Component {
   launchModal = (data) => {
     const { isObject, isFunction, isString } = validator;
     const { setValueToState } = this.context;
+
     try {
       if (isObject(data)) {
         if (
@@ -183,6 +182,7 @@ class App extends Component {
 
   launchErrorOverlay = (data) => {
     const { isObject, isString } = validator;
+    const { setValueToState, getValueFromState } = this.context;
 
     try {
       if (isObject(data)) {
@@ -191,12 +191,17 @@ class App extends Component {
           isString(data.message) &&
           isString(data.name)
         ) {
-          let errors = this.state.errors;
-          errors.push(data);
+          // let errors = this.state.errors;
 
+          /*
           this.setState({
             errors,
-          });
+          }); */
+          console.log("BLA");
+          let errors = getValueFromState("errors");
+          errors.push(data);
+
+          setValueToState("errors", errors);
         } else {
           throw ExceptionsHandler.ValidatorError("app-110");
         }
@@ -209,7 +214,7 @@ class App extends Component {
       });
     }
   };
-
+  /*
   clearModal = () => {
     const modal = {};
     const { setValueToState } = this.context;
@@ -217,7 +222,7 @@ class App extends Component {
     setTimeout(() => {
       setValueToState("modal", modal);
     }, 500);
-  };
+  }; */
 
   clearErrors = () => {
     const { setValueToState } = this.context;
@@ -228,7 +233,7 @@ class App extends Component {
     setValueToState("errors", errors);
   };
 
-  handleRaisedRoutesInfo = (data) => {
+  /* handleRaisedRoutesInfo = (data) => {
     const { isNumber, isString, isArray, isObject } = validator;
 
     try {
@@ -261,16 +266,17 @@ class App extends Component {
     } catch (err) {
       this.launchErrorOverlay(err);
     }
-  };
+  };*/
 
   render = () => {
-    const { errors } = this.state;
-
     const { getValueFromState } = this.context;
     const modalData = getValueFromState("modal");
-    const { launched: modalLaunched, id: modalId } = modalData;
 
-    console.log("REE", modalData);
+    const { launched: modalLaunched, id: modalId } = modalData;
+    const errors = getValueFromState("errors");
+    const routes = getValueFromState("routes");
+
+    console.log("REE", errors.length);
     return (
       <Fragment>
         <ErrorBoundary>
@@ -278,58 +284,56 @@ class App extends Component {
             <ConfirmationModal
               data={modalData}
               onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
-              onDismiss={() => this.clearModal()}
+              // onDismiss={() => this.clearModal()}
             ></ConfirmationModal>
           )}
           {modalLaunched && modalId === "date-settings" && (
             <CalendarDateSettingsModal
               data={modalData}
               onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
-              onDismiss={() => this.clearModal()}
+              // onDismiss={() => this.clearModal()}
             ></CalendarDateSettingsModal>
           )}
           {modalLaunched && modalId === "etgmlaunchgroupmodal" && (
             <ETGMLaunchGroupModal
               data={modalData}
               onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
-              onDismiss={() => {
-                this.clearModal();
-              }}
+              //  onDismiss={() => this.clearModal()}
             ></ETGMLaunchGroupModal>
           )}
           {modalLaunched && modalId === "etgmremovegroupmodal" && (
             <ETGMRemoveGroupModal
               data={modalData}
               onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
-              onDismiss={() => this.clearModal()}
+              // onDismiss={() => this.clearModal()}
             ></ETGMRemoveGroupModal>
           )}
           {modalLaunched && modalId === "etgmcreateoreditgroupmodal" && (
             <ETGMCreateOrEditGroupModal
               data={modalData}
               onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
-              onDismiss={() => this.clearModal()}
+              // onDismiss={() => this.clearModal()}
             ></ETGMCreateOrEditGroupModal>
           )}
           {modalLaunched && modalId === "cotmremoveunresponsivetabsmodal" && (
             <COTMRemoveUnresponsiveTabsModal
               data={modalData}
               onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
-              onDismiss={() => this.clearModal()}
+              // onDismiss={() => this.clearModal()}
             ></COTMRemoveUnresponsiveTabsModal>
           )}
           {modalLaunched && modalId === "cotmremovewindowmodal" && (
             <COTMRemoveWindowModal
               data={modalData}
               onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
-              onDismiss={() => this.clearModal()}
+              // onDismiss={() => this.clearModal()}
             ></COTMRemoveWindowModal>
           )}
           {modalLaunched && modalId === "cotmremovetabmodal" && (
             <COTMRemoveTabModal
               data={modalData}
               onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
-              onDismiss={() => this.clearModal()}
+              // onDismiss={() => this.clearModal()}
             ></COTMRemoveTabModal>
           )}
           {errors.length > 0 && (
@@ -342,17 +346,17 @@ class App extends Component {
 
           <div className="container-fluid">
             <MainNavBar
-              routes={this.state.routes}
+              routes={routes}
               onMainNavBarClick={(data) => this.handleMainNavBarClick(data)}
             />
             <div className="row">
               <div className="col-md-12 py-2" id="tabeon-view-container">
                 <RouteList
-                  onRaisedRoutesInfo={(data) =>
+                  /* onRaisedRoutesInfo={(data) =>
                     this.handleRaisedRoutesInfo(data)
-                  }
-                  onRaiseToModal={(data) => this.launchModal(data)}
-                  onNavigation={(data) => this.handleNavigation(data)}
+                  } */
+                  //onRaiseToModal={(data) => this.launchModal(data)}
+                  //  onNavigation={(data) => this.handleNavigation(data)}
                   onRaiseToErrorOverlay={(data) =>
                     this.launchErrorOverlay(data)
                   }

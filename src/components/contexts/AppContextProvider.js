@@ -16,19 +16,29 @@ export class AppContextProvider extends Component {
   setValueToState = (key, value, refresh, callback) => {
     const { isFunction } = validator;
 
-    this.setState(
-      {
-        [key]: value,
-        refreshFactor: refresh && this.state.refreshFactor + 1,
-      },
-      () => {
-        isFunction(callback) && callback(this.state);
-      }
-    );
+    let inputState = {
+      [key]: value,
+    };
+
+    if (refresh && refresh === true) {
+      inputState.refreshFactor = this.state.refreshFactor + 1;
+    }
+
+    this.setState(inputState, () => {
+      isFunction(callback) && callback(this.state);
+    });
   };
 
   getValueFromState = (key) => {
     return this.state[key];
+  };
+
+  launchModal = (data) => {
+    const modal = {
+      launched: true,
+      ...data,
+    };
+    this.setValueToState("modal", modal);
   };
 
   render() {
@@ -38,6 +48,7 @@ export class AppContextProvider extends Component {
           state: this.state,
           setValueToState: this.setValueToState,
           getValueFromState: this.getValueFromState,
+          launchModal: this.launchModal,
         }}
       >
         {this.props.children}

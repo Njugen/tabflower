@@ -1,6 +1,7 @@
-import React, {Component} from "react";
-import ErrorOverlay from '../modals/errorOverlay';
-import { PropTypes } from 'prop-types';
+import React, { Component } from "react";
+import ErrorOverlay from "../modals/errorOverlay";
+import { PropTypes } from "prop-types";
+import AppContext from "../contexts/AppContextProvider";
 
 /*
   Catch errors in child component's lifecycle hooks, during rendering and in 
@@ -11,48 +12,56 @@ import { PropTypes } from 'prop-types';
 */
 
 class ErrorBoundary extends Component {
-    state = { errors: [] };
+  state = { errors: [] };
 
-     /* Update state so the next render will show the fallback UI. */
-    static getDerivedStateFromError(error) {
+  static contextType = AppContext;
 
-      let currentErrors = [];
-      const newError = error;
-      currentErrors.push(newError);
+  /* Update state so the next render will show the fallback UI. */
+  static getDerivedStateFromError(error) {
+    let currentErrors = [];
+    const newError = error;
+    currentErrors.push(newError);
 
-      return { errors: currentErrors };
-    }
-    
-    /*
+    return { errors: currentErrors };
+  }
+
+  /*
       Catch an error and add it as an object in the this.state.error array for later use.
     */
-    componentDidCatch(error, errorInfo) {
-        let currentErrors = this.state.errors;
-        const newError = Object.assign(error, errorInfo);
-        currentErrors.push(newError);
-        
-        this.setState({
-            errors: currentErrors
-        }, () => {
-            
-        })
-    }
-  
-    render() {
-      if (this.state.errors.length > 0) {
-        /*
+  componentDidCatch(error, errorInfo) {
+    let currentErrors = this.state.errors;
+    const newError = Object.assign(error, errorInfo);
+    currentErrors.push(newError);
+
+    this.setState(
+      {
+        errors: currentErrors,
+      },
+      () => {}
+    );
+  }
+
+  render() {
+    if (this.state.errors.length > 0) {
+      /*
           If errors are stored in the boundary state, render the ErrorOverlay UI component and inform the user about the errors
           using the information stored in this.state.errors
         */
-        return <ErrorOverlay data={this.state.errors} onSave={() => ""} onDismiss={() => window.location.reload()}></ErrorOverlay>
-      }
-  
-      return this.props.children || null; 
+      return (
+        <ErrorOverlay
+          data={this.state.errors}
+          onSave={() => ""}
+          onDismiss={() => window.location.reload()}
+        ></ErrorOverlay>
+      );
     }
-  }
 
-  ErrorBoundary.propTypes = {
-    children: PropTypes.any.isRequired
+    return this.props.children || null;
   }
+}
 
-  export default ErrorBoundary;
+ErrorBoundary.propTypes = {
+  children: PropTypes.any.isRequired,
+};
+
+export default ErrorBoundary;

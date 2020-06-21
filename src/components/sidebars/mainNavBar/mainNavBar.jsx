@@ -1,57 +1,61 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import NavSection from './components/navSection';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import NavSection from "./components/navSection";
 
 class MainNavBar extends Component {
-    state = {
-        activeNavLinkKey: ""
-    }
+  state = {
+    activeNavLinkKey: "",
+  };
 
-    setActiveNavLinkKey = (key) => {
-        this.setState(
-            {
-                activeNavLinkKey: key
-            },
-            () => {
-                this.raiseState();
-            }
-        )
-    }
+  setActiveNavLinkKey = (key) => {
+    this.setState(
+      {
+        activeNavLinkKey: key,
+      },
+      () => {
+        this.raiseState();
+      }
+    );
+  };
 
-    raiseState = () => {
-        /*
+  raiseState = () => {
+    /*
             Inform the App component that a link in the main sidebar has been clicked (any link) by raising
             the main sidebar's state.
         */
-        const { onMainNavBarClick } = this.props;
+    const { onMainNavBarClick } = this.props;
 
-        onMainNavBarClick(this.state);
-    }
+    onMainNavBarClick(this.state);
+  };
 
-    renderNavSection = (title, links) => {
-        return <NavSection title={title} links={links} onNavClick={(navLinkKey) => this.setActiveNavLinkKey(navLinkKey)} />;
-    }
+  renderNavSection = (title, links) => {
+    return (
+      <NavSection
+        title={title}
+        links={links}
+        onNavClick={(navLinkKey) => this.setActiveNavLinkKey(navLinkKey)}
+      />
+    );
+  };
 
-    componentDidMount = () => {
-        
-    }
+  componentDidMount = () => {};
 
-    render = () => {
-        const { routes } = this.props;
+  render = () => {
+    const { routes } = this.props;
 
-        return (
-            <div className="row">
-                <div className="col-md-12" id="tabeon-main-nav-column">
-                    {this.renderNavSection("Tabflower", routes)}
-                </div>
-            </div>
-        );
-    }
+    return (
+      <div className="row">
+        <div className="col-md-12" id="tabeon-main-nav-column">
+          {this.renderNavSection("Tabflower", routes)}
+        </div>
+      </div>
+    );
+  };
 }
 
 MainNavBar.propTypes = {
-    routes: PropTypes.array.isRequired,
-    onMainNavBarClick: PropTypes.func.isRequired
-}
+  routes: PropTypes.array.isRequired,
+  onMainNavBarClick: PropTypes.func.isRequired,
+};
 
 export default MainNavBar;

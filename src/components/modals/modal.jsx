@@ -2,6 +2,7 @@ import React, { Component, createRef } from "react";
 import * as validator from "./../utils/inputValidators";
 import * as ExceptionsHandler from "../utils/exceptionsAndHandler";
 import { PropTypes } from "prop-types";
+import AppContext from "../contexts/AppContextProvider";
 
 /*
     The Modal component
@@ -57,6 +58,8 @@ class Modal extends Component {
     ui: {},
     fieldErrors: {},
   };
+
+  static contextType = AppContext;
 
   saveFieldErrorsToState = (errors) => {
     /*
@@ -186,17 +189,21 @@ class Modal extends Component {
             - callback (function, optional: can be used to execute more functions after the modal has faded out and dismissed)
         */
     try {
-      const { onDismiss: onDismissModal } = this.props;
+      // const { onDismiss: onDismissModal } = this.props;
       const { isUndefined, isFunction } = validator;
+      const { setValueToState } = this.context;
 
       this.setState({}, () => {
         this.fadeOut();
 
+        /*
         if (isFunction(onDismissModal)) {
           onDismissModal();
         } else {
           throw ExceptionsHandler.ValidatorError("mp-verifyProps-101");
-        }
+        } */
+
+        setValueToState("modal", {});
 
         if (!isUndefined(callback)) {
           if (isFunction(callback)) {
@@ -458,12 +465,16 @@ class Modal extends Component {
             the verifyChildProps function.
         */
 
-    const { onDismiss, onRaiseToErrorOverlay, data } = this.props;
+    const {
+      // onDismiss,
+      onRaiseToErrorOverlay,
+      data,
+    } = this.props;
     const { isFunction, isObject } = validator;
-
+    /*
     if (!isFunction(onDismiss)) {
       throw ExceptionsHandler.ValidatorError("mp-verifyProps-101");
-    }
+    } */
     if (!isFunction(onRaiseToErrorOverlay)) {
       throw ExceptionsHandler.ValidatorError("mp-verifyProps-102");
     }
