@@ -5,11 +5,11 @@ const AppContext = createContext(true);
 
 export class AppContextProvider extends Component {
   state = {
-    currentView: {},
+    //NOT NEEDED ANYMORE  currentView: {},
     routes: [],
     modal: {},
     errors: [],
-    MainNavBar: {},
+    //   MainNavBar: {},
     refreshFactor: 0,
   };
 
@@ -35,7 +35,7 @@ export class AppContextProvider extends Component {
 
   launchModal = (data) => {
     const modal = {
-      launched: true,
+      //  launched: true,
       ...data,
     };
     this.setValueToState("modal", modal);

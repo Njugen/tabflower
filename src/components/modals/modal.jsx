@@ -105,6 +105,7 @@ class Modal extends Component {
     try {
       if (isObject(errorData)) {
         const { onRaiseToErrorOverlay } = this.props;
+        const { setValueToState } = this.context;
 
         // NOTE: Removing this.dismissModalHandler will make it look like the
         // onRaiseToErrorOverlay variable not being a real function. Why?
@@ -115,7 +116,9 @@ class Modal extends Component {
 
         if (isFunction(onRaiseToErrorOverlay)) {
           setTimeout(() => {
-            onRaiseToErrorOverlay(errorData);
+            //onRaiseToErrorOverlay(errorData);
+
+            setValueToState("errors", errorData);
           }, 1000);
         } else {
           throw ExceptionsHandler.ValidatorError("mp-verifyProps-109");
@@ -475,6 +478,7 @@ class Modal extends Component {
     if (!isFunction(onDismiss)) {
       throw ExceptionsHandler.ValidatorError("mp-verifyProps-101");
     } */
+    //  throw ExceptionsHandler.ValidatorError("mp-verifyProps-102");
     if (!isFunction(onRaiseToErrorOverlay)) {
       throw ExceptionsHandler.ValidatorError("mp-verifyProps-102");
     }
@@ -584,7 +588,7 @@ Modal.propTypes = {
     params: PropTypes.object.isRequired,
   }),
   onRaiseToErrorOverlay: PropTypes.func,
-  onDismiss: PropTypes.func,
+  //  onDismiss: PropTypes.func,
 };
 
 export default Modal;

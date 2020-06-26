@@ -100,6 +100,7 @@ class RouteList extends Component {
     this.saveViewToAppContext(viewProps);
   };
 
+  /*
   saveViewToAppContext = (routeProps) => {
     const { isObject, isNumber } = validator;
     const { setValueToState, getValueFromState } = this.context;
@@ -123,7 +124,7 @@ class RouteList extends Component {
     } catch (err) {
       this.raiseToErrorOverlay(err);
     }
-  };
+  }; */
 
   raiseToModal = (data) => {
     /*
@@ -287,8 +288,8 @@ class RouteList extends Component {
 }
 
 RouteList.propTypes = {
-  onRaisedRoutesInfo: PropTypes.func.isRequired,
-  onRaiseToModal: PropTypes.func.isRequired,
+  //  onRaisedRoutesInfo: PropTypes.func.isRequired,
+  //  onRaiseToModal: PropTypes.func.isRequired,
   onRaiseToErrorOverlay: PropTypes.func.isRequired,
 };
 

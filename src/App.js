@@ -47,12 +47,12 @@ class App extends Component {
   static contextType = AppContext;
 
   state = {
-    currentView: {},
-    routes: [],
-    modal: {},
-    errors: [],
+    // NOT NEEDED ANYMORE currentView: {},
+    // routes: [],
+    // modal: {},
+    // errors: [],
     MainNavBar: {},
-    refreshFactor: 0,
+    //refreshFactor: 0,
   };
 
   updateState = (newProps, showLoadbar, callback) => {
@@ -62,6 +62,7 @@ class App extends Component {
         or not)
     */
     const { isObject, isFunction, isUndefined } = validator;
+    const { getValueFromState, setValueToState } = this.context;
 
     try {
       if (isObject(newProps)) {
@@ -70,10 +71,10 @@ class App extends Component {
         };
 
         if (showLoadbar && showLoadbar === true) {
-          let { refreshFactor } = this.state;
+          let refreshFactor = getValueFromState("refreshFactor");
           refreshFactor++;
 
-          newState.refreshFactor = refreshFactor;
+          setValueToState("refreshFactor", refreshFactor);
         }
 
         if (isFunction(callback)) {
@@ -124,17 +125,17 @@ class App extends Component {
     }
   }; */
 
-  handleMainNavBarClick = (sidebarProps) => {
+  handleMainNavBarClick = (data) => {
     const { isObject, isNumber } = validator;
 
     try {
-      if (isObject(sidebarProps)) {
-        if (isNumber(sidebarProps.activeNavLinkKey)) {
+      if (isObject(data)) {
+        if (isNumber(data.activeNavLinkKey)) {
           this.updateState(
             {
-              MainNavBar: sidebarProps,
+              MainNavBar: data,
             },
-            false
+            true
           );
         } else {
           throw ExceptionsHandler.ValidatorError("app-106");
@@ -146,7 +147,7 @@ class App extends Component {
       this.launchErrorOverlay(err);
     }
   };
-
+  /*
   launchModal = (data) => {
     const { isObject, isFunction, isString } = validator;
     const { setValueToState } = this.context;
@@ -163,10 +164,10 @@ class App extends Component {
             ...data,
           };
 
-          /*
+          
           this.setState({
             modal,
-          }); */
+          }); 
 
           setValueToState("modal", modal);
         } else {
@@ -179,7 +180,7 @@ class App extends Component {
       this.launchErrorOverlay(err);
     }
   };
-
+*/
   launchErrorOverlay = (data) => {
     const { isObject, isString } = validator;
     const { setValueToState, getValueFromState } = this.context;
@@ -269,67 +270,69 @@ class App extends Component {
   };*/
 
   render = () => {
+    // Get context
     const { getValueFromState } = this.context;
-    const modalData = getValueFromState("modal");
 
-    const { launched: modalLaunched, id: modalId } = modalData;
+    const modalData = getValueFromState("modal");
     const errors = getValueFromState("errors");
     const routes = getValueFromState("routes");
+
+    const { id: modalId } = modalData;
 
     console.log("REE", errors.length);
     return (
       <Fragment>
         <ErrorBoundary>
-          {modalLaunched && modalId === "confirm-action" && (
+          {modalId === "confirm-action" && (
             <ConfirmationModal
               data={modalData}
               onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
               // onDismiss={() => this.clearModal()}
             ></ConfirmationModal>
           )}
-          {modalLaunched && modalId === "date-settings" && (
+          {modalId === "date-settings" && (
             <CalendarDateSettingsModal
               data={modalData}
               onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
               // onDismiss={() => this.clearModal()}
             ></CalendarDateSettingsModal>
           )}
-          {modalLaunched && modalId === "etgmlaunchgroupmodal" && (
+          {modalId === "etgmlaunchgroupmodal" && (
             <ETGMLaunchGroupModal
               data={modalData}
               onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
               //  onDismiss={() => this.clearModal()}
             ></ETGMLaunchGroupModal>
           )}
-          {modalLaunched && modalId === "etgmremovegroupmodal" && (
+          {modalId === "etgmremovegroupmodal" && (
             <ETGMRemoveGroupModal
               data={modalData}
               onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
               // onDismiss={() => this.clearModal()}
             ></ETGMRemoveGroupModal>
           )}
-          {modalLaunched && modalId === "etgmcreateoreditgroupmodal" && (
+          {modalId === "etgmcreateoreditgroupmodal" && (
             <ETGMCreateOrEditGroupModal
               data={modalData}
               onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
               // onDismiss={() => this.clearModal()}
             ></ETGMCreateOrEditGroupModal>
           )}
-          {modalLaunched && modalId === "cotmremoveunresponsivetabsmodal" && (
+          {modalId === "cotmremoveunresponsivetabsmodal" && (
             <COTMRemoveUnresponsiveTabsModal
               data={modalData}
               onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
               // onDismiss={() => this.clearModal()}
             ></COTMRemoveUnresponsiveTabsModal>
           )}
-          {modalLaunched && modalId === "cotmremovewindowmodal" && (
+          {modalId === "cotmremovewindowmodal" && (
             <COTMRemoveWindowModal
               data={modalData}
               onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
               // onDismiss={() => this.clearModal()}
             ></COTMRemoveWindowModal>
           )}
-          {modalLaunched && modalId === "cotmremovetabmodal" && (
+          {modalId === "cotmremovetabmodal" && (
             <COTMRemoveTabModal
               data={modalData}
               onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
