@@ -83,11 +83,11 @@ class Modal extends Component {
         throw ExceptionsHandler.ValidatorError("mp-verifyProps-110");
       }
     } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
-  raiseToErrorOverlay = (errorData) => {
+  sendToErrorOverlay = (errorData) => {
     /*
             Parameters: 
             -   err (object, containing whatever error (1 error) that we want the modal to processs. Mandatory)
@@ -140,7 +140,7 @@ class Modal extends Component {
         throw ExceptionsHandler.ValidatorError("mp-fadeIn-102");
       }
     } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
@@ -167,7 +167,7 @@ class Modal extends Component {
         throw ExceptionsHandler.ValidatorError("mp-fadeOut-102");
       }
     } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
@@ -186,13 +186,6 @@ class Modal extends Component {
       this.setState({}, () => {
         this.fadeOut();
 
-        /*
-        if (isFunction(onDismissModal)) {
-          onDismissModal();
-        } else {
-          throw ExceptionsHandler.ValidatorError("mp-verifyProps-101");
-        } */
-
         setValueToState("modal", {});
 
         if (!isUndefined(callback)) {
@@ -204,7 +197,21 @@ class Modal extends Component {
         }
       });
     } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
+    }
+  };
+
+  /*
+        dismissModalHandler()
+
+        Triggers when the user clicks the #modal-dismiss button located in the modal's user interface. The modal's
+        state will be cleared.
+    */
+  dismissModalHandler = () => {
+    try {
+      this.clearModalData();
+    } catch (err) {
+      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
@@ -366,7 +373,7 @@ class Modal extends Component {
         throw ExceptionsHandler.ValidatorError("mp-propsAction-102");
       }
     } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
 
     /*
@@ -435,7 +442,7 @@ class Modal extends Component {
         throw ExceptionsHandler.ValidatorError("mp-saveToState-107");
       }
     } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 

@@ -31,11 +31,10 @@ class View extends Component {
 
   static contextType = AppContext;
 
-  raiseToErrorOverlay = (errorData) => {
+  sendToErrorOverlay = (errorData) => {
     const { isObject } = validator;
     const { launchErrorOverlay } = this.context;
 
-    console.log("ABC", errorData);
     try {
       if (isObject(errorData)) {
         setTimeout(() => {
@@ -70,38 +69,7 @@ class View extends Component {
         throw ValidatorError("view-101");
       }
     } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
-    }
-  };
-
-  raiseToModal = (data) => {
-    /*
-            Parameters: 
-            -   data (object, containing whatever data that we want the modal to processs. Mandatory)
-
-            Inform the App component to launch a modal (popup), by raising the data provided
-            in this function's parameter. The data parameter will travel through the following components:
-
-                View (any view: this view) > RouteList > App
-
-            All components in this chain will have access to the information raised.
-        */
-
-    const { onRaiseToModal } = this.props;
-    const { isObject, isFunction } = validator;
-
-    try {
-      if (isObject(data)) {
-        if (isFunction(onRaiseToModal)) {
-          onRaiseToModal(data);
-        } else {
-          ExceptionsHandler.ValidatorError("view-105");
-        }
-      } else {
-        ExceptionsHandler.ValidatorError("view-104");
-      }
-    } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
@@ -135,9 +103,9 @@ class View extends Component {
 }
 
 View.propTypes = {
-  onRaiseToModal: PropTypes.func.isRequired,
+  // onRaiseToModal: PropTypes.func.isRequired,
   onViewMount: PropTypes.func.isRequired,
-  onRaiseToErrorOverlay: PropTypes.func.isRequired,
+  // onRaiseToErrorOverlay: PropTypes.func.isRequired,
 };
 
 export default View;

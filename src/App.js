@@ -37,52 +37,14 @@ import "./styles/react-generated/App.css";
 /* Import Tabeon app specific CSS */
 import "./styles/tabeon/style.css";
 
-/* Import Tabeon */
-import * as validator from "./components/utils/inputValidators";
-
-import * as ExceptionsHandler from "./components/utils/exceptionsAndHandler";
 import AppContext from "./components/contexts/AppContextProvider";
 
 class App extends Component {
   static contextType = AppContext;
 
-  launchErrorOverlay = (data) => {
-    const { isObject, isString } = validator;
-    const { setValueToState, getValueFromState } = this.context;
-
-    try {
-      if (isObject(data)) {
-        if (
-          isString(data.code) &&
-          isString(data.message) &&
-          isString(data.name)
-        ) {
-          let errors = getValueFromState("errors");
-          errors.push(data);
-
-          setValueToState("errors", errors);
-        } else {
-          throw ExceptionsHandler.ValidatorError("app-110");
-        }
-      } else {
-        throw ExceptionsHandler.ValidatorError("app-109");
-      }
-    } catch (err) {
-      this.setState({
-        errors: [data, err],
-      });
-    }
-  };
-
-  handleErrorOverlayDismiss = () => {
-    const { setValueToState } = this.context;
-    const errors = [];
-
-    setValueToState("errors", errors);
-  };
-
   render = () => {
     // Get context
+
     const { getValueFromState } = this.context;
 
     const modalData = getValueFromState("modal");
@@ -90,8 +52,6 @@ class App extends Component {
     const routes = getValueFromState("routes");
 
     const { id: modalId } = modalData;
-
-    console.log("REE", errors.length);
     return (
       <Fragment>
         <ErrorBoundary>
@@ -104,10 +64,7 @@ class App extends Component {
             ></CalendarDateSettingsModal>
           )}
           {modalId === "etgmlaunchgroupmodal" && (
-            <ETGMLaunchGroupModal
-              data={modalData}
-              //  onDismiss={() => this.clearModal()}
-            ></ETGMLaunchGroupModal>
+            <ETGMLaunchGroupModal data={modalData}></ETGMLaunchGroupModal>
           )}
           {modalId === "etgmremovegroupmodal" && (
             <ETGMRemoveGroupModal data={modalData}></ETGMRemoveGroupModal>
@@ -128,13 +85,7 @@ class App extends Component {
           {modalId === "cotmremovetabmodal" && (
             <COTMRemoveTabModal data={modalData}></COTMRemoveTabModal>
           )}
-          {errors.length > 0 && (
-            <ErrorOverlay
-              data={errors}
-              onSave={() => ""}
-              onDismiss={() => this.handleErrorOverlayDismiss()}
-            ></ErrorOverlay>
-          )}
+          {errors.length > 0 && <ErrorOverlay data={errors}></ErrorOverlay>}
 
           <div className="container-fluid">
             <MainNavBar routes={routes} />

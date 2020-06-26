@@ -1,70 +1,65 @@
 import React, { Fragment } from "react";
-import Modal from '../modal';
-import * as ExceptionsHandler from './../../utils/exceptionsAndHandler';
-import * as validator from './../../utils/inputValidators';
+import Modal from "../modal";
+import * as ExceptionsHandler from "./../../utils/exceptionsAndHandler";
+import * as validator from "./../../utils/inputValidators";
 
 class COTMRemoveWindowModal extends Modal {
-    /*
+  /*
         verifyChildProps()
 
         verifyChildProps is run automatically at mount. If necessary, 
         verify data provided by props (this.props) using this function. 
     */
 
-    verifyChildProps = () => {
-        const { isObject, isNumber } = validator;
-        const { data } = this.props;
-        
-        if(isObject(data) && isObject(data.params)){
-            const { windowInfo } = data.params;
+  verifyChildProps = () => {
+    const { isObject, isNumber } = validator;
+    const { data } = this.props;
 
-            if(isObject(windowInfo)){ 
-                if(!isNumber(windowInfo.id)){
-                    throw ExceptionsHandler.ValidatorError("COTMRemoveWindowModal-101");
-                }
-            } else {
-                throw ExceptionsHandler.ValidatorError("COTMRemoveWindowModal-102");
-            }
-        } else {
-            throw ExceptionsHandler.ValidatorError("COTMRemoveWindowModal-104");
+    if (isObject(data) && isObject(data.params)) {
+      const { windowInfo } = data.params;
+
+      if (isObject(windowInfo)) {
+        if (!isNumber(windowInfo.id)) {
+          throw ExceptionsHandler.ValidatorError("COTMRemoveWindowModal-101");
         }
+      } else {
+        throw ExceptionsHandler.ValidatorError("COTMRemoveWindowModal-102");
+      }
+    } else {
+      throw ExceptionsHandler.ValidatorError("COTMRemoveWindowModal-104");
+    }
+  };
 
-        
-    } 
-
-    
-    /*
+  /*
         childComponentDidMount()
 
         Set window info to modal state
     */
 
-   childComponentDidMount = () => {
-        try {
-            const { isObject } = validator;
-            const { data } = this.props;
+  childComponentDidMount = () => {
+    try {
+      const { isObject } = validator;
+      const { data } = this.props;
 
-            if(isObject(data) && isObject(data.params)){
-                const { windowInfo } = data.params;
+      if (isObject(data) && isObject(data.params)) {
+        const { windowInfo } = data.params;
 
-                if(isObject(windowInfo)){ 
-                    const data = windowInfo;
+        if (isObject(windowInfo)) {
+          const data = windowInfo;
 
-                    this.setState(
-                        { data }
-                    )
-                } else {
-                    throw ExceptionsHandler.ValidatorError("COTMRemoveWindowModal-102");
-                }
-            } else {
-                throw ExceptionsHandler.ValidatorError("COTMRemoveWindowModal-104");
-            }
-        } catch(err){
-            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+          this.setState({ data });
+        } else {
+          throw ExceptionsHandler.ValidatorError("COTMRemoveWindowModal-102");
         }
+      } else {
+        throw ExceptionsHandler.ValidatorError("COTMRemoveWindowModal-104");
+      }
+    } catch (err) {
+      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
+  };
 
-    /*
+  /*
         saveModalHandler()
 
         Triggers when the user clicks the #modal-save button located in the modal's user interface. Once clicked
@@ -74,64 +69,49 @@ class COTMRemoveWindowModal extends Modal {
         Parameters:
         - callback (function, mandatory. Triggers once the modal state has been cleared after being dismissed by the user)
     */
-    saveModalHandler = (callback) => {
-        try {
-            const { isFunction } = validator;
+  saveModalHandler = (callback) => {
+    try {
+      const { isFunction } = validator;
 
-            if(isFunction(callback)){
-                this.clearModalData(callback(this.state));
-            } else {
-                throw ExceptionsHandler.ValidatorError("COTMRemoveWindowModal-103");
-            }
-        } catch(err){
-            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
-        }
+      if (isFunction(callback)) {
+        this.clearModalData(callback(this.state));
+      } else {
+        throw ExceptionsHandler.ValidatorError("COTMRemoveWindowModal-103");
+      }
+    } catch (err) {
+      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
+  };
 
-    /*
-        dismissModalHandler()
-
-        Triggers when the user clicks the #modal-dismiss button located in the modal's user interface. The modal's
-        state will be cleared.
-    */
-    dismissModalHandler = () => {
-        try{
-            this.clearModalData();
-        } catch(err){
-            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
-        }
-    }
-
-    /*
+  /*
         renderModalBody()
 
         Render the body and the contents of this particular modal
     */
-    renderModalBody(){
-        return (
-            <Fragment>
-                <p>
-                    Closing this window will also close all its tabs. All ongoing activities on these web pages will be interrupted and possibly lost.
-                </p>
-                <p>
-                    Are you sure you want to proceed?
-                </p>
-                <p className="small">
-                    You may reopen the window with all its tabs intact from the browser's history feature (presuming you have it activated).
-                </p>
-            </Fragment>
-        );    
-    }
+  renderModalBody() {
+    return (
+      <Fragment>
+        <p>
+          Closing this window will also close all its tabs. All ongoing
+          activities on these web pages will be interrupted and possibly lost.
+        </p>
+        <p>Are you sure you want to proceed?</p>
+        <p className="small">
+          You may reopen the window with all its tabs intact from the browser's
+          history feature (presuming you have it activated).
+        </p>
+      </Fragment>
+    );
+  }
 
-    /*
+  /*
         renderModalHeadery()
 
         Render the headline string of this modal
     */
-    renderModalHeader(){
-        
-        return "Close Window";    
-    }
+  renderModalHeader() {
+    return "Close Window";
+  }
 }
 
 export default COTMRemoveWindowModal;

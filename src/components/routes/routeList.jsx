@@ -29,12 +29,7 @@ class RouteList extends Component {
   /*
         The Routes Array
 
-        This variable is the core of all navigation in Tabeon. It is also shared with
-        the App component and the MainSidebar component to keep them up to date when rendering 
-        navigation lists etc. To add anotheraccessible path and view to the app, simply add 
-        another object to the array:
-
-        - label (string): Label of the view (used by e.g. the sidebar's navigation menu)
+        - label (string): Label of the view (used by e.g. in the navigation menu)
         - path (string): starts with an slash ( / ). To add a parameter to the path, add another slash
         followed by :parameter. e.g. /myview/:param1/:param2/:param3 etc
         - component (a react component): A react component. Can be whatever, but in this case, a view
@@ -42,33 +37,16 @@ class RouteList extends Component {
 
         Good to know:
         - The lower down the list, the higher the priority
-        - All view mounted based on the information in this list have the ability to inform App component
-        about being mounted, and can also call the Modal component
     */
 
   static contextType = AppContext;
 
   routes = [
-    /* { 
-            label: "Dashboard", 
-            path: "/dashboard" ,
-            component: DashboardView
-        }, */
     {
       label: "Manage Tabs",
       path: "/manage",
       component: TabManagementView,
     },
-    /*   { 
-            label: "Calendar", 
-            path: "/scheduler/:year/:month/:date",
-            component: CalendarView
-        },
-        { 
-            label: "Scheduler", 
-            path: "/scheduler" ,
-            component: CalendarView
-        }, */
     {
       label: "Settings",
       path: "/settings",
@@ -81,73 +59,37 @@ class RouteList extends Component {
     },
   ];
 
-  handleViewMount = (viewProps) => {
+  handleViewMount = () => {
     /*
-            Parameters: none
+        Parameters: none
 
-            Inform the App component that any view (this view) has been mounted, by raising its current state.
-            The state will travel through the following components:
+        Inform the App component that any view (this view) has been mounted, by raising its current state.
+        The state will travel through the following components:
 
-                RouteList > App
+        RouteList > App
 
-            All components in this chain will have access to the information raised.
-        */
+        All components in this chain will have access to the information raised.
 
-    /*
-    const { onNavigation } = this.props;
-
-    onNavigation(routeProps); */
-    this.saveViewToAppContext(viewProps);
+        CURRENTLY NOT in USE, but a good-to-have feature. Leaving it here for now
+    */
   };
 
-  saveViewToAppContext = (routeProps) => {
-    const { isObject, isNumber } = validator;
-    const { setValueToState, getValueFromState } = this.context;
+  sendToErrorOverlay = (errorData) => {
+    const { isObject } = validator;
+    const { launchErrorOverlay } = this.context;
 
     try {
-      if (isObject(routeProps)) {
-        if (
-          isObject(routeProps.viewData) &&
-          isObject(routeProps.metaData) &&
-          isNumber(routeProps.refreshFactor)
-        ) {
-          setValueToState("currentView", routeProps, true, () => {
-            console.log("RR", getValueFromState("refreshFactor"));
-          });
-        } else {
-          throw ExceptionsHandler.ValidatorError("app-103");
-        }
+      if (isObject(errorData)) {
+        setTimeout(() => {
+          launchErrorOverlay(errorData);
+        }, 1000);
       } else {
-        throw ExceptionsHandler.ValidatorError("app-104");
+        throw ExceptionsHandler.ValidatorError("view-102");
       }
     } catch (err) {
-      this.raiseToErrorOverlay(err);
+      ExceptionsHandler.ErrorHandler(err, () => {});
     }
   };
-
-  raiseToModal = (data) => {
-    /*
-            Parameters: 
-            -   data (object, containing whatever data that we want the modal to processs. Mandatory)
-
-            Inform the App component to launch a modal (popup), by raising the data provided
-            in this function's parameter. The data parameter will travel through the following components:
-
-                RouteList > App
-
-            All components in this chain will have access to the information raised.
-        */
-
-    const { onRaiseToModal } = this.props;
-
-    onRaiseToModal(data);
-  };
-  /*
-  raiseToErrorOverlay = (data) => {
-    const { onRaiseToErrorOverlay } = this.props;
-
-    onRaiseToErrorOverlay(data);
-  }; */
 
   renderRoutes = () => {
     /*
@@ -158,12 +100,11 @@ class RouteList extends Component {
             visits /calendar, then the <CalendarView> component will be rendered and so forth.
 
             Good to know about these props:
-            - onRaiseToModal: this props forwards info to the App component, triggering a modal based on forwarded info
-            - onViewMount: once the view is mounted, it forwards that info to App component.
+            - onViewMount: once the view is mounted, this (the RouteList component) can perform extra tasks if needed.
             - label: The label, passed from Routelist down to the view component (not necessary)
+            - key: a unique identifier for the view
         */
     const views = this.routes;
-    const { launchErrorOverlay } = this.context;
 
     return views.map((view, key) => {
       const TagName = view.component;
@@ -175,11 +116,9 @@ class RouteList extends Component {
           render={(props) => {
             return (
               <TagName
-                onRaiseToModal={(data) => this.raiseToModal(data)}
                 onViewMount={(data) => this.handleViewMount(data)}
                 label={view.label}
                 key={"routeView-" + key}
-                // onRaiseToErrorOverlay={(data) => launchErrorOverlay(data)}
                 {...props}
               />
             );
@@ -216,15 +155,8 @@ class RouteList extends Component {
   };
 
   saveRoutesInfoToAppContext = () => {
-    /*
-            Raise information to App component
-        */
-
-    //const { onRaisedRoutesInfo } = this.props;
     const data = this.getRoutesPathAndLabel();
     const { setValueToState } = this.context;
-
-    // onRaisedRoutesInfo(data);
 
     const { isNumber, isString, isArray, isObject } = validator;
 
@@ -248,7 +180,6 @@ class RouteList extends Component {
         }
 
         if (errors === 0) {
-          //this.setState({ routes });
           setValueToState("routes", routes);
         } else {
           throw ExceptionsHandler.ValidatorError("app-112");

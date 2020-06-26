@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import ErrorOverlay from "../modals/errorOverlay";
 import { PropTypes } from "prop-types";
-import AppContext from "../contexts/AppContextProvider";
 
 /*
   Catch errors in child component's lifecycle hooks, during rendering and in 
@@ -14,12 +13,11 @@ import AppContext from "../contexts/AppContextProvider";
 class ErrorBoundary extends Component {
   state = { errors: [] };
 
-  static contextType = AppContext;
-
   /* Update state so the next render will show the fallback UI. */
   static getDerivedStateFromError(error) {
     let currentErrors = [];
     const newError = error;
+
     currentErrors.push(newError);
 
     return { errors: currentErrors };
@@ -30,33 +28,33 @@ class ErrorBoundary extends Component {
     */
   componentDidCatch(error, errorInfo) {
     let currentErrors = this.state.errors;
+
     const newError = Object.assign(error, errorInfo);
     currentErrors.push(newError);
 
-    this.setState(
-      {
-        errors: currentErrors,
-      },
-      () => {}
-    );
+    this.setState({
+      errors: currentErrors,
+    });
   }
 
+  handleDismiss = () => {
+    window.location.reload();
+  };
+
   render() {
-    if (this.state.errors.length > 0) {
-      /*
-          If errors are stored in the boundary state, render the ErrorOverlay UI component and inform the user about the errors
-          using the information stored in this.state.errors
-        */
+    const { errors } = this.state;
+    const { children } = this.props;
+
+    if (errors.length > 0) {
       return (
         <ErrorOverlay
-          data={this.state.errors}
-          onSave={() => ""}
-          onDismiss={() => window.location.reload()}
+          data={errors}
+          onDismiss={() => this.handleDismiss()}
         ></ErrorOverlay>
       );
     }
 
-    return this.props.children || null;
+    return children || null;
   }
 }
 

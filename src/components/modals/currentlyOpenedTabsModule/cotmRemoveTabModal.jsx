@@ -63,7 +63,7 @@ class COTMRemoveTabModal extends Modal {
         throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-105");
       }
     } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
@@ -87,21 +87,7 @@ class COTMRemoveTabModal extends Modal {
         throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-103");
       }
     } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
-    }
-  };
-
-  /*
-        dismissModalHandler()
-
-        Triggers when the user clicks the #modal-dismiss button located in the modal's user interface. The modal's
-        state will be cleared.
-    */
-  dismissModalHandler = () => {
-    try {
-      this.clearModalData();
-    } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
@@ -186,7 +172,7 @@ COTMRemoveTabModal.propTypes = {
       }),
     }),
   }),
-  onRaiseToErrorOverlay: PropTypes.func.isRequired,
+  // onRaiseToErrorOverlay: PropTypes.func.isRequired,
   //  onDismiss: PropTypes.func.isRequired
 };
 

@@ -1,26 +1,19 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import AppContext from "./../contexts/AppContextProvider";
+import { isFunction } from "./../utils/inputValidators";
 
 class ErrorOverlay extends Component {
+  static contextType = AppContext;
+
   forceScrollTop = () => {
     window.scrollTo(0, 0);
   };
 
-  /*
-        renderErrors()
-
-        Renders a div wrapper for each element found in the errors parameter. These divs inform the user
-        about the errors that were caught and passed to this overlay.
-
-        Parameters:
-        - errors (array of errors represented as objects, mandatory)
-
-
-    */
-
   componentDidMount = () => {
     this.forceScrollTop();
   };
+
   renderErrors = (errors) => {
     return errors.map((error, index) => {
       return (
@@ -57,8 +50,21 @@ class ErrorOverlay extends Component {
     });
   };
 
+  handleErrorOverlayDismiss = () => {
+    const { onDismiss } = this.props;
+
+    if (isFunction(onDismiss)) {
+      onDismiss();
+    } else {
+      const { setValueToState } = this.context;
+      const errors = [];
+
+      setValueToState("errors", errors, true);
+    }
+  };
+
   render = () => {
-    const { data, onDismiss } = this.props;
+    const { data } = this.props;
 
     return (
       <div id="tabflower-error-overlay">
@@ -75,7 +81,10 @@ class ErrorOverlay extends Component {
             </div>
             {this.renderErrors(data)}
             <div className="row">
-              <button className="btn" onClick={() => onDismiss()}>
+              <button
+                className="btn"
+                onClick={() => this.handleErrorOverlayDismiss()}
+              >
                 Close
               </button>
             </div>
@@ -88,7 +97,7 @@ class ErrorOverlay extends Component {
 
 ErrorOverlay.propTypes = {
   data: PropTypes.array.isRequired,
-  onDismiss: PropTypes.func.isRequired,
+  //onDismiss: PropTypes.func.isRequired,
 };
 
 export default ErrorOverlay;

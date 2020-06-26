@@ -22,10 +22,6 @@ class Module extends Component {
 
     */
   state = {
-    dropDownGrid: {
-      draggedOverModuleId: "",
-      moduleBeingDraggedId: "",
-    },
     moduleData: {
       loadedTabGroups: [],
       openedWindowsAndTabs: [],
@@ -42,25 +38,42 @@ class Module extends Component {
     */
   settings = {};
 
-  raiseToErrorOverlay = (data) => {
-    const { isObject, isFunction } = validator;
+  sendToErrorOverlay = (data) => {
+    const { isObject } = validator;
+    const { launchErrorOverlay } = this.context;
 
     try {
       if (isObject(data)) {
-        const { onRaiseToErrorOverlay } = this.props;
-
-        if (isFunction(onRaiseToErrorOverlay)) {
-          setTimeout(() => {
-            onRaiseToErrorOverlay(data);
-          }, 1000);
-        } else {
-          throw ExceptionsHandler.ValidatorError("module-111");
-        }
+        setTimeout(() => {
+          launchErrorOverlay(data);
+        }, 1000);
       } else {
         throw ExceptionsHandler.ValidatorError("module-110");
       }
     } catch (err) {
       ExceptionsHandler.ErrorHandler(err, () => {});
+    }
+  };
+
+  sendToModal = (data) => {
+    /* 
+            Parameters: 
+            -   data (object, containing whatever data that we want the modal to processs. Mandatory)
+
+            Inform the App component to launch a modal (popup), by raising the data provided
+            in this function's parameter. The data parameter will travel through the following components:
+
+                Module (any module, this module) > View (any view: this view) > RouteList > App
+
+            All components in this chain will have access to the information raised.
+       */
+
+    const { launchModal } = this.context;
+
+    try {
+      launchModal(data);
+    } catch (err) {
+      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
@@ -103,7 +116,7 @@ class Module extends Component {
         throw ExceptionsHandler.ValidatorError("module-102");
       }
     } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
@@ -135,7 +148,7 @@ class Module extends Component {
         throw ExceptionsHandler.ValidatorError("module-104");
       }
     } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
@@ -161,7 +174,7 @@ class Module extends Component {
         throw ExceptionsHandler.ValidatorError("module-106");
       }
     } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
@@ -177,7 +190,7 @@ class Module extends Component {
         minimized: true,
       });
     } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
@@ -193,7 +206,7 @@ class Module extends Component {
         minimized: false,
       });
     } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
@@ -220,75 +233,10 @@ class Module extends Component {
         throw ExceptionsHandler.ValidatorError("module-107");
       }
     } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
-  changeStateModuleData = (parameters) => {
-    /*
-            Change or modify the moduleData section of the module's state.
-
-            Parameters:
-            - parameters (object, mandatory): An object with a set of new options e.g. { module_specific_info_1: "abc", module_specific_info_2: "blablabla" }
-        */
-    try {
-      const { isObject } = validator;
-
-      if (isObject(parameters)) {
-        const moduleData = {
-          ...this.state.moduleData,
-          ...parameters,
-        };
-
-        this.setState({
-          moduleData,
-        });
-      } else {
-        throw ExceptionsHandler.ValidatorError("module-108");
-      }
-    } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
-    }
-  };
-
-  createStateModuleDataSection = (sectionName) => {
-    /*
-            Create a sub section inside the state.moduleData. Use this function only
-            if keeping data separate inside the moduleData section is absolutely necessary (be it for sorting or
-            organizing purposes)
-
-            E.g. 
-            this.createStateModuleDataSection("batman");
-
-            will result in:
-
-            state = {
-                dropDownGrid: {...},
-                moduleData: {
-                    batman: {}
-                }, 
-                settings: {...}
-            }
-        */
-    try {
-      const { isString, isObject } = validator;
-
-      if (isString(sectionName)) {
-        if (!isObject(this.state.moduleData[sectionName])) {
-          let data = {};
-
-          data[sectionName] = {};
-          this.changeStateModuleData(data);
-        } else {
-          throw ExceptionsHandler.ValidatorError("module-114");
-        }
-      } else {
-        throw ExceptionsHandler.ValidatorError("module-109");
-      }
-    } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
-    }
-  };
   componentDidMount = () => {
     const { isFunction, isObject } = validator;
 
@@ -322,67 +270,15 @@ class Module extends Component {
     this.verifyState();
   };
 
-  raiseToModal = (data) => {
-    /*
-            Parameters: 
-            -   data (object, containing whatever data that we want the modal to processs. Mandatory)
-
-            Inform the App component to launch a modal (popup), by raising the data provided
-            in this function's parameter. The data parameter will travel through the following components:
-
-                Module (any module, this module) > View (any view: this view) > RouteList > App
-
-            All components in this chain will have access to the information raised.
-        */
-
-    const { isObject } = validator;
-    const { launchModal } = this.context;
-    //const { onRaiseToModal } = this.props;
-
-    try {
-      /*   if(isObject(data)){
-                onRaiseToModal(data);
-            } else {
-                throw ExceptionsHandler.ValidatorError("module-115");
-            } */
-
-      launchModal(data);
-    } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
-    }
-  };
-
   renderHeader = () => {};
 
   renderBody = () => {};
 
   verifyProps = () => {
-    const {
-      onRaiseToModal,
-      onDragOver,
-      onDrop,
-      onDragStart,
-      onRaiseToErrorOverlay,
-      id,
-    } = this.props;
+    const { id } = this.props;
 
-    const { isFunction, isString, isObject } = validator;
+    const { isString, isObject } = validator;
 
-    if (!isFunction(onRaiseToModal)) {
-      throw ExceptionsHandler.ValidatorError("module-verifyProps-101");
-    }
-    if (!isFunction(onDragOver)) {
-      throw ExceptionsHandler.ValidatorError("module-verifyProps-102");
-    }
-    if (!isFunction(onDrop)) {
-      throw ExceptionsHandler.ValidatorError("module-verifyProps-103");
-    }
-    if (!isFunction(onDragStart)) {
-      throw ExceptionsHandler.ValidatorError("module-verifyProps-104");
-    }
-    if (!isFunction(onRaiseToErrorOverlay)) {
-      throw ExceptionsHandler.ValidatorError("module-verifyProps-106");
-    }
     if (!isString(id)) {
       throw ExceptionsHandler.ValidatorError("module-verifyProps-107");
     }
@@ -394,30 +290,10 @@ class Module extends Component {
 
   verifyState = () => {
     // Check state
-    const { isString, isObject, isEmptyString } = validator;
+    const { isObject } = validator;
 
     if (isObject(this.state)) {
-      const { dropDownGrid, moduleData, settings } = this.state;
-
-      if (!isObject(dropDownGrid)) {
-        throw ExceptionsHandler.ValidatorError("module-verifyProps-110");
-      } else {
-        const { draggedOverModuleId, moduleBeingDraggedId } = dropDownGrid;
-
-        if (
-          !isString(draggedOverModuleId) &&
-          !isEmptyString(draggedOverModuleId)
-        ) {
-          throw ExceptionsHandler.ValidatorError("module-verifyProps-113");
-        }
-
-        if (
-          !isString(moduleBeingDraggedId) &&
-          !isEmptyString(moduleBeingDraggedId)
-        ) {
-          throw ExceptionsHandler.ValidatorError("module-verifyProps-114");
-        }
-      }
+      const { moduleData, settings } = this.state;
 
       if (!isObject(moduleData)) {
         throw ExceptionsHandler.ValidatorError("module-verifyProps-111");
@@ -448,19 +324,13 @@ class Module extends Component {
       <div
         id={"tabeon-module-container-id" + this.props.id}
         droppable="true"
-        onDragOver={(e) => this.handleDragOver(e)}
-        onDrop={(e) => this.handleDrop(e)}
         className={"tabeon-module-container col-12"}
       >
         <div
           id={"tabeon-module-id-" + this.props.id}
           className={"tabeon-module"}
         >
-          <div
-            className="row tabeon-module-header"
-            draggable="true"
-            onDragStart={(e) => this.handleDragStart(e)}
-          >
+          <div className="row tabeon-module-header" draggable="true">
             <div className="col-12">
               <div
                 className={
@@ -528,8 +398,7 @@ Module.propTypes = {
   onDragOver: PropTypes.func,
   onDrop: PropTypes.func,
   onDragStart: PropTypes.func,
-  onRaiseToModal: PropTypes.func.isRequired,
-  onRaiseToErrorOverlay: PropTypes.func.isRequired,
+  //  onRaiseToModal: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
 };
 

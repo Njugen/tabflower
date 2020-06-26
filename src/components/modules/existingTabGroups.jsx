@@ -43,7 +43,7 @@ class ExistingTabGroupsModule extends Module {
         throw ValidatorError("etgm-module-103");
       }
     } catch (err) {
-      ErrorHandler(err, this.raiseToErrorOverlay);
+      ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
@@ -67,7 +67,7 @@ class ExistingTabGroupsModule extends Module {
         this.getAllTabGroups();
       });
     } catch (err) {
-      ErrorHandler(err, this.raiseToErrorOverlay);
+      ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
@@ -112,14 +112,14 @@ class ExistingTabGroupsModule extends Module {
           },
           (failResponse) => {
             const err = ValidatorError(failResponse.data);
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ErrorHandler(err, this.sendToErrorOverlay);
           }
         );
       } else {
         throw ValidatorError("etgm-module-105");
       }
     } catch (err) {
-      ErrorHandler(err, this.raiseToErrorOverlay);
+      ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
@@ -149,16 +149,16 @@ class ExistingTabGroupsModule extends Module {
               () => {}
             );
           } catch (err) {
-            ErrorHandler(err, this.raiseToErrorOverlay);
+            ErrorHandler(err, this.sendToErrorOverlay);
           }
         },
         (failResponse) => {
           const err = ValidatorError(failResponse.data);
-          ErrorHandler(err, this.raiseToErrorOverlay);
+          ErrorHandler(err, this.sendToErrorOverlay);
         }
       );
     } catch (err) {
-      ErrorHandler(err, this.raiseToErrorOverlay);
+      ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
@@ -178,7 +178,7 @@ class ExistingTabGroupsModule extends Module {
                 <button
                   className="fas fa-cog options-button"
                   onClick={() =>
-                    this.raiseToModal({
+                    this.sendToModal({
                       id: "etgmcreateoreditgroupmodal",
                       params: {
                         windowAndTabs: group.windowAndTabs,
@@ -196,7 +196,7 @@ class ExistingTabGroupsModule extends Module {
                 <button
                   className="fas fa-times options-button"
                   onClick={() =>
-                    this.raiseToModal({
+                    this.sendToModal({
                       id: "etgmremovegroupmodal",
                       params: {
                         groupId: group.groupId,
@@ -216,7 +216,7 @@ class ExistingTabGroupsModule extends Module {
               <button
                 className="btn btn-tabeon-reverse d-inline-block"
                 onClick={() =>
-                  this.raiseToModal({
+                  this.sendToModal({
                     id: "etgmlaunchgroupmodal",
                     params: {
                       windowAndTabs: group.windowAndTabs,
@@ -281,7 +281,7 @@ class ExistingTabGroupsModule extends Module {
         <button
           className="btn btn-tabeon d-inline-block"
           onClick={() =>
-            this.raiseToModal({
+            this.sendToModal({
               id: "etgmremovegroupsmodal",
               params: { removeAll: true },
               action: this.removeTabGroups.bind(this),
@@ -293,7 +293,7 @@ class ExistingTabGroupsModule extends Module {
         <button
           className="btn btn-tabeon d-inline-block"
           onClick={() =>
-            this.raiseToModal({
+            this.sendToModal({
               id: "etgmcreateoreditgroupmodal",
               params: { windowAndTabs: [], type: "new-group" },
               action: this.createOrEditTabGroup.bind(this),

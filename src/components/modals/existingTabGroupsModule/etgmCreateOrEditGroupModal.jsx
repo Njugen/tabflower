@@ -171,24 +171,10 @@ class ETGMCreateNewGroupModal extends Modal {
             }
         } catch(err){
             
-            ExceptionsHandler.ErrorHandler(err.issue, this.raiseToErrorOverlay, err.additionalMessage);
+            ExceptionsHandler.ErrorHandler(err.issue, this.sendToErrorOverlay, err.additionalMessage);
         }
     }
-
-    /*
-        dismissModalHandler()
-
-        Triggers when the user clicks the #modal-dismiss button located in the modal's user interface. The modal's
-        state will be cleared.
-    */
-    dismissModalHandler = () => {
-        try {
-           this.clearModalData();
-        } catch(err){
-            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
-        }
-    }
-
+    
     /*
         validateFields()
 
@@ -262,9 +248,9 @@ class ETGMCreateNewGroupModal extends Modal {
         } catch(err){
     
             if(err.issue){
-                ExceptionsHandler.ErrorHandler(err.issue, this.raiseToErrorOverlay, err.additionalMessage);
+                ExceptionsHandler.ErrorHandler(err.issue, this.sendToErrorOverlay, err.additionalMessage);
             } else {
-                ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay, err.additionalMessage);
+                ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay, err.additionalMessage);
             } 
         }
     }
@@ -296,7 +282,7 @@ class ETGMCreateNewGroupModal extends Modal {
 
             return groupId;
         } catch(err){
-            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
         }
     }
 
@@ -319,7 +305,7 @@ class ETGMCreateNewGroupModal extends Modal {
                 throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-127");
             }
         } catch(err){
-            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
         }
     } 
 
@@ -365,7 +351,7 @@ class ETGMCreateNewGroupModal extends Modal {
             });
            
         } catch(err){
-            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
         }
     }
 
@@ -432,7 +418,7 @@ class ETGMCreateNewGroupModal extends Modal {
             }
         } catch(err){
             console.log("IDG", err);
-            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
         }
     }
 
@@ -507,7 +493,7 @@ class ETGMCreateNewGroupModal extends Modal {
                 throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-108")
             }
         } catch(err){
-            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
         }
     }
 
@@ -559,7 +545,7 @@ class ETGMCreateNewGroupModal extends Modal {
                 throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-110")
             }
         } catch(err){
-            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
         }
         
     }
@@ -596,7 +582,7 @@ class ETGMCreateNewGroupModal extends Modal {
                 throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-111")
             }
         } catch(err){
-            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
+            ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
         }
     }
 
@@ -659,7 +645,7 @@ class ETGMCreateNewGroupModal extends Modal {
                             onAddNewTab={(data, index) => this.addNewTab(data, index)}
                             onDeleteTab={(windowIndex, tabIndex) => this.deleteTab(windowIndex, tabIndex)}
                             onDeleteWindow={(windowIndex) => this.deleteWindow(windowIndex)}
-                            onRaiseToErrorOverlay={(data) => this.raiseToErrorOverlay(data)}
+                            onRaiseToErrorOverlay={(data) => this.sendToErrorOverlay(data)}
                             canCloseItems={type === "existing-group" || type === "new-group" ? true : false}
                             initialShowTabs={false}
                             initialTabStyle="vertical"
