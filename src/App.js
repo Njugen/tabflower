@@ -91,39 +91,6 @@ class App extends Component {
       this.launchErrorOverlay(err);
     }
   };
-  /*
-  handleNavigation = (viewProps) => {
-    const { isObject, isNumber } = validator;
-    const { setValueToState, getValueFromState } = this.context;
-
-    try {
-      if (isObject(viewProps)) {
-        if (
-          isObject(viewProps.viewData) &&
-          isObject(viewProps.metaData) &&
-          isNumber(viewProps.refreshFactor)
-        ) {
-        
-          this.updateState(
-            {
-              currentView: viewProps,
-            },
-            true
-          ); 
-
-          setValueToState("currentView", viewProps, true, () => {
-            console.log("RR", getValueFromState("refreshFactor"));
-          });
-        } else {
-          throw ExceptionsHandler.ValidatorError("app-103");
-        }
-      } else {
-        throw ExceptionsHandler.ValidatorError("app-104");
-      }
-    } catch (err) {
-      this.launchErrorOverlay(err);
-    }
-  }; */
 
   handleMainNavBarClick = (data) => {
     const { isObject, isNumber } = validator;
@@ -147,40 +114,7 @@ class App extends Component {
       this.launchErrorOverlay(err);
     }
   };
-  /*
-  launchModal = (data) => {
-    const { isObject, isFunction, isString } = validator;
-    const { setValueToState } = this.context;
 
-    try {
-      if (isObject(data)) {
-        if (
-          isString(data.id) &&
-          isFunction(data.action) &&
-          isObject(data.params)
-        ) {
-          const modal = {
-            launched: true,
-            ...data,
-          };
-
-          
-          this.setState({
-            modal,
-          }); 
-
-          setValueToState("modal", modal);
-        } else {
-          throw ExceptionsHandler.ValidatorError("app-108");
-        }
-      } else {
-        throw ExceptionsHandler.ValidatorError("app-107");
-      }
-    } catch (err) {
-      this.launchErrorOverlay(err);
-    }
-  };
-*/
   launchErrorOverlay = (data) => {
     const { isObject, isString } = validator;
     const { setValueToState, getValueFromState } = this.context;
@@ -192,13 +126,6 @@ class App extends Component {
           isString(data.message) &&
           isString(data.name)
         ) {
-          // let errors = this.state.errors;
-
-          /*
-          this.setState({
-            errors,
-          }); */
-          console.log("BLA");
           let errors = getValueFromState("errors");
           errors.push(data);
 
@@ -215,59 +142,13 @@ class App extends Component {
       });
     }
   };
-  /*
-  clearModal = () => {
-    const modal = {};
-    const { setValueToState } = this.context;
 
-    setTimeout(() => {
-      setValueToState("modal", modal);
-    }, 500);
-  }; */
-
-  clearErrors = () => {
+  handleErrorOverlayDismiss = () => {
     const { setValueToState } = this.context;
     const errors = [];
 
-    //this.setState({ errors });
-
     setValueToState("errors", errors);
   };
-
-  /* handleRaisedRoutesInfo = (data) => {
-    const { isNumber, isString, isArray, isObject } = validator;
-
-    try {
-      if (isArray(data) && data.length > 0) {
-        const routes = data;
-        let errors = 0;
-
-        for (let i = 0; i < routes.length; i++) {
-          if (isObject(routes[i])) {
-            if (
-              !isString(routes[i].label) ||
-              !isString(routes[i].path) ||
-              !isNumber(routes[i].key)
-            ) {
-              errors++;
-            }
-          } else {
-            errors++;
-          }
-        }
-
-        if (errors === 0) {
-          this.setState({ routes });
-        } else {
-          throw ExceptionsHandler.ValidatorError("app-112");
-        }
-      } else {
-        throw ExceptionsHandler.ValidatorError("app-113");
-      }
-    } catch (err) {
-      this.launchErrorOverlay(err);
-    }
-  };*/
 
   render = () => {
     // Get context
@@ -343,7 +224,7 @@ class App extends Component {
             <ErrorOverlay
               data={errors}
               onSave={() => ""}
-              onDismiss={() => this.clearErrors()}
+              onDismiss={() => this.handleErrorOverlayDismiss()}
             ></ErrorOverlay>
           )}
 
