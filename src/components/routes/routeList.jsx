@@ -74,22 +74,7 @@ class RouteList extends Component {
     */
   };
 
-  sendToErrorOverlay = (errorData) => {
-    const { isObject } = validator;
-    const { launchErrorOverlay } = this.context;
-
-    try {
-      if (isObject(errorData)) {
-        setTimeout(() => {
-          launchErrorOverlay(errorData);
-        }, 1000);
-      } else {
-        throw ExceptionsHandler.ValidatorError("view-102");
-      }
-    } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, () => {});
-    }
-  };
+  sendToErrorOverlay = this.context.sendToErrorOverlay;
 
   renderRoutes = () => {
     /*
@@ -188,7 +173,7 @@ class RouteList extends Component {
         throw ExceptionsHandler.ValidatorError("app-113");
       }
     } catch (err) {
-      this.raiseToErrorOverlay(err);
+      this.sendToErrorOverlay(err);
     }
   };
 
@@ -218,10 +203,6 @@ class RouteList extends Component {
   };
 }
 
-RouteList.propTypes = {
-  //  onRaisedRoutesInfo: PropTypes.func.isRequired,
-  //  onRaiseToModal: PropTypes.func.isRequired,
-  //onRaiseToErrorOverlay: PropTypes.func.isRequired,
-};
+RouteList.propTypes = {};
 
 export default RouteList;

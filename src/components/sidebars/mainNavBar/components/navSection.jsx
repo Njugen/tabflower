@@ -24,11 +24,7 @@ class NavSection extends Component {
   };
 
   render = () => {
-    const {
-      title,
-      links,
-      //  onNavClick
-    } = this.props;
+    const { title, links, onNavClick } = this.props;
 
     return (
       <Fragment>
@@ -44,7 +40,7 @@ class NavSection extends Component {
         <div className="row d-flex justify-content-center">
           <div className="row">
             <div className="col-md-12 tabeon-nav-link-container">
-              {this.mapLinks(links)}
+              {this.mapLinks(links, onNavClick)}
             </div>
           </div>
         </div>

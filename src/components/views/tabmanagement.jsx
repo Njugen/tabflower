@@ -30,7 +30,13 @@ class TabManagementView extends View {
     }
   };
 
-  // componentDidMount = () => {};
+  testf = () => {
+    try {
+      throw ExceptionsHandler.ValidatorError("tabManagement-view-101");
+    } catch (err) {
+      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
+    }
+  };
 
   render = () => {
     return (

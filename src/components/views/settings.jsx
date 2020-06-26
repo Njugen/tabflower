@@ -1,7 +1,6 @@
 import React from "react";
 import View from "./view";
-import Moduleon from "../utils/moduleon/moduleon";
-import ModuleColumn from "../utils/moduleon/moduleColumn";
+
 import ExtensionSettingsModule from "./../modules/extensionSettings";
 import * as ExceptionsHandler from "../utils/exceptionsAndHandler";
 import * as validator from "../utils/inputValidators";
@@ -32,16 +31,12 @@ class SettingsView extends View {
     return (
       <div className="row d-flex justify-content-center">
         <div className="col-6">
-          <Moduleon>
-            <ModuleColumn colspan="12">
-              <ExtensionSettingsModule
-                onRaiseToView={(data) => this.handleRaisedData(data)}
-                id="active-tabs-module"
-                onRaiseToModal={(data) => this.raiseToModal(data)}
-                onRaiseToErrorOverlay={(data) => this.sendToErrorOverlay(data)}
-              ></ExtensionSettingsModule>
-            </ModuleColumn>
-          </Moduleon>
+          <ExtensionSettingsModule
+            onRaiseToView={(data) => this.handleRaisedData(data)}
+            id="active-tabs-module"
+            onRaiseToModal={(data) => this.raiseToModal(data)}
+            onRaiseToErrorOverlay={(data) => this.sendToErrorOverlay(data)}
+          ></ExtensionSettingsModule>
         </div>
       </div>
     );

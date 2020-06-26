@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import * as ExceptionsHandler from "../exceptionsAndHandler";
 import * as validator from "./../../utils/inputValidators";
 import PropTypes from "prop-types";
-import AppContext from "../../contexts/AppContextProvider";
+import AppContext from "./../../contexts/AppContextProvider";
 require("../../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
 
 class Module extends Component {
@@ -38,44 +38,9 @@ class Module extends Component {
     */
   settings = {};
 
-  sendToErrorOverlay = (data) => {
-    const { isObject } = validator;
-    const { launchErrorOverlay } = this.context;
+  sendToErrorOverlay = this.context.sendToErrorOverlay;
 
-    try {
-      if (isObject(data)) {
-        setTimeout(() => {
-          launchErrorOverlay(data);
-        }, 1000);
-      } else {
-        throw ExceptionsHandler.ValidatorError("module-110");
-      }
-    } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, () => {});
-    }
-  };
-
-  sendToModal = (data) => {
-    /* 
-            Parameters: 
-            -   data (object, containing whatever data that we want the modal to processs. Mandatory)
-
-            Inform the App component to launch a modal (popup), by raising the data provided
-            in this function's parameter. The data parameter will travel through the following components:
-
-                Module (any module, this module) > View (any view: this view) > RouteList > App
-
-            All components in this chain will have access to the information raised.
-       */
-
-    const { launchModal } = this.context;
-
-    try {
-      launchModal(data);
-    } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
-    }
-  };
+  sendToModal = this.context.sendToModal;
 
   handleDragOver = (componentEvent) => {
     /*
@@ -306,8 +271,8 @@ class Module extends Component {
     }
   };
 
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     /*
             A module may need to run its own special tasks before being mounted. To do this, add
             childComponentWillMount() into the module, which will be executed if it exists

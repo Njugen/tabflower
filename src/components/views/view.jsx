@@ -4,24 +4,12 @@ import * as validator from "./../utils/inputValidators";
 import * as ExceptionsHandler from "../utils/exceptionsAndHandler";
 import PropTypes from "prop-types";
 import AppContext from "./../contexts/AppContextProvider";
+
 /*
-    The View Class
-
-    This class inherits all React related features from the Component class.
-    It also defines the basics of what a view is, like setting states and
-    automatically running common features shared by all views.
-
-    By making a single View inherit from this class, all its feature will be
-    shared with the inheritor also. The inheritor then runs its own unique features.
+    The View Component
 
     Props:
-    - onRaiseToModal(data): Call this when raising data to App component for modal triggering
-        - data = {
-            id: "id of the modal being called",
-            action: "function bound to the caller component. Can be executed by the modal"
-        }
-    - onViewMount(data): Call this when raising data to inform App component that this view has been mounted
-        - data = this.state or other parameters the App could use to verify this view as mounted    
+    - onViewMount (function): Triggers a function in the parent component, using the view's state as parameter.
 */
 
 class View extends Component {
@@ -31,22 +19,7 @@ class View extends Component {
 
   static contextType = AppContext;
 
-  sendToErrorOverlay = (errorData) => {
-    const { isObject } = validator;
-    const { launchErrorOverlay } = this.context;
-
-    try {
-      if (isObject(errorData)) {
-        setTimeout(() => {
-          launchErrorOverlay(errorData);
-        }, 1000);
-      } else {
-        throw ExceptionsHandler.ValidatorError("view-102");
-      }
-    } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, () => {});
-    }
-  };
+  sendToErrorOverlay = this.context.sendToErrorOverlay;
 
   handleViewMount = () => {
     /*
@@ -103,9 +76,7 @@ class View extends Component {
 }
 
 View.propTypes = {
-  // onRaiseToModal: PropTypes.func.isRequired,
   onViewMount: PropTypes.func.isRequired,
-  // onRaiseToErrorOverlay: PropTypes.func.isRequired,
 };
 
 export default View;

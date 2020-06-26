@@ -1,8 +1,7 @@
 import React from "react";
 import View from "./view";
 import AboutTabflowerModule from "./../modules/aboutTabflower";
-import Moduleon from "./../utils/moduleon/moduleon";
-import ModuleColumn from "../utils/moduleon/moduleColumn";
+
 import * as validator from "./../utils/inputValidators";
 import * as ExceptionsHandler from "../utils/exceptionsAndHandler";
 
@@ -32,16 +31,12 @@ class AboutTabFlowerView extends View {
     return (
       <div className="row d-flex justify-content-center">
         <div className="col-6">
-          <Moduleon>
-            <ModuleColumn colspan="12">
-              <AboutTabflowerModule
-                onRaiseToView={(data) => this.handleRaisedData(data)}
-                id="active-tabs-module"
-                onRaiseToModal={(data) => this.raiseToModal(data)}
-                onRaiseToErrorOverlay={(data) => this.sendToErrorOverlay(data)}
-              ></AboutTabflowerModule>
-            </ModuleColumn>
-          </Moduleon>
+          <AboutTabflowerModule
+            onRaiseToView={(data) => this.handleRaisedData(data)}
+            id="active-tabs-module"
+            onRaiseToModal={(data) => this.raiseToModal(data)}
+            onRaiseToErrorOverlay={(data) => this.sendToErrorOverlay(data)}
+          ></AboutTabflowerModule>
         </div>
       </div>
     );

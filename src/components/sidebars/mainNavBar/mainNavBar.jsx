@@ -1,13 +1,22 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import NavSection from "./components/navSection";
+import AppContext from "./../../contexts/AppContextProvider";
 
 class MainNavBar extends Component {
-  renderNavSection = (title, links) => {
-    return <NavSection title={title} links={links} />;
-  };
+  static contextType = AppContext;
 
-  componentDidMount = () => {};
+  renderNavSection = (title, links) => {
+    const { forceRefresh } = this.context;
+
+    return (
+      <NavSection
+        title={title}
+        links={links}
+        onNavClick={() => forceRefresh()}
+      />
+    );
+  };
 
   render = () => {
     const { routes } = this.props;

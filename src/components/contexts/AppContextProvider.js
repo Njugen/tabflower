@@ -48,6 +48,34 @@ export class AppContextProvider extends Component {
     this.setValueToState("errors", errors);
   };
 
+  sendToErrorOverlay = (data) => {
+    const { isObject } = validator;
+
+    try {
+      if (isObject(data)) {
+        setTimeout(() => {
+          this.launchErrorOverlay(data);
+        }, 1000);
+      } else {
+        //    throw ExceptionsHandler.ValidatorError("view-102");
+      }
+    } catch (err) {
+      //  ExceptionsHandler.ErrorHandler(err, () => {});
+    }
+  };
+
+  sendToModal = (data) => {
+    try {
+      this.launchModal(data);
+    } catch (err) {
+      // ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
+    }
+  };
+
+  forceRefresh = () => {
+    this.setValueToState("refreshFactor", 1, true);
+  };
+
   render() {
     return (
       <AppContext.Provider
@@ -55,8 +83,9 @@ export class AppContextProvider extends Component {
           state: this.state,
           setValueToState: this.setValueToState,
           getValueFromState: this.getValueFromState,
-          launchModal: this.launchModal,
-          launchErrorOverlay: this.launchErrorOverlay,
+          sendToErrorOverlay: this.sendToErrorOverlay,
+          sendToModal: this.sendToModal,
+          forceRefresh: this.forceRefresh,
         }}
       >
         {this.props.children}

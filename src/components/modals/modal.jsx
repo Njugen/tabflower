@@ -55,23 +55,24 @@ class Modal extends Component {
         }
     */
   state = {
-    ui: {},
     fieldErrors: {},
   };
 
   static contextType = AppContext;
 
+  sendToErrorOverlay = this.context.sendToErrorOverlay;
+
   saveFieldErrorsToState = (errors) => {
     /*
-            saveFieldErrorsToState()
+      saveFieldErrorsToState()
 
-            Parameters:
-            - errors (object, containing the field errors)
+      Parameters:
+      - errors (object, containing the field errors)
 
-            Save input field errors to component state. (for use in
-            e.g. alert boxes or notifying the user based on the state variables alone) 
-            
-        */
+      Save input field errors to component state. (for use in
+      e.g. alert boxes or notifying the user based on the state variables alone) 
+      
+    */
     const { isUndefined, isObject } = validator;
 
     try {
@@ -84,37 +85,6 @@ class Modal extends Component {
       }
     } catch (err) {
       ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
-    }
-  };
-
-  sendToErrorOverlay = (errorData) => {
-    /*
-            Parameters: 
-            -   err (object, containing whatever error (1 error) that we want the modal to processs. Mandatory)
-
-            Inform the App component to launch a modal (popup), by raising the error data provided
-            in this function's parameter. The parameter will travel through the following components:
-
-            This Modal > Module (any module, this module) > View (any view: this view) > RouteList > App
-
-            All components in this chain will have access to the information raised.
-        */
-
-    const { isObject } = validator;
-    const { launchErrorOverlay } = this.context;
-
-    try {
-      if (isObject(errorData)) {
-        this.dismissModalHandler();
-
-        setTimeout(() => {
-          launchErrorOverlay(errorData);
-        }, 1000);
-      } else {
-        throw ExceptionsHandler.ValidatorError("mp-verifyProps-108");
-      }
-    } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, () => {});
     }
   };
 
@@ -202,11 +172,11 @@ class Modal extends Component {
   };
 
   /*
-        dismissModalHandler()
+      dismissModalHandler()
 
-        Triggers when the user clicks the #modal-dismiss button located in the modal's user interface. The modal's
-        state will be cleared.
-    */
+      Triggers when the user clicks the #modal-dismiss button located in the modal's user interface. The modal's
+      state will be cleared.
+  */
   dismissModalHandler = () => {
     try {
       this.clearModalData();
@@ -217,20 +187,20 @@ class Modal extends Component {
 
   scrollHandler = (e) => {
     /*
-            scrollHandler(e)
+        scrollHandler(e)
 
-            Parameters:
-            - e (event object, passed to this function by the event caller. This parameter does not need to be used unless necessary).
+        Parameters:
+        - e (event object, passed to this function by the event caller. This parameter does not need to be used unless necessary).
 
-            This function acts as an event handler for the "scroll" event affecting the document object. 
-            Use this function in the following manner (preferably during component mount and unmount):
+        This function acts as an event handler for the "scroll" event affecting the document object. 
+        Use this function in the following manner (preferably during component mount and unmount):
 
-            componentDidMount:
-            - document.addEventListener("scroll", this.scrollHandler);
-            
-            componentWillUnmount:
-            - document.removeEventListener("scroll", this.scrollHandler);
-        */
+        componentDidMount:
+        - document.addEventListener("scroll", this.scrollHandler);
+        
+        componentWillUnmount:
+        - document.removeEventListener("scroll", this.scrollHandler);
+    */
 
     const modalWrapper = document.getElementById("tabeonModal");
     const modalDialogueBox = modalWrapper.getElementsByClassName(
@@ -370,7 +340,6 @@ class Modal extends Component {
           throw ExceptionsHandler.ValidatorError("mp-propsAction-101");
         }
       } else {
-        throw ExceptionsHandler.ValidatorError("mp-propsAction-102");
       }
     } catch (err) {
       ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
@@ -385,10 +354,7 @@ class Modal extends Component {
     /*
             The saveToState function
 
-            This function saves information to a categorized/area section of the state. The
-            state for a modal may be used to store feature related data or simply have
-            information onhold to be passed. However, to avoid clutter, use this
-            function to store data in separate sections if necessary. 
+            This function saves a value to a categorized/area section of the state.
 
             E.g. 
             state = {
@@ -481,11 +447,8 @@ class Modal extends Component {
     const { isObject } = validator;
 
     if (isObject(this.state)) {
-      const { ui, fieldErrors } = this.state;
+      const { fieldErrors } = this.state;
 
-      if (!isObject(ui)) {
-        throw ExceptionsHandler.ValidatorError("mp-verifyProps-106");
-      }
       if (!isObject(fieldErrors)) {
         throw ExceptionsHandler.ValidatorError("mp-verifyProps-107");
       }
