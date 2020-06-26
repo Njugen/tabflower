@@ -46,75 +46,6 @@ import AppContext from "./components/contexts/AppContextProvider";
 class App extends Component {
   static contextType = AppContext;
 
-  state = {
-    // NOT NEEDED ANYMORE currentView: {},
-    // routes: [],
-    // modal: {},
-    // errors: [],
-    MainNavBar: {},
-    //refreshFactor: 0,
-  };
-
-  updateState = (newProps, showLoadbar, callback) => {
-    /* 
-      Used to update the App state itself. This function works the same way as this.setState(), 
-      but also increases the refreshFactor (the FullWidthLoadbar uses this to determine whether to launch the loadbar
-        or not)
-    */
-    const { isObject, isFunction, isUndefined } = validator;
-    const { getValueFromState, setValueToState } = this.context;
-
-    try {
-      if (isObject(newProps)) {
-        let newState = {
-          ...newProps,
-        };
-
-        if (showLoadbar && showLoadbar === true) {
-          let refreshFactor = getValueFromState("refreshFactor");
-          refreshFactor++;
-
-          setValueToState("refreshFactor", refreshFactor);
-        }
-
-        if (isFunction(callback)) {
-          this.setState(newState, callback);
-        } else if (isUndefined(callback)) {
-          this.setState(newState);
-        } else {
-          throw ExceptionsHandler.ValidatorError("app-101");
-        }
-      } else {
-        throw ExceptionsHandler.ValidatorError("app-102");
-      }
-    } catch (err) {
-      this.launchErrorOverlay(err);
-    }
-  };
-
-  handleMainNavBarClick = (data) => {
-    const { isObject, isNumber } = validator;
-
-    try {
-      if (isObject(data)) {
-        if (isNumber(data.activeNavLinkKey)) {
-          this.updateState(
-            {
-              MainNavBar: data,
-            },
-            true
-          );
-        } else {
-          throw ExceptionsHandler.ValidatorError("app-106");
-        }
-      } else {
-        throw ExceptionsHandler.ValidatorError("app-105");
-      }
-    } catch (err) {
-      this.launchErrorOverlay(err);
-    }
-  };
-
   launchErrorOverlay = (data) => {
     const { isObject, isString } = validator;
     const { setValueToState, getValueFromState } = this.context;
@@ -165,60 +96,37 @@ class App extends Component {
       <Fragment>
         <ErrorBoundary>
           {modalId === "confirm-action" && (
-            <ConfirmationModal
-              data={modalData}
-              onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
-              // onDismiss={() => this.clearModal()}
-            ></ConfirmationModal>
+            <ConfirmationModal data={modalData}></ConfirmationModal>
           )}
           {modalId === "date-settings" && (
             <CalendarDateSettingsModal
               data={modalData}
-              onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
-              // onDismiss={() => this.clearModal()}
             ></CalendarDateSettingsModal>
           )}
           {modalId === "etgmlaunchgroupmodal" && (
             <ETGMLaunchGroupModal
               data={modalData}
-              onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
               //  onDismiss={() => this.clearModal()}
             ></ETGMLaunchGroupModal>
           )}
           {modalId === "etgmremovegroupmodal" && (
-            <ETGMRemoveGroupModal
-              data={modalData}
-              onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
-              // onDismiss={() => this.clearModal()}
-            ></ETGMRemoveGroupModal>
+            <ETGMRemoveGroupModal data={modalData}></ETGMRemoveGroupModal>
           )}
           {modalId === "etgmcreateoreditgroupmodal" && (
             <ETGMCreateOrEditGroupModal
               data={modalData}
-              onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
-              // onDismiss={() => this.clearModal()}
             ></ETGMCreateOrEditGroupModal>
           )}
           {modalId === "cotmremoveunresponsivetabsmodal" && (
             <COTMRemoveUnresponsiveTabsModal
               data={modalData}
-              onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
-              // onDismiss={() => this.clearModal()}
             ></COTMRemoveUnresponsiveTabsModal>
           )}
           {modalId === "cotmremovewindowmodal" && (
-            <COTMRemoveWindowModal
-              data={modalData}
-              onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
-              // onDismiss={() => this.clearModal()}
-            ></COTMRemoveWindowModal>
+            <COTMRemoveWindowModal data={modalData}></COTMRemoveWindowModal>
           )}
           {modalId === "cotmremovetabmodal" && (
-            <COTMRemoveTabModal
-              data={modalData}
-              onRaiseToErrorOverlay={(data) => this.launchErrorOverlay(data)}
-              // onDismiss={() => this.clearModal()}
-            ></COTMRemoveTabModal>
+            <COTMRemoveTabModal data={modalData}></COTMRemoveTabModal>
           )}
           {errors.length > 0 && (
             <ErrorOverlay
@@ -229,22 +137,10 @@ class App extends Component {
           )}
 
           <div className="container-fluid">
-            <MainNavBar
-              routes={routes}
-              onMainNavBarClick={(data) => this.handleMainNavBarClick(data)}
-            />
+            <MainNavBar routes={routes} />
             <div className="row">
               <div className="col-md-12 py-2" id="tabeon-view-container">
-                <RouteList
-                  /* onRaisedRoutesInfo={(data) =>
-                    this.handleRaisedRoutesInfo(data)
-                  } */
-                  //onRaiseToModal={(data) => this.launchModal(data)}
-                  //  onNavigation={(data) => this.handleNavigation(data)}
-                  onRaiseToErrorOverlay={(data) =>
-                    this.launchErrorOverlay(data)
-                  }
-                />
+                <RouteList />
                 <ViewFooter />
               </div>
             </div>

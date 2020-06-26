@@ -3,39 +3,8 @@ import PropTypes from "prop-types";
 import NavSection from "./components/navSection";
 
 class MainNavBar extends Component {
-  state = {
-    activeNavLinkKey: "",
-  };
-
-  setActiveNavLinkKey = (key) => {
-    this.setState(
-      {
-        activeNavLinkKey: key,
-      },
-      () => {
-        this.raiseState();
-      }
-    );
-  };
-
-  raiseState = () => {
-    /*
-            Inform the App component that a link in the main sidebar has been clicked (any link) by raising
-            the main sidebar's state.
-        */
-    const { onMainNavBarClick } = this.props;
-
-    onMainNavBarClick(this.state);
-  };
-
   renderNavSection = (title, links) => {
-    return (
-      <NavSection
-        title={title}
-        links={links}
-        onNavClick={(navLinkKey) => this.setActiveNavLinkKey(navLinkKey)}
-      />
-    );
+    return <NavSection title={title} links={links} />;
   };
 
   componentDidMount = () => {};
@@ -55,7 +24,7 @@ class MainNavBar extends Component {
 
 MainNavBar.propTypes = {
   routes: PropTypes.array.isRequired,
-  onMainNavBarClick: PropTypes.func.isRequired,
+  // onMainNavBarClick: PropTypes.func.isRequired,
 };
 
 export default MainNavBar;

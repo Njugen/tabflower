@@ -1,9 +1,9 @@
-import { Component } from 'react';
-import { ValidatorError } from './../utils/exceptionsAndHandler';
-import * as validator from './../utils/inputValidators'
-import * as ExceptionsHandler from '../utils/exceptionsAndHandler';
-import PropTypes from 'prop-types';
-
+import { Component } from "react";
+import { ValidatorError } from "./../utils/exceptionsAndHandler";
+import * as validator from "./../utils/inputValidators";
+import * as ExceptionsHandler from "../utils/exceptionsAndHandler";
+import PropTypes from "prop-types";
+import AppContext from "./../contexts/AppContextProvider";
 /*
     The View Class
 
@@ -25,53 +25,32 @@ import PropTypes from 'prop-types';
 */
 
 class View extends Component {
-    /*
-        The default structure of the View state (the same goes for the inheritors/child classes):
-        
-        state = {
-            viewData: {},
-            metaData: {}
-        }
+  state = {
+    refreshFactor: 0,
+  };
 
-        - viewData: Information about the view
-        - metaData: Calculation or background information about the view
+  static contextType = AppContext;
 
-        None of these are necessity, but whenever data state is needed in any view, stick to using either 
-        of these two objects to avoid convoluted code.
-    */
+  raiseToErrorOverlay = (errorData) => {
+    const { isObject } = validator;
+    const { launchErrorOverlay } = this.context;
 
-    state = {
-        viewData: {},
-        metaData: {},
-        refreshFactor: 0
+    console.log("ABC", errorData);
+    try {
+      if (isObject(errorData)) {
+        setTimeout(() => {
+          launchErrorOverlay(errorData);
+        }, 1000);
+      } else {
+        throw ExceptionsHandler.ValidatorError("view-102");
+      }
+    } catch (err) {
+      ExceptionsHandler.ErrorHandler(err, () => {});
     }
+  };
 
-    raiseToErrorOverlay = (data) => {
-        
-        const { isObject, isFunction } = validator;
-
-
-        try {
-            if(isObject(data)){
-                const { onRaiseToErrorOverlay } = this.props;
-
-                if(isFunction(onRaiseToErrorOverlay)){
-                    setTimeout(() => {
-                        onRaiseToErrorOverlay(data);
-                    }, 1000);
-                } else {
-                    throw ExceptionsHandler.ValidatorError("view-103");
-                }
-            } else {
-                throw ExceptionsHandler.ValidatorError("view-102");
-            }
-        } catch(err){
-            ExceptionsHandler.ErrorHandler(err, () => {}); 
-        }
-    } 
-
-    handleViewMount = () => {
-        /*
+  handleViewMount = () => {
+    /*
             Parameters: none
 
             Inform the App component that any view (this view) has been mounted, by raising its current state.
@@ -81,22 +60,22 @@ class View extends Component {
 
             All components in this chain will have access to the information raised.
         */
-        try {
-            const { isFunction } = validator;
-            const { onViewMount } = this.props;
+    try {
+      const { isFunction } = validator;
+      const { onViewMount } = this.props;
 
-            if(isFunction(onViewMount)){
-                onViewMount(this.state);
-            } else {
-                throw ValidatorError("view-101");
-            }
-        } catch(err){
-            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay); 
-        }
+      if (isFunction(onViewMount)) {
+        onViewMount(this.state);
+      } else {
+        throw ValidatorError("view-101");
+      }
+    } catch (err) {
+      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
     }
+  };
 
-    raiseToModal = (data) => {
-        /*
+  raiseToModal = (data) => {
+    /*
             Parameters: 
             -   data (object, containing whatever data that we want the modal to processs. Mandatory)
 
@@ -108,26 +87,26 @@ class View extends Component {
             All components in this chain will have access to the information raised.
         */
 
-        const { onRaiseToModal } = this.props;
-        const { isObject, isFunction } = validator;
+    const { onRaiseToModal } = this.props;
+    const { isObject, isFunction } = validator;
 
-        try {
-            if(isObject(data)){
-                if(isFunction(onRaiseToModal)){
-                    onRaiseToModal(data);
-                } else {
-                    ExceptionsHandler.ValidatorError("view-105");
-                }
-            } else {
-                ExceptionsHandler.ValidatorError("view-104");
-            }
-        } catch(err){
-            ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay); 
+    try {
+      if (isObject(data)) {
+        if (isFunction(onRaiseToModal)) {
+          onRaiseToModal(data);
+        } else {
+          ExceptionsHandler.ValidatorError("view-105");
         }
+      } else {
+        ExceptionsHandler.ValidatorError("view-104");
+      }
+    } catch (err) {
+      ExceptionsHandler.ErrorHandler(err, this.raiseToErrorOverlay);
     }
+  };
 
-    componentDidMount = () => {
-        /*
+  componentDidMount = () => {
+    /*
             Mount the view, as in, telling React this: The view has been rendered into the DOM and its lifecycle features
             as in componentWillMount(), render(), constructor() have all been executed.
 
@@ -138,28 +117,27 @@ class View extends Component {
             If other features need to be executed, or if info need to be shared after view mount, add them here.
         */
 
-        this.handleViewMount();
+    this.handleViewMount();
 
-        if(typeof this.childComponentDidMount === "function"){
-            
-            this.childComponentDidMount();
-        }
+    if (typeof this.childComponentDidMount === "function") {
+      this.childComponentDidMount();
     }
+  };
 
-    render = () => {
-        /*
+  render = () => {
+    /*
             JSX is returned and inserted to the DOM by react using this function.abs
             This class does not render anything. That is a task for its child classes, which
             may render ANYTHING .
         */
-        return null;
-    }
+    return null;
+  };
 }
 
 View.propTypes = {
-    onRaiseToModal: PropTypes.func.isRequired,
-    onViewMount: PropTypes.func.isRequired,
-    onRaiseToErrorOverlay: PropTypes.func.isRequired
-} 
+  onRaiseToModal: PropTypes.func.isRequired,
+  onViewMount: PropTypes.func.isRequired,
+  onRaiseToErrorOverlay: PropTypes.func.isRequired,
+};
 
 export default View;

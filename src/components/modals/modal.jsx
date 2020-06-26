@@ -100,29 +100,16 @@ class Modal extends Component {
             All components in this chain will have access to the information raised.
         */
 
-    const { isObject, isFunction } = validator;
+    const { isObject } = validator;
+    const { launchErrorOverlay } = this.context;
 
     try {
       if (isObject(errorData)) {
-        const { onRaiseToErrorOverlay } = this.props;
-        const { setValueToState } = this.context;
-
-        // NOTE: Removing this.dismissModalHandler will make it look like the
-        // onRaiseToErrorOverlay variable not being a real function. Why?
-        // Tasks:
-        // - Find out why onRaiseToErrorModal is a function when this.dismissModalHandler() is called
-        // - Add a mocked ExceptionsHandler.ErrorHandler() in all test suites. Atm, there is no such mock (which could generate false test results)
         this.dismissModalHandler();
 
-        if (isFunction(onRaiseToErrorOverlay)) {
-          setTimeout(() => {
-            //onRaiseToErrorOverlay(errorData);
-
-            setValueToState("errors", errorData);
-          }, 1000);
-        } else {
-          throw ExceptionsHandler.ValidatorError("mp-verifyProps-109");
-        }
+        setTimeout(() => {
+          launchErrorOverlay(errorData);
+        }, 1000);
       } else {
         throw ExceptionsHandler.ValidatorError("mp-verifyProps-108");
       }
@@ -470,18 +457,10 @@ class Modal extends Component {
 
     const {
       // onDismiss,
-      onRaiseToErrorOverlay,
       data,
     } = this.props;
-    const { isFunction, isObject } = validator;
-    /*
-    if (!isFunction(onDismiss)) {
-      throw ExceptionsHandler.ValidatorError("mp-verifyProps-101");
-    } */
-    //  throw ExceptionsHandler.ValidatorError("mp-verifyProps-102");
-    if (!isFunction(onRaiseToErrorOverlay)) {
-      throw ExceptionsHandler.ValidatorError("mp-verifyProps-102");
-    }
+    const { isObject } = validator;
+
     if (!isObject(data)) {
       throw ExceptionsHandler.ValidatorError("mp-verifyProps-103");
     } else {
@@ -587,7 +566,7 @@ Modal.propTypes = {
   data: PropTypes.shape({
     params: PropTypes.object.isRequired,
   }),
-  onRaiseToErrorOverlay: PropTypes.func,
+  // onRaiseToErrorOverlay: PropTypes.func,
   //  onDismiss: PropTypes.func,
 };
 

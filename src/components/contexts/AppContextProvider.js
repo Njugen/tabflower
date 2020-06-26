@@ -41,7 +41,12 @@ export class AppContextProvider extends Component {
     this.setValueToState("modal", modal);
   };
 
-  launchErrorOverlay = (data) => {};
+  launchErrorOverlay = (data) => {
+    let errors = this.getValueFromState("errors");
+    errors.push(data);
+
+    this.setValueToState("errors", errors);
+  };
 
   render() {
     return (
@@ -51,6 +56,7 @@ export class AppContextProvider extends Component {
           setValueToState: this.setValueToState,
           getValueFromState: this.getValueFromState,
           launchModal: this.launchModal,
+          launchErrorOverlay: this.launchErrorOverlay,
         }}
       >
         {this.props.children}

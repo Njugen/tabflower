@@ -100,7 +100,6 @@ class RouteList extends Component {
     this.saveViewToAppContext(viewProps);
   };
 
-  /*
   saveViewToAppContext = (routeProps) => {
     const { isObject, isNumber } = validator;
     const { setValueToState, getValueFromState } = this.context;
@@ -124,7 +123,7 @@ class RouteList extends Component {
     } catch (err) {
       this.raiseToErrorOverlay(err);
     }
-  }; */
+  };
 
   raiseToModal = (data) => {
     /*
@@ -143,12 +142,12 @@ class RouteList extends Component {
 
     onRaiseToModal(data);
   };
-
+  /*
   raiseToErrorOverlay = (data) => {
     const { onRaiseToErrorOverlay } = this.props;
 
     onRaiseToErrorOverlay(data);
-  };
+  }; */
 
   renderRoutes = () => {
     /*
@@ -164,6 +163,7 @@ class RouteList extends Component {
             - label: The label, passed from Routelist down to the view component (not necessary)
         */
     const views = this.routes;
+    const { launchErrorOverlay } = this.context;
 
     return views.map((view, key) => {
       const TagName = view.component;
@@ -179,7 +179,7 @@ class RouteList extends Component {
                 onViewMount={(data) => this.handleViewMount(data)}
                 label={view.label}
                 key={"routeView-" + key}
-                onRaiseToErrorOverlay={(data) => this.raiseToErrorOverlay(data)}
+                // onRaiseToErrorOverlay={(data) => launchErrorOverlay(data)}
                 {...props}
               />
             );
@@ -290,7 +290,7 @@ class RouteList extends Component {
 RouteList.propTypes = {
   //  onRaisedRoutesInfo: PropTypes.func.isRequired,
   //  onRaiseToModal: PropTypes.func.isRequired,
-  onRaiseToErrorOverlay: PropTypes.func.isRequired,
+  //onRaiseToErrorOverlay: PropTypes.func.isRequired,
 };
 
 export default RouteList;
