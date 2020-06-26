@@ -41,6 +41,8 @@ export class AppContextProvider extends Component {
     this.setValueToState("modal", modal);
   };
 
+  launchErrorOverlay = (data) => {};
+
   render() {
     return (
       <AppContext.Provider
