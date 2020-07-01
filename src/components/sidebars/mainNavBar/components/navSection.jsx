@@ -28,19 +28,15 @@ class NavSection extends Component {
 
     return (
       <Fragment>
-        <div className="row d-flex justify-content-center">
-          <div className="row">
-            <div className="col-md-2">
-              <h4 className="tabeon-nav-section-title p-2 pb-3 mb-0">
-                {title}
-              </h4>
-            </div>
+        <div className="row">
+          <div className="col-md-2">
+            <h4 className="tabeon-nav-section-title">{title}</h4>
           </div>
-        </div>
-        <div className="row d-flex justify-content-center">
-          <div className="row">
-            <div className="col-md-12 tabeon-nav-link-container">
-              {this.mapLinks(links, onNavClick)}
+          <div className="col-md-10 ">
+            <div className="row">
+              <div className="col-md-12 tabeon-nav-link-container">
+                {this.mapLinks(links, onNavClick)}
+              </div>
             </div>
           </div>
         </div>

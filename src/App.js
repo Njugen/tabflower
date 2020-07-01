@@ -66,7 +66,7 @@ class App extends Component {
           {modalId === "etgmlaunchgroupmodal" && (
             <ETGMLaunchGroupModal data={modalData}></ETGMLaunchGroupModal>
           )}
-          {modalId === "etgmremovegroupmodal" && (
+          {modalId === "etgmremovegroupsmodal" && (
             <ETGMRemoveGroupModal data={modalData}></ETGMRemoveGroupModal>
           )}
           {modalId === "etgmcreateoreditgroupmodal" && (
@@ -90,7 +90,7 @@ class App extends Component {
           <div className="container-fluid">
             <MainNavBar routes={routes} />
             <div className="row">
-              <div className="col-md-12 py-2" id="tabeon-view-container">
+              <div className="col-md-12" id="tabeon-view-container">
                 <RouteList />
                 <ViewFooter />
               </div>

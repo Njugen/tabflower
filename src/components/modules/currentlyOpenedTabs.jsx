@@ -184,7 +184,81 @@ class CurrentlyOpenedTabsModule extends Module {
     }
   };
 
+  getUISettings = () => {
+    sendToBackground(
+      "get-cotm-module-ui-settings",
+      {},
+      (successResponse) => {
+        try {
+          const { isObject } = validator;
+
+          if (!isObject(successResponse)) {
+            // throw ValidatorError("cotm-module-108");
+          }
+
+          this.setState(
+            {
+              uiSettings: successResponse.data,
+            },
+            () => {
+              console.log("ABRA", this.state, this.state.uiSettings);
+            }
+          );
+        } catch (err) {
+          ErrorHandler(err, this.sendToErrorOverlay);
+        }
+      },
+      (failResponse) => {
+        const err = ValidatorError(failResponse.data);
+        ErrorHandler(err, this.sendToErrorOverlay);
+      }
+    );
+  };
+
+  saveUISettings = (area, id, settings, handleSuccess, handleFail) => {
+    /*
+      Parameters:
+      - area (string): the category/section of the module
+      - id (string): the id which identifies the element this settings belongs to
+      - settings (object): an object containing settings for the targetted element
+    */
+    const { isString, isObject, isBoolean, isFunction } = validator;
+    console.log("III", id, settings);
+
+    if (isString(id) && isObject(settings)) {
+      const { isExpanded, isTabsCrowded } = settings;
+      let newSettings = {
+        area: area,
+      };
+
+      console.log("kkk", id, settings);
+      newSettings.id = id;
+
+      if (isBoolean(isExpanded)) {
+        newSettings.isExpanded = isExpanded;
+      }
+
+      if (isBoolean(isTabsCrowded)) {
+        newSettings.isTabsCrowded = isTabsCrowded;
+      }
+      console.log("wwww", id, settings);
+      sendToBackground(
+        "save-cotm-module-ui-settings",
+        newSettings,
+        (successResponse) => {
+          isFunction(handleSuccess) && handleSuccess(successResponse);
+        },
+        (failResponse) => {
+          isFunction(handleFail) && handleSuccess(failResponse);
+        }
+      );
+    } else {
+      console.log("HAISTA MANSIKKA. VIRHE ON TAPAHTUNUT");
+    }
+  };
+
   childComponentDidMount = () => {
+    this.getUISettings();
     this.getOpenedWindowsAndTabs();
     this.listenForWindowAndTabChanges();
   };
@@ -194,22 +268,22 @@ class CurrentlyOpenedTabsModule extends Module {
   renderBody = () => {
     return (
       <Fragment>
-        <div className="active-tabs-module">
-          <p>
-            Tab Flower offers you an oversight over all opened tabs, making it
-            easier to remove tabs and windows you seldom use. You may also scan
-            for unresponsive websites and remove them.
-          </p>
-          <WindowsList
-            windows={this.state.moduleData.openedWindowsAndTabs}
-            onRaiseToModal={(data) => this.sendToModal(data)}
-            onRaiseToErrorOverlay={(data) => this.sendToErrorOverlay(data)}
-            canCloseItems={true}
-            initialShowTabs={true}
-            initialTabStyle="horizontal"
-            refreshList={() => this.getOpenedWindowsAndTabs()}
-          />
-        </div>
+        <p>
+          Tab Flower offers you an oversight over all opened tabs, making it
+          easier to remove tabs and windows you seldom use. You may also scan
+          for unresponsive websites and remove them.
+        </p>
+        <WindowsList
+          windows={this.state.moduleData.openedWindowsAndTabs}
+          onRaiseToModal={(data) => this.sendToModal(data)}
+          onRaiseToErrorOverlay={(data) => this.sendToErrorOverlay(data)}
+          onSaveUISettings={this.saveUISettings}
+          uiSettings={this.state.uiSettings}
+          canCloseItems={true}
+          initialShowTabs={true}
+          initialTabStyle="horizontal"
+          refreshList={() => this.getOpenedWindowsAndTabs()}
+        />
       </Fragment>
     );
   };
@@ -218,7 +292,7 @@ class CurrentlyOpenedTabsModule extends Module {
     return (
       <Fragment>
         <button
-          className="btn btn-tabeon d-inline-block"
+          className="btn btn-secondary d-inline-block"
           onClick={() =>
             this.sendToModal({
               id: "cotmremoveunresponsivetabsmodal",
@@ -227,7 +301,7 @@ class CurrentlyOpenedTabsModule extends Module {
             })
           }
         >
-          Delete unresponsive tabs
+          <span className="fas fa-times mr-2"></span> Close Unresponsive
         </button>
         <button
           className="btn btn-tabeon d-inline-block"
@@ -242,7 +316,7 @@ class CurrentlyOpenedTabsModule extends Module {
             })
           }
         >
-          Create group
+          <span className="fas fa-plus mr-2"></span> Create Group
         </button>
       </Fragment>
     );

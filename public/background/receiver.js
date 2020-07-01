@@ -51,137 +51,152 @@
     and showing the user why something has failed and what to do about it.
 */
 
-const receive = (featureId, detailsObj, forwardSuccessResponse, forwardFailureResponse) => {
-    if(featureId === "get-all-tabs"){
+const receive = (
+  featureId,
+  detailsObj,
+  forwardSuccessResponse,
+  forwardFailureResponse
+) => {
+  if (featureId === "get-all-tabs") {
+    getAllTabs(
+      detailsObj,
+      (tabs) => {
+        forwardSuccessResponse(tabs);
+      },
+      (message) => {
+        forwardFailureResponse(message);
+      }
+    );
+  } else if (featureId === "get-all-windows-and-tabs") {
+    getAllWindowsAndTabs(
+      (windows) => {
+        forwardSuccessResponse(windows);
+      },
+      (message) => {
+        forwardFailureResponse(message);
+      }
+    );
+  } else if (featureId === "delete-tab") {
+    deleteTab(
+      detailsObj,
+      (message) => {
+        forwardSuccessResponse(message);
+      },
+      (message) => {
+        forwardFailureResponse(message);
+      }
+    );
+  } else if (featureId === "delete-window") {
+    deleteWindow(
+      detailsObj,
+      (message) => {
+        forwardSuccessResponse(message);
+      },
+      (message) => {
+        forwardFailureResponse(message);
+      }
+    );
+  } else if (featureId === "delete-unresponsive-tabs") {
+    deleteUnresponsiveTabs(
+      detailsObj,
+      (message) => {
+        forwardSuccessResponse(message);
+      },
+      (message) => {
+        forwardFailureResponse(message);
+      }
+    );
+  } else if (featureId === "save-tab-group") {
+    saveTabsToStorage(
+      detailsObj,
+      (message) => {
+        forwardSuccessResponse(message);
+      },
+      (message) => {
+        forwardFailureResponse(message);
+      }
+    );
+  } else if (featureId === "get-all-tab-groups") {
+    getAllTabGroups(
+      (message) => {
+        forwardSuccessResponse(message);
+      },
+      (message) => {
+        forwardFailureResponse(message);
+      }
+    );
+  } else if (featureId === "launch-tab-group") {
+    launchTabGroup(
+      detailsObj,
+      (message) => {
+        forwardSuccessResponse(message);
+      },
+      (message) => {
+        forwardFailureResponse(message);
+      }
+    );
+  } else if (featureId === "delete-tab-groups") {
+    deleteTabGroups(
+      detailsObj,
+      (message) => {
+        forwardSuccessResponse(message);
+      },
+      (message) => {
+        forwardFailureResponse(message);
+      }
+    );
+  } else if (featureId === "get-cotm-module-ui-settings") {
+    getCOTModuleUISettings(
+      (message) => {
+        forwardSuccessResponse(message);
+      },
+      (message) => {
+        forwardFailureResponse(message);
+      }
+    );
+  } else if (featureId === "save-cotm-module-ui-settings") {
+    saveCOTModuleUISettings(
+      detailsObj,
+      (message) => {
+        forwardSuccessResponse(message);
+      },
+      (message) => {
+        forwardFailureResponse(message);
+      }
+    );
+  } else {
+    forwardFailureResponse();
+  }
+};
 
-        getAllTabs(
-            detailsObj,
-            (tabs) => {
-                
-                forwardSuccessResponse(tabs);
-            },
-            (message) => {
-                
-                forwardFailureResponse(message);
-            }
-        ) 
-    } else if(featureId === "get-all-windows-and-tabs"){
-        getAllWindowsAndTabs(
-            (windows) => {
-     
-                forwardSuccessResponse(windows);
-            },
-            (message) => {
-                forwardFailureResponse(message);
-            }
-        )
-    } else if(featureId === "delete-tab") {
-        deleteTab(
-            detailsObj,
-            (message) => {
-                forwardSuccessResponse(message);
-            },
-            (message) => {
-                forwardFailureResponse(message);
-            }
-        )
-    } else if(featureId === "delete-window"){
-        deleteWindow(
-            detailsObj,
-            (message) => {
-                forwardSuccessResponse(message);
-            },
-            (message) => {
-                forwardFailureResponse(message);
-            }
-        )
-    } else if(featureId === "delete-unresponsive-tabs"){
-        deleteUnresponsiveTabs(
-            detailsObj,
-            (message) => {
-                forwardSuccessResponse(message)
-            },
-            (message) => {
-                forwardFailureResponse(message);
-            }
-        )
-    } else if(featureId === "save-tab-group"){
-        saveTabsToStorage(
-            detailsObj,
-            (message) => {
-                forwardSuccessResponse(message);
-            },
-            (message) => {
-                
-                forwardFailureResponse(message);
-            }
-        )
-    } else if(featureId === "get-all-tab-groups"){
-        getAllTabGroups(
-            (message) => {
-                forwardSuccessResponse(message)
-            },
-            (message) => {
-                forwardFailureResponse(message);
-            }
-        )
-     } else if(featureId === "launch-tab-group"){
-         launchTabGroup(
-             detailsObj,
-             (message) => {
-                 forwardSuccessResponse(message)
-             },
-             (message) => {
-                forwardFailureResponse(message);
-             }
-         )
-     } else if(featureId === "delete-tab-groups"){
-        deleteTabGroups(
-            detailsObj,
-             (message) => {
-                forwardSuccessResponse(message)
-             },
-             (message) => {
-                forwardFailureResponse(message);
-             }
-        )
-     } else {
-        forwardFailureResponse();
-    }
-}
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  const successResponse = (message) => {
+    const response = {
+      success: true,
+      data: message,
+    };
 
-chrome.runtime.onMessage.addListener(
-    (message, sender, sendResponse) => {
-        const successResponse = (message) => {
-            const response = {
-                success: true,
-                data: message
-            };
+    sendResponse(response);
+  };
 
-            sendResponse(response);
-        }
+  const failureResponse = (message) => {
+    const response = {
+      success: false,
+      data: message,
+    };
 
-        const failureResponse  = (message) => {
-            
-            const response = {
-                success: false,
-                data: message
-            }
+    sendResponse(response);
+  };
 
-            sendResponse(response);
-        }
+  if (typeof message === "object") {
+    const { id, details } = message;
 
-        if(typeof message === "object"){
-            const { id, details } = message;
-
-            if(typeof id === "string"){
-                /*
+    if (typeof id === "string") {
+      /*
                     The message has an id
                 */
-                receive(id, details || null, successResponse, failureResponse);
-                
-            }
-        }
-        return true;
+      receive(id, details || null, successResponse, failureResponse);
     }
-)
+  }
+  return true;
+});

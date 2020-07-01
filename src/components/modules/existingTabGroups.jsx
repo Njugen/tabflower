@@ -197,7 +197,7 @@ class ExistingTabGroupsModule extends Module {
                   className="fas fa-times options-button"
                   onClick={() =>
                     this.sendToModal({
-                      id: "etgmremovegroupmodal",
+                      id: "etgmremovegroupsmodal",
                       params: {
                         groupId: group.groupId,
                         groupName: group.tabGroupName,
@@ -232,7 +232,7 @@ class ExistingTabGroupsModule extends Module {
                   })
                 }
               >
-                Launch group
+                <span className="fas fa-play mr-2"></span> Launch
               </button>
             </div>
           </div>
@@ -267,8 +267,8 @@ class ExistingTabGroupsModule extends Module {
             group windows and tabs together. You may create new tab groups at
             any time, and launch their tabs in a categorized manner later.
           </p>
-          <div className="existing-tab-groups-list row d-flex justify-content-center">
-            <div className="col-12">{this.renderTabGroups()}</div>
+          <div className="existing-tab-groups-list">
+            {this.renderTabGroups()}
           </div>
         </div>
       </Fragment>
@@ -279,7 +279,7 @@ class ExistingTabGroupsModule extends Module {
     return (
       <Fragment>
         <button
-          className="btn btn-tabeon d-inline-block"
+          className="btn btn-secondary d-inline-block"
           onClick={() =>
             this.sendToModal({
               id: "etgmremovegroupsmodal",
@@ -288,7 +288,7 @@ class ExistingTabGroupsModule extends Module {
             })
           }
         >
-          Remove all groups
+          <span className="fas fa-trash mr-2"></span> Remove All
         </button>
         <button
           className="btn btn-tabeon d-inline-block"
@@ -300,7 +300,7 @@ class ExistingTabGroupsModule extends Module {
             })
           }
         >
-          Create a new group
+          <span className="fas fa-plus mr-2"></span> Add New Group
         </button>
       </Fragment>
     );

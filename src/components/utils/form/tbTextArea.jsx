@@ -1,65 +1,63 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component, Fragment } from "react";
+import PropTypes from "prop-types";
 
 class TBTextArea extends Component {
-    state = {
-        
-    }
+  state = {};
 
-    changeInputValue = (event, presetValue) => {
-        const {id, onChange} = this.props;
-        
-        this.setState(
-            {
-                value: event ? event.target.value : presetValue
-            },
-            () => {
-                
-                if(onChange && id){
-                    onChange(id, this.state.value);
-                }
-            }
-        )
-        
-    }
+  changeInputValue = (event, presetValue) => {
+    const { id, onChange } = this.props;
 
-    componentDidMount = () => {
-        const { value } = this.props;
-
-        if(value){
-            this.changeInputValue(null, value);
+    this.setState(
+      {
+        value: event ? event.target.value : presetValue,
+      },
+      () => {
+        if (onChange && id) {
+          onChange(id, this.state.value);
         }
-    }
+      }
+    );
+  };
 
-    render = () => {
-        const { label, value, warning } = this.props;
+  componentDidMount = () => {
+    const { value } = this.props;
 
-        return (
-            <div className="p-3">
-                <div className="tb-form-row row">
-                    <div className="label">
-                        <span>{typeof label === "string" && label}</span>
-                    </div>
-                    <div className="label">
-                        <span>{typeof warning === "string" && warning}</span>
-                    </div>
-                </div>
-                <div className="tb-form-row row">
-                    <div className="col-12">
-                            <textarea value={this.state.value || value} maxLength="170" onChange={(e) => this.changeInputValue(e)} className="tb-textarea"></textarea>   
-                    </div>
-                </div>
-            </div>  
-        );
+    if (value) {
+      this.changeInputValue(null, value);
     }
+  };
+
+  render = () => {
+    const { label, value, warning } = this.props;
+
+    return (
+      <Fragment>
+        <div className="tb-form-row row">
+          <div className="label">
+            <span>{typeof label === "string" && label}</span>
+          </div>
+          <div className="label">
+            <span>{typeof warning === "string" && warning}</span>
+          </div>
+
+          <textarea
+            value={this.state.value || value}
+            maxLength="170"
+            onChange={(e) => this.changeInputValue(e)}
+            className="tb-textarea"
+          ></textarea>
+        </div>
+      </Fragment>
+    );
+  };
 }
 
 TBTextArea.propTypes = {
-    value: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-    label: PropTypes.string.isRequired,
-    warning: PropTypes.string
-}
+  value: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  label: PropTypes.string.isRequired,
+  warning: PropTypes.string,
+};
 
 export default TBTextArea;

@@ -30,27 +30,19 @@ class TabManagementView extends View {
     }
   };
 
-  testf = () => {
-    try {
-      throw ExceptionsHandler.ValidatorError("tabManagement-view-101");
-    } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
-    }
-  };
-
   render = () => {
     return (
       <Fragment>
         <div className="row d-flex justify-content-center">
           <div className="col-6">
             <CurrentlyOpenedTabsModule
-              onRaiseToView={(data) => this.handleRaisedData(data)}
+              onRaiseToView={(data) => this.handleRaiseToView(data)}
               id="active-tabs-module"
             ></CurrentlyOpenedTabsModule>
             <ExistingTabGroupsModule
               id="existing-tab-groups-module"
               refresh={this.state.refreshFactor}
-              onRaiseToView={(data) => this.handleRaisedData(data)}
+              onRaiseToView={(data) => this.handleRaiseToView(data)}
             ></ExistingTabGroupsModule>
           </div>
         </div>

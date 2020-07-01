@@ -52,8 +52,30 @@ class WindowsList extends Component {
     */
   raiseToModal = (data) => {
     const { onRaiseToModal } = this.props;
+    const { isFunction } = validator;
 
-    onRaiseToModal(data);
+    if (isFunction(onRaiseToModal)) {
+      onRaiseToModal(data);
+    }
+  };
+
+  raiseToSaveUISettings = (
+    area,
+    windowId,
+    settings,
+    handleSuccess,
+    handleFail
+  ) => {
+    const { onSaveUISettings } = this.props;
+
+    const { isFunction } = validator;
+
+    if (isFunction(onSaveUISettings)) {
+      onSaveUISettings(area, windowId, settings, handleSuccess, handleFail);
+      return true;
+    } else {
+      return false;
+    }
   };
 
   /* 
@@ -75,10 +97,17 @@ class WindowsList extends Component {
       if (isString(windowId)) {
         const windowElement = document.getElementById(windowId);
         const tabList = windowElement.getElementsByClassName("tab-listing")[0];
+        const iconElement = windowElement.getElementsByClassName(
+          "list-item-options"
+        )[0].children[1].children[0];
 
         if (forceVisible && forceVisible === true) {
           tabList.style.display = "block";
           tabList.classList.remove("tab-listing-hide");
+
+          this.raiseToSaveUISettings("windowslist", windowId, {
+            isExpanded: true,
+          });
         } else {
           if (!isUndefined(forceVisible) && !isBoolean(forceVisible)) {
             throw ValidatorError("windowsList-102");
@@ -95,25 +124,29 @@ class WindowsList extends Component {
             this.cancelNewTab(windowId);
           }
 
-          /* Toggle up/down icon of window bar */
-
-          const iconElement =
-            event !== null &&
-            event.target.parentElement.parentElement.children[1].children[0];
-
           if (iconElement) {
-            console.log(
-              event
-                ? event.target.parentElement.parentElement.children[1].children[0].className.includes(
-                    "fa-chevron-up"
-                  )
-                : ""
-            );
             if (iconElement.className.includes("fa-chevron-up")) {
-              iconElement.className = "fas fa-chevron-down";
+              this.raiseToSaveUISettings("windowslist", windowId, {
+                isExpanded: false,
+              });
             } else {
-              iconElement.className = "fas fa-chevron-up";
+              this.raiseToSaveUISettings("windowslist", windowId, {
+                isExpanded: true,
+              });
             }
+          }
+        }
+
+        if (
+          (forceVisible === true &&
+            event === null &&
+            iconElement.className.includes("fa-chevron-down")) ||
+          event !== null
+        ) {
+          if (iconElement.className.includes("fa-chevron-up")) {
+            iconElement.className = "fas fa-chevron-down";
+          } else {
+            iconElement.className = "fas fa-chevron-up";
           }
         }
       } else {
@@ -155,6 +188,15 @@ class WindowsList extends Component {
 
       const tabListItems = tabList.getElementsByTagName("li");
 
+      const forceTabListVisible = () => {
+        /* 
+            If the tab list is invisible when changing style, then make it visible at style change. 
+            The user needs to observe the changes for the best user experience
+        */
+        console.log("FORCE VISIBLE SAVE MODE");
+        this.toggleTabListVisibility(null, windowId, true);
+      };
+
       for (let i = 0; i < tabListItems.length; i++) {
         const isChildOfTabListing = tabListItems[
           i
@@ -169,39 +211,34 @@ class WindowsList extends Component {
         }
       }
 
-      /*
-            if(tabListIsHorizontal){
-                tabList.className = tabList.className.replace("horizontal", "vertical");
-            } else {
-                tabList.className = tabList.className.replace("vertical", "horizontal");
-            } */
-
-      if (
-        tabList.style.display === "none" ||
-        tabList.classList.contains("tab-listing-hide")
-      ) {
-        this.toggleTabListVisibility(event, windowId, false);
-      }
-
       /* Toggle tab style icon of window bar */
       const iconElement = event.target;
+      let saveModeEnabled;
 
       if (iconElement.className.includes("fas fa-align-justify")) {
         iconElement.className = "fas fa-grip-horizontal";
+        saveModeEnabled = this.raiseToSaveUISettings(
+          "windowslist",
+          windowId,
+          {
+            isTabsCrowded: false,
+          },
+          forceTabListVisible
+        );
       } else {
         iconElement.className = "fas fa-align-justify";
+        saveModeEnabled = this.raiseToSaveUISettings(
+          "windowslist",
+          windowId,
+          {
+            isTabsCrowded: true,
+          },
+          forceTabListVisible
+        );
       }
 
-      /* 
-                If the tab list is invisible when changing style, then make it visible at style change. 
-                The user needs to observe the changes for the best user experience
-            */
-      if (
-        tabList.style.display === "none" ||
-        tabList.classList.contains("tab-listing-hide")
-      ) {
-        this.toggleTabListVisibility(null, windowId);
-        tabList.classList.remove("tab-listing-hide");
+      if (saveModeEnabled === false) {
+        forceTabListVisible();
       }
     } catch (err) {
       ErrorHandler(err, this.raiseToErrorOverlay);
@@ -476,6 +513,49 @@ class WindowsList extends Component {
     });
   };
 
+  determineTabStyle = (windowId, defaultTabStyle) => {
+    const { uiSettings } = this.props;
+    let tabStyle;
+
+    console.log("UIS", uiSettings);
+    if (
+      uiSettings &&
+      uiSettings["windowslist"] &&
+      uiSettings["windowslist"][windowId]
+    ) {
+      if (uiSettings["windowslist"][windowId].isTabsCrowded === true) {
+        tabStyle = "horizontal";
+      } else {
+        tabStyle = "vertical";
+      }
+    } else {
+      tabStyle = defaultTabStyle;
+    }
+
+    return tabStyle;
+  };
+
+  determineTabsVisibility = (windowId, defaultVisibility) => {
+    const { uiSettings } = this.props;
+    let tabsVisibility;
+
+    if (
+      uiSettings &&
+      uiSettings["windowslist"] &&
+      uiSettings["windowslist"][windowId]
+    ) {
+      if (uiSettings["windowslist"][windowId].isExpanded === true) {
+        tabsVisibility = true;
+      } else {
+        tabsVisibility = false;
+      }
+    } else {
+      tabsVisibility = defaultVisibility;
+    }
+
+    return tabsVisibility;
+  };
+
   render = () => {
     const {
       windows,
@@ -488,84 +568,43 @@ class WindowsList extends Component {
     const { newWindow, newTabInContainerIds } = this.state;
 
     if (windows && windows.length > 0) {
-      return windows.map((window, key, windowArray) => {
-        const { tabs } = window;
-        const windowContainerId = "window-container-id-" + key;
+      return (
+        <div className="windows-list">
+          {windows.map((window, key, windowArray) => {
+            const { tabs } = window;
+            const windowContainerId = "window-container-id-" + key;
 
-        const isAddingNewTab =
-          newTabInContainerIds !== false &&
-          newTabInContainerIds.find((item) => item === windowContainerId);
+            const isAddingNewTab =
+              newTabInContainerIds !== false &&
+              newTabInContainerIds.find((item) => item === windowContainerId);
 
-        const tabList = tabs.map((tab, tabIndex) => {
-          return (
-            <li
-              key={"tabindex-" + key + "-" + tabIndex}
-              className={
-                typeof initialTabStyle === "string" &&
-                initialTabStyle === "horizontal"
-                  ? "col-3"
-                  : "col-12"
-              }
-            >
-              <img
-                src={tab.favIconUrl}
-                alt={""}
-                className="list-item-favicon"
-              />
-              <span>{tab.title}</span>
-              <ul className="list-item-options">
-                {canCloseItems && canCloseItems === true && (
-                  <li>
-                    <button
-                      className="fas fa-times"
-                      onClick={() => {
-                        if (type === "existing-group" || type === "new-group") {
-                          this.raiseDeleteTabToModal(key, tabIndex, () => {});
-                        } else {
-                          this.raiseToModal({
-                            id: "cotmremovetabmodal",
-                            params: { tabInfo: tab },
-                            action: this.closeTab.bind(this),
-                          });
-                        }
-                      }}
-                    ></button>
-                  </li>
-                )}
-              </ul>
-            </li>
-          );
-        });
+            const tabStyle = this.determineTabStyle(
+              windowContainerId,
+              initialTabStyle
+            );
 
-        return (
-          <div className="active-tabs-module" key={"window-" + key}>
-            <ul className="window-listing col-12">
-              <li className="mt-2" id={windowContainerId}>
-                <div className="window-header">
-                  Window {key + 1}
+            const tabsVisibility = this.determineTabsVisibility(
+              windowContainerId,
+              initialShowTabs
+            );
+
+            const tabList = tabs.map((tab, tabIndex) => {
+              return (
+                <li
+                  key={"tabindex-" + key + "-" + tabIndex}
+                  className={
+                    typeof tabStyle === "string" && tabStyle === "horizontal"
+                      ? "col-3"
+                      : "col-12"
+                  }
+                >
+                  <img
+                    src={tab.favIconUrl}
+                    alt={""}
+                    className="list-item-favicon"
+                  />
+                  <span>{tab.title}</span>
                   <ul className="list-item-options">
-                    <li>
-                      <button
-                        className="fas fa-align-justify"
-                        onClick={(e) =>
-                          this.toggleTabListStyle(e, windowContainerId)
-                        }
-                      ></button>
-                    </li>
-                    <li>
-                      <button
-                        disabled={isAddingNewTab ? true : false}
-                        className={
-                          typeof initialShowTabs === "boolean" &&
-                          initialShowTabs === false
-                            ? "fas fa-chevron-down toggle-window"
-                            : "fas fa-chevron-up toggle-window"
-                        }
-                        onClick={(e) =>
-                          this.toggleTabListVisibility(e, windowContainerId)
-                        }
-                      ></button>
-                    </li>
                     {canCloseItems && canCloseItems === true && (
                       <li>
                         <button
@@ -575,12 +614,16 @@ class WindowsList extends Component {
                               type === "existing-group" ||
                               type === "new-group"
                             ) {
-                              this.raiseDeleteWindowToModal(key, () => {});
+                              this.raiseDeleteTabToModal(
+                                key,
+                                tabIndex,
+                                () => {}
+                              );
                             } else {
                               this.raiseToModal({
-                                id: "cotmremovewindowmodal",
-                                params: { windowInfo: window },
-                                action: this.closeWindow.bind(this),
+                                id: "cotmremovetabmodal",
+                                params: { tabInfo: tab },
+                                action: this.closeTab.bind(this),
                               });
                             }
                           }}
@@ -588,48 +631,110 @@ class WindowsList extends Component {
                       </li>
                     )}
                   </ul>
-                </div>
-                <ul
-                  className={
-                    typeof initialShowTabs === "boolean" &&
-                    initialShowTabs === false
-                      ? "tab-listing-hide tab-listing horizontal"
-                      : "tab-listing horizontal"
-                  }
-                >
-                  {tabList}
-                  {type &&
-                    (type === "existing-group" || type === "new-group") &&
-                    !isAddingNewTab && (
-                      <button
-                        className="btn-tabeon-reverse btn add-new-tab-button"
-                        onClick={() => this.addNewTab(windowContainerId)}
-                      >
-                        Add new Tab
-                      </button>
-                    )}
+                </li>
+              );
+            });
+
+            return (
+              <div className="active-tabs-module" key={"window-" + key}>
+                <ul className="window-listing col-12">
+                  <li className="mt-2" id={windowContainerId}>
+                    <div className="window-header">
+                      Window {key + 1}
+                      <ul className="list-item-options">
+                        <li>
+                          <button
+                            className={
+                              typeof tabStyle === "string" &&
+                              tabStyle === "horizontal"
+                                ? "fas fa-align-justify"
+                                : "fas fa-grip-horizontal"
+                            }
+                            onClick={(e) =>
+                              this.toggleTabListStyle(e, windowContainerId)
+                            }
+                          ></button>
+                        </li>
+                        <li>
+                          <button
+                            disabled={isAddingNewTab ? true : false}
+                            className={
+                              typeof tabsVisibility === "boolean" &&
+                              tabsVisibility === false
+                                ? "fas fa-chevron-down toggle-window"
+                                : "fas fa-chevron-up toggle-window"
+                            }
+                            onClick={(e) =>
+                              this.toggleTabListVisibility(e, windowContainerId)
+                            }
+                          ></button>
+                        </li>
+                        {canCloseItems && canCloseItems === true && (
+                          <li>
+                            <button
+                              className="fas fa-times"
+                              onClick={() => {
+                                if (
+                                  type === "existing-group" ||
+                                  type === "new-group"
+                                ) {
+                                  this.raiseDeleteWindowToModal(key, () => {});
+                                } else {
+                                  this.raiseToModal({
+                                    id: "cotmremovewindowmodal",
+                                    params: { windowInfo: window },
+                                    action: this.closeWindow.bind(this),
+                                  });
+                                }
+                              }}
+                            ></button>
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                    <ul
+                      className={
+                        typeof tabsVisibility === "boolean" &&
+                        tabsVisibility === false
+                          ? "tab-listing-hide tab-listing horizontal"
+                          : "tab-listing horizontal"
+                      }
+                    >
+                      {tabList}
+                      {type &&
+                        (type === "existing-group" || type === "new-group") &&
+                        !isAddingNewTab && (
+                          <button
+                            className="btn-tabeon-reverse btn add-new-tab-button"
+                            onClick={() => this.addNewTab(windowContainerId)}
+                          >
+                            Add new Tab
+                          </button>
+                        )}
+                    </ul>
+                    {isAddingNewTab &&
+                      this.renderAddNewTabForm(windowContainerId, key)}
+                  </li>
                 </ul>
-                {isAddingNewTab &&
-                  this.renderAddNewTabForm(windowContainerId, key)}
-              </li>
-            </ul>
-            {newWindow &&
-              newWindow === true &&
-              windowArray.length - 1 === key &&
-              this.renderAddNewWindowForm()}
-            {((newWindow && newWindow === false) || !newWindow) &&
-              windowArray.length - 1 === key &&
-              (type === "existing-group" || type === "new-group") && (
-                <button
-                  className="btn-tabeon-as-only-child btn add-new-window-button"
-                  onClick={() => this.addNewWindow(true)}
-                >
-                  Add new window
-                </button>
-              )}
-          </div>
-        );
-      });
+                {newWindow &&
+                  newWindow === true &&
+                  windowArray.length - 1 === key &&
+                  this.renderAddNewWindowForm()}
+                {((newWindow && newWindow === false) || !newWindow) &&
+                  windowArray.length - 1 === key &&
+                  (type === "existing-group" || type === "new-group") && (
+                    <button
+                      className="btn-tabeon-as-only-child btn add-new-window-button"
+                      onClick={() => this.addNewWindow(true)}
+                    >
+                      Add new window
+                    </button>
+                  )}
+              </div>
+            );
+          })}
+        </div>
+      );
     } else {
       return (
         <Fragment>
@@ -638,7 +743,7 @@ class WindowsList extends Component {
             type &&
             (type === "new-group" || "existing-group") && (
               <button
-                className="btn-tabeon-as-only-child btn"
+                className="btn-tabeon-as-only-child btn add-new-window-button"
                 onClick={() => this.addNewWindow(true)}
               >
                 Add new window
@@ -662,6 +767,8 @@ WindowsList.propTypes = {
   initialTabStyle: PropTypes.string.isRequired,
   refreshList: PropTypes.func,
   type: PropTypes.string.isRequired,
+  onSaveUISettings: PropTypes.func,
+  uiSettings: PropTypes.object,
 };
 
 WindowsList.defaultProps = {
