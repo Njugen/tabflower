@@ -145,8 +145,9 @@ const receive = (
         forwardFailureResponse(message);
       }
     );
-  } else if (featureId === "get-cotm-module-ui-settings") {
-    getCOTModuleUISettings(
+  } else if (featureId === "get-module-ui-settings") {
+    getModuleUISettings(
+      detailsObj,
       (message) => {
         forwardSuccessResponse(message);
       },
@@ -154,8 +155,9 @@ const receive = (
         forwardFailureResponse(message);
       }
     );
-  } else if (featureId === "save-cotm-module-ui-settings") {
-    saveCOTModuleUISettings(
+  } else if (featureId === "save-module-ui-settings") {
+    console.log("EEEE", detailsObj);
+    saveModuleUISettings(
       detailsObj,
       (message) => {
         forwardSuccessResponse(message);

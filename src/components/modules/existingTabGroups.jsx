@@ -9,15 +9,17 @@ require("../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
 
 class ExistingTabGroupsModule extends Module {
   static contextType = AppContext;
-  settings = {
+
+  staticPreset = {
     moduleTitle: "Existing Tab Groups",
+    moduleId: "tabeon-module-container-id-" + this.props.id,
   };
 
   verifyChildProps = () => {
     const { isObject, isString } = validator;
 
-    if (isObject(this.settings)) {
-      const { moduleTitle } = this.settings;
+    if (isObject(this.staticPreset)) {
+      const { moduleTitle } = this.staticPreset;
 
       if (!isString(moduleTitle)) {
         throw ValidatorError("etgm-module-102");
@@ -142,9 +144,7 @@ class ExistingTabGroupsModule extends Module {
 
             this.setState(
               {
-                moduleData: {
-                  loadedTabGroups: tabGroups,
-                },
+                loadedTabGroups: tabGroups,
               },
               () => {}
             );
@@ -163,7 +163,7 @@ class ExistingTabGroupsModule extends Module {
   };
 
   renderTabGroups = () => {
-    const tabGroups = this.state.moduleData.loadedTabGroups || [];
+    const tabGroups = this.state.loadedTabGroups || [];
     const { isPositiveNumber } = validator;
 
     if (isPositiveNumber(tabGroups.length)) {
@@ -249,6 +249,7 @@ class ExistingTabGroupsModule extends Module {
   };
 
   childComponentDidMount = () => {
+    this.getUISettingsFromStorage(this.staticPreset.moduleId);
     this.getAllTabGroups();
   };
 

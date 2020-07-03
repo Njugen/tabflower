@@ -8,13 +8,11 @@ import AppContext from "../contexts/AppContextProvider";
     The Modal component
 
     This class represents the Modal (also known as popup) and renders its JSX/HTML
-    into the DOM at mount. It also consists of - and triggers - basic features such as fadein/fadeout as well
-    as execution of bound functions (if any) from the component which calls the modal.
+    into the DOM at mount. 
 
     The contents (the graphical render/user interface) of this class is empty. To use a modal with inserted contents, 
     create a child class inheriting from this component, then import it into src/App.js. The new class will inherit all 
-    the basics written in Modal class, including its rendered import { ValidatorError } from './../utils/exceptionsAndHandler';
-    user interface. Example:
+    the basics written in Modal class
 
     modalForAPurpose.jsx:
     class ModalForAPurpose extends Modal {
@@ -239,19 +237,17 @@ class Modal extends Component {
     const { isFunction } = validator;
 
     /*
-            When a modal is rendered into the DOM, wait 100ms before fading in.
-            Apparently, the fade in does not work properly (resulting in immediate visibility of the component) without
-            the timeout.
-        */
+      When a modal is rendered into the DOM, wait 100ms before fading in.
+    */
 
     setTimeout(() => {
       this.fadeIn();
     }, 100);
 
     /*
-            Verify props for each individual child modal, if that modal has any props and a verifyChildProps()
-            function to its disposal
-        */
+        Verify props for each individual child modal, if that modal has any props and a verifyChildProps()
+        function to its disposal
+    */
 
     if (isFunction(this.verifyChildProps)) {
       this.verifyChildProps();
@@ -260,15 +256,15 @@ class Modal extends Component {
     this.handleOverflow("hidden", "auto");
 
     /*
-            This event listener prevents the modal from following the user when he scrolls vertically. 
-        */
+        This event listener prevents the modal from following the user when he scrolls vertically. 
+    */
 
     document.addEventListener("scroll", this.scrollHandler);
 
     /*
-            Execute certain features belonging to each individual child modal, when mounting that modal and
-            if a childComponentDidMount() function is defined in that modal class.
-        */
+        Execute certain features belonging to each individual child modal, when mounting that modal and
+        if a childComponentDidMount() function is defined in that modal class.
+    */
     if (isFunction(this.childComponentDidMount)) {
       this.childComponentDidMount();
     }
@@ -279,11 +275,11 @@ class Modal extends Component {
 
   componentWillMount = () => {
     /*
-            Before the modal is mounted (meaning render() is executed), set modalRef
-            to provide access to the modal container in the DOM (using this.modalRef.current).
+        Before the modal is mounted (meaning render() is executed), set modalRef
+        to provide access to the modal container in the DOM (using this.modalRef.current).
 
-            <div ref={this.modalRef} className="modal" id="tabeonModal">
-        */
+        <div ref={this.modalRef} className="modal" id="tabeonModal">
+    */
 
     this.modalRef = createRef();
   };

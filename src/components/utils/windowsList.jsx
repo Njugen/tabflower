@@ -67,7 +67,7 @@ class WindowsList extends Component {
     handleFail
   ) => {
     const { onSaveUISettings } = this.props;
-
+    console.log("VVVV", settings);
     const { isFunction } = validator;
 
     if (isFunction(onSaveUISettings)) {
@@ -216,6 +216,7 @@ class WindowsList extends Component {
       let saveModeEnabled;
 
       if (iconElement.className.includes("fas fa-align-justify")) {
+        console.log("ATOM");
         iconElement.className = "fas fa-grip-horizontal";
         saveModeEnabled = this.raiseToSaveUISettings(
           "windowslist",
@@ -226,6 +227,7 @@ class WindowsList extends Component {
           forceTabListVisible
         );
       } else {
+        console.log("NEUTRON");
         iconElement.className = "fas fa-align-justify";
         saveModeEnabled = this.raiseToSaveUISettings(
           "windowslist",

@@ -10,8 +10,8 @@ import {
   saveTabsToStorage,
   launchTabGroup,
   deleteTabGroups,
-  getCOTModuleUISettings,
-  saveCOTModuleUISettings,
+  getModuleUISettings,
+  saveModuleUISettings,
 } from "./storage";
 
 export const dummyReceiver = (
@@ -108,8 +108,8 @@ export const dummyReceiver = (
         forwardFailureResponse(message);
       }
     );
-  } else if (featureId === "get-cotm-module-ui-settings") {
-    getCOTModuleUISettings(
+  } else if (featureId === "get-module-ui-settings") {
+    getModuleUISettings(
       (message) => {
         forwardSuccessResponse(message);
       },
@@ -117,8 +117,8 @@ export const dummyReceiver = (
         forwardFailureResponse(message);
       }
     );
-  } else if (featureId === "save-cotm-module-ui-settings") {
-    saveCOTModuleUISettings(
+  } else if (featureId === "save-module-ui-settings") {
+    saveModuleUISettings(
       detailsObj,
       (message) => {
         forwardSuccessResponse(message);

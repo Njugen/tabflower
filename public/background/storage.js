@@ -170,63 +170,81 @@ const deleteTabGroups = (details, successCallback, failCallback) => {
   }
 };
 
-getCOTModuleUISettings = (successCallback, failCallback) => {
-  chrome.storage.local.get(["COTModuleUISettings"], (data) => {
-    console.log("XXX", data);
-    if (data && data.COTModuleUISettings) {
-      successCallback(data.COTModuleUISettings);
-    } else {
-      successCallback({});
-    }
-  });
+getModuleUISettings = (details, successCallback, failCallback) => {
+  console.log("");
+  if (details && details.moduleId) {
+    chrome.storage.local.get(details.moduleId, (data) => {
+      // console.log("XXX", data[details.moduleId]);
+      if (data && data[details.moduleId]) {
+        successCallback(data[details.moduleId]);
+      } else {
+        successCallback({});
+      }
+    });
+  }
 };
 
-saveCOTModuleUISettings = (details, successCallback, failCallback) => {
+saveModuleUISettings = (details, successCallback, failCallback) => {
   // Get existing settings and update the values
   const window = details;
 
   console.log("AAA", details);
 
-  getCOTModuleUISettings((settings) => {
+  getModuleUISettings(details.meta, (settings) => {
     let updatedSettings = settings;
-    console.log("MM");
-
-    if (typeof updatedSettings[window.area] !== "object") {
-      updatedSettings[window.area] = {};
+    console.log("MM", details, settings);
+    console.log("RRRRR", updatedSettings);
+    if (typeof updatedSettings[window.meta.area] !== "object") {
+      updatedSettings[window.meta.area] = {
+        [window.meta.id]: {},
+      };
     }
+    console.log("UPDATEDSETTINGS", updatedSettings);
+    if (typeof updatedSettings[window.meta.area][window.meta.id] === "object") {
+      const optionEntries = Object.entries(window.options);
+      const currentEntry = optionEntries[0];
+      const key = currentEntry[0];
+      const value = currentEntry[1];
 
-    if (typeof updatedSettings[window.area][window.id] === "object") {
-      console.log("BBBB");
-      if (typeof window.isExpanded === "boolean") {
-        if (
-          updatedSettings[window.area][window.id].isExpanded !==
-          window.isExpanded
-        ) {
-          updatedSettings[window.area][window.id].isExpanded =
-            window.isExpanded;
+      if (typeof window.options[key] === "boolean") {
+        if (updatedSettings[window.meta.area][window.meta.id][key] !== value) {
+          updatedSettings[window.meta.area][window.meta.id][key] = value;
         }
       }
 
-      if (typeof window.isTabsCrowded === "boolean") {
+      /*
+      if (typeof window.options.isExpanded === "boolean") {
         if (
-          updatedSettings[window.area][window.id].isTabsCrowded !==
-          window.isTabsCrowded
+          updatedSettings[window.meta.area][window.meta.id].isExpanded !==
+          window.options.isExpanded
         ) {
-          updatedSettings[window.area][window.id].isTabsCrowded =
-            window.isTabsCrowded;
+          updatedSettings[window.meta.area][window.meta.id].isExpanded =
+            window.options.isExpanded;
         }
       }
+
+      if (typeof window.options.isTabsCrowded === "boolean") {
+        if (
+          updatedSettings[window.meta.area][window.meta.id].isTabsCrowded !==
+          window.options.isTabsCrowded
+        ) {
+          updatedSettings[window.meta.area][window.meta.id].isTabsCrowded =
+            window.options.isTabsCrowded;
+        }
+      } */
     } else {
       console.log("CCCC");
-      updatedSettings[window.area][window.id] = window;
+      updatedSettings[window.meta.area][window.meta.id] = window.options;
     }
     console.log(updatedSettings);
     chrome.storage.local.set(
       {
-        COTModuleUISettings: updatedSettings,
+        [window.meta.moduleId]: updatedSettings,
       },
       () => {
-        successCallback();
+        if (!chrome.runtime.lastError) {
+          successCallback();
+        }
       }
     );
   });

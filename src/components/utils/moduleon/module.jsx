@@ -3,200 +3,197 @@ import * as ExceptionsHandler from "../exceptionsAndHandler";
 import * as validator from "./../../utils/inputValidators";
 import PropTypes from "prop-types";
 import AppContext from "./../../contexts/AppContextProvider";
+import { ValidatorError, ErrorHandler } from "./../exceptionsAndHandler";
+
+import { sendToBackground } from "./../../../services/webextension/APIBridge";
+
 require("../../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
 
 class Module extends Component {
   static contextType = AppContext;
   /*
-        Module State
-        - dropDownGrid 
-        information about what module is being dragged over and what module is currently dragged,
-        this information is used by moduleon utility to drag and drop modules
-
-        - moduleData
-        Contains possible data that is generated for use by the module itself or its view/sibling modules
-        (can be empty if the module does not generate necessary data)
-
-        - settings
-        Contains preset information needed for the module's basic/common features to work
-
+        State:
+        - uiSettings (object, the section where the ui settings are located)
+            - [area]: The component which this setting affects. (Can be the current component or a child component)
+                - [id]: The id of the element located in this area. Can be any HTML component.abs
+                    - [key]: The name of the setting.
     */
   state = {
-    moduleData: {
-      loadedTabGroups: [],
-      openedWindowsAndTabs: [],
-    },
-    settings: {
-      minimized: false,
+    uiSettings: {
+      modulecontainer: {
+        properties: {
+          minimized: false,
+        },
+      },
     },
   };
 
-  /*
-        Module settings
-
-        - More info to be added...
-    */
-  settings = {};
-
+  // Set a possibility to call the error overlay located in the addon's context, if an error occurs
   sendToErrorOverlay = this.context.sendToErrorOverlay;
 
+  // Set a possibility to call a modal located in the addon's context
   sendToModal = this.context.sendToModal;
 
-  handleDragOver = (componentEvent) => {
-    /*
-            Once another module gets dragged over this module, this method gets called as part of the onDragOver event.
-            It's task is to inform the Moduleon component state that is has now been draggedover.
+  /*
+    saveUISettingsToState
 
-            The information is raised through this component chain:
-            module > moduleColumn > moduleon
-        */
-    const { isObject, isString } = validator;
-    const { onDragOver } = this.props;
+    Change/set the UI settings to this component state
 
-    try {
-      if (isObject(componentEvent)) {
-        componentEvent.preventDefault();
+    Props:
+    - area (string, mandatory). The component or section where the targetted element is located
+    - id (string, mandatory). The id of the targetted element
+    - settings (object, mandatory). the collection of settings affecting this element
+    - handleSuccess (function, optional). Called when the settings are successfully set to the state.
+    - handleFail (function, optional). Called when this.setState() is not called.
+  */
+  saveUISettingsToState = (area, id, settings, handleSuccess, handleFail) => {
+    const { isString, isObject, isFunction } = validator;
 
-        if (isObject(componentEvent.target)) {
-          const isModuleContainer = componentEvent.target.className.includes(
-            "tabeon-module-container"
-          );
+    const { uiSettings: uiSettingsState } = this.state;
 
-          if (isModuleContainer) {
-            if (
-              isObject(componentEvent.target.children) &&
-              isString(componentEvent.target.children[0].id)
-            ) {
-              onDragOver(componentEvent.target.children[0].id);
-            } else {
-              throw ExceptionsHandler.ValidatorError("module-112");
-            }
-          } else {
-            return;
-          }
-        } else {
-          throw ExceptionsHandler.ValidatorError("module-101");
-        }
-      } else {
-        throw ExceptionsHandler.ValidatorError("module-102");
+    let existingUISettings = {};
+    let uiSettings = null;
+
+    if (isString(area) && isString(id) && isObject(settings)) {
+      //Check for earlier settings and merge the objects
+      if (
+        uiSettingsState &&
+        uiSettingsState[area] &&
+        uiSettingsState[area][id]
+      ) {
+        existingUISettings = uiSettingsState[area][id];
+
+        uiSettings = uiSettingsState;
+        uiSettings[area][id] = {
+          ...existingUISettings,
+          ...settings,
+        };
       }
-    } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
+    } else if (isObject(area)) {
+      uiSettings = area;
+    }
+
+    if (isObject(uiSettings) && uiSettings !== null) {
+      this.setState(
+        {
+          uiSettings,
+        },
+        () => {
+          console.log("NELSON", this.state);
+          if (isFunction(handleSuccess)) {
+            handleSuccess();
+          }
+        }
+      );
+    } else {
+      if (isFunction(handleFail)) {
+        handleFail();
+      }
     }
   };
 
-  handleDrop = (componentEvent) => {
-    /*
-            Once this module has been dropped (when dragged), this method gets called as part of the onDrop event.
-            This method tells the Moduleon component that this module has been dropped. Once this is done, this module will
-            lose its CSS highlight.
+  getUISettingsFromStorage = (moduleId, handleSuccess, handleFail) => {
+    const { isFunction } = validator;
 
-            The information is raised through this component chain:
-            module > moduleColumn > moduleon
-        */
-    try {
-      const { isObject } = validator;
+    sendToBackground(
+      "get-module-ui-settings",
+      { moduleId },
+      (successResponse) => {
+        try {
+          const { isObject } = validator;
 
-      if (isObject(componentEvent)) {
-        componentEvent.preventDefault();
-
-        if (isObject(componentEvent.target)) {
-          if (isObject(componentEvent.target.parentElement)) {
-            this.props.onDrop(componentEvent.target.parentElement);
-          } else {
-            throw ExceptionsHandler.ValidatorError("module-113");
+          if (!isObject(successResponse)) {
+            // throw ValidatorError("cotm-module-108");
           }
-        } else {
-          throw ExceptionsHandler.ValidatorError("module-103");
+
+          this.saveUISettingsToState(successResponse.data);
+
+          if (isFunction(handleSuccess)) {
+            handleSuccess();
+          }
+        } catch (err) {
+          ErrorHandler(err, this.sendToErrorOverlay);
         }
-      } else {
-        throw ExceptionsHandler.ValidatorError("module-104");
+      },
+      (failResponse) => {
+        if (isFunction(handleFail)) {
+          handleFail();
+        }
       }
-    } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
+    );
+  };
+
+  saveUISettingsToStorage = (area, id, settings, handleSuccess, handleFail) => {
+    /*
+      Parameters:
+      - area (string): the category/section of the module
+      - id (string): the id which identifies the element this settings belongs to
+      - settings (object): an object containing settings for the targetted element
+    */
+    const { isString, isObject, isFunction } = validator;
+
+    if (isString(area) && isString(id) && isObject(settings)) {
+      //const { isExpanded, isTabsCrowded } = settings;
+      let newSettings = {
+        meta: {
+          moduleId: this.staticPreset.moduleId,
+          area: area,
+          id: id,
+        },
+        options: {
+          ...settings,
+        },
+      };
+
+      sendToBackground(
+        "save-module-ui-settings",
+        newSettings,
+        (successResponse) => {
+          isFunction(handleSuccess) && handleSuccess(successResponse);
+        },
+        (failResponse) => {
+          isFunction(handleFail) && handleSuccess(failResponse);
+        }
+      );
+    } else {
+      console.log("HAISTA MANSIKKA. VIRHE ON TAPAHTUNUT");
     }
   };
 
-  handleDragStart = (componentEvent) => {
+  toggleModuleExpansion = (setMinimized) => {
     /*
-            Once the user starts dragging this module, this method gets called as part of the onDragStart event.
-            This method tells the Moduleon component state that this module is being dragged, and in doing so enables
-            CSS highlight (which disappears when module is dropped)
+      props:
 
-            The information is raised through this component chain:
-            module > moduleColumn > moduleon
-        */
-    try {
-      const { isObject } = validator;
+      - setMinimized (bool, mandatory): if true, the module will minimize. If false, the module will expand
+    */
 
-      if (isObject(componentEvent)) {
-        if (isObject(componentEvent.target)) {
-          this.props.onDragStart(componentEvent.target);
-        } else {
-          throw ExceptionsHandler.ValidatorError("module-105");
-        }
-      } else {
-        throw ExceptionsHandler.ValidatorError("module-106");
+    const settingsArea = "modulecontainer";
+    const settingsId = "properties";
+    const updatedSettings = {
+      minimized: setMinimized || false,
+    };
+
+    this.saveUISettingsToStorage(
+      settingsArea,
+      settingsId,
+      updatedSettings,
+      () => {
+        this.saveUISettingsToState(settingsArea, settingsId, updatedSettings);
       }
-    } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
-    }
+    );
   };
 
   handleModuleMinimize = () => {
-    /*
-            Event handler which is run when the user clicks the up/down array in the module's header. When clicked,
-            the state's settings section will change based on the inputs to this.changeStateSettings();
-
-            E.g. setting minimized to true will cause this module to contract, making only its header visible to the user
-        */
     try {
-      this.changeStateSettings({
-        minimized: true,
-      });
+      this.toggleModuleExpansion(true);
     } catch (err) {
       ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
   handleModuleExpand = () => {
-    /*
-            Event handler which is run when the user clicks the up/down array in the module's header. When clicked,
-            the state's settings section will change based on the inputs to this.changeStateSettings();
-
-            E.g. setting minimized to false will cause this module to expand, making its contents and footer visible to the user
-        */
     try {
-      this.changeStateSettings({
-        minimized: false,
-      });
-    } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
-    }
-  };
-
-  changeStateSettings = (parameters) => {
-    /*
-            Change or modify the settings section of the module's state.
-
-            Parameters:
-            - parameters (object, mandatory): An object with a set of new options e.g. { minimized: false, blablabla: "blablabla" }
-        */
-    try {
-      const { isObject } = validator;
-
-      if (isObject(parameters)) {
-        const settings = {
-          ...this.state.settings,
-          ...parameters,
-        };
-
-        this.setState({
-          settings,
-        });
-      } else {
-        throw ExceptionsHandler.ValidatorError("module-107");
-      }
+      this.toggleModuleExpansion(false);
     } catch (err) {
       ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
@@ -217,10 +214,6 @@ class Module extends Component {
             is found, it will be added to the module's state (doing it this way keeps us from constantly verifying
             the other variables in the state).
         */
-
-    if (isObject(this.settings)) {
-      this.changeStateSettings(this.settings);
-    }
 
     /*
             A module may also need to run its own special tasks immediately after mount. To do this, add
@@ -248,7 +241,7 @@ class Module extends Component {
       throw ExceptionsHandler.ValidatorError("module-verifyProps-107");
     }
 
-    if (!isObject(this.settings)) {
+    if (!isObject(this.staticPreset)) {
       throw ExceptionsHandler.ValidatorError("module-verifyProps-108");
     }
   };
@@ -258,14 +251,6 @@ class Module extends Component {
     const { isObject } = validator;
 
     if (isObject(this.state)) {
-      const { moduleData, settings } = this.state;
-
-      if (!isObject(moduleData)) {
-        throw ExceptionsHandler.ValidatorError("module-verifyProps-111");
-      }
-      if (!isObject(settings)) {
-        throw ExceptionsHandler.ValidatorError("module-verifyProps-112");
-      }
     } else {
       throw ExceptionsHandler.ValidatorError("module-verifyProps-109");
     }
@@ -284,10 +269,37 @@ class Module extends Component {
     }
   }
 
+  determineContainerProperties = () => {
+    const { uiSettings } = this.state;
+    const { isBoolean } = validator;
+
+    let determinedProperties = {};
+
+    if (
+      uiSettings &&
+      uiSettings["modulecontainer"] &&
+      uiSettings["modulecontainer"]["properties"]
+    ) {
+      // Preset various properties, or let them be inherited from current state.abs
+      if (!isBoolean(uiSettings["modulecontainer"]["properties"].minimized)) {
+        determinedProperties.minimized = true;
+      } else {
+        determinedProperties.minimized =
+          uiSettings["modulecontainer"]["properties"].minimized;
+      }
+    } else {
+      determinedProperties.minimized = false;
+    }
+
+    return determinedProperties;
+  };
+
   render = () => {
+    const containerProperties = this.determineContainerProperties();
+
     return (
       <div
-        id={"tabeon-module-container-id" + this.props.id}
+        id={this.staticPreset.moduleId}
         droppable="true"
         className={"tabeon-module-container col-12"}
       >
@@ -299,20 +311,20 @@ class Module extends Component {
             <div className="col-12">
               <div
                 className={
-                  this.state.settings.minimized === true
+                  containerProperties.minimized === true
                     ? "row tabeon-module-header-column-wrapper tabeon-no-border"
                     : "row tabeon-module-header-column-wrapper"
                 }
               >
                 <div className="col-8">
                   <div className="float-left">
-                    <h5>{this.state.settings.moduleTitle}</h5>
+                    <h5>{this.staticPreset.moduleTitle}</h5>
                   </div>
                 </div>
                 <div className="col-4 tabeon-module-header-control">
                   <button
                     onClick={(e) =>
-                      this.state.settings.minimized === true
+                      containerProperties.minimized === true
                         ? this.handleModuleExpand(e)
                         : this.handleModuleMinimize(e)
                     }
@@ -320,7 +332,7 @@ class Module extends Component {
                   >
                     <span
                       className={
-                        this.state.settings.minimized === true
+                        containerProperties.minimized === true
                           ? "fas fa-chevron-down"
                           : "fas fa-chevron-up"
                       }
@@ -332,7 +344,7 @@ class Module extends Component {
           </div>
           <div
             className={
-              this.state.settings.minimized === true
+              containerProperties.minimized === true
                 ? "row tabeon-module-body tabeon-hidden"
                 : "row tabeon-module-body tabeon-inline-block"
             }
@@ -344,7 +356,7 @@ class Module extends Component {
             this.renderFooter() !== null && (
               <div
                 className={
-                  this.state.settings.minimized === true
+                  containerProperties.minimized === true
                     ? "row tabeon-module-footer tabeon-hidden"
                     : "row tabeon-module-footer  tabeon-inline-block"
                 }

@@ -59,7 +59,7 @@ div.container-fluid > .row > div[class^="col-"] {
 
 .tabeon-nav-link.active {
   font-weight: bold;
-  color: #cc65df;
+  color: #d97de9;
   background: #772686;
   border-radius: 20px;
   border: 1px solid #a444b5;
@@ -277,8 +277,13 @@ div.container-fluid > .row > div[class^="col-"] {
   max-width: 900px;
 }
 
+.modal-content {
+  border-radius: 1rem;
+}
+
 .modal-header {
   padding: 1rem 2rem;
+  border-bottom: 0px;
 }
 
 .modal-body {
@@ -627,6 +632,10 @@ div.container-fluid > .row > div[class^="col-"] {
 
 .tb-form-row {
   margin: 2rem 0rem 2rem 0rem;
+}
+
+.tb-form-row:first-child {
+  margin: 1rem 0rem 2rem 0rem;
 }
 
 .tb-form-row-nomargin {

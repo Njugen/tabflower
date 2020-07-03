@@ -57,7 +57,7 @@ export const deleteTabGroups = (details, successCallback, failCallback) => {
   }
 };
 
-export const getCOTModuleUISettings = (successCallback, failCallback) => {
+export const getModuleUISettings = (successCallback, failCallback) => {
   successCallback({
     "window-container-id-0": {
       id: "window-container-id-0",
@@ -67,7 +67,7 @@ export const getCOTModuleUISettings = (successCallback, failCallback) => {
   });
 };
 
-export const saveCOTModuleUISettings = (
+export const saveModuleUISettings = (
   details,
   successCallback,
   failCallback
