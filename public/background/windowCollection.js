@@ -11,128 +11,113 @@
         -
 */
 
-// Tabs API 
-
+// Tabs API
 
 const getAllTabs = (options, successCallback, failCallback) => {
-    chrome.tabs.query(
-        options,
-        (tabs) => {
-            successCallback(tabs);
+  chrome.tabs.query(options, (tabs) => {
+    successCallback(tabs);
 
-            //failCallback("GET ALL TABS FAILED");
-            
-        }
-    )
-}
+    //failCallback("GET ALL TABS FAILED");
+  });
+};
 
 const deleteTab = (options, successCallback, failCallback) => {
-    
-    chrome.tabs.remove(
-        options.tabId,
-        () => {
-           successCallback("Tab deleted");
-        } 
-    )
-}
+  chrome.tabs.remove(options.tabId, () => {
+    successCallback("Tab deleted");
+  });
+};
 
 const deleteUnresponsiveTabs = (options, successCallback, failCallback) => {
+  const { windowCollection } = options;
 
-    const { windowsAndTabs } = options;
-
-    const evaluateTabs = (tabUrl, tabId) => {
-        fetch(tabUrl).then((response) => {
-            if (!response.ok) {
-                throw Error('Something went wrong');
-            }
-        })
-        .catch((error) => {
-            chrome.tabs.remove(
-                tabId
-            )
-        });
-    }
-
-    windowsAndTabs.map(
-        (window, i, windowsList) => {
-            console.log(window);
-            const mapped = window.tabs.map(
-                (tab) => {
-                    
-                    if(!tab.pendingUrl && (tab.url !== "about:blank" && !tab.url.includes("chrome://newtab"))){
-                        evaluateTabs(tab.url, tab.id);
-                    } else if(tab.pendingUrl && (tab.pendingUrl !== "about:blank" && !tab.pendingUrl.includes("chrome://newtab"))){
-                        evaluateTabs(tab.pendingUrl, tab.id);
-                    }
-
-                    if(tab.url === "about:blank" || tab.url.includes("chrome://newtab") || (tab.pendingUrl && tab.pendingUrl.includes("chrome://newtab"))){
-                        chrome.tabs.remove(
-                            tab.id
-                        )
-                    }
-                    return null;
-                } 
-            );
-            return mapped;
+  const evaluateTabs = (tabUrl, tabId) => {
+    fetch(tabUrl)
+      .then((response) => {
+        if (!response.ok) {
+          throw Error("Something went wrong");
         }
-    )
-}
+      })
+      .catch((error) => {
+        chrome.tabs.remove(tabId);
+      });
+  };
 
+  windowCollection.map((window, i, windowsList) => {
+    console.log(window);
+    const mapped = window.tabs.map((tab) => {
+      if (
+        !tab.pendingUrl &&
+        tab.url !== "about:blank" &&
+        !tab.url.includes("chrome://")
+      ) {
+        evaluateTabs(tab.url, tab.id);
+      } else if (
+        tab.pendingUrl &&
+        tab.pendingUrl !== "about:blank" &&
+        !tab.pendingUrl.includes("chrome://")
+      ) {
+        evaluateTabs(tab.pendingUrl, tab.id);
+      }
+
+      if (
+        tab.url === "about:blank" ||
+        tab.url.includes("chrome://") ||
+        (tab.pendingUrl && tab.pendingUrl.includes("chrome://"))
+      ) {
+        chrome.tabs.remove(tab.id);
+      }
+      return null;
+    });
+    return mapped;
+  });
+};
 
 // Windows API
 
 const getAllWindowsAndTabs = (successCallback, failCallback) => {
-    const options = {
-        populate: true
-    }
-    
-    let gettingWindows = chrome.windows.getAll(
-        options, 
-        (windows) => {
-            successCallback(windows)
-        }
-    );
-}
+  const options = {
+    populate: true,
+  };
 
+  let gettingWindows = chrome.windows.getAll(options, (windows) => {
+    successCallback(windows);
+  });
+};
 
 const deleteWindow = (options, successCallback, failCallback) => {
-    
-    chrome.windows.remove(
-        options.windowId,
-        () => {
-           successCallback("Window deleted");
-        } 
-    )
-}
+  chrome.windows.remove(options.windowId, () => {
+    successCallback("Window deleted");
+  });
+};
 
 /*
     Trigger event listeners
 */
 
 chrome.windows.onRemoved.addListener((windowId) => {
-    chrome.runtime.sendMessage({ messageId: "window-tabs-updated" });
-})
+  chrome.runtime.sendMessage({ messageId: "window-tabs-updated" });
+});
 
 chrome.windows.onCreated.addListener((window) => {
-    chrome.runtime.sendMessage({ messageId: "window-tabs-updated" });
-})
+  chrome.runtime.sendMessage({ messageId: "window-tabs-updated" });
+});
 
 chrome.tabs.onCreated.addListener((tab) => {
-    chrome.runtime.sendMessage({ messageId: "window-tabs-updated" });
-})
+  chrome.runtime.sendMessage({ messageId: "window-tabs-updated" });
+});
 
 chrome.tabs.onMoved.addListener((tab) => {
-    chrome.runtime.sendMessage({ messageId: "window-tabs-updated" });
-})
+  chrome.runtime.sendMessage({ messageId: "window-tabs-updated" });
+});
 
 chrome.tabs.onDetached.addListener((tab) => {
-    chrome.runtime.sendMessage({ messageId: "window-tabs-updated" });
-})
+  chrome.runtime.sendMessage({ messageId: "window-tabs-updated" });
+});
 
 chrome.tabs.onRemoved.addListener((tab) => {
-    chrome.runtime.sendMessage({ messageId: "window-tabs-updated" });
-})
+  chrome.runtime.sendMessage({ messageId: "window-tabs-updated" });
+});
 
 chrome.tabs.onUpdated.addListener((tab) => {
-    chrome.runtime.sendMessage({ messageId: "window-tabs-updated" });
-})
+  chrome.runtime.sendMessage({ messageId: "window-tabs-updated" });
+});

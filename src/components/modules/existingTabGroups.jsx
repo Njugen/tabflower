@@ -23,14 +23,20 @@ class ExistingTabGroupsModule extends Module {
   };
 
   setLoadedTabGroupsToState = (groups, callback) => {
-    const { isFunction } = validator;
+    try {
+      const { isFunction, isArray } = validator;
 
-    this.setState(
-      {
-        loadedTabGroups: groups,
-      },
-      () => isFunction(callback) && callback()
-    );
+      if (!isArray(groups)) throw ValidatorError("etgm-module-113");
+
+      this.setState(
+        {
+          loadedTabGroups: groups,
+        },
+        () => isFunction(callback) && callback()
+      );
+    } catch (err) {
+      ErrorHandler(err, this.sendToErrorOverlay);
+    }
   };
 
   launchTabGroup = (tabGroup) => {
@@ -148,7 +154,7 @@ class ExistingTabGroupsModule extends Module {
   renderTabGroups = () => {
     const tabGroups = this.state.loadedTabGroups || [];
     const { isPositiveNumber } = validator;
-
+    console.log("FAIR", tabGroups);
     if (isPositiveNumber(tabGroups.length)) {
       return tabGroups.map((group, i) => {
         return (
@@ -195,20 +201,24 @@ class ExistingTabGroupsModule extends Module {
               <button
                 className="btn btn-tabeon-reverse d-inline-block"
                 onClick={() => {
-                  this.sendToModal({
-                    id: "etgmlaunchgroupmodal",
-                    params: {
-                      windowCollection: group.windowCollection,
-                      groupName: group.groupName,
-                      groupDescription: group.groupDescription,
-                      groupId: group.groupId,
-                      groupCloseAll: group.groupCloseAll || false,
-                      groupCloseInactiveTabs:
-                        group.groupCloseInactiveTabs || false,
-                      groupDontAskAgain: group.groupDontAskAgain || false,
-                    },
-                    action: this.launchTabGroup.bind(this),
-                  });
+                  if (group && group.groupDontAskAgain === true) {
+                    this.launchTabGroup(group);
+                  } else {
+                    this.sendToModal({
+                      id: "etgmlaunchgroupmodal",
+                      params: {
+                        windowCollection: group.windowCollection,
+                        groupName: group.groupName,
+                        groupDescription: group.groupDescription,
+                        groupId: group.groupId,
+                        groupCloseAll: group.groupCloseAll || false,
+                        groupCloseInactiveTabs:
+                          group.groupCloseInactiveTabs || false,
+                        groupDontAskAgain: group.groupDontAskAgain || false,
+                      },
+                      action: this.launchTabGroup.bind(this),
+                    });
+                  }
                 }}
               >
                 <span className="fas fa-play mr-2"></span> Launch

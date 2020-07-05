@@ -565,6 +565,10 @@ export const ValidatorError = (code) => {
       message =
         'If "onRaiseToView" props is specified while using the "CurrentlyOpenedTabsModule" component, that value needs to be a function';
       break;
+    case "cotm-module-112":
+      message =
+        'The "windows" parameter in setOpenedWindowsToState() function needs to be an array';
+      break;
     // modules/existingTabGroups
     case "etgm-module-101":
       message =
@@ -613,6 +617,10 @@ export const ValidatorError = (code) => {
     case "etgm-module-112":
       message =
         'If "onRaiseToView" props is specified while using the "ExistingTabGroupsModule" component, that value needs to be a function';
+      break;
+    case "etgm-module-113":
+      message =
+        'The "groups" parameter in setLoadedTabGroupsToState() needs to be an array.';
       break;
     // modules/aboutTabflower.jsx
     case "atfm-module-101":

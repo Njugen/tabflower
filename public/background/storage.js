@@ -73,7 +73,7 @@ const saveTabsToStorage = (groupDetails, successCallback, failCallback) => {
 
 const launchTabGroup = (details, successCallback, failCallback) => {
   const requestedGroupId = details.groupId;
-  const closeInactiveTabs = details.tabGroupCloseInactiveTabs || false;
+  const closeInactiveTabs = details.groupCloseInactiveTabs || false;
 
   console.log("DE", details);
 
@@ -100,7 +100,7 @@ const launchTabGroup = (details, successCallback, failCallback) => {
           (createdWindow) => {
             if (closeInactiveTabs === true) {
               const options = {
-                windowsAndTabs: [createdWindow],
+                windowCollection: [createdWindow],
               };
               setTimeout(() => {
                 deleteUnresponsiveTabs(options);
@@ -118,7 +118,7 @@ const launchTabGroup = (details, successCallback, failCallback) => {
     });
   };
 
-  if (details.tabGroupCloseAll && details.tabGroupCloseAll === true) {
+  if (details.groupCloseAll && details.groupCloseAll === true) {
     chrome.windows.getAll(
       { windowTypes: ["normal", "popup"] },
       (windowsArray) => {

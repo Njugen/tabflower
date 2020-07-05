@@ -190,7 +190,7 @@ class ETGMLaunchGroupsModal extends Modal {
               label="Close all currently opened tabs and windows"
               value={groupCloseAll && groupCloseAll === true ? "true" : "false"}
               onToggle={(id, value) =>
-                this.saveToState(id, value, "groupDetails")
+                this.saveToState(id, value, "tabGroupDetails")
               }
             />
             <TBCheckBox
@@ -202,7 +202,7 @@ class ETGMLaunchGroupsModal extends Modal {
                   : "false"
               }
               onToggle={(id, value) =>
-                this.saveToState(id, value, "groupDetails")
+                this.saveToState(id, value, "tabGroupDetails")
               }
             />
             <TBCheckBox
@@ -214,7 +214,7 @@ class ETGMLaunchGroupsModal extends Modal {
                   : "false"
               }
               onToggle={(id, value) =>
-                this.saveToState(id, value, "groupDetails")
+                this.saveToState(id, value, "tabGroupDetails")
               }
             />
           </Fragment>

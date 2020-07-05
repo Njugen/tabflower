@@ -26,7 +26,9 @@ class CurrentlyOpenedTabsModule extends Module {
   };
 
   setOpenedWindowsToState = (windows, callback) => {
-    const { isFunction } = validator;
+    const { isFunction, isArray } = validator;
+
+    if (!isArray(windows)) throw ValidatorError("cotm-module-112");
 
     this.setState(
       {
@@ -116,11 +118,13 @@ class CurrentlyOpenedTabsModule extends Module {
 
   closeUnresponsiveTabs = (data) => {
     try {
+      const parameters = {
+        windowCollection: this.state.openedWindowsAndTabs,
+      };
+
       sendToBackground(
         "delete-unresponsive-tabs",
-        {
-          windowsAndTabs: this.state.openedWindowsAndTabs,
-        },
+        parameters,
         () => {
           try {
             setTimeout(() => this.getOpenedWindowsAndTabs(), 1500);

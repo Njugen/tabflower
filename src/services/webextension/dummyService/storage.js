@@ -16,21 +16,21 @@ export const saveTabsToStorage = (
 ) => {
   const {
     groupId,
-    tabGroupDescription,
-    tabGroupName,
-    tabGroupCloseAll,
-    tabGroupCloseInactiveTabs,
-    tabGroupDontAskAgain,
+    groupDescription,
+    groupName,
+    groupCloseAll,
+    groupCloseInactiveTabs,
+    groupDontAskAgain,
     windowCollection,
   } = groupDetails;
 
   importedTabGroups.push({
     groupId: groupId,
-    tabGroupCloseAll: tabGroupCloseAll,
-    tabGroupCloseInactiveTabs: tabGroupCloseInactiveTabs,
-    tabGroupDontAskAgain: tabGroupDontAskAgain,
-    tabGroupDescription: tabGroupDescription,
-    tabGroupName: tabGroupName,
+    groupCloseAll: groupCloseAll,
+    groupCloseInactiveTabs: groupCloseInactiveTabs,
+    groupDontAskAgain: groupDontAskAgain,
+    groupDescription: groupDescription,
+    groupName: groupName,
     windowCollection: windowCollection,
   });
   successCallback("A new tab group was added to TabFlower");

@@ -31,6 +31,7 @@ class ETGMCreateNewGroupModal extends Modal {
           groupCloseAll,
           groupCloseInactiveTabs,
           groupDescription,
+          groupDontAskAgain,
           type,
           groupId,
         } = this.props.data.params;
@@ -109,6 +110,10 @@ class ETGMCreateNewGroupModal extends Modal {
           !isBoolean(groupCloseInactiveTabs) &&
           !isUndefined(groupCloseInactiveTabs)
         ) {
+          throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-122");
+        }
+
+        if (!isBoolean(groupDontAskAgain) && !isUndefined(groupDontAskAgain)) {
           throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-122");
         }
 
@@ -767,6 +772,7 @@ class ETGMCreateNewGroupModal extends Modal {
           groupCloseAll: closeAll,
           groupCloseInactiveTabs: closeInactiveTabs,
           groupDescription: description,
+          groupDontAskAgain: dontAskAgain,
           type,
         } = params;
 
@@ -814,6 +820,14 @@ class ETGMCreateNewGroupModal extends Modal {
                   ? "true"
                   : "false"
               }
+              onToggle={(id, value) =>
+                this.saveToState(id, value, "tabGroupDetails")
+              }
+            />
+            <TBCheckBox
+              id="groupDontAskAgain"
+              label="Do not ask for confirmation when launching this tab group"
+              value={dontAskAgain && dontAskAgain === true ? "true" : "false"}
               onToggle={(id, value) =>
                 this.saveToState(id, value, "tabGroupDetails")
               }
