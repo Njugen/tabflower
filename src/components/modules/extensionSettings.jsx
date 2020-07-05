@@ -14,7 +14,8 @@ class ExtensionSettingsModule extends Module {
         - moduleTitle: Title of the module (string)
    */
   staticPreset = {
-    moduleTitle: "Settings",
+    moduleTitle: "staticPreset",
+    moduleId: "tabeon-module-container-id-" + this.props.id,
   };
 
   verifyChildProps = () => {

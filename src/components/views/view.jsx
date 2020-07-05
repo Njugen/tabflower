@@ -7,7 +7,7 @@ import AppContext from "./../contexts/AppContextProvider";
 
 /*
     The View Component
-
+ 
     Props:
     - onViewMount (function): Triggers a function in the parent component, using the view's state as parameter.
 */
@@ -20,6 +20,13 @@ class View extends Component {
   static contextType = AppContext;
 
   sendToErrorOverlay = this.context.sendToErrorOverlay;
+
+  refreshView = () => {
+    let refreshFactor = this.state.refreshFactor;
+    refreshFactor++;
+
+    this.setState({ refreshFactor });
+  };
 
   handleViewMount = () => {
     /*

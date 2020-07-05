@@ -26,7 +26,7 @@ class ETGMCreateNewGroupModal extends Modal {
     if (isObject(this.props.data)) {
       if (isObject(this.props.data.params)) {
         const {
-          windowAndTabs,
+          windowCollection,
           groupName,
           groupCloseAll,
           groupCloseInactiveTabs,
@@ -113,13 +113,13 @@ class ETGMCreateNewGroupModal extends Modal {
         }
 
         /* 
-                    windowAndTabs (object, mandatory)
+                    windowCollection (object, mandatory)
 
                     This parameter contains windows and tabs stored into a single array. If there are no windows/tabs, this array
-                    is empty e.g. windowAndTabs = []
+                    is empty e.g. windowCollection = []
                 */
 
-        if (!isArray(windowAndTabs) && !isUndefined(windowAndTabs)) {
+        if (!isArray(windowCollection) && !isUndefined(windowCollection)) {
           throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-119");
         }
       } else {
@@ -220,9 +220,9 @@ class ETGMCreateNewGroupModal extends Modal {
           if (isObject(this.props.data.params)) {
             if (isObject(this.state.tabGroupDetails)) {
               const {
-                tabGroupName,
-                tabGroupDescription,
-                windowAndTabs,
+                groupName,
+                groupDescription,
+                windowCollection,
               } = this.state.tabGroupDetails;
 
               if (isString(this.props.data.params.groupName)) {
@@ -233,23 +233,23 @@ class ETGMCreateNewGroupModal extends Modal {
 
               error.additionalMessage += ". Please try again.";
 
-              if (!isString(tabGroupName)) {
-                fieldErrors.tabGroupName =
+              if (!isString(groupName)) {
+                fieldErrors.groupName =
                   "A tab group needs to be given a name or a label before it can be saved.";
               }
 
-              if (!isString(tabGroupDescription)) {
-                fieldErrors.tabGroupDescription =
+              if (!isString(groupDescription)) {
+                fieldErrors.groupDescription =
                   "A tab group needs to be given a short description before it can be saved.";
               }
 
               if (
-                !isArray(windowAndTabs) ||
-                (isArray(windowAndTabs) &&
-                  (isUndefined(windowAndTabs.length) ||
-                    isZero(windowAndTabs.length)))
+                !isArray(windowCollection) ||
+                (isArray(windowCollection) &&
+                  (isUndefined(windowCollection.length) ||
+                    isZero(windowCollection.length)))
               ) {
-                fieldErrors.windowAndTabs =
+                fieldErrors.windowCollection =
                   "A tab group must consist of at least one window.";
               }
 
@@ -337,10 +337,14 @@ class ETGMCreateNewGroupModal extends Modal {
       const { data } = this.props;
 
       if (isObject(data) && isObject(data.params)) {
-        const { windowAndTabs, groupId } = data.params;
+        const { windowCollection, groupId } = data.params;
 
-        if (isArray(windowAndTabs)) {
-          this.saveToState("windowAndTabs", windowAndTabs, "tabGroupDetails");
+        if (isArray(windowCollection)) {
+          this.saveToState(
+            "windowCollection",
+            windowCollection,
+            "tabGroupDetails"
+          );
         } else {
           throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-128");
         }
@@ -426,10 +430,10 @@ class ETGMCreateNewGroupModal extends Modal {
         if (isObject(this.state.tabGroupDetails)) {
           let windows;
 
-          const { windowAndTabs } = this.state.tabGroupDetails;
+          const { windowCollection } = this.state.tabGroupDetails;
 
-          if (isArray(windowAndTabs) && windowAndTabs.length > 0) {
-            windows = [...windowAndTabs];
+          if (isArray(windowCollection) && windowCollection.length > 0) {
+            windows = [...windowCollection];
           } else {
             windows = [];
           }
@@ -451,7 +455,7 @@ class ETGMCreateNewGroupModal extends Modal {
                   },
                 ],
               });
-              this.saveToState("windowAndTabs", windows, "tabGroupDetails");
+              this.saveToState("windowCollection", windows, "tabGroupDetails");
             },
             (err) => {
               windows.push({
@@ -464,7 +468,7 @@ class ETGMCreateNewGroupModal extends Modal {
                 ],
               });
 
-              this.saveToState("windowAndTabs", windows, "tabGroupDetails");
+              this.saveToState("windowCollection", windows, "tabGroupDetails");
             }
           );
         } else {
@@ -501,10 +505,10 @@ class ETGMCreateNewGroupModal extends Modal {
           if (isObject(this.state.tabGroupDetails)) {
             let windows;
 
-            const { windowAndTabs } = this.state.tabGroupDetails;
+            const { windowCollection } = this.state.tabGroupDetails;
 
-            if (isArray(windowAndTabs) && windowAndTabs.length > 0) {
-              windows = [...windowAndTabs];
+            if (isArray(windowCollection) && windowCollection.length > 0) {
+              windows = [...windowCollection];
             } else {
               throw ExceptionsHandler.ValidatorError(
                 "ETGMCreateNewGroupModal-129"
@@ -529,7 +533,7 @@ class ETGMCreateNewGroupModal extends Modal {
                 });
 
                 this.saveToState(
-                  "windowAndTabs",
+                  "windowCollection",
                   parsedWindows,
                   "tabGroupDetails"
                 );
@@ -542,7 +546,7 @@ class ETGMCreateNewGroupModal extends Modal {
                 });
 
                 this.saveToState(
-                  "windowAndTabs",
+                  "windowCollection",
                   parsedWindows,
                   "tabGroupDetails"
                 );
@@ -582,10 +586,12 @@ class ETGMCreateNewGroupModal extends Modal {
           let windows;
 
           if (
-            Object.keys(this.state.tabGroupDetails.windowAndTabs).length > 0
+            Object.keys(this.state.tabGroupDetails.windowCollection).length > 0
           ) {
-            //windows = [...this.state.tabGroupDetails.windowAndTabs];
-            windows = JSON.stringify(this.state.tabGroupDetails.windowAndTabs);
+            //windows = [...this.state.tabGroupDetails.windowCollection];
+            windows = JSON.stringify(
+              this.state.tabGroupDetails.windowCollection
+            );
             const parsedWindows = JSON.parse(windows);
 
             if (isObject(parsedWindows[windowIndex])) {
@@ -598,7 +604,7 @@ class ETGMCreateNewGroupModal extends Modal {
               }
 
               this.saveToState(
-                "windowAndTabs",
+                "windowCollection",
                 parsedWindows,
                 "tabGroupDetails"
               );
@@ -637,14 +643,20 @@ class ETGMCreateNewGroupModal extends Modal {
       let windows;
 
       if (isAtLeastZero(windowIndex)) {
-        if (Object.keys(this.state.tabGroupDetails.windowAndTabs).length > 0) {
-          windows = JSON.stringify(this.state.tabGroupDetails.windowAndTabs);
+        if (
+          Object.keys(this.state.tabGroupDetails.windowCollection).length > 0
+        ) {
+          windows = JSON.stringify(this.state.tabGroupDetails.windowCollection);
           const parsedWindows = JSON.parse(windows);
 
           if (isObject(parsedWindows[windowIndex])) {
             parsedWindows.splice(windowIndex, 1);
 
-            this.saveToState("windowAndTabs", parsedWindows, "tabGroupDetails");
+            this.saveToState(
+              "windowCollection",
+              parsedWindows,
+              "tabGroupDetails"
+            );
           } else {
             throw ExceptionsHandler.ValidatorError(
               "ETGMCreateNewGroupModal-134"
@@ -664,17 +676,17 @@ class ETGMCreateNewGroupModal extends Modal {
   /*
         renderWindowsAndTabsSection()
 
-        Render a list of windows and tabs available in the windowAndTabs parameter.
+        Render a list of windows and tabs available in the windowCollection parameter.
 
         Parameters:
-        - windowAndTabs (array of window objects, mandatory): contains a collection of windows retrieved from the browser API
+        - windowCollection (array of window objects, mandatory): contains a collection of windows retrieved from the browser API
         - type (string, mandatory), can be either one of the following values. This parameter decides what feature the windowlist should offer:
             - currently-opened
             - existing-group
             - new-group
         - warning
     */
-  renderWindowsAndTabsSection = (windowAndTabs, type, warning) => {
+  renderWindowsAndTabsSection = (windowCollection, type, warning) => {
     /* 
            types:
             - currently-opened
@@ -684,8 +696,8 @@ class ETGMCreateNewGroupModal extends Modal {
 
     const { isString, isArray } = validator;
 
-    if (isArray(windowAndTabs)) {
-      windowAndTabs = windowAndTabs || [];
+    if (isArray(windowCollection)) {
+      windowCollection = windowCollection || [];
     } else {
       throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-121");
     }
@@ -721,7 +733,7 @@ class ETGMCreateNewGroupModal extends Modal {
         <div className="tb-form-row-nomargin row">
           <div className="col-12 mt-0 nopadding">
             <WindowsList
-              windows={windowAndTabs}
+              windows={windowCollection}
               onAddNewWindow={(data) => this.addNewWindow(data)}
               onAddNewTab={(data, index) => this.addNewTab(data, index)}
               onDeleteTab={(windowIndex, tabIndex) =>
@@ -759,9 +771,9 @@ class ETGMCreateNewGroupModal extends Modal {
         } = params;
 
         const {
-          tabGroupName: nameErr,
-          tabGroupDescription: descErr,
-          windowAndTabs: windowErr,
+          groupName: nameErr,
+          groupDescription: descErr,
+          windowCollection: windowErr,
         } = this.state.fieldErrors;
 
         const { tabGroupDetails } = this.state;
@@ -769,7 +781,7 @@ class ETGMCreateNewGroupModal extends Modal {
         return (
           <Fragment>
             <TBTextInput
-              id="tabGroupName"
+              id="groupName"
               warning={nameErr || null}
               label="Group Name"
               value={name ? name : ""}
@@ -778,7 +790,7 @@ class ETGMCreateNewGroupModal extends Modal {
               }
             ></TBTextInput>
             <TBTextArea
-              id="tabGroupDescription"
+              id="groupDescription"
               warning={descErr || null}
               label="Description (max 170 characters)"
               value={description ? description : ""}
@@ -787,7 +799,7 @@ class ETGMCreateNewGroupModal extends Modal {
               }
             ></TBTextArea>
             <TBCheckBox
-              id="tabGroupCloseAll"
+              id="groupCloseAll"
               label="Close everything else before launching this tab group"
               value={closeAll && closeAll === true ? "true" : "false"}
               onToggle={(id, value) =>
@@ -795,7 +807,7 @@ class ETGMCreateNewGroupModal extends Modal {
               }
             />
             <TBCheckBox
-              id="tabGroupCloseInactiveTabs"
+              id="groupCloseInactiveTabs"
               label="Automatically close all unresponsive tabs opened by this tab group"
               value={
                 closeInactiveTabs && closeInactiveTabs === true
@@ -808,7 +820,7 @@ class ETGMCreateNewGroupModal extends Modal {
             />
             {tabGroupDetails &&
               this.renderWindowsAndTabsSection(
-                tabGroupDetails.windowAndTabs || [],
+                tabGroupDetails.windowCollection || [],
                 type,
                 windowErr || null
               )}

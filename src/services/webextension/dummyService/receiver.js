@@ -4,7 +4,7 @@ import {
   deleteUnresponsiveTabs,
   getAllWindowsAndTabs,
   deleteWindow,
-} from "./windowAndTabs";
+} from "./windowCollection";
 import {
   getAllTabGroups,
   saveTabsToStorage,

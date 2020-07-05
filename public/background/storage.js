@@ -84,7 +84,7 @@ const launchTabGroup = (details, successCallback, failCallback) => {
       );
 
       // Go through all windows and open new ones based on stored information
-      const storedWindows = storedTabGroup.windowAndTabs;
+      const storedWindows = storedTabGroup.windowCollection;
 
       storedWindows.map((window) => {
         let urls = [];
@@ -171,12 +171,13 @@ const deleteTabGroups = (details, successCallback, failCallback) => {
 };
 
 getModuleUISettings = (details, successCallback, failCallback) => {
-  console.log("");
+  const userInterfaceSuffix = "-ui";
+
   if (details && details.moduleId) {
-    chrome.storage.local.get(details.moduleId, (data) => {
+    chrome.storage.local.get(details.moduleId + userInterfaceSuffix, (data) => {
       // console.log("XXX", data[details.moduleId]);
-      if (data && data[details.moduleId]) {
-        successCallback(data[details.moduleId]);
+      if (data && data[details.moduleId + userInterfaceSuffix]) {
+        successCallback(data[details.moduleId + userInterfaceSuffix]);
       } else {
         successCallback({});
       }
@@ -186,60 +187,47 @@ getModuleUISettings = (details, successCallback, failCallback) => {
 
 saveModuleUISettings = (details, successCallback, failCallback) => {
   // Get existing settings and update the values
-  const window = details;
-
+  const userInterfaceSuffix = "-ui";
   console.log("AAA", details);
 
   getModuleUISettings(details.meta, (settings) => {
     let updatedSettings = settings;
     console.log("MM", details, settings);
     console.log("RRRRR", updatedSettings);
-    if (typeof updatedSettings[window.meta.area] !== "object") {
-      updatedSettings[window.meta.area] = {
-        [window.meta.id]: {},
+
+    if (typeof updatedSettings[details.meta.area] !== "object") {
+      updatedSettings[details.meta.area] = {
+        [details.meta.elementId]: {},
       };
     }
+
     console.log("UPDATEDSETTINGS", updatedSettings);
-    if (typeof updatedSettings[window.meta.area][window.meta.id] === "object") {
-      const optionEntries = Object.entries(window.options);
+    if (
+      typeof updatedSettings[details.meta.area][details.meta.elementId] ===
+      "object"
+    ) {
+      const optionEntries = Object.entries(details.options);
       const currentEntry = optionEntries[0];
       const key = currentEntry[0];
       const value = currentEntry[1];
 
-      if (typeof window.options[key] === "boolean") {
-        if (updatedSettings[window.meta.area][window.meta.id][key] !== value) {
-          updatedSettings[window.meta.area][window.meta.id][key] = value;
-        }
-      }
+      console.log("MONTE", details.options[key]);
 
-      /*
-      if (typeof window.options.isExpanded === "boolean") {
-        if (
-          updatedSettings[window.meta.area][window.meta.id].isExpanded !==
-          window.options.isExpanded
-        ) {
-          updatedSettings[window.meta.area][window.meta.id].isExpanded =
-            window.options.isExpanded;
-        }
+      if (
+        updatedSettings[details.meta.area][details.meta.elementId][key] !==
+        value
+      ) {
+        updatedSettings[details.meta.area][details.meta.elementId][key] = value;
       }
-
-      if (typeof window.options.isTabsCrowded === "boolean") {
-        if (
-          updatedSettings[window.meta.area][window.meta.id].isTabsCrowded !==
-          window.options.isTabsCrowded
-        ) {
-          updatedSettings[window.meta.area][window.meta.id].isTabsCrowded =
-            window.options.isTabsCrowded;
-        }
-      } */
     } else {
       console.log("CCCC");
-      updatedSettings[window.meta.area][window.meta.id] = window.options;
+      updatedSettings[details.meta.area][details.meta.elementId] =
+        details.options;
     }
     console.log(updatedSettings);
     chrome.storage.local.set(
       {
-        [window.meta.moduleId]: updatedSettings,
+        [details.meta.moduleId + userInterfaceSuffix]: updatedSettings,
       },
       () => {
         if (!chrome.runtime.lastError) {

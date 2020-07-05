@@ -28,7 +28,7 @@ class ETGMLaunchGroupsModal extends Modal {
           groupCloseAll,
           groupCloseInactiveTabs,
           groupDescription,
-          windowAndTabs,
+          windowCollection,
         } = this.props.data.params;
 
         /*
@@ -82,13 +82,13 @@ class ETGMLaunchGroupsModal extends Modal {
         }
 
         /* 
-                    windowAndTabs (object, mandatory)
+                    windowCollection (object, mandatory)
         
                     This parameter contains windows and tabs stored into a single array. If there are no windows/tabs, this array
-                    is empty e.g. windowAndTabs = []
+                    is empty e.g. windowCollection = []
                 */
 
-        if (!isArray(windowAndTabs)) {
+        if (!isArray(windowCollection)) {
           throw ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-107");
         }
       } else {
@@ -122,9 +122,9 @@ class ETGMLaunchGroupsModal extends Modal {
             //this.clearModalData(callback(this.props.data.params));
             const tabGroupDetails = {
               groupId: this.props.data.params.groupId,
-              windowAndTabs: this.props.data.params.windowAndTabs,
-              tabGroupName: this.props.data.params.groupName,
-              tabGroupDescription: this.props.data.params.groupDescription,
+              windowCollection: this.props.data.params.windowCollection,
+              groupName: this.props.data.params.groupName,
+              groupDescription: this.props.data.params.groupDescription,
               ...this.state.tabGroupDetails,
             };
             this.clearModalData(callback(tabGroupDetails));
@@ -186,15 +186,15 @@ class ETGMLaunchGroupsModal extends Modal {
         return (
           <Fragment>
             <TBCheckBox
-              id="tabGroupCloseAll"
+              id="groupCloseAll"
               label="Close all currently opened tabs and windows"
               value={groupCloseAll && groupCloseAll === true ? "true" : "false"}
               onToggle={(id, value) =>
-                this.saveToState(id, value, "tabGroupDetails")
+                this.saveToState(id, value, "groupDetails")
               }
             />
             <TBCheckBox
-              id="tabGroupCloseInactiveTabs"
+              id="groupCloseInactiveTabs"
               label="Automatically close all unresponsive tabs opened by this tab group"
               value={
                 groupCloseInactiveTabs && groupCloseInactiveTabs === true
@@ -202,11 +202,11 @@ class ETGMLaunchGroupsModal extends Modal {
                   : "false"
               }
               onToggle={(id, value) =>
-                this.saveToState(id, value, "tabGroupDetails")
+                this.saveToState(id, value, "groupDetails")
               }
             />
             <TBCheckBox
-              id="tabGroupDontAskAgain"
+              id="groupDontAskAgain"
               label="Save all selected options and do not show this message again (All settings offered in this popup can still be changed for any tab group. Just click the cog wheel for the tab group you want to change)."
               value={
                 groupDontAskAgain && groupDontAskAgain === true
@@ -214,7 +214,7 @@ class ETGMLaunchGroupsModal extends Modal {
                   : "false"
               }
               onToggle={(id, value) =>
-                this.saveToState(id, value, "tabGroupDetails")
+                this.saveToState(id, value, "groupDetails")
               }
             />
           </Fragment>

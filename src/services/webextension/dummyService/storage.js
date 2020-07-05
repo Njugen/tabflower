@@ -21,7 +21,7 @@ export const saveTabsToStorage = (
     tabGroupCloseAll,
     tabGroupCloseInactiveTabs,
     tabGroupDontAskAgain,
-    windowAndTabs,
+    windowCollection,
   } = groupDetails;
 
   importedTabGroups.push({
@@ -31,7 +31,7 @@ export const saveTabsToStorage = (
     tabGroupDontAskAgain: tabGroupDontAskAgain,
     tabGroupDescription: tabGroupDescription,
     tabGroupName: tabGroupName,
-    windowAndTabs: windowAndTabs,
+    windowCollection: windowCollection,
   });
   successCallback("A new tab group was added to TabFlower");
 };
@@ -59,10 +59,12 @@ export const deleteTabGroups = (details, successCallback, failCallback) => {
 
 export const getModuleUISettings = (successCallback, failCallback) => {
   successCallback({
-    "window-container-id-0": {
-      id: "window-container-id-0",
-      isExpanded: true,
-      isTabsVisible: false,
+    data: {
+      "window-container-id-0": {
+        id: "window-container-id-0",
+        isExpanded: true,
+        isTabsVisible: false,
+      },
     },
   });
 };

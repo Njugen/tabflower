@@ -6,22 +6,17 @@ import * as validator from "./../utils/inputValidators";
 import * as ExceptionsHandler from "../utils/exceptionsAndHandler";
 
 class AboutTabFlowerView extends View {
-  handleRaisedData = (data) => {
+  handleRaiseToView = (data) => {
     try {
       const { isString } = validator;
 
-      if (isString(data)) {
-        if (data === "refresh") {
-          let refreshFactor = this.state.refreshFactor;
-          refreshFactor++;
-
-          this.setState({ refreshFactor }, () => {});
-        } else {
-          throw ExceptionsHandler.ValidatorError("aboutTabflower-view-102");
-        }
-      } else {
+      if (!isString(data))
         throw ExceptionsHandler.ValidatorError("aboutTabflower-view-101");
-      }
+
+      if (data !== "refresh")
+        throw ExceptionsHandler.ValidatorError("aboutTabflower-view-102");
+
+      if (data === "refresh") this.refreshView();
     } catch (err) {
       ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
@@ -32,8 +27,9 @@ class AboutTabFlowerView extends View {
       <div className="row d-flex justify-content-center">
         <div className="col-6">
           <AboutTabflowerModule
-            onRaiseToView={(data) => this.handleRaisedData(data)}
-            id="active-tabs-module"
+            title="About Tabflower"
+            onRaiseToView={(data) => this.handleRaiseToView(data)}
+            id="about-tabflower-module"
             onRaiseToModal={(data) => this.raiseToModal(data)}
             onRaiseToErrorOverlay={(data) => this.sendToErrorOverlay(data)}
           ></AboutTabflowerModule>

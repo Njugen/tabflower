@@ -40,33 +40,63 @@ class Module extends Component {
     Change/set the UI settings to this component state
 
     Props:
-    - area (string, mandatory). The component or section where the targetted element is located
-    - id (string, mandatory). The id of the targetted element
+    - area (string or object, mandatory). The component or section where the targetted element is located
+    - elementId (string, mandatory). The id of the targetted element
     - settings (object, mandatory). the collection of settings affecting this element
     - handleSuccess (function, optional). Called when the settings are successfully set to the state.
     - handleFail (function, optional). Called when this.setState() is not called.
+
+    Note: If area is an object, then elementId and settings will not be used nor considered even if they are valid.
   */
-  saveUISettingsToState = (area, id, settings, handleSuccess, handleFail) => {
-    const { isString, isObject, isFunction } = validator;
+  saveUISettingsToState = (
+    area,
+    elementId,
+    settings,
+    handleSuccess,
+    handleFail
+  ) => {
+    const { isString, isObject, isFunction, isUndefined } = validator;
 
     const { uiSettings: uiSettingsState } = this.state;
+
+    if (!isString(area) && !isObject(area))
+      throw ValidatorError("module-verifyProps-109");
+    if (!isFunction(handleSuccess) && !isUndefined(handleSuccess))
+      throw ValidatorError("module-verifyProps-112");
+    if (!isFunction(handleFail) && !isUndefined(handleFail))
+      throw ValidatorError("module-verifyProps-113");
 
     let existingUISettings = {};
     let uiSettings = null;
 
-    if (isString(area) && isString(id) && isObject(settings)) {
-      //Check for earlier settings and merge the objects
-      if (
-        uiSettingsState &&
-        uiSettingsState[area] &&
-        uiSettingsState[area][id]
-      ) {
-        existingUISettings = uiSettingsState[area][id];
+    if (isString(area) && isString(elementId) && isObject(settings)) {
+      if (!isString(elementId)) throw ValidatorError("module-verifyProps-110");
+      if (!isObject(settings)) throw ValidatorError("module-verifyProps-111");
 
-        uiSettings = uiSettingsState;
-        uiSettings[area][id] = {
-          ...existingUISettings,
-          ...settings,
+      uiSettings = uiSettingsState;
+
+      if (isObject(uiSettingsState)) {
+        if (isObject(uiSettingsState[area])) {
+          if (isObject(uiSettingsState[area][elementId])) {
+            existingUISettings = uiSettingsState[area][elementId];
+
+            uiSettings[area][elementId] = {
+              ...existingUISettings,
+              ...settings,
+            };
+          } else {
+            uiSettings[area][elementId] = settings;
+          }
+        } else {
+          uiSettings[area] = {
+            [elementId]: settings,
+          };
+        }
+      } else {
+        uiSettings = {
+          [area]: {
+            [elementId]: settings,
+          },
         };
       }
     } else if (isObject(area)) {
@@ -80,83 +110,103 @@ class Module extends Component {
         },
         () => {
           console.log("NELSON", this.state);
-          if (isFunction(handleSuccess)) {
-            handleSuccess();
-          }
+          isFunction(handleSuccess) && handleSuccess();
         }
       );
     } else {
-      if (isFunction(handleFail)) {
-        handleFail();
-      }
+      isFunction(handleFail) && handleFail();
     }
   };
 
   getUISettingsFromStorage = (moduleId, handleSuccess, handleFail) => {
-    const { isFunction } = validator;
+    const { isFunction, isObject, isString, isUndefined } = validator;
+
+    if (!isString(moduleId)) throw ValidatorError("module-verifyProps-119");
+    if (!isFunction(handleSuccess) && !isUndefined(handleSuccess))
+      throw ValidatorError("module-verifyProps-120");
+    if (!isFunction(handleFail) && !isUndefined(handleFail))
+      throw ValidatorError("module-verifyProps-121");
 
     sendToBackground(
       "get-module-ui-settings",
       { moduleId },
       (successResponse) => {
         try {
-          const { isObject } = validator;
+          if (
+            !isObject(successResponse) ||
+            (isObject(successResponse) && isUndefined(successResponse.data))
+          )
+            throw ValidatorError("module-verifyProps-122");
 
-          if (!isObject(successResponse)) {
-            // throw ValidatorError("cotm-module-108");
-          }
-
-          this.saveUISettingsToState(successResponse.data);
-
-          if (isFunction(handleSuccess)) {
-            handleSuccess();
-          }
+          this.saveUISettingsToState(
+            successResponse.data,
+            undefined,
+            undefined,
+            () => {
+              isFunction(handleSuccess) && handleSuccess(successResponse.data);
+            }
+          );
         } catch (err) {
           ErrorHandler(err, this.sendToErrorOverlay);
         }
       },
       (failResponse) => {
-        if (isFunction(handleFail)) {
-          handleFail();
-        }
+        isFunction(handleFail) && handleFail();
       }
     );
   };
 
-  saveUISettingsToStorage = (area, id, settings, handleSuccess, handleFail) => {
-    /*
-      Parameters:
-      - area (string): the category/section of the module
-      - id (string): the id which identifies the element this settings belongs to
-      - settings (object): an object containing settings for the targetted element
-    */
-    const { isString, isObject, isFunction } = validator;
+  saveUISettingsToStorage = (
+    area,
+    elementId,
+    settings,
+    handleSuccess,
+    handleFail
+  ) => {
+    try {
+      /*
+        Parameters:
+        - area (string): the category/section of the module
+        - elementId (string): the id which identifies the element this setup of settings belongs to
+        - settings (object): an object containing settings for the targetted element
+      */
+      const { isString, isObject, isFunction, isUndefined } = validator;
+      const { id } = this.props;
 
-    if (isString(area) && isString(id) && isObject(settings)) {
-      //const { isExpanded, isTabsCrowded } = settings;
-      let newSettings = {
-        meta: {
-          moduleId: this.staticPreset.moduleId,
-          area: area,
-          id: id,
-        },
-        options: {
-          ...settings,
-        },
-      };
+      if (!isString(area)) throw ValidatorError("module-verifyProps-114");
+      if (!isString(elementId)) throw ValidatorError("module-verifyProps-115");
+      if (!isObject(settings)) throw ValidatorError("module-verifyProps-116");
+      if (!isFunction(handleSuccess) && !isUndefined(handleSuccess))
+        throw ValidatorError("module-verifyProps-117");
+      if (!isFunction(handleFail) && !isUndefined(handleFail))
+        throw ValidatorError("module-verifyProps-118");
 
-      sendToBackground(
-        "save-module-ui-settings",
-        newSettings,
-        (successResponse) => {
-          isFunction(handleSuccess) && handleSuccess(successResponse);
-        },
-        (failResponse) => {
-          isFunction(handleFail) && handleSuccess(failResponse);
-        }
-      );
-    } else {
-      console.log("HAISTA MANSIKKA. VIRHE ON TAPAHTUNUT");
+      if (isString(area) && isString(elementId) && isObject(settings)) {
+        //const { isExpanded, isTabsCrowded } = settings;
+        let newSettings = {
+          meta: {
+            moduleId: id,
+            area: area,
+            elementId,
+          },
+          options: {
+            ...settings,
+          },
+        };
+
+        sendToBackground(
+          "save-module-ui-settings",
+          newSettings,
+          (successResponse) => {
+            isFunction(handleSuccess) && handleSuccess(successResponse);
+          },
+          (failResponse) => {
+            isFunction(handleFail) && handleSuccess(failResponse);
+          }
+        );
+      }
+    } catch (err) {
+      ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
@@ -187,7 +237,7 @@ class Module extends Component {
     try {
       this.toggleModuleExpansion(true);
     } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
+      ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
@@ -195,30 +245,16 @@ class Module extends Component {
     try {
       this.toggleModuleExpansion(false);
     } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
+      ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
   componentDidMount = () => {
-    const { isFunction, isObject } = validator;
+    const { isFunction } = validator;
 
     if (isFunction(this.verifyChildProps)) {
       this.verifyChildProps();
     }
-
-    /*
-            Every module can set their own settings independent from other modules. E.g. Module A may be minimized
-            while Module B is not, and so forth.
-
-            This can be done by inserting a settings object into the modules. If the settings object
-            is found, it will be added to the module's state (doing it this way keeps us from constantly verifying
-            the other variables in the state).
-        */
-
-    /*
-            A module may also need to run its own special tasks immediately after mount. To do this, add
-            childComponentDidMount() into the module, which will be executed if it exists
-        */
 
     if (isFunction(this.childComponentDidMount)) {
       this.childComponentDidMount();
@@ -233,17 +269,16 @@ class Module extends Component {
   renderBody = () => {};
 
   verifyProps = () => {
-    const { id } = this.props;
+    const { id, title, refresh, onRaiseToView } = this.props;
 
-    const { isString, isObject } = validator;
+    const { isString, isNumber, isFunction, isUndefined } = validator;
 
-    if (!isString(id)) {
-      throw ExceptionsHandler.ValidatorError("module-verifyProps-107");
-    }
-
-    if (!isObject(this.staticPreset)) {
-      throw ExceptionsHandler.ValidatorError("module-verifyProps-108");
-    }
+    if (!isString(id)) throw ValidatorError("module-verifyProps-107");
+    if (!isString(title)) throw ValidatorError("module-verifyProps-108");
+    if (!isNumber(refresh) && !isUndefined(refresh))
+      throw ValidatorError("module-verifyProps-127");
+    if (!isFunction(onRaiseToView) && !isUndefined(onRaiseToView))
+      throw ValidatorError("module-verifyProps-128");
   };
 
   verifyState = () => {
@@ -251,8 +286,21 @@ class Module extends Component {
     const { isObject } = validator;
 
     if (isObject(this.state)) {
+      const { uiSettings } = this.state;
+
+      if (isObject(uiSettings)) {
+        if (isObject(uiSettings["modulecontainer"])) {
+          if (!isObject(uiSettings["modulecontainer"]["properties"])) {
+            throw ValidatorError("module-verifyProps-125");
+          }
+        } else {
+          throw ValidatorError("module-verifyProps-124");
+        }
+      } else {
+        throw ValidatorError("module-verifyProps-123");
+      }
     } else {
-      throw ExceptionsHandler.ValidatorError("module-verifyProps-109");
+      throw ValidatorError("module-verifyProps-126");
     }
   };
 
@@ -296,17 +344,15 @@ class Module extends Component {
 
   render = () => {
     const containerProperties = this.determineContainerProperties();
+    const { title, id } = this.props;
 
     return (
       <div
-        id={this.staticPreset.moduleId}
+        id={id}
         droppable="true"
         className={"tabeon-module-container col-12"}
       >
-        <div
-          id={"tabeon-module-id-" + this.props.id}
-          className={"tabeon-module"}
-        >
+        <div id={"tabeon-module-id-" + id} className={"tabeon-module"}>
           <div className="row tabeon-module-header" draggable="true">
             <div className="col-12">
               <div
@@ -318,7 +364,7 @@ class Module extends Component {
               >
                 <div className="col-8">
                   <div className="float-left">
-                    <h5>{this.staticPreset.moduleTitle}</h5>
+                    <h5>{title}</h5>
                   </div>
                 </div>
                 <div className="col-4 tabeon-module-header-control">

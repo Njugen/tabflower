@@ -12,35 +12,32 @@ require("../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
 
 class CurrentlyOpenedTabsModule extends Module {
   static contextType = AppContext;
-  /*
-        staticPreset
-        - moduleTitle: Title of the module (string)
-   */
-  staticPreset = {
-    moduleTitle: "Currently Opened Tabs",
-    moduleId: "tabeon-module-container-id-" + this.props.id,
-  };
 
   verifyChildProps = () => {
-    const { isObject, isString } = validator;
+    const { id, title, refresh, onRaiseToView } = this.props;
+    const { isString, isNumber, isFunction, isUndefined } = validator;
 
-    if (isObject(this.staticPreset)) {
-      const { moduleTitle } = this.staticPreset;
+    if (!isString(id)) throw ValidatorError("cotm-module-101");
+    if (!isString(title)) throw ValidatorError("cotm-module-102");
+    if (!isNumber(refresh) && !isUndefined(refresh))
+      throw ValidatorError("cotm-module-110");
+    if (!isFunction(onRaiseToView) && !isUndefined(onRaiseToView))
+      throw ValidatorError("cotm-module-111");
+  };
 
-      if (!isString(moduleTitle)) {
-        throw ValidatorError("cotm-module-102");
-      }
-    } else {
-      throw ValidatorError("cotm-module-101");
-    }
+  setOpenedWindowsToState = (windows, callback) => {
+    const { isFunction } = validator;
+
+    this.setState(
+      {
+        openedWindowsAndTabs: windows,
+      },
+      () => isFunction(callback) && callback()
+    );
   };
 
   /*
         createTabGroup
-        
-        Creates a new tab group based on information given in the input parameter. A group is
-        created when this parameter is sent to the browser, where the background script decides
-        whether to add a new group or overwrite an existing group. 
 
         Parameter
         - details (object), information about the tab group to create
@@ -49,53 +46,42 @@ class CurrentlyOpenedTabsModule extends Module {
     try {
       const { isObject, isString, isArray } = validator;
 
-      if (isObject(details)) {
-        const {
-          groupId,
-          windowAndTabs,
-          tabGroupName,
-          tabGroupDescription,
-        } = details;
+      if (!isObject(details)) throw ValidatorError("cotm-module-103");
 
-        if (
-          !isArray(windowAndTabs) ||
-          (isArray(windowAndTabs) && windowAndTabs.length < 1)
-        ) {
-          throw ValidatorError("cotm-module-104");
-        }
+      const {
+        groupId,
+        windowCollection,
+        groupName,
+        groupDescription,
+      } = details;
 
-        if (!isString(groupId)) {
-          throw ValidatorError("cotm-module-105");
-        }
-        if (!isString(tabGroupName)) {
-          throw ValidatorError("cotm-module-106");
-        }
-        if (!isString(tabGroupDescription)) {
-          throw ValidatorError("cotm-module-107");
-        }
+      if (
+        !isArray(windowCollection) ||
+        (isArray(windowCollection) && windowCollection.length < 1)
+      )
+        throw ValidatorError("cotm-module-104");
 
-        sendToBackground(
-          "save-tab-group",
-          details,
-          () => {
-            try {
-              const { onRaiseToView } = this.props;
+      if (!isString(groupId)) throw ValidatorError("cotm-module-105");
+      if (!isString(groupName)) throw ValidatorError("cotm-module-106");
+      if (!isString(groupDescription)) throw ValidatorError("cotm-module-107");
 
-              if (onRaiseToView) {
-                onRaiseToView("refresh");
-              }
-            } catch (err) {
-              ErrorHandler(err, this.sendToErrorOverlay);
-            }
-          },
-          (failResponse) => {
-            const err = ValidatorError(failResponse.data);
+      sendToBackground(
+        "save-tab-group",
+        details,
+        () => {
+          try {
+            const { onRaiseToView } = this.props;
+
+            if (onRaiseToView) onRaiseToView("refresh");
+          } catch (err) {
             ErrorHandler(err, this.sendToErrorOverlay);
           }
-        );
-      } else {
-        throw ValidatorError("cotm-module-103");
-      }
+        },
+        (failResponse) => {
+          const err = ValidatorError(failResponse.data);
+          ErrorHandler(err, this.sendToErrorOverlay);
+        }
+      );
     } catch (err) {
       ErrorHandler(err, this.sendToErrorOverlay);
     }
@@ -116,9 +102,7 @@ class CurrentlyOpenedTabsModule extends Module {
             throw ValidatorError("cotm-module-108");
           }
 
-          this.setState({
-            openedWindowsAndTabs: successResponse.data,
-          });
+          this.setOpenedWindowsToState(successResponse.data);
         } catch (err) {
           ErrorHandler(err, this.sendToErrorOverlay);
         }
@@ -154,42 +138,49 @@ class CurrentlyOpenedTabsModule extends Module {
     }
   };
 
-  listenForWindowAndTabChanges = () => {
+  listenForWindowChanges = (event) => {
     try {
-      const chrome =
-        typeof window.chrome === "undefined" ? null : window.chrome;
-
-      if (chrome) {
-        chrome.runtime.onMessage.addListener((message) => {
-          try {
-            if (
-              message.messageId &&
-              message.messageId === "window-tabs-updated"
-            ) {
-              this.getOpenedWindowsAndTabs();
-            }
-          } catch (err) {
-            ErrorHandler(err, this.sendToErrorOverlay);
-          }
-        });
-      } else {
-        // If the webextension API does not exist, simply ignore listening for anything and just request dummy data
+      if (event.messageId && event.messageId === "window-tabs-updated") {
         this.getOpenedWindowsAndTabs();
-
-        //throw ValidatorError("cotm-module-109")
       }
     } catch (err) {
       ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
-  childComponentDidMount = () => {
-    this.getUISettingsFromStorage(this.staticPreset.moduleId);
-    this.getOpenedWindowsAndTabs();
-    this.listenForWindowAndTabChanges();
+  addWindowsTabsListener = () => {
+    try {
+      const chrome =
+        typeof window.chrome === "undefined" ? null : window.chrome;
+
+      if (chrome) {
+        chrome.runtime.onMessage.addListener(this.listenForWindowChanges);
+      } else {
+        // If the webextension API does not exist, simply ignore listening for anything and just request dummy data
+        this.getOpenedWindowsAndTabs();
+      }
+    } catch (err) {
+      ErrorHandler(err, this.sendToErrorOverlay);
+    }
   };
 
-  componentWillUnmount = () => {};
+  removeWindowsTabsListener = () => {
+    const chrome = typeof window.chrome === "undefined" ? null : window.chrome;
+
+    if (chrome) {
+      chrome.runtime.onMessage.removeListener(this.listenForWindowChanges);
+    }
+  };
+
+  childComponentDidMount = () => {
+    this.getUISettingsFromStorage(this.props.id);
+    this.getOpenedWindowsAndTabs();
+    this.addWindowsTabsListener();
+  };
+
+  componentWillUnmount = () => {
+    this.removeWindowsTabsListener();
+  };
 
   renderBody = () => {
     console.log("CURRENTLY OPENED SETTINGS", this.state.uiSettings);
@@ -236,7 +227,7 @@ class CurrentlyOpenedTabsModule extends Module {
             this.sendToModal({
               id: "etgmcreateoreditgroupmodal",
               params: {
-                windowAndTabs: this.state.openedWindowsAndTabs,
+                windowCollection: this.state.openedWindowsAndTabs,
                 type: "currently-opened",
               },
               action: this.createTabGroup.bind(this),

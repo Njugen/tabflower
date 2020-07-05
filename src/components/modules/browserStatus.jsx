@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Module from "../utils/moduleon/module";
 
 class BrowserStatusModule extends Module {
-  staticPreset = {
+  settings = {
     moduleTitle: "Browser Status",
   };
 

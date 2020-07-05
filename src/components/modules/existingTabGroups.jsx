@@ -10,57 +10,58 @@ require("../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
 class ExistingTabGroupsModule extends Module {
   static contextType = AppContext;
 
-  staticPreset = {
-    moduleTitle: "Existing Tab Groups",
-    moduleId: "tabeon-module-container-id-" + this.props.id,
-  };
-
   verifyChildProps = () => {
-    const { isObject, isString } = validator;
+    const { id, title, refresh, onRaiseToView } = this.props;
+    const { isString, isNumber, isFunction, isUndefined } = validator;
 
-    if (isObject(this.staticPreset)) {
-      const { moduleTitle } = this.staticPreset;
-
-      if (!isString(moduleTitle)) {
-        throw ValidatorError("etgm-module-102");
-      }
-    } else {
-      throw ValidatorError("etgm-module-101");
-    }
+    if (!isString(id)) throw ValidatorError("etgm-module-101");
+    if (!isString(title)) throw ValidatorError("etgm-module-102");
+    if (!isNumber(refresh) && !isUndefined(refresh))
+      throw ValidatorError("etgm-module-111");
+    if (!isFunction(onRaiseToView) && !isUndefined(onRaiseToView))
+      throw ValidatorError("etgm-module-112");
   };
 
-  launchTabGroup = (tabGroupInfo) => {
+  setLoadedTabGroupsToState = (groups, callback) => {
+    const { isFunction } = validator;
+
+    this.setState(
+      {
+        loadedTabGroups: groups,
+      },
+      () => isFunction(callback) && callback()
+    );
+  };
+
+  launchTabGroup = (tabGroup) => {
     try {
-      const { isObject } = validator;
+      const { isObject, isFunction } = validator;
 
-      if (isObject(tabGroupInfo)) {
-        sendToBackground("launch-tab-group", tabGroupInfo, (response) => {
-          const { onRaiseToView } = this.props;
+      if (!isObject(tabGroup)) throw ValidatorError("etgm-module-103");
 
-          if (onRaiseToView) {
-            onRaiseToView("refresh");
-          }
-        });
-      } else {
-        throw ValidatorError("etgm-module-103");
-      }
+      sendToBackground("launch-tab-group", tabGroup, (response) => {
+        const { onRaiseToView } = this.props;
+
+        if (isFunction(onRaiseToView)) {
+          onRaiseToView("refresh");
+        }
+      });
     } catch (err) {
       ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
-  removeTabGroups = (data) => {
+  removeTabGroups = (tabGroup) => {
     try {
       const { isString } = validator;
 
       let groupId = "";
 
-      if (data && data.groupId) {
-        if (isString(data.groupId)) {
-          groupId = data.groupId;
-        } else {
+      if (tabGroup && tabGroup.groupId) {
+        if (!isString(tabGroup.groupId))
           throw ValidatorError("etgm-module-104");
-        }
+
+        groupId = tabGroup.groupId;
       } else {
         groupId = "all";
       }
@@ -75,51 +76,38 @@ class ExistingTabGroupsModule extends Module {
 
   createOrEditTabGroup = (details) => {
     try {
-      const { isObject, isString, isArray } = validator;
+      const { isObject, isString, isArray, isFunction } = validator;
+      const {
+        groupId,
+        windowCollection,
+        groupName,
+        groupDescription,
+      } = details;
 
-      if (isObject(details)) {
-        const {
-          groupId,
-          windowAndTabs,
-          tabGroupName,
-          tabGroupDescription,
-        } = details;
+      if (!isObject(details)) throw ValidatorError("etgm-module-105");
+      if (
+        !isArray(windowCollection) ||
+        (isArray(windowCollection) && windowCollection.length < 1)
+      )
+        throw ValidatorError("etgm-module-106");
 
-        if (
-          !isArray(windowAndTabs) ||
-          (isArray(windowAndTabs) && windowAndTabs.length < 1)
-        ) {
-          throw ValidatorError("etgm-module-106");
+      if (!isString(groupId)) throw ValidatorError("etgm-module-107");
+      if (!isString(groupName)) throw ValidatorError("etgm-module-108");
+      if (!isString(groupDescription)) throw ValidatorError("etgm-module-109");
+
+      sendToBackground(
+        "save-tab-group",
+        details,
+        (successResponse) => {
+          const { onRaiseToView } = this.props;
+
+          if (isFunction(onRaiseToView)) onRaiseToView("refresh");
+        },
+        (failResponse) => {
+          const err = ValidatorError(failResponse.data);
+          ErrorHandler(err, this.sendToErrorOverlay);
         }
-
-        if (!isString(groupId)) {
-          throw ValidatorError("etgm-module-107");
-        }
-        if (!isString(tabGroupName)) {
-          throw ValidatorError("etgm-module-108");
-        }
-        if (!isString(tabGroupDescription)) {
-          throw ValidatorError("etgm-module-109");
-        }
-
-        sendToBackground(
-          "save-tab-group",
-          details,
-          () => {
-            const { onRaiseToView } = this.props;
-
-            if (onRaiseToView) {
-              onRaiseToView("refresh");
-            }
-          },
-          (failResponse) => {
-            const err = ValidatorError(failResponse.data);
-            ErrorHandler(err, this.sendToErrorOverlay);
-          }
-        );
-      } else {
-        throw ValidatorError("etgm-module-105");
-      }
+      );
     } catch (err) {
       ErrorHandler(err, this.sendToErrorOverlay);
     }
@@ -142,12 +130,7 @@ class ExistingTabGroupsModule extends Module {
               throw ValidatorError("etgm-module-110");
             }
 
-            this.setState(
-              {
-                loadedTabGroups: tabGroups,
-              },
-              () => {}
-            );
+            this.setLoadedTabGroupsToState(tabGroups);
           } catch (err) {
             ErrorHandler(err, this.sendToErrorOverlay);
           }
@@ -172,7 +155,7 @@ class ExistingTabGroupsModule extends Module {
           <div className="list-item-block col-12 my-2 p-3" key={"tg-" + i}>
             <div className="list-item-block-header mb-3">
               <h6 className="list-item-block-headline float-left pr-2">
-                {group.tabGroupName}
+                {group.groupName}
               </h6>
               <div className="list-item-block-options float-right">
                 <button
@@ -181,12 +164,7 @@ class ExistingTabGroupsModule extends Module {
                     this.sendToModal({
                       id: "etgmcreateoreditgroupmodal",
                       params: {
-                        windowAndTabs: group.windowAndTabs,
-                        groupName: group.tabGroupName,
-                        groupCloseAll: group.tabGroupCloseAll,
-                        groupCloseInactiveTabs: group.tabGroupCloseInactiveTabs,
-                        groupDescription: group.tabGroupDescription,
-                        groupId: group.groupId,
+                        ...group,
                         type: "existing-group",
                       },
                       action: this.createOrEditTabGroup.bind(this),
@@ -195,42 +173,43 @@ class ExistingTabGroupsModule extends Module {
                 ></button>
                 <button
                   className="fas fa-times options-button"
-                  onClick={() =>
+                  onClick={() => {
+                    const { groupId, groupName } = group;
                     this.sendToModal({
                       id: "etgmremovegroupsmodal",
                       params: {
-                        groupId: group.groupId,
-                        groupName: group.tabGroupName,
+                        groupId,
+                        groupName,
                       },
                       action: this.removeTabGroups.bind(this),
-                    })
-                  }
+                    });
+                  }}
                 ></button>
               </div>
               <div className="clearfix"></div>
             </div>
             <div className="list-item-block-body small pb-3">
-              <p>{group.tabGroupDescription}</p>
+              <p>{group.groupDescription}</p>
             </div>
             <div className="list-item-block-footer">
               <button
                 className="btn btn-tabeon-reverse d-inline-block"
-                onClick={() =>
+                onClick={() => {
                   this.sendToModal({
                     id: "etgmlaunchgroupmodal",
                     params: {
-                      windowAndTabs: group.windowAndTabs,
-                      groupName: group.tabGroupName,
-                      groupDescription: group.tabGroupDescription,
+                      windowCollection: group.windowCollection,
+                      groupName: group.groupName,
+                      groupDescription: group.groupDescription,
                       groupId: group.groupId,
-                      groupCloseAll: group.tabGroupCloseAll || false,
+                      groupCloseAll: group.groupCloseAll || false,
                       groupCloseInactiveTabs:
-                        group.tabGroupCloseInactiveTabs || false,
-                      groupDontAskAgain: group.tabGroupDontAskAgain || false,
+                        group.groupCloseInactiveTabs || false,
+                      groupDontAskAgain: group.groupDontAskAgain || false,
                     },
                     action: this.launchTabGroup.bind(this),
-                  })
-                }
+                  });
+                }}
               >
                 <span className="fas fa-play mr-2"></span> Launch
               </button>
@@ -249,7 +228,7 @@ class ExistingTabGroupsModule extends Module {
   };
 
   childComponentDidMount = () => {
-    this.getUISettingsFromStorage(this.staticPreset.moduleId);
+    this.getUISettingsFromStorage(this.props.id);
     this.getAllTabGroups();
   };
 
@@ -296,7 +275,7 @@ class ExistingTabGroupsModule extends Module {
           onClick={() =>
             this.sendToModal({
               id: "etgmcreateoreditgroupmodal",
-              params: { windowAndTabs: [], type: "new-group" },
+              params: { windowCollection: [], type: "new-group" },
               action: this.createOrEditTabGroup.bind(this),
             })
           }

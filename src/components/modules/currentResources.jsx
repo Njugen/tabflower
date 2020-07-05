@@ -2,10 +2,6 @@ import React, { Fragment } from "react";
 import Module from "../utils/moduleon/module";
 
 class CurrentResourcesModule extends Module {
-  staticPreset = {
-    moduleTitle: "Currently Opened Resources",
-  };
-
   renderBody = () => {
     return (
       <Fragment>

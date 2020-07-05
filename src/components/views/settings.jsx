@@ -32,8 +32,9 @@ class SettingsView extends View {
       <div className="row d-flex justify-content-center">
         <div className="col-6">
           <ExtensionSettingsModule
+            title="Settings"
             onRaiseToView={(data) => this.handleRaisedData(data)}
-            id="active-tabs-module"
+            id="settings-module"
             onRaiseToModal={(data) => this.raiseToModal(data)}
             onRaiseToErrorOverlay={(data) => this.sendToErrorOverlay(data)}
           ></ExtensionSettingsModule>

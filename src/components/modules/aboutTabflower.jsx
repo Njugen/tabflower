@@ -14,6 +14,7 @@ class AboutTabflowerModule extends Module {
    */
   staticPreset = {
     moduleTitle: "About Tabflower",
+    moduleId: "tabeon-module-container-id-" + this.props.id,
   };
 
   verifyChildProps = () => {

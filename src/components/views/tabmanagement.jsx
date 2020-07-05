@@ -13,18 +13,13 @@ class TabManagementView extends View {
     try {
       const { isString } = validator;
 
-      if (isString(data)) {
-        if (data === "refresh") {
-          let refreshFactor = this.state.refreshFactor;
-          refreshFactor++;
-
-          this.setState({ refreshFactor }, () => {});
-        } else {
-          throw ExceptionsHandler.ValidatorError("tabManagement-view-102");
-        }
-      } else {
+      if (!isString(data))
         throw ExceptionsHandler.ValidatorError("tabManagement-view-101");
-      }
+
+      if (data !== "refresh")
+        throw ExceptionsHandler.ValidatorError("tabManagement-view-102");
+
+      if (data === "refresh") this.refreshView();
     } catch (err) {
       ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
@@ -36,10 +31,12 @@ class TabManagementView extends View {
         <div className="row d-flex justify-content-center">
           <div className="col-6">
             <CurrentlyOpenedTabsModule
+              title="Currently Opened Tabs"
               onRaiseToView={(data) => this.handleRaiseToView(data)}
               id="active-tabs-module"
             ></CurrentlyOpenedTabsModule>
             <ExistingTabGroupsModule
+              title="Existing Tab Groups"
               id="existing-tab-groups-module"
               refresh={this.state.refreshFactor}
               onRaiseToView={(data) => this.handleRaiseToView(data)}
