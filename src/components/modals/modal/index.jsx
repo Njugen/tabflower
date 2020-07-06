@@ -61,31 +61,6 @@ class Modal extends Component {
 
   sendToErrorOverlay = this.context.sendToErrorOverlay;
 
-  saveFieldErrorsToState = (errors) => {
-    /*
-      saveFieldErrorsToState()
-
-      Parameters:
-      - errors (object, containing the field errors)
-
-      Save input field errors to component state. (for use in
-      e.g. alert boxes or notifying the user based on the state variables alone) 
-      
-    */
-    const { isUndefined, isObject } = validator;
-
-    try {
-      if (isUndefined(errors) && isObject(errors))
-        throw ExceptionsHandler.ValidatorError("mp-verifyProps-110");
-
-      this.setState({
-        fieldErrors: errors || {},
-      });
-    } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
-    }
-  };
-
   fadeIn = () => {
     /*
             Fading in the modal by accessing its tag by react ref (https://reactjs.org/docs/refs-and-the-dom.html).
@@ -355,14 +330,18 @@ class Modal extends Component {
         throw ExceptionsHandler.ValidatorError("mp-saveToState-107");
       if (isUndefined(value))
         throw ExceptionsHandler.ValidatorError("mp-saveToState-104");
-      if (!isString(key))
-        throw ExceptionsHandler.ValidatorError("mp-saveToState-105");
+      /* if (!isString(key))
+        throw ExceptionsHandler.ValidatorError("mp-saveToState-105"); */
 
       let newInput = this.state;
 
       if (!isObject(newInput[area])) newInput[area] = {};
 
-      newInput[area][key] = value;
+      if (isString(key)) {
+        newInput[area][key] = value;
+      } else if (key === null) {
+        newInput[area] = value;
+      }
 
       this.setState(newInput, () => {
         console.log("MOHAHAHA");

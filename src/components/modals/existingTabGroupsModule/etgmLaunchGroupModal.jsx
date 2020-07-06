@@ -227,18 +227,18 @@ class ETGMLaunchGroupsModal extends Modal {
     }
   };
 
-  renderBodyContents(props) {
+  renderBodyContents = (props) => {
     return (
       <Fragment>
         {this.renderManyTabsDetected()}
         {this.renderLaunchOptions()}
       </Fragment>
     );
-  }
+  };
 
-  renderHeaderContents(props) {
+  renderHeaderContents = (props) => {
     return "Confirm launch of selected tabs";
-  }
+  };
 }
 
 export default ETGMLaunchGroupsModal;

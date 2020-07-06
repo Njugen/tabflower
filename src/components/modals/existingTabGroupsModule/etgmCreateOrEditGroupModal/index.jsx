@@ -5,12 +5,15 @@ import TBCheckBox from "../../../utils/form/tbCheckbox";
 import TBTextInput from "../../../utils/form/tbTextInput";
 import TBTextArea from "../../../utils/form/tbTextArea";
 import { PropTypes } from "prop-types";
-import * as ExceptionsHandler from "../../../utils/exceptionsAndHandler";
 import * as validator from "../../../utils/inputValidators";
 import HeaderContents from "./HeaderContents";
 
 import AppContext from "./../../../contexts/AppContextProvider";
 import BodyContents from "./BodyContents";
+import {
+  ValidatorError,
+  ErrorHandler,
+} from "./../../../utils/exceptionsAndHandler";
 
 class ETGMCreateNewGroupModal extends Modal {
   static contextType = AppContext;
@@ -51,102 +54,94 @@ class ETGMCreateNewGroupModal extends Modal {
                     - "existing-group"
                 */
         if (!isString(type)) {
-          throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-114");
+          throw ValidatorError("ETGMCreateNewGroupModal-114");
         } else {
           if (
             type !== "currently-opened" &&
             type !== "new-group" &&
             type !== "existing-group"
           ) {
-            throw ExceptionsHandler.ValidatorError(
-              "ETGMCreateNewGroupModal-115"
-            );
+            throw ValidatorError("ETGMCreateNewGroupModal-115");
           }
         }
 
         /*
-                    groupId (string, optional)
+            groupId (string, optional)
 
-                    A group id is optional and if given, should always be a string. If there is no
-                    group id, refrain from using the groupId parameter when calling this modal
-                */
-
+            A group id is optional and if given, should always be a string. If there is no
+            group id, refrain from using the groupId parameter when calling this modal
+        */
         if (!isString(groupId) && !isUndefined(groupId)) {
-          throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-120");
+          throw ValidatorError("ETGMCreateNewGroupModal-120");
         }
 
         /*
-                    groupName (string, optional)
+            groupName (string, optional)
 
-                    A group name is optional and if given, should always be a string. If there is no
-                    group name, refrain from using the groupName parameter when calling this modal
-                */
-
+            A group name is optional and if given, should always be a string. If there is no
+            group name, refrain from using the groupName parameter when calling this modal
+        */
         if (!isString(groupName) && !isUndefined(groupName)) {
-          throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-116");
+          throw ValidatorError("ETGMCreateNewGroupModal-116");
         }
 
         /*
-                    groupDescription (string, optional)
+            groupDescription (string, optional)
 
-                    A group description is optional and if given, should always be a string. If there is no
-                    group description, refrain from using the groupDescription parameter when calling this modal
-                */
+            A group description is optional and if given, should always be a string. If there is no
+            group description, refrain from using the groupDescription parameter when calling this modal
+        */
         if (!isString(groupDescription) && !isUndefined(groupDescription)) {
-          throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-117");
+          throw ValidatorError("ETGMCreateNewGroupModal-117");
         }
 
         /*
-                    groupCloseAll (boolean, optional)
+            groupCloseAll (boolean, optional)
 
-                    This parameter is optional and if given, should always be a boolean (either true or false). If there is no boolean value, 
-                    refrain from using the groupCloseAll parameter when calling this modal
-                */
+            This parameter is optional and if given, should always be a boolean (either true or false). If there is no boolean value, 
+            refrain from using the groupCloseAll parameter when calling this modal
+        */
         if (!isBoolean(groupCloseAll) && !isUndefined(groupCloseAll)) {
-          throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-118");
+          throw ValidatorError("ETGMCreateNewGroupModal-118");
         }
 
         /*
-                    groupCloseInactiveTabs (boolean, optional)
+            groupCloseInactiveTabs (boolean, optional)
 
-                    This parameter is optional and if given, should always be a boolean (either true or false)
-                */
-
+            This parameter is optional and if given, should always be a boolean (either true or false)
+        */
         if (
           !isBoolean(groupCloseInactiveTabs) &&
           !isUndefined(groupCloseInactiveTabs)
         ) {
-          throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-122");
+          throw ValidatorError("ETGMCreateNewGroupModal-122");
         }
 
         if (!isBoolean(groupDontAskAgain) && !isUndefined(groupDontAskAgain)) {
-          throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-122");
+          throw ValidatorError("ETGMCreateNewGroupModal-122");
         }
 
         /* 
-                    windowCollection (object, mandatory)
+            windowCollection (object, mandatory)
 
-                    This parameter contains windows and tabs stored into a single array. If there are no windows/tabs, this array
-                    is empty e.g. windowCollection = []
-                */
-
+            This parameter contains windows and tabs stored into a single array. If there are no windows/tabs, this array
+            is empty e.g. windowCollection = []
+        */
         if (!isArray(windowCollection) && !isUndefined(windowCollection)) {
-          throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-119");
+          throw ValidatorError("ETGMCreateNewGroupModal-119");
         }
       } else {
-        throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-124");
+        throw ValidatorError("ETGMCreateNewGroupModal-124");
       }
     } else {
-      throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-123");
+      throw ValidatorError("ETGMCreateNewGroupModal-123");
     }
   };
 
   /*
         saveModalHandler()
 
-        Triggers when the user clicks the #modal-save button located in the modal's user interface. Once clicked
-        the information located in the modal's state will be passed on to the function bound by the caller function, before
-        being deleted.
+        Triggers when the user clicks the #modal-save button located in the modal's user interface.
 
         Parameters:
         - callback (function, mandatory. Triggers once the modal state has been cleared after being dismissed by the user)
@@ -174,30 +169,20 @@ class ETGMCreateNewGroupModal extends Modal {
               this.clearModalData(callback(this.state.tabGroupDetails));
             });
           } else {
-            error.issue = ExceptionsHandler.ValidatorError(
-              "ETGMCreateNewGroupModal-101"
-            );
+            error.issue = ValidatorError("ETGMCreateNewGroupModal-101");
           }
         } else {
-          error.issue = ExceptionsHandler.ValidatorError(
-            "ETGMCreateNewGroupModal-124"
-          );
+          error.issue = ValidatorError("ETGMCreateNewGroupModal-124");
         }
       } else {
-        error.issue = ExceptionsHandler.ValidatorError(
-          "ETGMCreateNewGroupModal-123"
-        );
+        error.issue = ValidatorError("ETGMCreateNewGroupModal-123");
       }
 
       if (error.issue) {
         throw error;
       }
     } catch (err) {
-      ExceptionsHandler.ErrorHandler(
-        err.issue,
-        this.sendToErrorOverlay,
-        err.additionalMessage
-      );
+      ErrorHandler(err.issue, this.sendToErrorOverlay, err.additionalMessage);
     }
   };
 
@@ -220,7 +205,7 @@ class ETGMCreateNewGroupModal extends Modal {
         isArray,
         isFunction,
       } = validator;
-
+      console.log("JACKASS", this.state);
       let fieldErrors = {};
       let error = {
         issue: null,
@@ -265,30 +250,22 @@ class ETGMCreateNewGroupModal extends Modal {
               }
 
               if (Object.keys(fieldErrors).length > 0) {
-                this.saveFieldErrorsToState(fieldErrors);
+                this.saveToState(null, fieldErrors, "fieldErrors");
                 throw fieldErrors;
               } else {
                 success();
               }
             } else {
-              error.issue = ExceptionsHandler.ValidatorError(
-                "ETGMCreateNewGroupModal-125"
-              );
+              error.issue = ValidatorError("ETGMCreateNewGroupModal-125");
             }
           } else {
-            error.issue = ExceptionsHandler.ValidatorError(
-              "ETGMCreateNewGroupModal-124"
-            );
+            error.issue = ValidatorError("ETGMCreateNewGroupModal-124");
           }
         } else {
-          error.issue = ExceptionsHandler.ValidatorError(
-            "ETGMCreateNewGroupModal-123"
-          );
+          error.issue = ValidatorError("ETGMCreateNewGroupModal-123");
         }
       } else {
-        error.issue = ExceptionsHandler.ValidatorError(
-          "ETGMCreateNewGroupModal-126"
-        );
+        error.issue = ValidatorError("ETGMCreateNewGroupModal-126");
       }
 
       if (isString(error.issue)) {
@@ -296,17 +273,9 @@ class ETGMCreateNewGroupModal extends Modal {
       }
     } catch (err) {
       if (err.issue) {
-        ExceptionsHandler.ErrorHandler(
-          err.issue,
-          this.sendToErrorOverlay,
-          err.additionalMessage
-        );
+        ErrorHandler(err.issue, this.sendToErrorOverlay, err.additionalMessage);
       } else {
-        ExceptionsHandler.ErrorHandler(
-          err,
-          this.sendToErrorOverlay,
-          err.additionalMessage
-        );
+        ErrorHandler(err, this.sendToErrorOverlay, err.additionalMessage);
       }
     }
   };
@@ -330,7 +299,7 @@ class ETGMCreateNewGroupModal extends Modal {
         if (isString(id)) {
           groupId = id;
         } else {
-          throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-102");
+          throw ValidatorError("ETGMCreateNewGroupModal-102");
         }
       } else {
         groupId = Math.random().toString(36).slice(2);
@@ -338,7 +307,7 @@ class ETGMCreateNewGroupModal extends Modal {
 
       return groupId;
     } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
+      ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
@@ -357,7 +326,7 @@ class ETGMCreateNewGroupModal extends Modal {
             "tabGroupDetails"
           );
         } else {
-          throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-128");
+          throw ValidatorError("ETGMCreateNewGroupModal-128");
         }
 
         this.saveToState(
@@ -366,10 +335,10 @@ class ETGMCreateNewGroupModal extends Modal {
           "tabGroupDetails"
         );
       } else {
-        throw ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-127");
+        throw ValidatorError("ETGMCreateNewGroupModal-127");
       }
     } catch (err) {
-      ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
+      ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
