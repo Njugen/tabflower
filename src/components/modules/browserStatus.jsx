@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
-import Module from "../utils/moduleon/module";
+import Module from "./module/index";
 
 class BrowserStatusModule extends Module {
   settings = {

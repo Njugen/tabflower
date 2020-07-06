@@ -1,10 +1,10 @@
 import React, { Fragment } from "react";
-import Module from "../utils/moduleon/module";
 //import WindowsList from './../utils/windowsList';
 //import { sendToBackground } from "../../services/webextension/APIBridge";
 import * as validator from "./../utils/inputValidators";
 //import { ValidatorError, ErrorHandler } from '../utils/exceptionsAndHandler';
 import { ValidatorError } from "../utils/exceptionsAndHandler";
+import Module from "./module/index";
 require("../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
 
 class AboutTabflowerModule extends Module {

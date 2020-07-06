@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import Module from "../utils/moduleon/module";
+import Module from "./module/index";
 import WindowsList from "./../utils/windowsList";
 import { sendToBackground } from "../../services/webextension/APIBridge";
 import * as validator from "./../utils/inputValidators";

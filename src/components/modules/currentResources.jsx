@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import Module from "../utils/moduleon/module";
+import Module from "./module/index";
 
 class CurrentResourcesModule extends Module {
   renderBody = () => {

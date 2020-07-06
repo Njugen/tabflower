@@ -1,11 +1,14 @@
 import React, { Component } from "react";
-import * as ExceptionsHandler from "../exceptionsAndHandler";
-import * as validator from "./../../utils/inputValidators";
+import * as ExceptionsHandler from "../../utils/exceptionsAndHandler";
+import * as validator from "../../utils/inputValidators";
 import PropTypes from "prop-types";
-import AppContext from "./../../contexts/AppContextProvider";
-import { ValidatorError, ErrorHandler } from "./../exceptionsAndHandler";
+import AppContext from "../../contexts/AppContextProvider";
+import { ValidatorError, ErrorHandler } from "../../utils/exceptionsAndHandler";
 
-import { sendToBackground } from "./../../../services/webextension/APIBridge";
+import { sendToBackground } from "../../../services/webextension/APIBridge";
+import HeaderWrapper from "./HeaderWrapper";
+import BodyWrapper from "./BodyWrapper";
+import FooterWrapper from "./FooterWrapper";
 
 require("../../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
 
@@ -233,22 +236,6 @@ class Module extends Component {
     );
   };
 
-  handleModuleMinimize = () => {
-    try {
-      this.toggleModuleExpansion(true);
-    } catch (err) {
-      ErrorHandler(err, this.sendToErrorOverlay);
-    }
-  };
-
-  handleModuleExpand = () => {
-    try {
-      this.toggleModuleExpansion(false);
-    } catch (err) {
-      ErrorHandler(err, this.sendToErrorOverlay);
-    }
-  };
-
   componentDidMount = () => {
     const { isFunction } = validator;
 
@@ -345,7 +332,7 @@ class Module extends Component {
   render = () => {
     const containerProperties = this.determineContainerProperties();
     const { title, id } = this.props;
-
+    console.log("RERENDER", containerProperties);
     return (
       <div
         id={id}
@@ -353,63 +340,21 @@ class Module extends Component {
         className={"tabeon-module-container col-12"}
       >
         <div id={"tabeon-module-id-" + id} className={"tabeon-module"}>
-          <div className="row tabeon-module-header" draggable="true">
-            <div className="col-12">
-              <div
-                className={
-                  containerProperties.minimized === true
-                    ? "row tabeon-module-header-column-wrapper tabeon-no-border"
-                    : "row tabeon-module-header-column-wrapper"
-                }
-              >
-                <div className="col-8">
-                  <div className="float-left">
-                    <h5>{title}</h5>
-                  </div>
-                </div>
-                <div className="col-4 tabeon-module-header-control">
-                  <button
-                    onClick={(e) =>
-                      containerProperties.minimized === true
-                        ? this.handleModuleExpand(e)
-                        : this.handleModuleMinimize(e)
-                    }
-                    className="btn shadow-none tabeon-module-header-control-button"
-                  >
-                    <span
-                      className={
-                        containerProperties.minimized === true
-                          ? "fas fa-chevron-down"
-                          : "fas fa-chevron-up"
-                      }
-                    ></span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className={
-              containerProperties.minimized === true
-                ? "row tabeon-module-body tabeon-hidden"
-                : "row tabeon-module-body tabeon-inline-block"
-            }
-            draggable="false"
-          >
-            <div className="col-12">{this.renderBody()}</div>
-          </div>
+          <HeaderWrapper
+            title={title}
+            onToggleModuleExpansion={this.toggleModuleExpansion}
+            containerProperties={containerProperties}
+          />
+          <BodyWrapper
+            Contents={this.renderBody}
+            containerProperties={containerProperties}
+          />
           {typeof this.renderFooter === "function" &&
             this.renderFooter() !== null && (
-              <div
-                className={
-                  containerProperties.minimized === true
-                    ? "row tabeon-module-footer tabeon-hidden"
-                    : "row tabeon-module-footer  tabeon-inline-block"
-                }
-                draggable="false"
-              >
-                <div className="col-12">{this.renderFooter()}</div>
-              </div>
+              <FooterWrapper
+                Contents={this.renderFooter}
+                containerProperties={containerProperties}
+              />
             )}
         </div>
       </div>
@@ -418,9 +363,6 @@ class Module extends Component {
 }
 
 Module.propTypes = {
-  onDragOver: PropTypes.func,
-  onDrop: PropTypes.func,
-  onDragStart: PropTypes.func,
   //  onRaiseToModal: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
 };
