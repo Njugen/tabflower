@@ -1,15 +1,25 @@
 import React, { Component } from "react";
-import * as ExceptionsHandler from "../../utils/exceptionsAndHandler";
 import * as validator from "../../utils/inputValidators";
-import PropTypes from "prop-types";
-import AppContext from "../../contexts/AppContextProvider";
-import { ValidatorError, ErrorHandler } from "../../utils/exceptionsAndHandler";
-
-import { sendToBackground } from "../../../services/webextension/APIBridge";
+import { ValidatorError } from "../../utils/exceptionsAndHandler";
 
 require("../../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
 
 export default class HeaderWrapper extends Component {
+  verifyProps = () => {
+    const { containerProperties, title, onToggleModuleExpansion } = this.props;
+    const { isObject, isFunction, isString } = validator;
+
+    if (!isObject(containerProperties))
+      throw ValidatorError("module-header-101");
+    if (!isString(title)) throw ValidatorError("module-header-102");
+    if (!isFunction(onToggleModuleExpansion))
+      throw ValidatorError("module-header-103");
+  };
+
+  componentDidMount = () => {
+    this.verifyProps();
+  };
+
   render() {
     const { containerProperties, title, onToggleModuleExpansion } = this.props;
     const { minimized } = containerProperties;

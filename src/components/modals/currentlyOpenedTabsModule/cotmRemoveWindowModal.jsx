@@ -84,11 +84,11 @@ class COTMRemoveWindowModal extends Modal {
   };
 
   /*
-        renderModalBody()
+        renderBodyContents(props)
 
         Render the body and the contents of this particular modal
     */
-  renderModalBody() {
+  renderBodyContents(props) {
     return (
       <Fragment>
         <p>
@@ -109,7 +109,7 @@ class COTMRemoveWindowModal extends Modal {
 
         Render the headline string of this modal
     */
-  renderModalHeader() {
+  renderHeaderContents(props) {
     return "Close Window";
   }
 }

@@ -7,7 +7,7 @@ import TabGroupItem from "./TabGroupItem";
 
 require("../../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
 
-export default class Body extends Component {
+export default class BodyContents extends Component {
   static contextType = AppContext;
 
   sendToModal = this.context.sendToModal;

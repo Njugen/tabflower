@@ -227,7 +227,7 @@ class ETGMLaunchGroupsModal extends Modal {
     }
   };
 
-  renderModalBody() {
+  renderBodyContents(props) {
     return (
       <Fragment>
         {this.renderManyTabsDetected()}
@@ -236,7 +236,7 @@ class ETGMLaunchGroupsModal extends Modal {
     );
   }
 
-  renderModalHeader() {
+  renderHeaderContents(props) {
     return "Confirm launch of selected tabs";
   }
 }

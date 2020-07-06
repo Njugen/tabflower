@@ -7,7 +7,7 @@ class BrowserStatusModule extends Module {
     moduleTitle: "Browser Status",
   };
 
-  renderBody = () => {
+  renderBodyContents = () => {
     return (
       <Fragment>
         <div className="browser-resource-status">
@@ -27,7 +27,7 @@ class BrowserStatusModule extends Module {
     );
   };
 
-  renderFooter = () => {
+  renderFooterContents = () => {
     return (
       <Fragment>
         <Link to="/manage">

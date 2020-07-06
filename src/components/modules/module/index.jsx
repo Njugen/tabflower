@@ -251,9 +251,9 @@ class Module extends Component {
     this.verifyState();
   };
 
-  renderHeader = () => {};
+  renderHeaderContents = () => {};
 
-  renderBody = () => {};
+  renderBodyContents = () => {};
 
   verifyProps = () => {
     const { id, title, refresh, onRaiseToView } = this.props;
@@ -346,13 +346,13 @@ class Module extends Component {
             containerProperties={containerProperties}
           />
           <BodyWrapper
-            Contents={this.renderBody}
+            Contents={this.renderBodyContents}
             containerProperties={containerProperties}
           />
-          {typeof this.renderFooter === "function" &&
-            this.renderFooter() !== null && (
+          {typeof this.renderFooterContents === "function" &&
+            this.renderFooterContents() !== null && (
               <FooterWrapper
-                Contents={this.renderFooter}
+                Contents={this.renderFooterContents}
                 containerProperties={containerProperties}
               />
             )}

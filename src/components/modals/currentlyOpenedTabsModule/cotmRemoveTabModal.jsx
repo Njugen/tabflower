@@ -8,7 +8,7 @@ import { PropTypes } from "prop-types";
 class COTMRemoveTabModal extends Modal {
   /*
         verifyChildProps()
-
+ 
         verifyChildProps is run automatically at mount. If necessary, 
         verify data provided by props (this.props) using this function 
         (data which is used exclusively by this modal component, and not used in common 
@@ -92,14 +92,14 @@ class COTMRemoveTabModal extends Modal {
   };
 
   /*
-        renderModalBody()
+        renderBodyContents(props)
 
         Render the body and the contents of this particular modal
     */
-  renderModalBody() {
-    const { data } = this.props;
+  renderBodyContents(props) {
+    const { data } = props;
     const { isObject, isString, isUndefined } = validator;
-
+    console.log(props);
     if (!isUndefined(data)) {
       if (isObject(data)) {
         if (!isUndefined(data.params)) {
@@ -107,7 +107,7 @@ class COTMRemoveTabModal extends Modal {
             const { tabInfo } = data.params;
 
             if (isObject(tabInfo)) {
-              const { title } = this.props.data.params.tabInfo;
+              const { title } = tabInfo;
 
               if (isString(title)) {
                 return (
@@ -158,7 +158,7 @@ class COTMRemoveTabModal extends Modal {
         Render the headline string of this modal
     */
 
-  renderModalHeader() {
+  renderHeaderContents(props) {
     return "Close Tab";
   }
 }

@@ -11,7 +11,7 @@ class COTMRemoveUnresponsiveTabs extends Modal {
   // This modal has no child props
 
   /*
-        saveModalHandler()
+        saveModalHandler() 
 
         Triggers when the user clicks the #modal-save button located in the modal's user interface. Once clicked
         the information located in the modal's state will be passed on to the function bound by the caller function, before
@@ -35,20 +35,20 @@ class COTMRemoveUnresponsiveTabs extends Modal {
   };
 
   /*
-        renderModalBody()
+        renderBodyContents(props)
 
         Render the body and the contents of this particular modal
     */
-  renderModalBody() {
+  renderBodyContents(props) {
     return <p>Go through all opened tabs and remove them from the list</p>;
   }
 
   /*
-        renderModalHeader()
+        renderHeaderContents(props)
 
         Render the headline string of this modal
     */
-  renderModalHeader() {
+  renderHeaderContents(props) {
     return "Close unresponsive tabs";
   }
 }

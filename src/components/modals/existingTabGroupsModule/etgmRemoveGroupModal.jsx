@@ -77,15 +77,15 @@ class ETGMRemoveGroupsModal extends Modal {
     }
   };
 
-  renderModalBody() {
+  renderBodyContents(props) {
     const { isObject } = validator;
-    const { data } = this.props;
+    const { data } = props;
 
     if (isObject(data)) {
-      const { params } = this.props.data;
+      const { params } = data;
 
       if (isObject(params)) {
-        const { groupId, groupName } = this.props.data.params;
+        const { groupId, groupName } = params;
 
         return (
           <Fragment>
@@ -112,22 +112,22 @@ class ETGMRemoveGroupsModal extends Modal {
     }
   }
 
-  renderModalHeader() {
+  renderHeaderContents = (props) => {
     const { isObject } = validator;
-    const { data } = this.props;
+    const { data } = props;
 
     if (isObject(data)) {
-      const { params } = this.props.data;
+      const { params } = data;
 
       if (isObject(params)) {
-        const { groupId, groupName } = this.props.data.params || {};
+        const { groupId, groupName } = params || {};
         return !groupId
           ? "Confirm Removal of All Tabs"
           : 'Confirm removal of the "' + groupName + '" tab group';
       }
     } else {
     }
-  }
+  };
 }
 
 ETGMRemoveGroupsModal.propTypes = {

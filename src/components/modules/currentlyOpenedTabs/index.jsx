@@ -1,14 +1,16 @@
 import React, { Fragment } from "react";
-import Module from "./module/index";
-import WindowsList from "./../utils/windowsList";
-import { sendToBackground } from "../../services/webextension/APIBridge";
-import * as validator from "./../utils/inputValidators";
-import { ValidatorError, ErrorHandler } from "../utils/exceptionsAndHandler";
+import Module from "../module/index";
+import WindowsList from "../../utils/windowsList";
+import { sendToBackground } from "../../../services/webextension/APIBridge";
+import * as validator from "../../utils/inputValidators";
+import { ValidatorError, ErrorHandler } from "../../utils/exceptionsAndHandler";
 import PropTypes from "prop-types";
 
-import AppContext from "./../contexts/AppContextProvider";
+import AppContext from "../../contexts/AppContextProvider";
+import FooterContents from "./FooterContents";
+import BodyContents from "./BodyContents";
 
-require("../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
+require("../../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
 
 class CurrentlyOpenedTabsModule extends Module {
   static contextType = AppContext;
@@ -186,61 +188,27 @@ class CurrentlyOpenedTabsModule extends Module {
     this.removeWindowsTabsListener();
   };
 
-  renderBody = () => {
-    console.log("CURRENTLY OPENED SETTINGS", this.state.uiSettings);
+  renderBodyContents = () => {
+    const { openedWindowsAndTabs, uiSettings } = this.state;
+
     return (
-      <Fragment>
-        <p>
-          Tab Flower offers you an oversight over all opened tabs, making it
-          easier to remove tabs and windows you seldom use. You may also scan
-          for unresponsive websites and remove them.
-        </p>
-        <WindowsList
-          windows={this.state.openedWindowsAndTabs}
-          onRaiseToModal={(data) => this.sendToModal(data)}
-          onRaiseToErrorOverlay={(data) => this.sendToErrorOverlay(data)}
-          onSaveUISettings={this.saveUISettingsToStorage}
-          uiSettings={this.state.uiSettings}
-          canCloseItems={true}
-          initialShowTabs={true}
-          initialTabStyle="horizontal"
-          refreshList={() => this.getOpenedWindowsAndTabs()}
-        />
-      </Fragment>
+      <BodyContents
+        windows={openedWindowsAndTabs}
+        onSaveUISettings={this.saveUISettingsToStorage}
+        refreshList={() => this.getOpenedWindowsAndTabs()}
+        uiSettings={uiSettings}
+      />
     );
   };
 
-  renderFooter = () => {
+  renderFooterContents = () => {
+    const { openedWindowsAndTabs } = this.state;
     return (
-      <Fragment>
-        <button
-          className="btn btn-secondary d-inline-block"
-          onClick={() =>
-            this.sendToModal({
-              id: "cotmremoveunresponsivetabsmodal",
-              params: {},
-              action: this.closeUnresponsiveTabs.bind(this),
-            })
-          }
-        >
-          <span className="fas fa-times mr-2"></span> Close Unresponsive
-        </button>
-        <button
-          className="btn btn-tabeon d-inline-block"
-          onClick={() =>
-            this.sendToModal({
-              id: "etgmcreateoreditgroupmodal",
-              params: {
-                windowCollection: this.state.openedWindowsAndTabs,
-                type: "currently-opened",
-              },
-              action: this.createTabGroup.bind(this),
-            })
-          }
-        >
-          <span className="fas fa-plus mr-2"></span> Create Group
-        </button>
-      </Fragment>
+      <FooterContents
+        windowCollection={openedWindowsAndTabs}
+        onCloseUnresponsiveTabs={this.closeUnresponsiveTabs}
+        onCreateGroup={this.createTabGroup}
+      />
     );
   };
 }

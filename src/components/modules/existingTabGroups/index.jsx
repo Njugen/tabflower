@@ -6,8 +6,8 @@ import * as validator from "../../utils/inputValidators";
 import PropTypes from "prop-types";
 import AppContext from "../../contexts/AppContextProvider";
 
-import Footer from "./Footer";
-import Body from "./Body";
+import FooterContents from "./FooterContents";
+import BodyContents from "./BodyContents";
 require("../../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
 
 class ExistingTabGroupsModule extends Module {
@@ -165,10 +165,10 @@ class ExistingTabGroupsModule extends Module {
     }
   };
 
-  renderBody = () => {
+  renderBodyContents = () => {
     const { loadedTabGroups } = this.state;
     return (
-      <Body
+      <BodyContents
         tabgroups={loadedTabGroups}
         onEditGroup={this.createOrEditTabGroup}
         onRemoveGroup={this.removeTabGroups}
@@ -177,9 +177,9 @@ class ExistingTabGroupsModule extends Module {
     );
   };
 
-  renderFooter = () => {
+  renderFooterContents = () => {
     return (
-      <Footer
+      <FooterContents
         onCreateGroup={this.createOrEditTabGroup}
         onRemoveGroup={this.removeTabGroups}
       />

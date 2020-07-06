@@ -32,7 +32,7 @@ class ExtensionSettingsModule extends Module {
     }
   };
 
-  renderBody = () => {
+  renderBodyContents = () => {
     return (
       <Fragment>
         <div className="active-tabs-module">

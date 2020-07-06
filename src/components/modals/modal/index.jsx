@@ -1,8 +1,10 @@
 import React, { Component, createRef } from "react";
-import * as validator from "./../utils/inputValidators";
-import * as ExceptionsHandler from "../utils/exceptionsAndHandler";
-import { PropTypes } from "prop-types";
-import AppContext from "../contexts/AppContextProvider";
+import * as validator from "../../utils/inputValidators";
+import * as ExceptionsHandler from "../../utils/exceptionsAndHandler";
+import PropTypes from "prop-types";
+import AppContext from "../../contexts/AppContextProvider";
+import HeaderWrapper from "./HeaderWrapper";
+import BodyWrapper from "./BodyWrapper";
 
 /*
     The Modal component
@@ -31,6 +33,7 @@ import AppContext from "../contexts/AppContextProvider";
 */
 
 class Modal extends Component {
+  static contextType = AppContext;
   /*
         The modal state consists of information to be passed to
         other components. E.g. 
@@ -56,8 +59,6 @@ class Modal extends Component {
     fieldErrors: {},
   };
 
-  static contextType = AppContext;
-
   sendToErrorOverlay = this.context.sendToErrorOverlay;
 
   saveFieldErrorsToState = (errors) => {
@@ -74,13 +75,12 @@ class Modal extends Component {
     const { isUndefined, isObject } = validator;
 
     try {
-      if (isUndefined(errors) || isObject(errors)) {
-        this.setState({
-          fieldErrors: errors || {},
-        });
-      } else {
+      if (isUndefined(errors) && isObject(errors))
         throw ExceptionsHandler.ValidatorError("mp-verifyProps-110");
-      }
+
+      this.setState({
+        fieldErrors: errors || {},
+      });
     } catch (err) {
       ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
@@ -95,18 +95,19 @@ class Modal extends Component {
     try {
       const { isObject } = validator;
 
-      if (isObject(this.modalRef) && isObject(this.modalRef.current)) {
-        let modal = this.modalRef.current;
-
-        if (isObject(modal.style)) {
-          modal.style.opacity = 1;
-          modal.style.zIndex = 10000;
-        } else {
-          throw ExceptionsHandler.ValidatorError("mp-fadeIn-101");
-        }
-      } else {
+      if (
+        !isObject(this.modalRef) ||
+        (isObject(this.modalRef) && !isObject(this.modalRef.current))
+      )
         throw ExceptionsHandler.ValidatorError("mp-fadeIn-102");
-      }
+
+      let modal = this.modalRef.current;
+
+      if (!isObject(modal.style))
+        throw ExceptionsHandler.ValidatorError("mp-fadeIn-101");
+
+      modal.style.opacity = 1;
+      modal.style.zIndex = 10000;
     } catch (err) {
       ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
@@ -120,20 +121,22 @@ class Modal extends Component {
     const { isObject } = validator;
 
     try {
-      if (isObject(this.modalRef) && isObject(this.modalRef.current)) {
-        let modal = this.modalRef.current;
-
-        if (isObject(modal.style)) {
-          modal.style.opacity = 0;
-          setTimeout(() => {
-            modal.style.zIndex = 0;
-          }, 500);
-        } else {
-          throw ExceptionsHandler.ValidatorError("mp-fadeOut-101");
-        }
-      } else {
+      if (
+        !isObject(this.modalRef) ||
+        (isObject(this.modalRef) && !isObject(this.modalRef.current))
+      )
         throw ExceptionsHandler.ValidatorError("mp-fadeOut-102");
-      }
+
+      let modal = this.modalRef.current;
+
+      if (!isObject(modal.style))
+        throw ExceptionsHandler.ValidatorError("mp-fadeOut-101");
+
+      modal.style.opacity = 0;
+
+      setTimeout(() => {
+        modal.style.zIndex = 0;
+      }, 500);
     } catch (err) {
       ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
@@ -147,7 +150,6 @@ class Modal extends Component {
             - callback (function, optional: can be used to execute more functions after the modal has faded out and dismissed)
         */
     try {
-      // const { onDismiss: onDismissModal } = this.props;
       const { isUndefined, isFunction } = validator;
       const { setValueToState } = this.context;
 
@@ -156,13 +158,11 @@ class Modal extends Component {
 
         setValueToState("modal", {});
 
-        if (!isUndefined(callback)) {
-          if (isFunction(callback)) {
-            callback();
-          } else {
-            throw ExceptionsHandler.ValidatorError("mp-clearModalData-103");
-          }
+        if (!isUndefined(callback) && !isFunction(callback)) {
+          throw ExceptionsHandler.ValidatorError("mp-clearModalData-103");
         }
+
+        if (isFunction(callback)) callback();
       });
     } catch (err) {
       ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
@@ -239,25 +239,15 @@ class Modal extends Component {
     /*
       When a modal is rendered into the DOM, wait 100ms before fading in.
     */
-
     setTimeout(() => {
       this.fadeIn();
     }, 100);
-
-    /*
-        Verify props for each individual child modal, if that modal has any props and a verifyChildProps()
-        function to its disposal
-    */
 
     if (isFunction(this.verifyChildProps)) {
       this.verifyChildProps();
     }
 
     this.handleOverflow("hidden", "auto");
-
-    /*
-        This event listener prevents the modal from following the user when he scrolls vertically. 
-    */
 
     document.addEventListener("scroll", this.scrollHandler);
 
@@ -305,14 +295,8 @@ class Modal extends Component {
             triggers this.props.data.action, which is a props variable with a bound function raised by an outside component calling
             the modal.
 
-            The point is to give the caller component the opportunity to execute its internal functions based on what
-            the user does in the modal. This is useful if the user needs to confirm e.g. data saving, money transaction, identity verification etc.        
-
             Parameters:
             - data (optional, any datatype: data passed from the modal to the caller component)
-        
-
-            [Example]:
             
             In the /src/components/modules/existingTabGroups.jsx module, we launch a modal by running this
         
@@ -321,8 +305,7 @@ class Modal extends Component {
                 params: {groupId: group.groupId, groupName: group.tabGroupName}, 
                 action: this.removeTabGroups.bind(this) })}
             
-            Where the function stored in the "action" key gets called whenever the user clicks a button with the id "modal-save" located
-            in the launched modal.
+            Where the function stored in the "action" key gets called with the params as its input.
         */
 
     try {
@@ -354,15 +337,9 @@ class Modal extends Component {
 
             E.g. 
             state = {
-                ui: { key1: value1 }
-                dataOnHold: {key2: null}
-                AnotherArea: {key3: null}
-            }
-
-            instead of:
-            
-            state = {
-                key1: null, key2: null, key3: null ...
+                area1: { key1: value1 }
+                area2: {key2: null}
+                area3: {key3: null}
             }
 
             Parameters:
@@ -372,58 +349,37 @@ class Modal extends Component {
             - callback (function, optional): Function to execute once the data has been stored 
         */
     try {
-      const { isString, isUndefined, isFunction } = validator;
+      const { isString, isUndefined, isFunction, isObject } = validator;
 
-      if (isString(area)) {
-        if (isUndefined(value)) {
-          throw ExceptionsHandler.ValidatorError("mp-saveToState-104");
-        }
-
-        if (!isString(key)) {
-          throw ExceptionsHandler.ValidatorError("mp-saveToState-105");
-        }
-
-        let newInput = this.state;
-
-        if (typeof newInput[area] !== "object") {
-          newInput[area] = {};
-        }
-
-        newInput[area][key] = value;
-
-        this.setState(newInput, () => {
-          if (!isUndefined(callback)) {
-            if (isFunction(callback)) {
-              callback();
-            } else {
-              throw ExceptionsHandler.ValidatorError("mp-saveToState-106");
-            }
-          }
-        });
-      } else {
+      if (!isString(area))
         throw ExceptionsHandler.ValidatorError("mp-saveToState-107");
-      }
+      if (isUndefined(value))
+        throw ExceptionsHandler.ValidatorError("mp-saveToState-104");
+      if (!isString(key))
+        throw ExceptionsHandler.ValidatorError("mp-saveToState-105");
+
+      let newInput = this.state;
+
+      if (!isObject(newInput[area])) newInput[area] = {};
+
+      newInput[area][key] = value;
+
+      this.setState(newInput, () => {
+        console.log("MOHAHAHA");
+        if (!isUndefined(callback)) {
+          if (isFunction(callback)) {
+            callback();
+          } else {
+            throw ExceptionsHandler.ValidatorError("mp-saveToState-106");
+          }
+        }
+      });
     } catch (err) {
       ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
   verifyProps = () => {
-    /*
-            verifyProps
-            
-            All modals need to have a mandatory set of props:
-            - onDismiss (function), function for triggering a function when modal is dimissed
-            - onRaiseToErrorOverlay (function), function for passing information to the graphical UI if something goes wrong
-            - data (object), object containing modal id, optional save function, and data parameters of possible existing values 
-
-            A single modal can, of course have its own unique props that do not exist in other modals. These
-            may be checked by adding a verifyChildProps function to that modal class.
-            
-            The data.params object should also be verified for each individual modal. Do this using
-            the verifyChildProps function.
-        */
-
     const {
       // onDismiss,
       data,
@@ -453,6 +409,10 @@ class Modal extends Component {
     }
   };
 
+  renderHeaderContents = () => {
+    console.log("INSECT");
+  };
+
   render = () => {
     /*
             Rendering of the modal's user interface
@@ -471,30 +431,19 @@ class Modal extends Component {
             These functions add contents and functionalities to the modal's user interface. 
             Add these to the Modal child classes to give them necessary features.
         */
-
     return (
       <div ref={this.modalRef} className="modal" id="tabeonModal">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="tabeonModalLabel">
-                {typeof this.renderModalHeader === "function" &&
-                  this.renderModalHeader()}
-              </h5>
-              {typeof this.dismissModalHandler === "function" && (
-                <button
-                  type="button"
-                  className="close"
-                  onClick={() => this.dismissModalHandler()}
-                >
-                  &times;
-                </button>
-              )}
-            </div>
-            <div className="modal-body">
-              {typeof this.renderModalBody === "function" &&
-                this.renderModalBody()}
-            </div>
+            <HeaderWrapper
+              data={this.props.data}
+              Contents={this.renderHeaderContents}
+              onDismiss={this.dismissModalHandler}
+            />
+            <BodyWrapper
+              data={this.props.data}
+              Contents={this.renderBodyContents}
+            />
             <div className="modal-footer">
               {typeof this.dismissModalHandler === "function" && (
                 <button
