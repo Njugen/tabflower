@@ -575,6 +575,7 @@ class WindowsList extends Component {
           {windows.map((window, key, windowArray) => {
             const { tabs } = window;
             const windowContainerId = "window-container-id-" + key;
+            const windowName = "Window " + (key + 1);
 
             const isAddingNewTab =
               newTabInContainerIds !== false &&
@@ -642,7 +643,7 @@ class WindowsList extends Component {
                 <ul className="window-listing col-12">
                   <li className="mt-2" id={windowContainerId}>
                     <div className="window-header">
-                      Window {key + 1}
+                      {windowName}
                       <ul className="list-item-options">
                         <li>
                           <button
@@ -684,7 +685,7 @@ class WindowsList extends Component {
                                 } else {
                                   this.raiseToModal({
                                     id: "cotmremovewindowmodal",
-                                    params: { windowInfo: window },
+                                    params: { windowInfo: window, windowName },
                                     action: this.closeWindow.bind(this),
                                   });
                                 }

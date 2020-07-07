@@ -3,9 +3,12 @@ import { PropTypes } from "prop-types";
 import {
   ValidatorError,
   ErrorHandler,
-} from "./../../utils/exceptionsAndHandler";
-import * as validator from "./../../utils/inputValidators";
-import Modal from "../modal";
+} from "../../../utils/exceptionsAndHandler";
+import * as validator from "../../../utils/inputValidators";
+import Modal from "../../modal";
+import HeaderContents from "./HeaderContents";
+import BodyContents from "./BodyContents";
+import FooterContents from "./FooterContents";
 
 class COTMRemoveUnresponsiveTabs extends Modal {
   // This modal has no child props
@@ -34,23 +37,27 @@ class COTMRemoveUnresponsiveTabs extends Modal {
     }
   };
 
-  /*
-        renderBodyContents(props)
+  renderBodyContents = (data) => {
+    return <BodyContents data={data} />;
+  };
 
-        Render the body and the contents of this particular modal
-    */
-  renderBodyContents(props) {
-    return <p>Go through all opened tabs and remove them from the list</p>;
-  }
+  renderHeaderContents = (data) => {
+    return <HeaderContents data={data} />;
+  };
 
-  /*
-        renderHeaderContents(props)
-
-        Render the headline string of this modal
-    */
-  renderHeaderContents(props) {
-    return "Close unresponsive tabs";
-  }
+  renderFooterContents = (data) => {
+    return (
+      <FooterContents
+        data={data}
+        onConfirm={() =>
+          this.saveModalHandler((response) => {
+            this.executePropsAction(response);
+          })
+        }
+        onDismiss={this.dismissModalHandler}
+      />
+    );
+  };
 }
 
 COTMRemoveUnresponsiveTabs.propTypes = {

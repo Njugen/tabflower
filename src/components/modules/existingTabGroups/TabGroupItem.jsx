@@ -23,7 +23,7 @@ export default class TabGroupItem extends Component {
       <div className="list-item-block col-12 my-2 p-3">
         <div className="list-item-block-header mb-3">
           <h6 className="list-item-block-headline float-left pr-2">
-            {group.groupName}
+            {groupName}
           </h6>
           <div className="list-item-block-options float-right">
             <button

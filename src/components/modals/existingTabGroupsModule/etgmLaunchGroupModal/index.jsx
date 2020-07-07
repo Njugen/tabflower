@@ -1,9 +1,11 @@
 import React, { Fragment } from "react";
-import Modal from "../modal";
+import Modal from "../../modal";
 
-import TBCheckBox from "../../utils/form/tbCheckbox";
-import * as ExceptionsHandler from "../../utils/exceptionsAndHandler";
-import * as validator from "../../utils/inputValidators";
+import * as ExceptionsHandler from "../../../utils/exceptionsAndHandler";
+import * as validator from "../../../utils/inputValidators";
+import HeaderContents from "./HeaderContents";
+import BodyContents from "./BodyContents";
+import FooterContents from "./FooterContents";
 
 class ETGMLaunchGroupsModal extends Modal {
   /*
@@ -142,102 +144,31 @@ class ETGMLaunchGroupsModal extends Modal {
     }
   };
 
-  /*
-        renderManyTabsDetected()
-
-        Render a warning message to the user, if the number of windows and/or tabs to be opened exceeds the recommended number.
-        The recommended number is up to the app developer to decide. 
-
-        Parameters:
-        - numberOfWindows (optional, number)
-        - numberOfTabs (optional, number)
-    */
-  renderManyTabsDetected = (numberOfWindows, numberOfTabs) => {
+  renderBodyContents = (data) => {
     return (
-      <p>
-        Warning: You are about to launch a group consisting of{" "}
-        {numberOfWindows || "undefined number of "} windows and{" "}
-        {numberOfTabs || "undefined number of "} tabs. This might stress your
-        computer down in the long run
-      </p>
+      <BodyContents
+        data={data}
+        onChange={(id, value, area) => this.saveToState(id, value, area)}
+      />
     );
   };
 
-  /*
-        renderLaunchOptions()
-
-        Render a list of checkbox elements, offering the user the possibility to change 
-        the behaviour of the launching tab group.
-    */
-  renderLaunchOptions = () => {
-    const { data } = this.props;
-    const { isObject } = validator;
-
-    if (isObject(data)) {
-      const { params } = this.props.data;
-
-      if (isObject(params)) {
-        const {
-          groupCloseAll,
-          groupCloseInactiveTabs,
-          groupDontAskAgain,
-        } = this.props.data.params;
-
-        return (
-          <Fragment>
-            <TBCheckBox
-              id="groupCloseAll"
-              label="Close all currently opened tabs and windows"
-              value={groupCloseAll && groupCloseAll === true ? "true" : "false"}
-              onToggle={(id, value) =>
-                this.saveToState(id, value, "tabGroupDetails")
-              }
-            />
-            <TBCheckBox
-              id="groupCloseInactiveTabs"
-              label="Automatically close all unresponsive tabs opened by this tab group"
-              value={
-                groupCloseInactiveTabs && groupCloseInactiveTabs === true
-                  ? "true"
-                  : "false"
-              }
-              onToggle={(id, value) =>
-                this.saveToState(id, value, "tabGroupDetails")
-              }
-            />
-            <TBCheckBox
-              id="groupDontAskAgain"
-              label="Save all selected options and do not show this message again (All settings offered in this popup can still be changed for any tab group. Just click the cog wheel for the tab group you want to change)."
-              value={
-                groupDontAskAgain && groupDontAskAgain === true
-                  ? "true"
-                  : "false"
-              }
-              onToggle={(id, value) =>
-                this.saveToState(id, value, "tabGroupDetails")
-              }
-            />
-          </Fragment>
-        );
-      } else {
-        return "The options could not be loaded because the relevant parameters were not provided with the group data. Please, contact the developer.";
-      }
-    } else {
-      return "Information about the requested tab group was not provided to this modal. Please, contact the developer.";
-    }
+  renderHeaderContents = (data) => {
+    return <HeaderContents data={data} />;
   };
 
-  renderBodyContents = (props) => {
+  renderFooterContents = (data) => {
     return (
-      <Fragment>
-        {this.renderManyTabsDetected()}
-        {this.renderLaunchOptions()}
-      </Fragment>
+      <FooterContents
+        data={data}
+        onConfirm={() =>
+          this.saveModalHandler((response) => {
+            this.executePropsAction(response);
+          })
+        }
+        onDismiss={this.dismissModalHandler}
+      />
     );
-  };
-
-  renderHeaderContents = (props) => {
-    return "Confirm launch of selected tabs";
   };
 }
 

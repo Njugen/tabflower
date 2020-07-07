@@ -1,7 +1,10 @@
 import React, { Fragment } from "react";
-import Modal from "../modal";
-import * as ExceptionsHandler from "./../../utils/exceptionsAndHandler";
-import * as validator from "./../../utils/inputValidators";
+import Modal from "../../modal";
+import * as ExceptionsHandler from "../../../utils/exceptionsAndHandler";
+import * as validator from "../../../utils/inputValidators";
+import HeaderContents from "./HeaderContents";
+import BodyContents from "./BodyContents";
+import FooterContents from "./FooterContents";
 
 class COTMRemoveWindowModal extends Modal {
   /*
@@ -83,35 +86,27 @@ class COTMRemoveWindowModal extends Modal {
     }
   };
 
-  /*
-        renderBodyContents(props)
+  renderBodyContents = (data) => {
+    return <BodyContents data={data} />;
+  };
 
-        Render the body and the contents of this particular modal
-    */
-  renderBodyContents(props) {
+  renderHeaderContents = (data) => {
+    return <HeaderContents data={data} />;
+  };
+
+  renderFooterContents = (data) => {
     return (
-      <Fragment>
-        <p>
-          Closing this window will also close all its tabs. All ongoing
-          activities on these web pages will be interrupted and possibly lost.
-        </p>
-        <p>Are you sure you want to proceed?</p>
-        <p className="small">
-          You may reopen the window with all its tabs intact from the browser's
-          history feature (presuming you have it activated).
-        </p>
-      </Fragment>
+      <FooterContents
+        data={data}
+        onConfirm={() =>
+          this.saveModalHandler((response) => {
+            this.executePropsAction(response);
+          })
+        }
+        onDismiss={this.dismissModalHandler}
+      />
     );
-  }
-
-  /*
-        renderModalHeadery()
-
-        Render the headline string of this modal
-    */
-  renderHeaderContents(props) {
-    return "Close Window";
-  }
+  };
 }
 
 export default COTMRemoveWindowModal;

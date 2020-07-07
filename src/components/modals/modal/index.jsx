@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import AppContext from "../../contexts/AppContextProvider";
 import HeaderWrapper from "./HeaderWrapper";
 import BodyWrapper from "./BodyWrapper";
+import FooterWrapper from "./FooterWrapper";
 
 /*
     The Modal component
@@ -392,6 +393,8 @@ class Modal extends Component {
     console.log("INSECT");
   };
 
+  renderFooterContents = () => {};
+
   render = () => {
     /*
             Rendering of the modal's user interface
@@ -423,32 +426,10 @@ class Modal extends Component {
               data={this.props.data}
               Contents={this.renderBodyContents}
             />
-            <div className="modal-footer">
-              {typeof this.dismissModalHandler === "function" && (
-                <button
-                  type="button"
-                  id="modal-dismiss"
-                  className="btn btn-secondary"
-                  onClick={() => this.dismissModalHandler()}
-                >
-                  Close
-                </button>
-              )}
-              {typeof this.saveModalHandler === "function" && (
-                <button
-                  type="button"
-                  id="modal-save"
-                  className="btn btn-tabeon"
-                  onClick={() =>
-                    this.saveModalHandler((data) => {
-                      this.executePropsAction(data);
-                    })
-                  }
-                >
-                  Save changes
-                </button>
-              )}
-            </div>
+            <FooterWrapper
+              data={this.props.data}
+              Contents={this.renderFooterContents}
+            />
           </div>
         </div>
       </div>

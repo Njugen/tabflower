@@ -1,9 +1,5 @@
 import React, { Fragment } from "react";
 import Modal from "../../modal/index";
-import WindowsList from "../../../utils/windowsList";
-import TBCheckBox from "../../../utils/form/tbCheckbox";
-import TBTextInput from "../../../utils/form/tbTextInput";
-import TBTextArea from "../../../utils/form/tbTextArea";
 import { PropTypes } from "prop-types";
 import * as validator from "../../../utils/inputValidators";
 import HeaderContents from "./HeaderContents";
@@ -14,6 +10,7 @@ import {
   ValidatorError,
   ErrorHandler,
 } from "./../../../utils/exceptionsAndHandler";
+import FooterContents from "./FooterContents";
 
 class ETGMCreateNewGroupModal extends Modal {
   static contextType = AppContext;
@@ -355,6 +352,20 @@ class ETGMCreateNewGroupModal extends Modal {
 
   renderHeaderContents = (data) => {
     return <HeaderContents data={data} />;
+  };
+
+  renderFooterContents = (data) => {
+    return (
+      <FooterContents
+        data={data}
+        onConfirm={() =>
+          this.saveModalHandler((response) => {
+            this.executePropsAction(response);
+          })
+        }
+        onDismiss={this.dismissModalHandler}
+      />
+    );
   };
 }
 

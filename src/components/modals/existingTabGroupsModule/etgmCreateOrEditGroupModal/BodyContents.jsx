@@ -4,6 +4,7 @@ import TBTextInput from "./../../../utils/form/tbTextInput";
 import TBTextArea from "./../../../utils/form/tbTextArea";
 import TBCheckBox from "./../../../utils/form/tbCheckbox";
 import TBWindowListInput from "./../../../utils/form/tbWindowListInput";
+import { ValidatorError } from "./../../../utils/exceptionsAndHandler";
 
 export default class BodyContents extends Component {
   render() {
@@ -80,12 +81,10 @@ export default class BodyContents extends Component {
           </Fragment>
         );
       } else {
-        /*  return ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-135")
-          .message; */
+        return ValidatorError("ETGMCreateNewGroupModal-135").message;
       }
     } else {
-      /*  return ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-136")
-        .message; */
+      return ValidatorError("ETGMCreateNewGroupModal-136").message;
     }
   }
 }

@@ -1,8 +1,11 @@
 import React, { Fragment } from "react";
-import Modal from "../modal";
+import Modal from "../../modal";
 import { PropTypes } from "prop-types";
-import * as ExceptionsHandler from "../../utils/exceptionsAndHandler";
-import * as validator from "../../utils/inputValidators";
+import * as ExceptionsHandler from "../../../utils/exceptionsAndHandler";
+import * as validator from "../../../utils/inputValidators";
+import HeaderContents from "./HeaderContents";
+import FooterContents from "./FooterContents";
+import BodyContents from "./BodyContents";
 
 class ETGMRemoveGroupsModal extends Modal {
   verifyChildProps = () => {
@@ -11,9 +14,9 @@ class ETGMRemoveGroupsModal extends Modal {
         */
     const { isString, isUndefined, isObject } = validator;
     const { data } = this.props;
-
+    console.log("EEEEO", data);
     if (isObject(data)) {
-      const { params } = this.props.data;
+      const { params } = data;
 
       if (isObject(params)) {
         const { groupId, groupName, removeAll } = this.props.data.params;
@@ -77,56 +80,26 @@ class ETGMRemoveGroupsModal extends Modal {
     }
   };
 
-  renderBodyContents(props) {
-    const { isObject } = validator;
-    const { data } = props;
+  renderBodyContents = (data) => {
+    return <BodyContents data={data} />;
+  };
 
-    if (isObject(data)) {
-      const { params } = data;
+  renderHeaderContents = (data) => {
+    return <HeaderContents data={data} />;
+  };
 
-      if (isObject(params)) {
-        const { groupId, groupName } = params;
-
-        return (
-          <Fragment>
-            {!groupId && (
-              <p>
-                Are you sure you want to remove all existing groups? You will
-                lose all saved windows and tabs. This cannot be undone.
-              </p>
-            )}
-            {groupId && (
-              <p>
-                Are you sure you want to remove the tab group{" "}
-                {groupName ? <strong>{groupName}</strong> : ""}? You will lose
-                all windows and tabs saved in it. This cannot be undone.
-              </p>
-            )}
-          </Fragment>
-        );
-      } else {
-        return "ETGMRemoveGroupsModal-104";
-      }
-    } else {
-      return "ETGMRemoveGroupsModal-105";
-    }
-  }
-
-  renderHeaderContents = (props) => {
-    const { isObject } = validator;
-    const { data } = props;
-
-    if (isObject(data)) {
-      const { params } = data;
-
-      if (isObject(params)) {
-        const { groupId, groupName } = params || {};
-        return !groupId
-          ? "Confirm Removal of All Tabs"
-          : 'Confirm removal of the "' + groupName + '" tab group';
-      }
-    } else {
-    }
+  renderFooterContents = (data) => {
+    return (
+      <FooterContents
+        data={data}
+        onDismiss={this.dismissModalHandler}
+        onConfirm={() =>
+          this.saveModalHandler((response) => {
+            this.executePropsAction(response);
+          })
+        }
+      />
+    );
   };
 }
 
