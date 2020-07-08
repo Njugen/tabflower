@@ -85,14 +85,20 @@ class App extends Component {
           {modalId === "cotmremovetabmodal" && (
             <COTMRemoveTabModal data={modalData}></COTMRemoveTabModal>
           )}
-          {errors.length > 0 && <ErrorOverlay data={errors}></ErrorOverlay>}
+          {errors.length > 0 && <ErrorOverlay errors={errors}></ErrorOverlay>}
 
           <div className="container-fluid">
             <MainNavBar routes={routes} />
+          </div>
+          <div className="container">
             <div className="row">
               <div className="col-md-12" id="tabeon-view-container">
-                <RouteList />
-                <ViewFooter />
+                <div className="row d-flex justify-content-center">
+                  <div className="col-12">
+                    <RouteList />
+                    <ViewFooter />
+                  </div>
+                </div>
               </div>
             </div>
           </div>

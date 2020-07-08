@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import Modal from "../../modal";
 
 import * as ExceptionsHandler from "../../../utils/exceptionsAndHandler";

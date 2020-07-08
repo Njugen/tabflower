@@ -3,7 +3,6 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import TabManagementView from "../views/tabManagement";
 import AboutTabFlowerView from "./../views/aboutTabFlower";
 import SettingsView from "./../views/settings";
-import PropTypes from "prop-types";
 
 /* Import Tabeon */
 import * as validator from "../../components/utils/inputValidators";
@@ -202,7 +201,5 @@ class RouteList extends Component {
     );
   };
 }
-
-RouteList.propTypes = {};
 
 export default RouteList;

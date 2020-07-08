@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import AppContext from "../../contexts/AppContextProvider";
-import { ValidatorError, ErrorHandler } from "../../utils/exceptionsAndHandler";
-import * as validator from "../../utils/inputValidators";
-import { sendToBackground } from "../../../services/webextension/APIBridge";
+
 require("../../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
 
 export default class Footer extends Component {

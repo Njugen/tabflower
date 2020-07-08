@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import Module from "../module";
 import { sendToBackground } from "../../../services/webextension/APIBridge";
 import { ValidatorError, ErrorHandler } from "../../utils/exceptionsAndHandler";

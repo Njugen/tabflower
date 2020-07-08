@@ -48,7 +48,7 @@ class ErrorBoundary extends Component {
     if (errors.length > 0) {
       return (
         <ErrorOverlay
-          data={errors}
+          errors={errors}
           onDismiss={() => this.handleDismiss()}
         ></ErrorOverlay>
       );

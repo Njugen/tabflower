@@ -1,6 +1,5 @@
-import React, { Fragment } from "react";
+import React from "react";
 import Module from "../module/index";
-import WindowsList from "../../utils/windowsList";
 import { sendToBackground } from "../../../services/webextension/APIBridge";
 import * as validator from "../../utils/inputValidators";
 import { ValidatorError, ErrorHandler } from "../../utils/exceptionsAndHandler";

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import * as ExceptionsHandler from "../../utils/exceptionsAndHandler";
 import * as validator from "../../utils/inputValidators";
 import WindowsList from "./../windowsList";
@@ -179,7 +179,7 @@ class TBWindowListInput extends Component {
     */
   addNewTab = (inputUrl, index) => {
     try {
-      const { isString, isAtLeastZero, isObject, isArray } = validator;
+      const { isString, isAtLeastZero, isArray } = validator;
       const { windowCollection, onModifyList } = this.props;
 
       if (isString(inputUrl)) {
@@ -306,7 +306,7 @@ class TBWindowListInput extends Component {
   };
 
   render = () => {
-    const { isString, isArray } = validator;
+    const { isString } = validator;
     const { windowCollection, type, warning } = this.props;
     /*
     if (isArray(windowCollection)) {

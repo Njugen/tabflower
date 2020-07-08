@@ -12,6 +12,7 @@
     "default_title": "Tabeon",
     "default_popup": "index.html"
   },
+  "browser_style": "true",
   "options_ui": {
     "page": "index.html",
     "open_in_tab": true

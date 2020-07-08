@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from "react";
-import * as validator from "../../../utils/inputValidators";
 
 export default class BodyContents extends Component {
   render() {

@@ -1,5 +1,4 @@
-import React, { Component } from "react";
-import * as validator from "../../../utils/inputValidators";
+import { Component } from "react";
 
 export default class HeaderContents extends Component {
   render() {

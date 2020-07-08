@@ -29,17 +29,13 @@ class SettingsView extends View {
 
   render = () => {
     return (
-      <div className="row d-flex justify-content-center">
-        <div className="col-6">
-          <ExtensionSettingsModule
-            title="Settings"
-            onRaiseToView={(data) => this.handleRaisedData(data)}
-            id="settings-module"
-            onRaiseToModal={(data) => this.raiseToModal(data)}
-            onRaiseToErrorOverlay={(data) => this.sendToErrorOverlay(data)}
-          ></ExtensionSettingsModule>
-        </div>
-      </div>
+      <ExtensionSettingsModule
+        title="Settings"
+        onRaiseToView={(data) => this.handleRaisedData(data)}
+        id="settings-module"
+        onRaiseToModal={(data) => this.raiseToModal(data)}
+        onRaiseToErrorOverlay={(data) => this.sendToErrorOverlay(data)}
+      ></ExtensionSettingsModule>
     );
   };
 }

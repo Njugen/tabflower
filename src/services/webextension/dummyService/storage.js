@@ -74,8 +74,5 @@ export const saveModuleUISettings = (
   successCallback,
   failCallback
 ) => {
-  // Get existing settings and update the values
-  const window = details;
-
   successCallback();
 };

@@ -28,21 +28,17 @@ class TabManagementView extends View {
   render = () => {
     return (
       <Fragment>
-        <div className="row d-flex justify-content-center">
-          <div className="col-6">
-            <CurrentlyOpenedTabsModule
-              title="Currently Opened Tabs"
-              onRaiseToView={(data) => this.handleRaiseToView(data)}
-              id="active-tabs-module"
-            ></CurrentlyOpenedTabsModule>
-            <ExistingTabGroupsModule
-              title="Existing Tab Groups"
-              id="existing-tab-groups-module"
-              refresh={this.state.refreshFactor}
-              onRaiseToView={(data) => this.handleRaiseToView(data)}
-            ></ExistingTabGroupsModule>
-          </div>
-        </div>
+        <CurrentlyOpenedTabsModule
+          title="Currently Opened Tabs"
+          onRaiseToView={(data) => this.handleRaiseToView(data)}
+          id="active-tabs-module"
+        ></CurrentlyOpenedTabsModule>
+        <ExistingTabGroupsModule
+          title="Existing Tab Groups"
+          id="existing-tab-groups-module"
+          refresh={this.state.refreshFactor}
+          onRaiseToView={(data) => this.handleRaiseToView(data)}
+        ></ExistingTabGroupsModule>
       </Fragment>
     );
   };

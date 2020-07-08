@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import * as validator from "../../../utils/inputValidators";
 
 export default class FooterContents extends Component {
   render() {
-    const { data, onConfirm, onDismiss } = this.props;
+    const { onConfirm, onDismiss } = this.props;
 
     return (
       <>

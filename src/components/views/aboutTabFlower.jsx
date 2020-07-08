@@ -24,17 +24,13 @@ class AboutTabFlowerView extends View {
 
   render = () => {
     return (
-      <div className="row d-flex justify-content-center">
-        <div className="col-6">
-          <AboutTabflowerModule
-            title="About Tabflower"
-            onRaiseToView={(data) => this.handleRaiseToView(data)}
-            id="about-tabflower-module"
-            onRaiseToModal={(data) => this.raiseToModal(data)}
-            onRaiseToErrorOverlay={(data) => this.sendToErrorOverlay(data)}
-          ></AboutTabflowerModule>
-        </div>
-      </div>
+      <AboutTabflowerModule
+        title="About Tabflower"
+        onRaiseToView={(data) => this.handleRaiseToView(data)}
+        id="about-tabflower-module"
+        onRaiseToModal={(data) => this.raiseToModal(data)}
+        onRaiseToErrorOverlay={(data) => this.sendToErrorOverlay(data)}
+      ></AboutTabflowerModule>
     );
   };
 }
