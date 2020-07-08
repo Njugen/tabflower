@@ -13,34 +13,3 @@ export default class FooterWrapper extends Component {
     );
   }
 }
-
-/* 
- 
- <div className="modal-footer">
-        {typeof this.dismissModalHandler === "function" && (
-          <button
-            type="button"
-            id="modal-dismiss"
-            className="btn btn-secondary"
-            onClick={() => this.dismissModalHandler()}
-          >
-            Close
-          </button>
-        )}
-        {typeof this.saveModalHandler === "function" && (
-          <button
-            type="button"
-            id="modal-save"
-            className="btn btn-tabeon"
-            onClick={() =>
-              this.saveModalHandler((data) => {
-                this.executePropsAction(data);
-              })
-            }
-          >
-            Save changes
-          </button>
-        )}
-      </div>
-
- */

@@ -5,9 +5,9 @@ import AppContext from "../../contexts/AppContextProvider";
 import { ValidatorError, ErrorHandler } from "../../utils/exceptionsAndHandler";
 
 import { sendToBackground } from "../../../services/webextension/APIBridge";
-import HeaderWrapper from "./HeaderWrapper";
-import BodyWrapper from "./BodyWrapper";
-import FooterWrapper from "./FooterWrapper";
+import HeaderWrapper from "./headerWrapper";
+import BodyWrapper from "./bodyWrapper";
+import FooterWrapper from "./footerWrapper";
 
 require("../../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
 

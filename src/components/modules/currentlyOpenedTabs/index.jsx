@@ -6,8 +6,8 @@ import { ValidatorError, ErrorHandler } from "../../utils/exceptionsAndHandler";
 import PropTypes from "prop-types";
 
 import AppContext from "../../contexts/AppContextProvider";
-import FooterContents from "./FooterContents";
-import BodyContents from "./BodyContents";
+import FooterContents from "./footerContents";
+import BodyContents from "./bodyContents";
 
 require("../../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
 

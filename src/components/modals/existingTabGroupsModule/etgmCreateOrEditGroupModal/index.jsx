@@ -2,15 +2,15 @@ import React from "react";
 import Modal from "../../modal/index";
 import { PropTypes } from "prop-types";
 import * as validator from "../../../utils/inputValidators";
-import HeaderContents from "./HeaderContents";
+import HeaderContents from "./headerContents";
 
 import AppContext from "./../../../contexts/AppContextProvider";
-import BodyContents from "./BodyContents";
+import BodyContents from "./bodyContents";
 import {
   ValidatorError,
   ErrorHandler,
 } from "./../../../utils/exceptionsAndHandler";
-import FooterContents from "./FooterContents";
+import FooterContents from "./footerContents";
 
 class ETGMCreateNewGroupModal extends Modal {
   static contextType = AppContext;

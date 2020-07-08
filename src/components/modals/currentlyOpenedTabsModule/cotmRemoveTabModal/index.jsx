@@ -3,9 +3,9 @@ import Modal from "../../modal";
 import * as ExceptionsHandler from "../../../utils/exceptionsAndHandler";
 import * as validator from "../../../utils/inputValidators";
 import { PropTypes } from "prop-types";
-import HeaderContents from "./HeaderContents";
-import BodyContents from "./BodyContents";
-import FooterContents from "./FooterContents";
+import HeaderContents from "./headerContents";
+import BodyContents from "./bodyContents";
+import FooterContents from "./footerContents";
 
 class COTMRemoveTabModal extends Modal {
   /*
