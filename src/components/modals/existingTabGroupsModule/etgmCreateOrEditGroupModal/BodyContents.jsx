@@ -5,13 +5,13 @@ import TBTextArea from "./../../../utils/form/tbTextArea";
 import TBCheckBox from "./../../../utils/form/tbCheckbox";
 import TBWindowListInput from "./../../../utils/form/tbWindowListInput";
 import { ValidatorError } from "./../../../utils/exceptionsAndHandler";
+import TBScheduleListInput from "../../../utils/form/tbScheduleListInput";
 
 export default class BodyContents extends Component {
   render() {
-    const { isObject } = validator;
+    const { isObject, isArray } = validator;
     const { data, fieldErrors, onChange, tabGroupDetails } = this.props;
 
-    console.log("VITAMIN", data);
     if (isObject(data)) {
       const { params } = data;
 
@@ -31,12 +31,14 @@ export default class BodyContents extends Component {
           windowCollection: windowErr,
         } = fieldErrors;
 
+        console.log("MOVERFLOW", tabGroupDetails);
         return (
           <Fragment>
             <TBTextInput
               id="groupName"
               warning={nameErr || null}
               label="Group Name"
+              maxWidth={true}
               value={name ? name : ""}
               onChange={(id, value) => onChange(id, value, "tabGroupDetails")}
             ></TBTextInput>
@@ -71,12 +73,37 @@ export default class BodyContents extends Component {
             />
 
             {tabGroupDetails && (
-              <TBWindowListInput
-                windowCollection={tabGroupDetails.windowCollection || []}
-                type={type}
-                warning={windowErr || null}
-                onModifyList={onChange}
-              />
+              <>
+                <TBWindowListInput
+                  windowCollection={tabGroupDetails.windowCollection || []}
+                  type={type}
+                  label={
+                    type === "currently-opened"
+                      ? "Currently opened windows and tabs"
+                      : type === "existing-group"
+                      ? "Edit the windows and tabs in this group"
+                      : type === "new-group" &&
+                        "Add windows or tabs to this new group"
+                  }
+                  warning={windowErr || null}
+                  onModifyList={onChange}
+                />
+                <TBScheduleListInput
+                  id="groupScheduleList"
+                  scheduleCollection={tabGroupDetails.groupScheduleList || []}
+                  weekdays={[
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday",
+                    "Saturday",
+                    "Sunday",
+                    //  "Every Day",
+                  ]}
+                  onModifyList={onChange}
+                />
+              </>
             )}
           </Fragment>
         );

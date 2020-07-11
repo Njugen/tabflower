@@ -64,6 +64,7 @@ const saveTabsToStorage = (groupDetails, successCallback, failCallback) => {
       },
       () => {
         successCallback("A new tab group was added to TabFlower");
+        setAlarms();
       }
     );
   });
@@ -106,10 +107,11 @@ const launchTabGroup = (details, successCallback, failCallback) => {
                 deleteUnresponsiveTabs(options);
               }, 500);
             }
-
+            successCallback("A tabgroup has been launched");
+            /*
             saveTabsToStorage(details, () => {
               successCallback("A tabgroup has been launched");
-            });
+            }); */
           }
         );
 

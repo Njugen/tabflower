@@ -307,7 +307,7 @@ class TBWindowListInput extends Component {
 
   render = () => {
     const { isString } = validator;
-    const { windowCollection, type, warning } = this.props;
+    const { windowCollection, type, warning, label } = this.props;
     /*
     if (isArray(windowCollection)) {
       windowCollection = windowCollection || [];
@@ -337,6 +337,7 @@ class TBWindowListInput extends Component {
               {type === "existing-group" &&
                 "Edit the windows and tabs in this group"}
               {type === "new-group" && "Add windows or tabs to this new group"}
+              {label}
             </span>
           </div>
           <div className="col-4 label">

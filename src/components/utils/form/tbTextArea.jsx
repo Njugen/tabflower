@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
-
+import * as validator from "../../utils/inputValidators";
 class TBTextArea extends Component {
-  state = {};
+  state = {
+    value: "",
+  };
 
   changeInputValue = (event, presetValue) => {
     const { id, onChange } = this.props;
@@ -24,6 +26,17 @@ class TBTextArea extends Component {
 
     if (value) {
       this.changeInputValue(null, value);
+    }
+  };
+
+  componentDidUpdate = (prevProps) => {
+    const { isNumber } = validator;
+    const { clear } = this.props;
+
+    if (isNumber(clear) && isNumber(prevProps.clear)) {
+      if (clear > prevProps.clear) {
+        this.setState({ value: "" });
+      }
     }
   };
 

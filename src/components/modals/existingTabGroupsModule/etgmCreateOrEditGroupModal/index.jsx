@@ -314,8 +314,8 @@ class ETGMCreateNewGroupModal extends Modal {
       const { data } = this.props;
 
       if (isObject(data) && isObject(data.params)) {
-        const { windowCollection, groupId } = data.params;
-
+        const { windowCollection, groupId, groupScheduleList } = data.params;
+        console.log("CHILDCOMP", groupScheduleList);
         if (isArray(windowCollection)) {
           this.saveToState(
             "windowCollection",
@@ -324,6 +324,16 @@ class ETGMCreateNewGroupModal extends Modal {
           );
         } else {
           throw ValidatorError("ETGMCreateNewGroupModal-128");
+        }
+
+        if (isArray(groupScheduleList)) {
+          this.saveToState(
+            "groupScheduleList",
+            groupScheduleList,
+            "tabGroupDetails"
+          );
+        } else {
+          //throw ValidatorError("ETGMCreateNewGroupModal-128");
         }
 
         this.saveToState(

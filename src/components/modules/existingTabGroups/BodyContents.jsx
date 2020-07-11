@@ -14,7 +14,7 @@ export default class BodyContents extends Component {
     groups = groups || [];
     const { ...props } = this.props;
     const { isPositiveNumber } = validator;
-
+    console.log("EXISTING", this.props);
     if (isPositiveNumber(groups.length)) {
       return groups.map((group, i) => {
         return (

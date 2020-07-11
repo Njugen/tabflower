@@ -12,12 +12,12 @@
 */
 
 export const isArray = (input) => {
-    if(typeof input !== "undefined"){
-        return Array.isArray(input);
-    } else {
-        return false;
-    }
-}
+  if (typeof input !== "undefined") {
+    return Array.isArray(input);
+  } else {
+    return false;
+  }
+};
 
 /*
     isObject()
@@ -34,16 +34,16 @@ export const isArray = (input) => {
 */
 
 export const isObject = (input) => {
-    if(!isArray(input)){
-        if(typeof input === "object" && input !== null){
-            return true;
-        } else {
-            return false;
-        }
+  if (!isArray(input)) {
+    if (typeof input === "object" && input !== null) {
+      return true;
     } else {
-        return false;
+      return false;
     }
-} 
+  } else {
+    return false;
+  }
+};
 
 /*
     isEmptyString()
@@ -63,16 +63,16 @@ export const isObject = (input) => {
 */
 
 export const isEmptyString = (input) => {
-    if(typeof input === "string"){
-        if(input.length === 0 || input.replace(/ /g, "").length === 0){
-            return true;
-        } else {
-            return false
-        }
+  if (typeof input === "string") {
+    if (input.length === 0 || input.replace(/ /g, "").length === 0) {
+      return true;
     } else {
-        return false;
+      return false;
     }
-}
+  } else {
+    return false;
+  }
+};
 
 /*
     isString()
@@ -88,16 +88,16 @@ export const isEmptyString = (input) => {
 */
 
 export const isString = (input) => {
-    if(typeof input === "string"){
-        if(input.length > 0){
-            return true;
-        } else {
-            return false
-        }
+  if (typeof input === "string") {
+    if (input.length > 0) {
+      return true;
     } else {
-        return false;
+      return false;
     }
-}
+  } else {
+    return false;
+  }
+};
 
 /*
     isNumber()
@@ -112,12 +112,12 @@ export const isString = (input) => {
     - false, if the input is not a number
 */
 export const isNumber = (input) => {
-    if(typeof input === "number"){
-        return true;
-    } else {
-        return false
-    }
-}
+  if (typeof input === "number" && !isNaN(input)) {
+    return true;
+  } else {
+    return false;
+  }
+};
 
 /*
     isPositiveNumber()
@@ -133,16 +133,16 @@ export const isNumber = (input) => {
     - false, if the input is not a number
 */
 export const isPositiveNumber = (input) => {
-    if(typeof input === "number"){
-        if(input > 0){
-            return true;
-        } else {
-            return false;
-        }
+  if (typeof input === "number") {
+    if (input > 0) {
+      return true;
     } else {
-        return false;
+      return false;
     }
-}
+  } else {
+    return false;
+  }
+};
 
 /*
     isNegativeNumber()
@@ -158,16 +158,16 @@ export const isPositiveNumber = (input) => {
     - false, if the input is not a number
 */
 export const isNegativeNumber = (input) => {
-    if(typeof input === "number"){
-        if(input < 0){
-            return true;
-        } else {
-            return false;
-        }
+  if (typeof input === "number") {
+    if (input < 0) {
+      return true;
     } else {
-        return false;
+      return false;
     }
-}
+  } else {
+    return false;
+  }
+};
 
 /*
     isZero()
@@ -184,16 +184,16 @@ export const isNegativeNumber = (input) => {
 */
 
 export const isZero = (input) => {
-    if(typeof input === "number"){
-        if(input === 0){
-            return true;
-        } else {
-            return false;
-        }
+  if (typeof input === "number") {
+    if (input === 0) {
+      return true;
     } else {
-        return false;
+      return false;
     }
-}
+  } else {
+    return false;
+  }
+};
 
 /*
     isAtLeastZero()
@@ -210,16 +210,16 @@ export const isZero = (input) => {
 */
 
 export const isAtLeastZero = (input) => {
-    if(typeof input === "number"){
-        if(input >= 0){
-            return true;
-        } else {
-            return false;
-        }
+  if (typeof input === "number") {
+    if (input >= 0) {
+      return true;
     } else {
-        return false;
+      return false;
     }
-}
+  } else {
+    return false;
+  }
+};
 
 /*
     isFunction()
@@ -235,12 +235,12 @@ export const isAtLeastZero = (input) => {
 */
 
 export const isFunction = (input) => {
-    if(typeof input === "function"){
-        return true
-    } else {
-        return false;
-    }
-}
+  if (typeof input === "function") {
+    return true;
+  } else {
+    return false;
+  }
+};
 
 /*
     isBoolean()
@@ -256,12 +256,12 @@ export const isFunction = (input) => {
 */
 
 export const isBoolean = (input) => {
-    if(typeof input === "boolean"){
-        return true
-    } else {
-        return false;
-    }
-}
+  if (typeof input === "boolean") {
+    return true;
+  } else {
+    return false;
+  }
+};
 
 /*
     isUndefined()
@@ -277,9 +277,9 @@ export const isBoolean = (input) => {
 */
 
 export const isUndefined = (input) => {
-    if(typeof input === "undefined"){
-        return true;
-    } else {
-        return false;
-    }
-}
+  if (typeof input === "undefined") {
+    return true;
+  } else {
+    return false;
+  }
+};

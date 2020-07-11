@@ -623,7 +623,7 @@ div.container-fluid > .row > div[class^="col-"] {
 /* form utils */
 
 /* form */
-.tb-form-row > .label {
+.tb-form-row .label {
   margin: 0rem 0rem 0rem 0rem;
   display: block;
   font-size: 0.9rem;
@@ -667,7 +667,7 @@ div.container-fluid > .row > div[class^="col-"] {
   border-radius: 5rem;
   background: #c95cdf;
   position: relative;
-  margin: 1rem;
+  margin-top: 1.5rem;
   border: 1px solid #7a1d8c;
   transition: background-color 0.5s ease;
 }
@@ -701,6 +701,22 @@ div.container-fluid > .row > div[class^="col-"] {
   transition: background-color 0.25s ease-in-out;
 }
 
+.tb-textinput.no-max-width {
+  width: 80px !important;
+  display: inline-block !important;
+  margin-top: 1rem;
+  padding: 1.5rem 1rem 1.5rem 1.5rem;
+  border: 1px solid #c2c2c2;
+}
+
+.tb-form-row.no-max-width {
+  display: inline-block !important;
+}
+
+.tb-form-row.no-max-width {
+  margin-right: 1rem;
+}
+
 .tb-textarea {
   width: 100%;
   display: block;
@@ -709,6 +725,153 @@ div.container-fluid > .row > div[class^="col-"] {
   border-bottom: 1px solid #c2c2c2;
   padding: 1rem 1rem 1rem 0rem;
   transition: background-color 0.25s ease-in-out;
+}
+
+/* Drop Down List field */
+
+.tb-dropdownlist-uppersection {
+  display: block;
+}
+
+.tb-dropdownlist-container {
+  margin: 1rem 0rem;
+  position: relative;
+  display: block;
+}
+
+.tb-dropdownlist-container > .selected-value {
+  border: 1px solid #c2c2c2;
+  width: 100%;
+  height: 2rem;
+  padding: 1.5rem 1rem 1.5rem 0rem;
+  text-align: left;
+  position: relative;
+  background: #ffffff;
+}
+
+.tb-dropdownlist-container > .selected-value:hover {
+  background: #c95cdf;
+  color: #ffffff;
+}
+
+.tb-dropdownlist-container > .selected-value .selected-value-text {
+  padding-left: 1rem;
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+
+.tb-dropdownlist-container > .selected-value .selected-value-icon {
+  display: block;
+  float: right;
+  padding-left: 1rem;
+  padding-top: 0.25rem;
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translate(0, -50%);
+}
+
+.tb-dropdownlist {
+  list-style-type: none;
+  width: 100%;
+  border: 1px solid #c2c2c2;
+  padding: 0px;
+  position: absolute;
+  z-index: 10000;
+  background: #ffffff;
+  display: none;
+}
+
+.tb-dropdownlist > li {
+  padding: 0.5rem 1rem;
+  width: 100%;
+  text-align: right;
+}
+
+.tb-dropdownlist > li:hover {
+  background: #c95cdf;
+  color: #ffffff;
+}
+
+/* Timeform */
+
+.timeform {
+  position: relative;
+}
+
+timeform-error-message > span {
+}
+
+.timeform-button-container {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.timeform .tb-form-row {
+  margin-right: 3rem;
+}
+
+.timeform .tb-form-row:first-child {
+  margin: 2rem 3rem 2rem 0rem;
+}
+
+/* Schedule List */
+
+.schedule-list-container {
+  padding: 1rem 2rem;
+  background: #dadada;
+  margin: 1rem 0rem;
+  border-top: 3px solid #c2c2c2;
+  border-radius: 10px;
+}
+
+.schedule-list {
+  list-style-type: none;
+  padding: 0;
+  width: 100%;
+}
+
+.schedule-list > li.schedule-list-item {
+  padding: 0.5rem 0rem;
+  border-bottom: 1px solid #c2c2c2;
+  width: 100%;
+}
+
+.schedule-list > li.schedule-list-item:last-child {
+  padding-bottom: 0px !important;
+  border-bottom: 0px;
+}
+
+.schedule-list > li.schedule-list-item .left-sector {
+  display: inline-block;
+  float: left;
+}
+
+.schedule-list > li.schedule-list-item .right-sector {
+  display: inline-block;
+  float: right;
+}
+
+.schedule-list > li.schedule-list-item:last-child {
+  margin-bottom: 0rem;
+}
+
+.schedule-list > li.schedule-list-item .schedule-list-item-day {
+  text-transform: capitalize;
+}
+
+.schedule-list > li.schedule-list-item .right-sector span {
+  margin: auto 1rem;
+}
+
+.schedule-list-container .no-schedule {
+  text-align: center;
+  width: 100%;
 }
 
 /* Add New Window Form Area */

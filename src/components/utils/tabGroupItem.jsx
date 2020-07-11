@@ -16,7 +16,7 @@ export default class TabGroupItem extends Component {
       onLaunchGroup,
     } = this.props;
     const { groupName, groupId } = group;
-
+    console.log("TABGROUPITEM", group);
     return (
       <div className="list-item-block col-12 my-2 p-3">
         <div className="list-item-block-header mb-3">

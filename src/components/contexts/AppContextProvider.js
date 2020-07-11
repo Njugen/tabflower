@@ -25,6 +25,7 @@ export class AppContextProvider extends Component {
     }
 
     this.setState(inputState, () => {
+      console.log("CONTEXT", this.state);
       isFunction(callback) && callback(this.state);
     });
   };

@@ -1,5 +1,6 @@
 import React, { Component, createRef } from "react";
 import PropTypes from "prop-types";
+import * as validator from "../../utils/inputValidators";
 
 class TBCheckBox extends Component {
   state = {
@@ -60,20 +61,54 @@ class TBCheckBox extends Component {
     }
   };
 
+  componentDidUpdate = (prevProps) => {
+    const { isNumber } = validator;
+    const { clear } = this.props;
+
+    if (isNumber(clear) && isNumber(prevProps.clear)) {
+      if (clear > prevProps.clear) {
+        if (this.state.on === false) {
+          this.toggleCheckbox(this.checkboxRef.current);
+        }
+      }
+    }
+  };
+
   componentDidMount = () => {
     //
     this.toggleCheckbox(this.checkboxRef.current);
   };
 
   render = () => {
-    const { label } = this.props;
+    const { label, maxWidth } = this.props;
 
     return (
-      <div className="tb-form-row-checkbox row d-flex justify-content-between">
-        <div className="col-9 label">
+      <div
+        className={
+          maxWidth === false
+            ? "tb-form-row no-max-width"
+            : "tb-form-row-checkbox row d-flex justify-content-between"
+        }
+      >
+        <div
+          className={
+            maxWidth !== false || typeof maxWidth === "undefined"
+              ? "col-9 label"
+              : "label"
+          }
+        >
           <span>{typeof label === "string" && label}</span>
         </div>
-        <div className="col-2">
+        {(maxWidth !== false || typeof maxWidth === "undefined") && (
+          <div className="label">
+            <span></span>
+          </div>
+        )}
+        <div
+          className={
+            (maxWidth !== false || typeof maxWidth === "undefined") && "col-2"
+          }
+        >
           <div
             ref={this.checkboxRef}
             className="tb-checkbox-container"

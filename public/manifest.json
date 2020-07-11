@@ -12,7 +12,6 @@
     "default_title": "Tabeon",
     "default_popup": "index.html"
   },
-  "browser_style": "true",
   "options_ui": {
     "page": "index.html",
     "open_in_tab": true
@@ -21,9 +20,17 @@
     "scripts": [
       "background/receiver.js",
       "background/windowCollection.js",
-      "background/storage.js"
+      "background/storage.js",
+      "background/alarms.js"
     ],
     "persistent": true
   },
-  "permissions": ["activeTab", "tabs", "storage", "<all_urls>"]
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "storage",
+    "notifications",
+    "alarms",
+    "<all_urls>"
+  ]
 }

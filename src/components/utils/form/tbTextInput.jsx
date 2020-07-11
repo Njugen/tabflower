@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
-
+import * as validator from "../../utils/inputValidators";
 class TBTextInput extends Component {
   state = {
     value: "",
@@ -29,12 +29,27 @@ class TBTextInput extends Component {
     }
   };
 
-  render = () => {
-    const { label, warning } = this.props;
+  componentDidUpdate = (prevProps) => {
+    const { isNumber } = validator;
+    const { clear } = this.props;
 
+    if (isNumber(clear) && isNumber(prevProps.clear)) {
+      if (clear > prevProps.clear) {
+        this.setState({ value: "" });
+      }
+    }
+  };
+
+  render = () => {
+    const { label, warning, maxWidth, maxlength, value } = this.props;
+    console.log("RRRR", maxWidth);
     return (
       <Fragment>
-        <div className="tb-form-row row">
+        <div
+          className={
+            "tb-form-row " + (maxWidth === false ? "no-max-width" : "row")
+          }
+        >
           <div className="label">
             <span>{typeof label === "string" && label}</span>
           </div>
@@ -44,9 +59,10 @@ class TBTextInput extends Component {
 
           <input
             type="text"
-            value={this.state.value}
+            maxlength={maxlength}
+            value={this.state.value || value}
             onChange={(e) => this.changeInputValue(e)}
-            className="tb-textinput"
+            className={"tb-textinput " + (maxWidth === false && "no-max-width")}
           />
         </div>
       </Fragment>
