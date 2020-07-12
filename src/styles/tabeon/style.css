@@ -798,18 +798,45 @@ div.container-fluid > .row > div[class^="col-"] {
 
 .timeform {
   position: relative;
+  display: none;
+  background: #ffffff;
+
+  width: 100%;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  border: 1px solid #c2c2c2;
+  border-top-color: rgb(194, 194, 194);
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top: 3px solid #c2c2c2;
+}
+
+.timeform > h5 {
+  display: inline-block;
+  margin: 1rem 0rem 0rem 1rem;
+  text-align: left;
+  width: 100%;
+  color: #242424;
 }
 
 timeform-error-message > span {
 }
 
 .timeform-button-container {
-  display: flex;
-  align-items: center;
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  text-align: right;
+  padding: 0rem 1rem 1rem 1rem;
+}
+
+.timeform-button-container .btn {
+  display: inline-block;
+}
+
+.timeform-button-container .btn:last-child {
+  margin-left: 1rem;
+}
+
+.manage-schedule-button {
+  margin: 1rem 0;
 }
 
 .timeform .tb-form-row {
@@ -872,6 +899,10 @@ timeform-error-message > span {
 .schedule-list-container .no-schedule {
   text-align: center;
   width: 100%;
+}
+
+.schedule-section-footer {
+  text-align: center;
 }
 
 /* Add New Window Form Area */

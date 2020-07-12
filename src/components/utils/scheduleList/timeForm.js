@@ -162,6 +162,19 @@ export default class TimeForm extends Component {
     if (value >= start && value <= end) return true;
   };
 
+  hideTimeForm = () => {
+    document.getElementsByClassName("timeform")[0].style.display = "none";
+    document.getElementsByClassName("manage-schedule-button")[0].style.display =
+      "inline-block";
+  };
+
+  showTimeForm = () => {
+    document.getElementsByClassName("timeform")[0].style.display = "block";
+    document.getElementsByClassName("manage-schedule-button")[0].style.display =
+      "none";
+    // this.timeformRef.current.setAttribute("style", "block !important");
+  };
+
   render() {
     const { weekdays, error: formError } = this.props;
     const { errors, refreshFactor } = this.state;
@@ -173,54 +186,63 @@ export default class TimeForm extends Component {
 
     return (
       <>
-        {formError && (
-          <div class="timeform-error-message">
-            <span>{formError}</span>
-          </div>
-        )}
-        <div className="timeform d-flex">
-          <TBDropdown
-            id="weekdayDropDown"
-            label="Set Launch Schedule (Optional)"
-            selectables={weekdays}
-            warning={errors["weekdayfield"] || null}
-            maxWidth={false}
-            value={currentDayDropDownValue}
-            onChange={(id, value) => this.handleChangeWeekDay(value)}
-            clear={refreshFactor}
-          />
-          <TBTextInput
-            id="hourInput"
-            warning={errors["hourfield"] || null}
-            label="Hour"
-            maxWidth={false}
-            maxlength="2"
-            value={currentTimeInputValues.hour}
-            onChange={(id, value) => this.handleChangeHour(value)}
-            clear={refreshFactor}
-          />
-          <TBTextInput
-            id="minuteInput"
-            warning={errors["minutefield"] || null}
-            label="Minute"
-            maxWidth={false}
-            maxlength="2"
-            value={currentTimeInputValues.minute}
-            onChange={(id, value) => this.handleChangeMinute(value)}
-            clear={refreshFactor}
-          />
-          {this.state.data.currentDayDropDownValue !== "every day" && (
-            <TBCheckBox
-              id="regularLaunchcheckbox"
-              warning={"" || null}
-              label="Launch every week"
-              value={currentRegularLaunchValue}
+        <div className="timeform">
+          <h5>Add a new schedule</h5>
+          <div className="col-12 d-flex">
+            {formError && (
+              <div class="timeform-error-message">
+                <span>{formError}</span>
+              </div>
+            )}
+            <TBDropdown
+              id="weekdayDropDown"
+              label="Set Launch Schedule (Optional)"
+              selectables={weekdays}
+              warning={errors["weekdayfield"] || null}
               maxWidth={false}
-              onToggle={(id, value) => this.handleChangeRegularLaunch(value)}
+              value={currentDayDropDownValue}
+              onChange={(id, value) => this.handleChangeWeekDay(value)}
               clear={refreshFactor}
             />
-          )}
+            <TBTextInput
+              id="hourInput"
+              warning={errors["hourfield"] || null}
+              label="Hour"
+              maxWidth={false}
+              maxlength="2"
+              value={currentTimeInputValues.hour}
+              onChange={(id, value) => this.handleChangeHour(value)}
+              clear={refreshFactor}
+            />
+            <TBTextInput
+              id="minuteInput"
+              warning={errors["minutefield"] || null}
+              label="Minute"
+              maxWidth={false}
+              maxlength="2"
+              value={currentTimeInputValues.minute}
+              onChange={(id, value) => this.handleChangeMinute(value)}
+              clear={refreshFactor}
+            />
+            {this.state.data.currentDayDropDownValue !== "every day" && (
+              <TBCheckBox
+                id="regularLaunchcheckbox"
+                warning={"" || null}
+                label="Launch every week"
+                value={currentRegularLaunchValue}
+                maxWidth={false}
+                onToggle={(id, value) => this.handleChangeRegularLaunch(value)}
+                clear={refreshFactor}
+              />
+            )}
+          </div>
           <div className="timeform-button-container">
+            <button
+              className="btn btn-secondary"
+              onClick={() => this.hideTimeForm()}
+            >
+              Cancel
+            </button>
             <button
               className="btn btn-tabeon"
               onClick={() => this.handlePrimaryButtonClick(this.state.data)}
@@ -228,6 +250,14 @@ export default class TimeForm extends Component {
               Add
             </button>
           </div>
+        </div>
+        <div className="schedule-section-footer">
+          <button
+            className="btn-tabeon-as-only-child btn manage-schedule-button"
+            onClick={() => this.showTimeForm()}
+          >
+            Manage Schedule
+          </button>
         </div>
       </>
     );

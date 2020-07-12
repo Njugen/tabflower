@@ -65,12 +65,14 @@ export default class UrlForm extends Component {
     return (
       <div className={className}>
         <h5>{title}</h5>
-        <TBTextInput
-          id="url"
-          label="URL"
-          value={url || "https://"}
-          onChange={(id, value) => this.handleChange(id, value)}
-        ></TBTextInput>
+        <div className="col-12">
+          <TBTextInput
+            id="url"
+            label="URL"
+            value={url || "https://"}
+            onChange={(id, value) => this.handleChange(id, value)}
+          ></TBTextInput>
+        </div>
         <div className="text-aligner p-3">
           <button
             className="btn btn-secondary"

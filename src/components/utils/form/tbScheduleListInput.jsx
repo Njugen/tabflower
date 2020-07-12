@@ -158,11 +158,6 @@ export default class TBScheduleListInput extends Component {
           weekdays={weekdays}
           onAdd={(data) => this.handleTimeFormOutput(data)}
         />
-        <div>
-          <button className="btn-tabeon-as-only-child btn">
-            Manage Schedule
-          </button>
-        </div>
       </>
     );
   }
