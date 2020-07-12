@@ -216,6 +216,16 @@ class WindowsList extends Component {
     } else {
       return (
         <Fragment>
+          <div className="active-tabs-module">
+            <ul class="window-listing col-12">
+              <li className="window-listing-nowindows">
+                <span className="small">
+                  There currently are no windows in this tab group. Please, add
+                  at least one window.
+                </span>
+              </li>
+            </ul>
+          </div>
           {isAddingNewWindow &&
             isAddingNewWindow === true &&
             this.renderAddNewWindowForm()}

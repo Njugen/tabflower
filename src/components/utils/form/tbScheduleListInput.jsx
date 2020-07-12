@@ -103,6 +103,7 @@ export default class TBScheduleListInput extends Component {
     console.log("SCHEDULE", scheduleCollection);
     return (
       <>
+        <h6>Schedule automatic launch (optional)</h6>
         <div className="col-md-12 schedule-list-container">
           <div className="row">
             {scheduleCollection.length > 0 ? (

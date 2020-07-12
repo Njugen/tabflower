@@ -1,5 +1,8 @@
 /* General Purpose */
-
+h5,
+h6 {
+  color: #7a1d8c;
+}
 body {
   height: 100% !important;
   min-height: 100vh !important;
@@ -368,12 +371,17 @@ div.container-fluid > .row > div[class^="col-"] {
 */
 
 .windows-list {
-  margin: 2rem auto;
+  margin: 0rem auto;
 }
 
 .active-tabs-module ul.window-listing {
   list-style-type: none;
   padding: 0px;
+}
+
+ul.window-listing .window-listing-nowindows {
+  text-align: center;
+  padding: 1rem 2rem !important;
 }
 
 .active-tabs-module ul.window-listing > li {

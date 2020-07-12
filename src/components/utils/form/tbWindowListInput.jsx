@@ -331,14 +331,13 @@ class TBWindowListInput extends Component {
       <div className="tb-windowlist-container">
         <div className="tb-form-row-nomargin row d-flex justify-content-between">
           <div className="label mb-0 mt-4">
-            <span>
+            <h6>
               {type === "currently-opened" &&
                 "Currently opened windows and tabs"}
               {type === "existing-group" &&
                 "Edit the windows and tabs in this group"}
               {type === "new-group" && "Add windows or tabs to this new group"}
-              {label}
-            </span>
+            </h6>
           </div>
           <div className="col-4 label">
             <span>{typeof warning === "string" && warning}</span>
