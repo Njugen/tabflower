@@ -64,7 +64,7 @@ const saveTabsToStorage = (groupDetails, successCallback, failCallback) => {
       },
       () => {
         successCallback("A new tab group was added to TabFlower");
-        setAlarms();
+        refreshAlarms();
       }
     );
   });
@@ -162,12 +162,14 @@ const deleteTabGroups = (details, successCallback, failCallback) => {
         },
         () => {
           successCallback("asdsad");
+          refreshAlarms();
         }
       );
     });
   } else if (typeof details.id === "string" && details.id === "all") {
     chrome.storage.local.remove(["tabGroups"], () => {
       successCallback("asdsad");
+      refreshAlarms();
     });
   }
 };
