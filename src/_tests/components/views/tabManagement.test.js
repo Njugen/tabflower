@@ -1,8 +1,7 @@
-import React, { Fragment } from "react";
-import { shallow, mount, render } from "enzyme";
+import React from "react";
+import { shallow } from "enzyme";
 import TabManagementView from "./../../../components/views/tabManagement";
 import * as ExceptionsHandler from "./../../../components/utils/exceptionsAndHandler";
-import * as validator from "./../../../components/utils/inputValidators";
 
 const predefinedComponent = (props, options) => {
   props = props || {};

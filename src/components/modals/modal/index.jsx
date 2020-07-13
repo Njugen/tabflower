@@ -295,6 +295,7 @@ class Modal extends Component {
           throw ExceptionsHandler.ValidatorError("mp-propsAction-101");
         }
       } else {
+        throw ExceptionsHandler.ValidatorError("mp-propsAction-102");
       }
     } catch (err) {
       ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
@@ -331,8 +332,8 @@ class Modal extends Component {
         throw ExceptionsHandler.ValidatorError("mp-saveToState-107");
       if (isUndefined(value))
         throw ExceptionsHandler.ValidatorError("mp-saveToState-104");
-      /* if (!isString(key))
-        throw ExceptionsHandler.ValidatorError("mp-saveToState-105"); */
+      if (!isString(key))
+        throw ExceptionsHandler.ValidatorError("mp-saveToState-105");
 
       let newInput = this.state;
 
@@ -360,10 +361,7 @@ class Modal extends Component {
   };
 
   verifyProps = () => {
-    const {
-      // onDismiss,
-      data,
-    } = this.props;
+    const { data } = this.props;
     const { isObject } = validator;
 
     if (!isObject(data)) {
