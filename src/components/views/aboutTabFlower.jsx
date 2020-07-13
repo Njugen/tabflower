@@ -28,8 +28,6 @@ class AboutTabFlowerView extends View {
         title="About Tabflower"
         onRaiseToView={(data) => this.handleRaiseToView(data)}
         id="about-tabflower-module"
-        onRaiseToModal={(data) => this.raiseToModal(data)}
-        onRaiseToErrorOverlay={(data) => this.sendToErrorOverlay(data)}
       ></AboutTabflowerModule>
     );
   };

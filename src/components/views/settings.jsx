@@ -6,22 +6,17 @@ import * as ExceptionsHandler from "../utils/exceptionsAndHandler";
 import * as validator from "../utils/inputValidators";
 
 class SettingsView extends View {
-  handleRaisedData = (data) => {
+  handleRaiseToView = (data) => {
     try {
       const { isString } = validator;
 
-      if (isString(data)) {
-        if (data === "refresh") {
-          let refreshFactor = this.state.refreshFactor;
-          refreshFactor++;
-
-          this.setState({ refreshFactor }, () => {});
-        } else {
-          throw ExceptionsHandler.ValidatorError("settings-view-102");
-        }
-      } else {
+      if (!isString(data))
         throw ExceptionsHandler.ValidatorError("settings-view-101");
-      }
+
+      if (data !== "refresh")
+        throw ExceptionsHandler.ValidatorError("settings-view-102");
+
+      if (data === "refresh") this.refreshView();
     } catch (err) {
       ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
@@ -31,10 +26,8 @@ class SettingsView extends View {
     return (
       <ExtensionSettingsModule
         title="Settings"
-        onRaiseToView={(data) => this.handleRaisedData(data)}
+        onRaiseToView={(data) => this.handleRaiseToView(data)}
         id="settings-module"
-        onRaiseToModal={(data) => this.raiseToModal(data)}
-        onRaiseToErrorOverlay={(data) => this.sendToErrorOverlay(data)}
       ></ExtensionSettingsModule>
     );
   };
