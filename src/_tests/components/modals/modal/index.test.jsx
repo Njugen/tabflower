@@ -354,59 +354,25 @@ describe("Test <Modal /> component behaviour at mount", () => {
       expect(isObject(componentInstance.modalRef)).toBe(true);
     });
   });
-  /*
-    describe("Test this.componentDidUpdate(prevProps, prevState) lifesycle method (as a unit)", () => {
-        test("If prevProps is NOT equal to the modal component's current props, a setTimeout will trigger its callback in 100ms", () => {
-            jest.useFakeTimers();
 
-            const presetProps = {
-                testProp: 1
-            }
-            testComponent = predefinedComponent(presetProps, { disableLifecycleMethods: true });
-            componentInstance = testComponent.instance();
-            componentInstance.componentDidUpdate({testProp: 1}, null);
-            
-            expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 100);
+  describe("Test this.componentDidUpdate(prevProps, prevState) lifesycle method (as a unit)", () => {
+    test("If prevProps is NOT equal to the modal component's current props, a setTimeout will trigger its callback in 100ms", () => {
+      jest.useFakeTimers();
 
-            jest.useRealTimers();
-        });
-    });
-*/
-  /*
-  describe("Test saveFieldErrorsToState(errors)", () => {
-    const various_errors = [
-      ["A string representing an error variable"],
-      [32],
-      [null],
-      [false],
-      [true],
-      [[12, 8, 3, 7]],
-    ];
-
-    test('Run saveFieldErrorsToState({ error1: "test" }): Call this.setState({ fieldErrors: { error1: "test" } })', () => {
-      componentInstance.setState = jest.fn();
-
-      const mockInput = { error1: "test" };
-      componentInstance.saveFieldErrorsToState(mockInput);
-
-      const setStateInput = {
-        fieldErrors: mockInput,
+      const presetProps = {
+        testProp: 1,
       };
+      testComponent = predefinedComponent(presetProps, {
+        disableLifecycleMethods: true,
+      });
+      componentInstance = testComponent.instance();
+      componentInstance.componentDidUpdate({ testProp: 1 }, null);
 
-      expect(componentInstance.setState).toHaveBeenCalledWith(setStateInput);
+      expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 100);
+
+      jest.useRealTimers();
     });
-
-    test.each(various_errors)(
-      'Run saveFieldErrorsToState(%p): Call ExceptionsHandler.ValidatorError("mp-verifyProps-110")',
-      (val) => {
-        componentInstance.saveFieldErrorsToState(val);
-
-        expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith(
-          "mp-verifyProps-110"
-        );
-      }
-    );
-  }); */
+  });
 
   describe("Test fadeIn()", () => {
     describe("this.modalRef is not an object", () => {
@@ -714,7 +680,6 @@ describe("Test <Modal /> component behaviour at mount", () => {
             );
             const componentInstance = testComponent.instance();
             componentInstance.fadeOut = jest.fn();
-            ExceptionsHandler.ValidatorError = jest.fn();
 
             const mockedCallback = val;
 
@@ -1579,6 +1544,18 @@ describe("Test <Modal /> component behaviour at mount", () => {
           }
         );
       });
+    });
+  });
+
+  describe("Test renderHeaderContents()", () => {
+    test("Run renderHeaderContents(): It should return null", () => {
+      expect(componentInstance.renderHeaderContents()).toBe(null);
+    });
+  });
+
+  describe("Test renderFooterContents()", () => {
+    test("Run renderFooterContents(): It should return null", () => {
+      expect(componentInstance.renderFooterContents()).toBe(null);
     });
   });
 });

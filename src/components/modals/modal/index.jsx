@@ -131,7 +131,6 @@ class Modal extends Component {
 
       this.setState({}, () => {
         this.fadeOut();
-
         setValueToState("modal", {});
 
         if (!isUndefined(callback) && !isFunction(callback)) {
@@ -388,10 +387,12 @@ class Modal extends Component {
   };
 
   renderHeaderContents = () => {
-    console.log("INSECT");
+    return null;
   };
 
-  renderFooterContents = () => {};
+  renderFooterContents = () => {
+    return null;
+  };
 
   render = () => {
     /*
