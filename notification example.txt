@@ -1,1 +1,0 @@
-chrome.notifications.create({type: "basic", iconUrl: "https://upload.wikimedia.org/wikipedia/commons/1/11/Blue_question_mark_icon.svg", title: "test", message: "blablabla"})
