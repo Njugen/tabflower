@@ -6,9 +6,9 @@ import {
 } from "../../../utils/exceptionsAndHandler";
 import * as validator from "../../../utils/inputValidators";
 import Modal from "../../modal";
-import HeaderContents from "./headerContents";
-import BodyContents from "./bodyContents";
-import FooterContents from "./footerContents";
+import HeaderContents from "./HeaderContents";
+import BodyContents from "./BodyContents";
+import FooterContents from "./FooterContents";
 
 class COTMRemoveUnresponsiveTabs extends Modal {
   // This modal has no child props

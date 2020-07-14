@@ -6,8 +6,8 @@ import * as validator from "../../utils/inputValidators";
 import PropTypes from "prop-types";
 import AppContext from "../../contexts/AppContextProvider";
 
-import FooterContents from "./footerContents";
-import BodyContents from "./bodyContents";
+import FooterContents from "./FooterContents";
+import BodyContents from "./BodyContents";
 require("../../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
 
 class ExistingTabGroupsModule extends Module {
