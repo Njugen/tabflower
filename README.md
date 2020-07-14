@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Tabflower- The Ultimate Tab Manager
 
 Tabflower is a webextension for managing browser windows and tabs. It is intended for people - like myself - who simply cannot browse a session without opening thirty-forty tabs, while never noticing before the computer slows down immensely. Using Tabflower, browsing becomes smoother as you may open - as well as close - one or multiple tabs at once depending on your needs and/or tasks at specific times, helping you be consequential with your browser. None of us wants to get distracted by irrelevant contents at work - and none of us wants to work during our freetime, right?
@@ -399,3 +400,6 @@ render = () => {
 ```
 
 4. Save myview.jsx and run the project. 
+=======
+
+>>>>>>> 80b15d5cb15602a5d89c644cbeb3cef890912796
