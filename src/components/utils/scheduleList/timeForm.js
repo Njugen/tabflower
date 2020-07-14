@@ -95,14 +95,15 @@ export default class TimeForm extends Component {
         if (Object.keys(errors).length === 0) {
           const { hour, minute } = data.currentTimeInputValues;
           const selectedDay = data.currentDayDropDownValue;
-          /*
+
           data.launchAtTimestamp = this.buildAutomaticLaunchTimestamp(
             selectedDay,
             hour,
             minute
-          ); */
+          );
 
-          data.launchAtTimestamp = Date.now() + 60 * 1000;
+          // dev
+          // data.launchAtTimestamp = Date.now() + 60 * 1000;
 
           data.currentTimeInputValues = {
             hour: this.forceDoubleDigits(hour),
