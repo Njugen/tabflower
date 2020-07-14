@@ -62,6 +62,67 @@ class Modal extends Component {
 
   sendToErrorOverlay = this.context.sendToErrorOverlay;
 
+  componentWillUnmount = () => {
+    // The scroll event and the behaviour it follows are not needed when the user dismisses the modal. Therefore, it should be removed.
+
+    this.handleOverflow("auto", "auto");
+    document.removeEventListener("scroll", this.scrollHandler);
+  };
+
+  componentDidMount = () => {
+    const { isFunction } = validator;
+
+    /*
+      When a modal is rendered into the DOM, wait 100ms before fading in.
+    */
+    setTimeout(() => {
+      this.fadeIn();
+    }, 100);
+
+    if (isFunction(this.verifyChildProps)) {
+      this.verifyChildProps();
+    }
+
+    this.handleOverflow("hidden", "auto");
+
+    document.addEventListener("scroll", this.scrollHandler);
+
+    /*
+        Execute certain features belonging to each individual child modal, when mounting that modal and
+        if a childComponentDidMount() function is defined in that modal class.
+    */
+    if (isFunction(this.childComponentDidMount)) {
+      this.childComponentDidMount();
+    }
+
+    this.verifyProps();
+    this.verifyState();
+  };
+
+  componentWillMount = () => {
+    /*
+        Before the modal is mounted (meaning render() is executed), set modalRef
+        to provide access to the modal container in the DOM (using this.modalRef.current).
+
+        <div ref={this.modalRef} className="modal" id="tabeonModal">
+    */
+
+    this.modalRef = createRef();
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    /*
+            Fade in the modal component if the props changes (this is meant to check props.data, which are
+            bound to change as data raised by these modals will always differ)
+        */
+
+    if (prevProps !== this.props) {
+      setTimeout(() => {
+        this.fadeIn();
+      }, 100);
+    }
+  };
+
   fadeIn = () => {
     /*
             Fading in the modal by accessing its tag by react ref (https://reactjs.org/docs/refs-and-the-dom.html).
@@ -175,7 +236,7 @@ class Modal extends Component {
         - document.removeEventListener("scroll", this.scrollHandler);
     */
 
-    const modalWrapper = document.getElementById("tabeonModal");
+    const modalWrapper = this.modalRef.current;
     const modalDialogueBox = modalWrapper.getElementsByClassName(
       "modal-dialog"
     )[0];
@@ -196,70 +257,15 @@ class Modal extends Component {
             - wrapperOverflow ("auto", "scroll" or "hidden")
         */
 
+    /*
     const modalWrapper = document.getElementById("tabeonModal");
     document.body.style.overflow = bodyOverflow;
     modalWrapper.style.overflowY = wrapperOverflow;
-  };
-
-  componentWillUnmount = () => {
-    // The scroll event and the behaviour it follows are not needed when the user dismisses the modal. Therefore, it should be removed.
-
-    this.handleOverflow("auto", "auto");
-    document.removeEventListener("scroll", this.scrollHandler);
-  };
-
-  componentDidMount = () => {
-    const { isFunction } = validator;
-
-    /*
-      When a modal is rendered into the DOM, wait 100ms before fading in.
-    */
-    setTimeout(() => {
-      this.fadeIn();
-    }, 100);
-
-    if (isFunction(this.verifyChildProps)) {
-      this.verifyChildProps();
-    }
-
-    this.handleOverflow("hidden", "auto");
-
-    document.addEventListener("scroll", this.scrollHandler);
-
-    /*
-        Execute certain features belonging to each individual child modal, when mounting that modal and
-        if a childComponentDidMount() function is defined in that modal class.
-    */
-    if (isFunction(this.childComponentDidMount)) {
-      this.childComponentDidMount();
-    }
-
-    this.verifyProps();
-    this.verifyState();
-  };
-
-  componentWillMount = () => {
-    /*
-        Before the modal is mounted (meaning render() is executed), set modalRef
-        to provide access to the modal container in the DOM (using this.modalRef.current).
-
-        <div ref={this.modalRef} className="modal" id="tabeonModal">
     */
 
-    this.modalRef = createRef();
-  };
-
-  componentDidUpdate = (prevProps, prevState) => {
-    /*
-            Fade in the modal component if the props changes (this is meant to check props.data, which are
-            bound to change as data raised by these modals will always differ)
-        */
-
-    if (prevProps !== this.props) {
-      setTimeout(() => {
-        this.fadeIn();
-      }, 100);
-    }
+    const modalWrapper = this.modalRef.current;
+    document.body.style.overflow = bodyOverflow;
+    modalWrapper.style.overflowY = wrapperOverflow;
   };
 
   executePropsAction = (data) => {
@@ -331,7 +337,7 @@ class Modal extends Component {
         throw ExceptionsHandler.ValidatorError("mp-saveToState-107");
       if (isUndefined(value))
         throw ExceptionsHandler.ValidatorError("mp-saveToState-104");
-      if (!isString(key))
+      if (!isString(key) && key !== null)
         throw ExceptionsHandler.ValidatorError("mp-saveToState-105");
 
       let newInput = this.state;
