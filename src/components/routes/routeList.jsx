@@ -1,8 +1,13 @@
-import React, { Component } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
-import DashboardView from './../views/dashboard';
-import CalendarView from './../views/calendar';
+import React, { Component } from "react";
+import { Redirect, Route, Switch } from "react-router-dom";
+import TabManagementView from "../views/tabManagement";
+import AboutTabFlowerView from "./../views/aboutTabFlower";
+import SettingsView from "./../views/settings";
 
+/* Import Tabeon */
+import * as validator from "../../components/utils/inputValidators";
+import * as ExceptionsHandler from "../../components/utils/exceptionsAndHandler";
+import AppContext from "../contexts/AppContextProvider";
 /*
     The RouteList component
 
@@ -20,15 +25,10 @@ import CalendarView from './../views/calendar';
 */
 
 class RouteList extends Component {
-    /*
+  /*
         The Routes Array
 
-        This variable is the core of all navigation in Tabeon. It is also shared with
-        the App component and the MainSidebar component to keep them up to date when rendering 
-        navigation lists etc. To add anotheraccessible path and view to the app, simply add 
-        another object to the array:
-
-        - label (string): Label of the view (used by e.g. the sidebar's navigation menu)
+        - label (string): Label of the view (used by e.g. in the navigation menu)
         - path (string): starts with an slash ( / ). To add a parameter to the path, add another slash
         followed by :parameter. e.g. /myview/:param1/:param2/:param3 etc
         - component (a react component): A react component. Can be whatever, but in this case, a view
@@ -36,66 +36,47 @@ class RouteList extends Component {
 
         Good to know:
         - The lower down the list, the higher the priority
-        - All view mounted based on the information in this list have the ability to inform App component
-        about being mounted, and can also call the Modal component
     */
 
-    routes = [
-        { 
-            label: "Dashboard", 
-            path: "/dashboard" ,
-            component: DashboardView
-        },
-        { 
-            label: "Calendar", 
-            path: "/calendar/:year/:month/:date",
-            component: CalendarView
-        },
-        { 
-            label: "Calendar", 
-            path: "/calendar" ,
-            component: CalendarView
-        }
-    ];
+  static contextType = AppContext;
 
+  routes = [
+    {
+      label: "Manage Tabs",
+      path: "/manage",
+      component: TabManagementView,
+    },
+    {
+      label: "Settings",
+      path: "/settings",
+      component: SettingsView,
+    },
+    {
+      label: "About",
+      path: "/about",
+      component: AboutTabFlowerView,
+    },
+  ];
 
-    handleViewMount = (routeProps) => {
-        /*
-            Parameters: none
+  handleViewMount = () => {
+    /*
+        Parameters: none
 
-            Inform the App component that any view (this view) has been mounted, by raising its current state.
-            The state will travel through the following components:
+        Inform the App component that any view (this view) has been mounted, by raising its current state.
+        The state will travel through the following components:
 
-                RouteList > App
+        RouteList > App
 
-            All components in this chain will have access to the information raised.
-        */
+        All components in this chain will have access to the information raised.
 
-        const { onNavigation } = this.props;
+        CURRENTLY NOT in USE, but a good-to-have feature. Leaving it here for now
+    */
+  };
 
-        onNavigation(routeProps);
-    }
-r
-    raiseToModal = (data) => {
-        /*
-            Parameters: 
-            -   data (object, containing whatever data that we want the modal to processs. Mandatory)
+  sendToErrorOverlay = this.context.sendToErrorOverlay;
 
-            Inform the App component to launch a modal (popup), by raising the data provided
-            in this function's parameter. The data parameter will travel through the following components:
-
-                RouteList > App
-
-            All components in this chain will have access to the information raised.
-        */
-        console.log("BATMAN", data)
-        const { onRaiseToModal } = this.props;
-
-        onRaiseToModal(data);
-    }
-
-    renderRoutes = () => {
-        /*
+  renderRoutes = () => {
+    /*
             This function loops through every object set up in the 
             routes array of this component, and builds route components based
             on the array's information. The <Route> component sets up a path, which renders
@@ -103,80 +84,108 @@ r
             visits /calendar, then the <CalendarView> component will be rendered and so forth.
 
             Good to know about these props:
-            - onRaiseToModal: this props forwards info to the App component, triggering a modal based on forwarded info
-            - onViewMount: once the view is mounted, it forwards that info to App component.
+            - onViewMount: once the view is mounted, this (the RouteList component) can perform extra tasks if needed.
             - label: The label, passed from Routelist down to the view component (not necessary)
+            - key: a unique identifier for the view
         */
-        const views = this.routes;
+    const views = this.routes;
 
-        return views.map(
-            (view, key) => {
-                 const TagName = view.component;
+    return views.map((view, key) => {
+      const TagName = view.component;
 
-                return <Route path={view.path} render={
-                    (props) => {
-                        return <TagName
-                            onRaiseToModal={(data) => this.raiseToModal(data)} 
-                            onViewMount={(data) => this.handleViewMount(data)}
-                            label={view.label} 
-                            key={key}
-                            {...props} />
- 
-                    } 
-                }></Route>
-            }
-        )
-    }
+      return (
+        <Route
+          path={view.path}
+          key={"route-" + key}
+          render={(props) => {
+            return (
+              <TagName
+                onViewMount={(data) => this.handleViewMount(data)}
+                label={view.label}
+                key={"routeView-" + key}
+                {...props}
+              />
+            );
+          }}
+        ></Route>
+      );
+    });
+  };
 
-    getRoutesPathAndLabel = () => {
-        /*
+  getRoutesPathAndLabel = () => {
+    /*
             Build and return a route list array, without the component keys. This information
             is raised to the App component where it is set in state. Once
             the App's state is updated, this information will be sent down to MainSidebar
             component and other components that might need it.
         */
 
-        const routes = this.routes;
-        const output = [];
-        
-        routes.map(
-            (route, i) => {
-                if(route.path.includes("/:") === false){
-                    output.push({
-                        label: route.label,
-                        path: route.path,
-                        key: i
-                    });
-                } 
+    const routes = this.routes;
+    const output = [];
 
-                return null;
+    routes.map((route, i) => {
+      if (route.path.includes("/:") === false) {
+        output.push({
+          label: route.label,
+          path: route.path,
+          key: i,
+        });
+      }
+
+      return null;
+    });
+
+    return output;
+  };
+
+  saveRoutesInfoToAppContext = () => {
+    const data = this.getRoutesPathAndLabel();
+    const { setValueToState } = this.context;
+
+    const { isNumber, isString, isArray, isObject } = validator;
+
+    try {
+      if (isArray(data) && data.length > 0) {
+        const routes = data;
+        let errors = 0;
+
+        for (let i = 0; i < routes.length; i++) {
+          if (isObject(routes[i])) {
+            if (
+              !isString(routes[i].label) ||
+              !isString(routes[i].path) ||
+              !isNumber(routes[i].key)
+            ) {
+              errors++;
             }
-        )
-        
-        return output;
+          } else {
+            errors++;
+          }
+        }
+
+        if (errors === 0) {
+          setValueToState("routes", routes);
+        } else {
+          throw ExceptionsHandler.ValidatorError("app-112");
+        }
+      } else {
+        throw ExceptionsHandler.ValidatorError("app-113");
+      }
+    } catch (err) {
+      this.sendToErrorOverlay(err);
     }
+  };
 
-    raiseRoutesInfo = () => {
-        /*
-            Raise information to App component
-        */
-
-        const { onRaisedRoutesInfo } = this.props;
-        const data = this.getRoutesPathAndLabel();
-
-        onRaisedRoutesInfo(data);
-    }
-
-    componentDidMount = () => {
-        /*
+  componentDidMount = () => {
+    /*
             The component has successfully mounted and set up the routes. We may now
             provide the route information to App component.
         */
-        this.raiseRoutesInfo();
-    }
+    this.saveRoutesInfoToAppContext();
+  };
 
-    render = () => {
-        /*
+  render = () => {
+    /*
             Using React Router DOM to set up routes, which renders components
             based on browser addressbar paths. In order for this to work, <BrowserRouter> needs
             to encapsulate whatever <App /> render. (in this project, it encapsulates the <App> component
@@ -184,14 +193,13 @@ r
 
             Read more: https://reacttraining.com/react-router/web/guides/quick-start
         */
-        return (
-            <Switch>
-                {this.renderRoutes()}
-
-                <Redirect from="/" to="/dashboard" />
-            </Switch>
-        );
-    }
+    return (
+      <Switch>
+        {this.renderRoutes()}
+        <Redirect from="/" to="/manage"></Redirect>
+      </Switch>
+    );
+  };
 }
 
 export default RouteList;
