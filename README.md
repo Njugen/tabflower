@@ -1,4 +1,4 @@
-#Tabflower
+# Tabflower
 
 Tabflower is a window and tab management addon for modern web browsers. It lets the user sort and group tabs together into individual groups, in order to launch them at any time or at a scheduled time.
 The purpose is to help the user to be more consequential while using the web browser, be it for slacking off during freetime - or maintaining focus during work. Or just to keep things organized.
