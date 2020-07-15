@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test <ETGMCreateNewGroupModal /> component behaviour at mount Test renderBodyContents() Snapshot test of renderBodyContents(), assuming information is available in this.props.data Run renderBodyContents(), with all parameters intact: Check that the snapshot matches the example set by the first test run 1`] = `
+<BodyContents
+  fieldErrors={Object {}}
+  onChange={[Function]}
+  tabGroupDetails={
+    Object {
+      "windowAndTabs": Array [
+        Object {
+          "tabs": Array [
+            Object {
+              "favIconUrl": "http://google.com/favicon.ico",
+              "title": "A test tab in a test window",
+              "url": "http://google.com",
+            },
+            Object {
+              "favIconUrl": "http://google.com/favicon.ico",
+              "title": "Another test tab in a test window",
+              "url": "http://google.com",
+            },
+          ],
+        },
+      ],
+    }
+  }
+/>
+`;

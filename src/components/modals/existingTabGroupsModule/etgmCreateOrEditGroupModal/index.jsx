@@ -324,43 +324,32 @@ class ETGMCreateNewGroupModal extends Modal {
       const { isObject, isArray } = validator;
       const { data } = this.props;
 
-      if (isObject(data) && isObject(data.params)) {
-        const { windowCollection, groupId, groupScheduleList } = data.params;
-        console.log("CHILDCOMP", groupScheduleList);
-        if (isArray(windowCollection)) {
-          this.saveToState(
-            "windowCollection",
-            windowCollection,
-            "tabGroupDetails"
-          );
-        } else {
-          throw ValidatorError("ETGMCreateNewGroupModal-128");
-        }
+      if (!isObject(data)) throw ValidatorError("ETGMCreateNewGroupModal-127");
 
-        if (isArray(groupScheduleList)) {
-          this.saveToState(
-            "groupScheduleList",
-            groupScheduleList,
-            "tabGroupDetails"
-          );
-        } else {
-          //throw ValidatorError("ETGMCreateNewGroupModal-128");
-        }
+      if (isObject(data) && !isObject(data.params))
+        throw ValidatorError("ETGMCreateNewGroupModal-142");
 
-        this.saveToState(
-          "groupId",
-          this.setGroupId(groupId),
-          "tabGroupDetails"
-        );
-      } else {
-        throw ValidatorError("ETGMCreateNewGroupModal-127");
-      }
+      const { params } = data;
+      const { windowCollection, groupId } = params;
+
+      if (!isArray(windowCollection))
+        throw ValidatorError("ETGMCreateNewGroupModal-128");
+
+      this.saveToState("windowCollection", windowCollection, "tabGroupDetails");
+
+      this.saveToState("groupId", this.setGroupId(groupId), "tabGroupDetails");
     } catch (err) {
       ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
   renderBodyContents = (data) => {
+    const { isObject } = validator;
+
+    if (!isObject(data)) {
+      throw ValidatorError("ETGMCreateNewGroupModal-139");
+    }
+
     return (
       <BodyContents
         data={data}
@@ -372,10 +361,22 @@ class ETGMCreateNewGroupModal extends Modal {
   };
 
   renderHeaderContents = (data) => {
+    const { isObject } = validator;
+
+    if (!isObject(data)) {
+      throw ValidatorError("ETGMCreateNewGroupModal-140");
+    }
+
     return <HeaderContents data={data} />;
   };
 
   renderFooterContents = (data) => {
+    const { isObject } = validator;
+
+    if (!isObject(data)) {
+      throw ValidatorError("ETGMCreateNewGroupModal-141");
+    }
+
     return (
       <FooterContents
         data={data}
