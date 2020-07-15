@@ -2,15 +2,15 @@ import React from "react";
 import Modal from "../../modal/index";
 import { PropTypes } from "prop-types";
 import * as validator from "../../../utils/inputValidators";
-import HeaderContents from "./headerContents";
+import HeaderContents from "./HeaderContents";
 
 import AppContext from "./../../../contexts/AppContextProvider";
-import BodyContents from "./bodyContents";
+import BodyContents from "./BodyContents";
 import {
   ValidatorError,
   ErrorHandler,
 } from "./../../../utils/exceptionsAndHandler";
-import FooterContents from "./footerContents";
+import FooterContents from "./FooterContents";
 
 class ETGMCreateNewGroupModal extends Modal {
   static contextType = AppContext;
@@ -28,9 +28,12 @@ class ETGMCreateNewGroupModal extends Modal {
             Verify the this.props.data.params object
         */
     const { isBoolean, isString, isUndefined, isArray, isObject } = validator;
+    const { data } = this.props;
 
-    if (isObject(this.props.data)) {
-      if (isObject(this.props.data.params)) {
+    if (isObject(data)) {
+      const { params } = data;
+
+      if (isObject(params)) {
         const {
           windowCollection,
           groupName,
@@ -40,7 +43,7 @@ class ETGMCreateNewGroupModal extends Modal {
           groupDontAskAgain,
           type,
           groupId,
-        } = this.props.data.params;
+        } = params;
 
         /*
                     type (string, mandatory)
@@ -115,7 +118,7 @@ class ETGMCreateNewGroupModal extends Modal {
         }
 
         if (!isBoolean(groupDontAskAgain) && !isUndefined(groupDontAskAgain)) {
-          throw ValidatorError("ETGMCreateNewGroupModal-122");
+          throw ValidatorError("ETGMCreateNewGroupModal-137");
         }
 
         /* 
@@ -146,14 +149,17 @@ class ETGMCreateNewGroupModal extends Modal {
   saveModalHandler = (callback) => {
     try {
       const { isFunction, isObject, isString } = validator;
+      const { data } = this.props;
 
       let error = {
         issue: null,
       };
 
-      if (isObject(this.props.data)) {
-        if (isObject(this.props.data.params)) {
-          if (isString(this.props.data.params.groupName)) {
+      if (isObject(data)) {
+        const { params } = data;
+
+        if (isObject(params)) {
+          if (isString(params.groupName)) {
             error.additionalMessage = "The tab group could not be changed";
           } else {
             error.additionalMessage = "The tab group could not be saved";
@@ -202,23 +208,28 @@ class ETGMCreateNewGroupModal extends Modal {
         isArray,
         isFunction,
       } = validator;
-      console.log("JACKASS", this.state);
+
       let fieldErrors = {};
       let error = {
         issue: null,
       };
 
+      const { data } = this.props;
+      const { tabGroupDetails } = this.state;
+
       if (isFunction(success)) {
-        if (isObject(this.props.data)) {
-          if (isObject(this.props.data.params)) {
-            if (isObject(this.state.tabGroupDetails)) {
+        if (isObject(data)) {
+          const { params } = data;
+
+          if (isObject(params)) {
+            if (isObject(tabGroupDetails)) {
               const {
                 groupName,
                 groupDescription,
                 windowCollection,
-              } = this.state.tabGroupDetails;
+              } = tabGroupDetails;
 
-              if (isString(this.props.data.params.groupName)) {
+              if (isString(params.groupName)) {
                 error.additionalMessage = "The tab group could not be changed";
               } else {
                 error.additionalMessage = "The tab group could not be saved";
@@ -313,43 +324,32 @@ class ETGMCreateNewGroupModal extends Modal {
       const { isObject, isArray } = validator;
       const { data } = this.props;
 
-      if (isObject(data) && isObject(data.params)) {
-        const { windowCollection, groupId, groupScheduleList } = data.params;
-        console.log("CHILDCOMP", groupScheduleList);
-        if (isArray(windowCollection)) {
-          this.saveToState(
-            "windowCollection",
-            windowCollection,
-            "tabGroupDetails"
-          );
-        } else {
-          throw ValidatorError("ETGMCreateNewGroupModal-128");
-        }
+      if (!isObject(data)) throw ValidatorError("ETGMCreateNewGroupModal-127");
 
-        if (isArray(groupScheduleList)) {
-          this.saveToState(
-            "groupScheduleList",
-            groupScheduleList,
-            "tabGroupDetails"
-          );
-        } else {
-          //throw ValidatorError("ETGMCreateNewGroupModal-128");
-        }
+      if (isObject(data) && !isObject(data.params))
+        throw ValidatorError("ETGMCreateNewGroupModal-142");
 
-        this.saveToState(
-          "groupId",
-          this.setGroupId(groupId),
-          "tabGroupDetails"
-        );
-      } else {
-        throw ValidatorError("ETGMCreateNewGroupModal-127");
-      }
+      const { params } = data;
+      const { windowCollection, groupId } = params;
+
+      if (!isArray(windowCollection))
+        throw ValidatorError("ETGMCreateNewGroupModal-128");
+
+      this.saveToState("windowCollection", windowCollection, "tabGroupDetails");
+
+      this.saveToState("groupId", this.setGroupId(groupId), "tabGroupDetails");
     } catch (err) {
       ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
   renderBodyContents = (data) => {
+    const { isObject } = validator;
+
+    if (!isObject(data)) {
+      throw ValidatorError("ETGMCreateNewGroupModal-139");
+    }
+
     return (
       <BodyContents
         data={data}
@@ -361,10 +361,22 @@ class ETGMCreateNewGroupModal extends Modal {
   };
 
   renderHeaderContents = (data) => {
+    const { isObject } = validator;
+
+    if (!isObject(data)) {
+      throw ValidatorError("ETGMCreateNewGroupModal-140");
+    }
+
     return <HeaderContents data={data} />;
   };
 
   renderFooterContents = (data) => {
+    const { isObject } = validator;
+
+    if (!isObject(data)) {
+      throw ValidatorError("ETGMCreateNewGroupModal-141");
+    }
+
     return (
       <FooterContents
         data={data}

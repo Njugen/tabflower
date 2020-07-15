@@ -3,9 +3,9 @@ import Modal from "../../modal";
 import { PropTypes } from "prop-types";
 import * as ExceptionsHandler from "../../../utils/exceptionsAndHandler";
 import * as validator from "../../../utils/inputValidators";
-import HeaderContents from "./headerContents";
-import FooterContents from "./footerContents";
-import BodyContents from "./bodyContents";
+import HeaderContents from "./HeaderContents";
+import FooterContents from "./FooterContents";
+import BodyContents from "./BodyContents";
 
 class ETGMRemoveGroupsModal extends Modal {
   verifyChildProps = () => {

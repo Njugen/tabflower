@@ -273,6 +273,29 @@ export const ValidatorError = (code) => {
       message =
         "The data props section is missing or not an object when attempting to add/modify a tab group. The attempt to add/modify a tab group is neglected.";
       break;
+    case "ETGMCreateNewGroupModal-137":
+      message =
+        'The "groupDontAskAgain" parameter in this.props.data.params needs to be a boolean value (true or false) if given. If such a value is not available, remove "groupDontAskAgain" from props. As a result of this error, tab groups cannot be added nor edited at this time.';
+      break;
+    case "ETGMCreateNewGroupModal-138":
+      message =
+        "The schedule data retrieved for this modal is either corrupted or stored in the wrong format. The data needs to be an array.";
+      break;
+    case "ETGMCreateNewGroupModal-139":
+      message =
+        "The data parameter in renderBodyContents() of ETGMCreateNewGroupModal, needs to be an object";
+      break;
+    case "ETGMCreateNewGroupModal-140":
+      message =
+        "The data parameter in renderHeaderContents() of ETGMCreateNewGroupModal, needs to be an object";
+      break;
+    case "ETGMCreateNewGroupModal-141":
+      message =
+        "The data parameter in renderFooterContents() of ETGMCreateNewGroupModal, needs to be an object";
+      break;
+    case "ETGMCreateNewGroupModal-142":
+      message = "The necessary info about the targetted tab could not be read.";
+      break;
     // ETGMRemoveGroupsModal
     case "ETGMRemoveGroupsModal-101":
       message = "The callback parameter is not a function.";

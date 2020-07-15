@@ -3,9 +3,9 @@ import * as validator from "../../utils/inputValidators";
 import * as ExceptionsHandler from "../../utils/exceptionsAndHandler";
 import PropTypes from "prop-types";
 import AppContext from "../../contexts/AppContextProvider";
-import HeaderWrapper from "./headerWrapper";
-import BodyWrapper from "./bodyWrapper";
-import FooterWrapper from "./footerWrapper";
+import HeaderWrapper from "./HeaderWrapper";
+import BodyWrapper from "./BodyWrapper";
+import FooterWrapper from "./FooterWrapper";
 
 /*
     The Modal component
