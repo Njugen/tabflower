@@ -296,6 +296,50 @@ export const ValidatorError = (code) => {
     case "ETGMCreateNewGroupModal-142":
       message = "The necessary info about the targetted tab could not be read.";
       break;
+    case "ETGMCreateNewGroupModal-b1":
+      message = 'The "data" props is missing or not an object';
+      break;
+    case "ETGMCreateNewGroupModal-b2":
+      message = 'The "fieldErrors" props is missing or not an object';
+      break;
+    case "ETGMCreateNewGroupModal-b3":
+      message = 'The "onChange" props is missing or not a function';
+      break;
+    case "ETGMCreateNewGroupModal-b4":
+      message = 'The "tabGroupDetails" props is missing or not an object';
+      break;
+    case "ETGMCreateNewGroupModal-b5":
+      message =
+        'The "params" key in this.props.data is missing or not an object';
+      break;
+    case "ETGMCreateNewGroupModal-b6":
+      message =
+        'The "groupName" in this.props.data.params has to be either undefined or a string. All other datatypes are invalid.';
+      break;
+    case "ETGMCreateNewGroupModal-b7":
+      message =
+        'The "groupCloseAll" in this.props.data.params has to be either undefined or a boolean (true or false). All other datatypes are invalid.';
+      break;
+    case "ETGMCreateNewGroupModal-b8":
+      message =
+        'The "groupCloseInactiveTabs" in this.props.data.params has to be either undefined or a boolean (true or false). All other datatypes are invalid.';
+      break;
+    case "ETGMCreateNewGroupModal-b9":
+      message =
+        'The "groupDescription" in this.props.data.params has to be either undefined or a string. All other datatypes are invalid.';
+      break;
+    case "ETGMCreateNewGroupModal-b10":
+      message =
+        'The "groupDontAskAgain" in this.props.data.params has to be either undefined or a boolean (true or false). All other datatypes are invalid.';
+      break;
+    case "ETGMCreateNewGroupModal-b11":
+      message =
+        'The "type" in this.props.data.params has to be either undefined or a string. All other datatypes are invalid.';
+      break;
+    case "ETGMCreateNewGroupModal-b12":
+      message =
+        'If the "type" in this.props.data.params is given as a string, it has to hold one of the following values: "currently-opened", "existing-group" or "new-group". All other datatypes are invalid.';
+      break;
     // ETGMRemoveGroupsModal
     case "ETGMRemoveGroupsModal-101":
       message = "The callback parameter is not a function.";

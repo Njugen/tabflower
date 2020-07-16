@@ -1,8 +1,7 @@
-import React, { Fragment } from "react";
-import { shallow, mount, render } from "enzyme";
+import React from "react";
+import { shallow } from "enzyme";
 import ETGMCreateNewGroupModal from "./../../../../../components/modals/existingTabGroupsModule/etgmCreateOrEditGroupModal";
 import * as ExceptionsHandler from "./../../../../../components/utils/exceptionsAndHandler";
-import * as validator from "./../../../../../components/utils/inputValidators";
 
 const predefinedComponent = (props, options) => {
   props = props || {};
@@ -1570,6 +1569,7 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
           componentInstance = testComponent.instance();
           const success = jest.fn();
 
+          componentInstance.state.tabGroupDetails = undefined;
           componentInstance.validateFields(success);
 
           expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith(
@@ -1578,7 +1578,7 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
         });
 
         test.each(various_nonObjects)(
-          'Run validateFields(success): If a "tabGroupDetails" = %p (is not an object) component state, throw an error "ETGMCreateNewGroupModal-125"',
+          'Run validateFields(success): If a "tabGroupDetails" = %p (is not an object) in component state, throw an error "ETGMCreateNewGroupModal-125"',
           (val) => {
             const presetProps = {
               data: {

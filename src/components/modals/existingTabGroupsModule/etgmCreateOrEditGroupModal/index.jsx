@@ -14,6 +14,12 @@ import FooterContents from "./FooterContents";
 
 class ETGMCreateNewGroupModal extends Modal {
   static contextType = AppContext;
+
+  state = {
+    fieldErrors: this.state.fieldErrors,
+    tabGroupDetails: {},
+  };
+
   /*
         verifyChildProps()
 
@@ -345,6 +351,7 @@ class ETGMCreateNewGroupModal extends Modal {
 
   renderBodyContents = (data) => {
     const { isObject } = validator;
+    const {fieldErrors, tabGroupDetails} = this.state;
 
     if (!isObject(data)) {
       throw ValidatorError("ETGMCreateNewGroupModal-139");
@@ -353,8 +360,8 @@ class ETGMCreateNewGroupModal extends Modal {
     return (
       <BodyContents
         data={data}
-        fieldErrors={this.state.fieldErrors}
-        tabGroupDetails={this.state.tabGroupDetails}
+        fieldErrors={fieldErrors}
+        tabGroupDetails={tabGroupDetails}
         onChange={(id, value, area) => this.saveToState(id, value, area)}
       />
     );
