@@ -22,6 +22,9 @@ export default class FooterContents extends Component {
       throw ValidatorError("ETGMCreateNewGroupModal-f2");
     if (!isFunction(onDismiss))
       throw ValidatorError("ETGMCreateNewGroupModal-f3");
+
+    if (isObject(data) && !isObject(data.params))
+      throw ValidatorError("ETGMCreateNewGroupModal-f6");
   };
 
   componentDidUpdate = () => {

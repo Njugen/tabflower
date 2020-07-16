@@ -33,6 +33,10 @@ describe("Test <BodyContents /> component behaviour at mount", () => {
     "ETGMCreateNewGroupModal-f3": ExceptionsHandler.ValidatorError(
       "ETGMCreateNewGroupModal-f3"
     ),
+
+    "ETGMCreateNewGroupModal-f6": ExceptionsHandler.ValidatorError(
+      "ETGMCreateNewGroupModal-f6"
+    ),
   };
 
   const expectedErrorReturns = {
@@ -50,6 +54,11 @@ describe("Test <BodyContents /> component behaviour at mount", () => {
       name: "ValidatorError",
       message: 'The "onDismiss" props is missing or not a function',
       code: "ETGMCreateNewGroupModal-f3",
+    },
+    "ETGMCreateNewGroupModal-f6": {
+      name: "ValidatorError",
+      message: 'The "params" key in the data props is missing or not an object',
+      code: "ETGMCreateNewGroupModal-f6",
     },
   };
 
@@ -326,6 +335,66 @@ describe("Test <BodyContents /> component behaviour at mount", () => {
 
         expect(() => componentInstance.verifyProps()).not.toThrowError(
           expectedErrorReturns["ETGMCreateNewGroupModal-f3"].message
+        );
+      });
+    });
+
+    describe("Try out different this.props.data.params values (given that data is an object", () => {
+      test('Run verifyProps(): If this.props.data.params is missing, throw error "ETGMCreateNewGroupModal-f6"', () => {
+        const presetProps = {
+          onConfirm: () => {},
+          onDismiss: () => {},
+          data: {},
+        };
+        testComponent = predefinedComponent(presetProps, {
+          disableLifecycleMethods: true,
+        });
+        componentInstance = testComponent.instance();
+
+        expect(() => componentInstance.verifyProps()).toThrowError(
+          expectedErrorReturns["ETGMCreateNewGroupModal-f6"].message
+        );
+        expect(() => componentInstance.verifyProps()).toThrowError(
+          expectedErrorReturns["ETGMCreateNewGroupModal-f6"].message
+        );
+      });
+
+      test.each(various_nonObjects)(
+        'Run verifyProps(): If this.props.data.params = %p (not an object), throw error "ETGMCreateNewGroupModal-f6"',
+        (val) => {
+          const presetProps = {
+            onConfirm: () => {},
+            onDismiss: () => {},
+            data: {
+              params: val,
+            },
+          };
+          testComponent = predefinedComponent(presetProps, {
+            disableLifecycleMethods: true,
+          });
+          componentInstance = testComponent.instance();
+
+          expect(() => componentInstance.verifyProps()).toThrowError(
+            expectedErrorReturns["ETGMCreateNewGroupModal-f6"].message
+          );
+        }
+      );
+
+      test('Run verifyProps(): If this.props.data.params is an object, do not throw error "ETGMCreateNewGroupModal-f6"', () => {
+        const presetProps = {
+          onConfirm: () => {},
+          onDismiss: () => {},
+          data: {
+            params: {},
+          },
+        };
+        testComponent = predefinedComponent(presetProps, {
+          disableLifecycleMethods: true,
+        });
+        componentInstance = testComponent.instance();
+
+        expect(() => componentInstance.verifyProps()).not.toThrowError(
+          expectedErrorReturns["ETGMCreateNewGroupModal-f6"].message
         );
       });
     });
