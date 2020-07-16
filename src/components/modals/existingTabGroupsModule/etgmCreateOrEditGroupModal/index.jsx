@@ -351,7 +351,7 @@ class ETGMCreateNewGroupModal extends Modal {
 
   renderBodyContents = (data) => {
     const { isObject } = validator;
-    const {fieldErrors, tabGroupDetails} = this.state;
+    const { fieldErrors, tabGroupDetails } = this.state;
 
     if (!isObject(data)) {
       throw ValidatorError("ETGMCreateNewGroupModal-139");

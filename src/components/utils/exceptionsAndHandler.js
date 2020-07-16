@@ -340,6 +340,31 @@ export const ValidatorError = (code) => {
       message =
         'If the "type" in this.props.data.params is given as a string, it has to hold one of the following values: "currently-opened", "existing-group" or "new-group". All other datatypes are invalid.';
       break;
+    case "ETGMCreateNewGroupModal-b13":
+      message =
+        "The required parameters were not provided to the data props of this modal. The attempt to add/modify a tab group is neglected.";
+      break;
+    case "ETGMCreateNewGroupModal-b14":
+      message =
+        "The data props section is missing or not an object when attempting to add/modify a tab group. The attempt to add/modify a tab group is neglected.";
+      break;
+    case "ETGMCreateNewGroupModal-f1":
+      message = 'The "data" props is missing or not an object';
+      break;
+    case "ETGMCreateNewGroupModal-f2":
+      message = 'The "onConfirm" props is missing or not a function';
+      break;
+    case "ETGMCreateNewGroupModal-f3":
+      message = 'The "onDismiss" props is missing or not a function';
+      break;
+    case "ETGMCreateNewGroupModal-f4":
+      message =
+        "The required parameters were not provided to the data props of this modal. The attempt to add/modify a tab group is neglected.";
+      break;
+    case "ETGMCreateNewGroupModal-f5":
+      message =
+        "The data props section is missing or not an object when attempting to add/modify a tab group. The attempt to add/modify a tab group is neglected.";
+      break;
     // ETGMRemoveGroupsModal
     case "ETGMRemoveGroupsModal-101":
       message = "The callback parameter is not a function.";

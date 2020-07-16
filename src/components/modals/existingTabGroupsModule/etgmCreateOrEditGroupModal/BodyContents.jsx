@@ -185,10 +185,10 @@ export default class BodyContents extends Component {
           </Fragment>
         );
       } else {
-        return ValidatorError("ETGMCreateNewGroupModal-135");
+        return ValidatorError("ETGMCreateNewGroupModal-b13");
       }
     } else {
-      return ValidatorError("ETGMCreateNewGroupModal-136");
+      return ValidatorError("ETGMCreateNewGroupModal-b14");
     }
   }
 }
