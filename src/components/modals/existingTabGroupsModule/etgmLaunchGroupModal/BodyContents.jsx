@@ -2,14 +2,27 @@ import React, { Component, Fragment } from "react";
 import * as validator from "../../../utils/inputValidators";
 
 import TBCheckBox from "../../../utils/form/tbCheckbox";
+import * as ExceptionsHandler from "../../../utils/exceptionsAndHandler";
 
 export default class BodyContents extends Component {
+  verifyProps = () => {
+    const { data, onChange } = this.props;
+    const { isObject, isFunction } = validator;
+
+    if (!isObject(data))
+      throw ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-113");
+
+    if (!isFunction(onChange))
+      throw ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-114");
+  };
+
   getWindowCollection = () => {
     const { data } = this.props;
     const { isObject, isArray } = validator;
     const emptyCollection = [];
 
     if (!isObject(data)) return emptyCollection;
+
     const { params } = data;
 
     if (!isObject(params)) return emptyCollection;
@@ -78,52 +91,44 @@ export default class BodyContents extends Component {
     const { data, onChange } = this.props;
     const { isObject } = validator;
 
-    if (isObject(data)) {
-      const { params } = data;
-
-      if (isObject(params)) {
-        const {
-          groupCloseAll,
-          groupCloseInactiveTabs,
-          groupDontAskAgain,
-        } = params;
-
-        return (
-          <Fragment>
-            <TBCheckBox
-              id="groupCloseAll"
-              label="Close all currently opened tabs and windows"
-              value={groupCloseAll && groupCloseAll === true ? "true" : "false"}
-              onToggle={(id, value) => onChange(id, value, "tabGroupDetails")}
-            />
-            <TBCheckBox
-              id="groupCloseInactiveTabs"
-              label="Automatically close all unresponsive tabs opened by this tab group"
-              value={
-                groupCloseInactiveTabs && groupCloseInactiveTabs === true
-                  ? "true"
-                  : "false"
-              }
-              onToggle={(id, value) => onChange(id, value, "tabGroupDetails")}
-            />
-            <TBCheckBox
-              id="groupDontAskAgain"
-              label="Save all selected options and do not show this message again (All settings offered in this popup can still be changed for any tab group. Just click the cog wheel for the tab group you want to change)."
-              value={
-                groupDontAskAgain && groupDontAskAgain === true
-                  ? "true"
-                  : "false"
-              }
-              onToggle={(id, value) => onChange(id, value, "tabGroupDetails")}
-            />
-          </Fragment>
-        );
-      } else {
-        return "The options could not be loaded because the relevant parameters were not provided with the group data. Please, contact the developer.";
-      }
-    } else {
+    if (!isObject(data))
       return "Information about the requested tab group was not provided to this modal. Please, contact the developer.";
-    }
+
+    const { params } = data;
+
+    if (!isObject(params))
+      return "The options could not be loaded because the relevant parameters were not provided with the group data. Please, contact the developer.";
+
+    const { groupCloseAll, groupCloseInactiveTabs, groupDontAskAgain } = params;
+
+    return (
+      <Fragment>
+        <TBCheckBox
+          id="groupCloseAll"
+          label="Close all currently opened tabs and windows"
+          value={groupCloseAll && groupCloseAll === true ? "true" : "false"}
+          onToggle={(id, value) => onChange(id, value, "tabGroupDetails")}
+        />
+        <TBCheckBox
+          id="groupCloseInactiveTabs"
+          label="Automatically close all unresponsive tabs opened by this tab group"
+          value={
+            groupCloseInactiveTabs && groupCloseInactiveTabs === true
+              ? "true"
+              : "false"
+          }
+          onToggle={(id, value) => onChange(id, value, "tabGroupDetails")}
+        />
+        <TBCheckBox
+          id="groupDontAskAgain"
+          label="Save all selected options and do not show this message again (All settings offered in this popup can still be changed for any tab group. Just click the cog wheel for the tab group you want to change)."
+          value={
+            groupDontAskAgain && groupDontAskAgain === true ? "true" : "false"
+          }
+          onToggle={(id, value) => onChange(id, value, "tabGroupDetails")}
+        />
+      </Fragment>
+    );
   };
 
   render() {

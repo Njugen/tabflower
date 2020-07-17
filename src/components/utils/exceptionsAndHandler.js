@@ -446,15 +446,21 @@ export const ValidatorError = (code) => {
       break;
     case "ETGMLaunchGroupsModal-110":
       message =
-        "The data parameter in renderBodyContents() of ETGMCreateNewGroupModal, needs to be an object";
+        "The data parameter in renderBodyContents() of ETGMLaunchGroupsModal, needs to be an object";
       break;
     case "ETGMLaunchGroupsModal-111":
       message =
-        "The data parameter in renderHeaderContents() of ETGMCreateNewGroupModal, needs to be an object";
+        "The data parameter in renderHeaderContents() of ETGMLaunchGroupsModal, needs to be an object";
       break;
     case "ETGMLaunchGroupsModal-112":
       message =
-        "The data parameter in renderFooterContents() of ETGMCreateNewGroupModal, needs to be an object";
+        "The data parameter in renderFooterContents() of ETGMLaunchGroupsModal, needs to be an object";
+      break;
+    case "ETGMLaunchGroupsModal-113":
+      message = "The data key in props needs to be an object";
+      break;
+    case "ETGMLaunchGroupsModal-114":
+      message = "The onChange key in props needs to be a function";
       break;
     // COTMRemoveTabModal
     case "COTMRemoveTabModal-101":

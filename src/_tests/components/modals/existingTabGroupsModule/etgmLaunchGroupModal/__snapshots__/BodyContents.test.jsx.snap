@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test <BodyContents /> component behaviour at mount Test renderLaunchOptions() Examine the function, when this.props.data and this.props.data.params are valid Run renderLaunchOptions(): The output based on the preset props should match the snapshot. Evaluate the snapshot after every run of this test case. 1`] = `
+<React.Fragment>
+  <TBCheckBox
+    id="groupCloseAll"
+    label="Close all currently opened tabs and windows"
+    onToggle={[Function]}
+    value="false"
+  />
+  <TBCheckBox
+    id="groupCloseInactiveTabs"
+    label="Automatically close all unresponsive tabs opened by this tab group"
+    onToggle={[Function]}
+    value="true"
+  />
+  <TBCheckBox
+    id="groupDontAskAgain"
+    label="Save all selected options and do not show this message again (All settings offered in this popup can still be changed for any tab group. Just click the cog wheel for the tab group you want to change)."
+    onToggle={[Function]}
+    value="true"
+  />
+</React.Fragment>
+`;
