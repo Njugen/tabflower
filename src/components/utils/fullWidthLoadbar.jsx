@@ -27,7 +27,6 @@ class FullWidthLoadbar extends Component {
   /*
         Show the loading/filler animation when a new (or updated) refreshFactor is passed to this component
         as a prop. This generally happens at each state update of the refreshFactor variable in the parent component 
-        (Check out the updateState() function in App.js for more information about this)
     */
   componentDidUpdate = (prevProps, prevState) => {
     if (this.props.refreshFactor !== prevState.refreshFactor) {

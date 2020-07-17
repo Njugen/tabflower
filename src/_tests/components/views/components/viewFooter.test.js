@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow } from "enzyme";
-import ViewFooter from "./../../../components/views/aboutTabFlower";
 import * as ExceptionsHandler from "./../../../components/utils/exceptionsAndHandler";
+import ViewFooter from "./../../../../components/views/components/viewFooter";
 
 const predefinedComponent = (props, options) => {
   props = props || {};

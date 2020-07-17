@@ -444,6 +444,18 @@ export const ValidatorError = (code) => {
       message =
         'The "data" key in this.props is not an object. The data key needs to be an object, which provides parameters and other data required by the modal';
       break;
+    case "ETGMLaunchGroupsModal-110":
+      message =
+        "The data parameter in renderBodyContents() of ETGMCreateNewGroupModal, needs to be an object";
+      break;
+    case "ETGMLaunchGroupsModal-111":
+      message =
+        "The data parameter in renderHeaderContents() of ETGMCreateNewGroupModal, needs to be an object";
+      break;
+    case "ETGMLaunchGroupsModal-112":
+      message =
+        "The data parameter in renderFooterContents() of ETGMCreateNewGroupModal, needs to be an object";
+      break;
     // COTMRemoveTabModal
     case "COTMRemoveTabModal-101":
       message =

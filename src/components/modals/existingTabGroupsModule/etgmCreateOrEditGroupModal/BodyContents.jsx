@@ -108,7 +108,6 @@ export default class BodyContents extends Component {
           windowCollection: windowErr,
         } = fieldErrors;
 
-        console.log("MOVERFLOW", tabGroupDetails);
         return (
           <Fragment>
             <TBTextInput
