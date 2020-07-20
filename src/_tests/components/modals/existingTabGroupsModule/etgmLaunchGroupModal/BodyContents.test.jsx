@@ -3,6 +3,7 @@ import { shallow, mount, render } from "enzyme";
 import BodyContents from "../../../../../components/modals/existingTabGroupsModule/etgmLaunchGroupModal/BodyContents.jsx";
 import * as ExceptionsHandler from "../../../../../components/utils/exceptionsAndHandler";
 import * as validator from "../../../../../components/utils/inputValidators";
+import { dummyWindowsAndTabs } from "./../../../../../services/webextension/dummyService/data";
 
 const predefinedComponent = (props, options) => {
   props = props || {};
@@ -281,13 +282,305 @@ describe("Test <BodyContents /> component behaviour at mount", () => {
         }
       );
     });
+
+    describe("Examine function behaviour based on the value of this.props.data.params", () => {
+      test("Run getWindowCollection(): If this.props.data.params is missing, return an empty array", () => {
+        const presetProps = {
+          data: {},
+        };
+        testComponent = predefinedComponent(presetProps, {
+          disableLifecycleMethods: true,
+        });
+        componentInstance = testComponent.instance();
+
+        expect(componentInstance.getWindowCollection()).toStrictEqual([]);
+      });
+
+      test.each(various_nonObjects)(
+        "Run getWindowCollection(): If this.props.data.params = %p (not an object), return an empty array",
+        (val) => {
+          const presetProps = {
+            data: {
+              params: val,
+            },
+          };
+          testComponent = predefinedComponent(presetProps, {
+            disableLifecycleMethods: true,
+          });
+          componentInstance = testComponent.instance();
+
+          expect(componentInstance.getWindowCollection()).toStrictEqual([]);
+        }
+      );
+    });
+
+    describe("Examine function behaviour based on the value of this.props.data.params.windowCollection", () => {
+      test("Run getWindowCollection(): If this.props.data.params.windowCollection is missing, return an empty array", () => {
+        const presetProps = {
+          data: {
+            params: {},
+          },
+        };
+        testComponent = predefinedComponent(presetProps, {
+          disableLifecycleMethods: true,
+        });
+        componentInstance = testComponent.instance();
+
+        expect(componentInstance.getWindowCollection()).toStrictEqual([]);
+      });
+
+      test.each(various_nonArrays)(
+        "Run getWindowCollection(): If this.props.data.params = %p (not an array), return an empty array",
+        (val) => {
+          const presetProps = {
+            data: {
+              params: {
+                windowCollection: val,
+              },
+            },
+          };
+          testComponent = predefinedComponent(presetProps, {
+            disableLifecycleMethods: true,
+          });
+          componentInstance = testComponent.instance();
+
+          expect(componentInstance.getWindowCollection()).toStrictEqual([]);
+        }
+      );
+
+      test("Run getWindowCollection(): If this.props.data.params.windowCollection= [], return an empty array", () => {
+        const presetProps = {
+          data: {
+            params: {
+              windowCollection: [],
+            },
+          },
+        };
+        testComponent = predefinedComponent(presetProps, {
+          disableLifecycleMethods: true,
+        });
+        componentInstance = testComponent.instance();
+
+        expect(componentInstance.getWindowCollection()).toStrictEqual([]);
+      });
+    });
+
+    describe("Examine function behaviour based on all used props (data, data.params and data.params.windowCollection) being valid", () => {
+      test("Run getWindowCollection(): If this.props.data.params.windowCollection is a filled array, return it.", () => {
+        const expectedArray = dummyWindowsAndTabs;
+
+        const presetProps = {
+          data: {
+            params: {
+              windowCollection: expectedArray,
+            },
+          },
+        };
+
+        testComponent = predefinedComponent(presetProps, {
+          disableLifecycleMethods: true,
+        });
+
+        componentInstance = testComponent.instance();
+
+        expect(componentInstance.getWindowCollection()).toStrictEqual(
+          expectedArray
+        );
+      });
+    });
   });
 
-  describe("Test numberOfWindows()", () => {});
+  describe("Test numberOfWindows()", () => {
+    test("Run numberOfWindows(): It should return a number representing the number of windows located in this.props.data.params.windowCollection", () => {
+      const expectedArray = dummyWindowsAndTabs;
 
-  describe("Test numberOfTabs()", () => {});
+      const presetProps = {
+        data: {
+          params: {
+            windowCollection: expectedArray,
+          },
+        },
+      };
 
-  describe("Test renderWarningMessage()", () => {});
+      testComponent = predefinedComponent(presetProps, {
+        disableLifecycleMethods: true,
+      });
+
+      componentInstance = testComponent.instance();
+
+      expect(componentInstance.numberOfWindows()).toStrictEqual(
+        expectedArray.length
+      );
+    });
+  });
+
+  describe("Test numberOfTabs()", () => {
+    test("Run numberOfTabs(): It should return a number representing the total number of tabs in this.props.data.params.windowCollection (meaning, the sum of all tabs from each window)", () => {
+      const expectedArray = dummyWindowsAndTabs;
+
+      const presetProps = {
+        data: {
+          params: {
+            windowCollection: expectedArray,
+          },
+        },
+      };
+
+      // The expected number of tabs
+      const expectedNumberOfTabs = () => {
+        const windows = presetProps.data.params.windowCollection;
+
+        if (windows.length === 0) return 0;
+
+        let numberOfTabs = 0;
+
+        windows.map((window) => (numberOfTabs += window.tabs.length));
+        console.log("CINDERELLA", numberOfTabs);
+        return numberOfTabs;
+      };
+
+      testComponent = predefinedComponent(presetProps, {
+        disableLifecycleMethods: true,
+      });
+
+      componentInstance = testComponent.instance();
+
+      expect(componentInstance.numberOfTabs()).toStrictEqual(
+        expectedNumberOfTabs()
+      );
+    });
+  });
+
+  describe("Test renderWarningMessage()", () => {
+    test("Run renderWarningMessage(numberOfWindows, numberOfTabs). It should return the same message written in this test, in which the input parameters are present", () => {
+      const getRandomNumber = (max) => {
+        return Math.floor(Math.random() * Math.floor(max));
+      };
+
+      const mockedNumberOfWindows = getRandomNumber(1000);
+      const mockedNumberOfTabs = getRandomNumber(1000);
+
+      componentInstance.numberOfWindows = jest.fn(() => {
+        return mockedNumberOfWindows;
+      });
+      componentInstance.numberOfTabs = jest.fn(() => {
+        return mockedNumberOfTabs;
+      });
+
+      expect(
+        componentInstance.renderWarningMessage(
+          mockedNumberOfWindows,
+          mockedNumberOfTabs
+        )
+      ).toStrictEqual(
+        <p>
+          Warning: You are about to launch a group consisting of{" "}
+          <strong>{mockedNumberOfWindows} windows</strong> and{" "}
+          <strong>{mockedNumberOfTabs} tabs</strong>. This might stress your
+          computer down in the long run, or cause confusion in your work. Are
+          you sure you want to launch this group?
+        </p>
+      );
+    });
+
+    test.each(various_nonNumber)(
+      "Run renderWarningMessage(numberOfWindows, numberOfTabs), where numberOfWindows = %p (not a number). This should be represented in the returned text",
+      (val) => {
+        const getRandomNumber = (max) => {
+          return Math.floor(Math.random() * Math.floor(max));
+        };
+
+        const mockedNumberOfWindows = val;
+        const mockedNumberOfTabs = getRandomNumber(1000);
+
+        componentInstance.numberOfWindows = jest.fn(() => {
+          return mockedNumberOfWindows;
+        });
+        componentInstance.numberOfTabs = jest.fn(() => {
+          return mockedNumberOfTabs;
+        });
+
+        expect(
+          componentInstance.renderWarningMessage(
+            mockedNumberOfWindows,
+            mockedNumberOfTabs
+          )
+        ).toStrictEqual(
+          <p>
+            Warning: You are about to launch a group consisting of{" "}
+            <strong>{"an undefined number of"} windows</strong> and{" "}
+            <strong>{mockedNumberOfTabs} tabs</strong>. This might stress your
+            computer down in the long run, or cause confusion in your work. Are
+            you sure you want to launch this group?
+          </p>
+        );
+      }
+    );
+
+    test.each(various_nonNumber)(
+      "Run renderWarningMessage(numberOfWindows, numberOfTabs), where numberOfTabs = %p (not a number). This should be represented in the returned text",
+      (val) => {
+        const getRandomNumber = (max) => {
+          return Math.floor(Math.random() * Math.floor(max));
+        };
+
+        const mockedNumberOfWindows = getRandomNumber(1000);
+        const mockedNumberOfTabs = val;
+
+        componentInstance.numberOfWindows = jest.fn(() => {
+          return mockedNumberOfWindows;
+        });
+        componentInstance.numberOfTabs = jest.fn(() => {
+          return mockedNumberOfTabs;
+        });
+
+        expect(
+          componentInstance.renderWarningMessage(
+            mockedNumberOfWindows,
+            mockedNumberOfTabs
+          )
+        ).toStrictEqual(
+          <p>
+            Warning: You are about to launch a group consisting of{" "}
+            <strong>{mockedNumberOfWindows} windows</strong> and{" "}
+            <strong>{"an undefined number of"} tabs</strong>. This might stress
+            your computer down in the long run, or cause confusion in your work.
+            Are you sure you want to launch this group?
+          </p>
+        );
+      }
+    );
+
+    test.each(various_nonNumber)(
+      "Run renderWarningMessage(numberOfWindows, numberOfTabs), where both parameters are not numbers. This should be represented in the returned text",
+      (val) => {
+        const mockedNumberOfWindows = val;
+        const mockedNumberOfTabs = val;
+
+        componentInstance.numberOfWindows = jest.fn(() => {
+          return mockedNumberOfWindows;
+        });
+        componentInstance.numberOfTabs = jest.fn(() => {
+          return mockedNumberOfTabs;
+        });
+
+        expect(
+          componentInstance.renderWarningMessage(
+            mockedNumberOfWindows,
+            mockedNumberOfTabs
+          )
+        ).toStrictEqual(
+          <p>
+            Warning: You are about to launch a group consisting of{" "}
+            <strong>{"an undefined number of"} windows</strong> and{" "}
+            <strong>{"an undefined number of"} tabs</strong>. This might stress
+            your computer down in the long run, or cause confusion in your work.
+            Are you sure you want to launch this group?
+          </p>
+        );
+      }
+    );
+  });
 
   describe("Test renderLaunchOptions()", () => {
     describe("Examine the function based on the value of this.props.data", () => {

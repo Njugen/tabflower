@@ -69,14 +69,22 @@ export default class BodyContents extends Component {
         - numberOfTabs (optional, number)
     */
   renderWarningMessage = (numberOfWindows, numberOfTabs) => {
-    console.log("ORANGE", this.props.data);
+    const { isNumber } = validator;
+
+    numberOfWindows = isNumber(numberOfWindows)
+      ? numberOfWindows
+      : "an undefined number of";
+    numberOfTabs = isNumber(numberOfTabs)
+      ? numberOfTabs
+      : "an undefined number of";
+
     return (
       <p>
         Warning: You are about to launch a group consisting of{" "}
-        <strong>{numberOfWindows || "an undefined number of "} windows</strong>{" "}
-        and <strong>{numberOfTabs || "an undefined number of "} tabs</strong>.
-        This might stress your computer down in the long run, or cause confusion
-        in your work. Are you sure you want to launch this group?
+        <strong>{numberOfWindows} windows</strong> and{" "}
+        <strong>{numberOfTabs} tabs</strong>. This might stress your computer
+        down in the long run, or cause confusion in your work. Are you sure you
+        want to launch this group?
       </p>
     );
   };

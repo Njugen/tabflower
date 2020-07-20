@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow } from "enzyme";
-import FooterContents from "./../../../../../components/modals/existingTabGroupsModule/etgmCreateOrEditGroupModal/FooterContents.jsx";
+import FooterContents from "./../../../../../components/modals/existingTabGroupsModule/etgmLaunchGroupModal/FooterContents.jsx";
 import * as ExceptionsHandler from "./../../../../../components/utils/exceptionsAndHandler";
 
 const predefinedComponent = (props, options) => {
@@ -22,43 +22,43 @@ let componentInstance;
 
 //jest.mock("./__mocks__/fetch");
 
-describe("Test <FooterContents /> component behaviour at mount", () => {
+describe("Test <HeaderContents /> component behaviour at mount", () => {
   const actualErrorReturns = {
-    "ETGMCreateNewGroupModal-f1": ExceptionsHandler.ValidatorError(
-      "ETGMCreateNewGroupModal-f1"
+    "ETGMLaunchGroupsModal-f1": ExceptionsHandler.ValidatorError(
+      "ETGMLaunchGroupsModal-f1"
     ),
-    "ETGMCreateNewGroupModal-f2": ExceptionsHandler.ValidatorError(
-      "ETGMCreateNewGroupModal-f2"
+    "ETGMLaunchGroupsModal-f2": ExceptionsHandler.ValidatorError(
+      "ETGMLaunchGroupsModal-f2"
     ),
-    "ETGMCreateNewGroupModal-f3": ExceptionsHandler.ValidatorError(
-      "ETGMCreateNewGroupModal-f3"
+    "ETGMLaunchGroupsModal-f3": ExceptionsHandler.ValidatorError(
+      "ETGMLaunchGroupsModal-f3"
     ),
 
-    "ETGMCreateNewGroupModal-f6": ExceptionsHandler.ValidatorError(
-      "ETGMCreateNewGroupModal-f6"
+    "ETGMLaunchGroupsModal-f6": ExceptionsHandler.ValidatorError(
+      "ETGMLaunchGroupsModal-f6"
     ),
   };
 
   const expectedErrorReturns = {
-    "ETGMCreateNewGroupModal-f1": {
+    "ETGMLaunchGroupsModal-f1": {
       name: "ValidatorError",
       message: 'The "data" props is missing or not an object',
-      code: "ETGMCreateNewGroupModal-f1",
+      code: "ETGMLaunchGroupsModal-f1",
     },
-    "ETGMCreateNewGroupModal-f2": {
+    "ETGMLaunchGroupsModal-f2": {
       name: "ValidatorError",
       message: 'The "onConfirm" props is missing or not a function',
-      code: "ETGMCreateNewGroupModal-f2",
+      code: "ETGMLaunchGroupsModal-f2",
     },
-    "ETGMCreateNewGroupModal-f3": {
+    "ETGMLaunchGroupsModal-f3": {
       name: "ValidatorError",
       message: 'The "onDismiss" props is missing or not a function',
-      code: "ETGMCreateNewGroupModal-f3",
+      code: "ETGMLaunchGroupsModal-f3",
     },
-    "ETGMCreateNewGroupModal-f6": {
+    "ETGMLaunchGroupsModal-f6": {
       name: "ValidatorError",
       message: 'The "params" key in the data props is missing or not an object',
-      code: "ETGMCreateNewGroupModal-f6",
+      code: "ETGMLaunchGroupsModal-f6",
     },
   };
 
@@ -173,43 +173,16 @@ describe("Test <FooterContents /> component behaviour at mount", () => {
     ["a text string"],
   ];
 
-  describe("Test confirmButtonLabel()", () => {
-    test.each(various_values)(
-      'Run confirmButtonLabel(type), where the "type" parameter is anything but "currently-opened", "new-group", or "existing-group". The function should return "Try Save" as a string',
-      (val) => {
-        expect(componentInstance.confirmButtonLabel(val)).toBe("Try Save");
-      }
-    );
-
-    test('Run confirmButtonLabel("currently-opened"). The function should return "Create""', () => {
-      expect(componentInstance.confirmButtonLabel("currently-opened")).toBe(
-        "Create"
-      );
-    });
-
-    test('Run confirmButtonLabel("new-group"). The function should return "Create"', () => {
-      expect(componentInstance.confirmButtonLabel("currently-opened")).toBe(
-        "Create"
-      );
-    });
-
-    test('Run confirmButtonLabel("existing-group"). The function should return "Save Changes"', () => {
-      expect(componentInstance.confirmButtonLabel("existing-group")).toBe(
-        "Save Changes"
-      );
-    });
-  });
-
   describe("Test verifyProps()", () => {
     describe("Try out different this.props.data values", () => {
-      test('Run verifyProps(): If this.props.data is missing, throw error "ETGMCreateNewGroupModal-f1"', () => {
+      test('Run verifyProps(): If this.props.data is missing, throw error "ETGMLaunchGroupsModal-f1"', () => {
         expect(() => componentInstance.verifyProps()).toThrowError(
-          expectedErrorReturns["ETGMCreateNewGroupModal-f1"].message
+          expectedErrorReturns["ETGMLaunchGroupsModal-f1"].message
         );
       });
 
       test.each(various_nonObjects)(
-        'Run verifyProps(): If this.props.data = %p (not an object), throw error "ETGMCreateNewGroupModal-f1"',
+        'Run verifyProps(): If this.props.data = %p (not an object), throw error "ETGMLaunchGroupsModal-f1"',
         (val) => {
           const presetProps = {
             data: val,
@@ -220,12 +193,12 @@ describe("Test <FooterContents /> component behaviour at mount", () => {
           componentInstance = testComponent.instance();
 
           expect(() => componentInstance.verifyProps()).toThrowError(
-            expectedErrorReturns["ETGMCreateNewGroupModal-f1"].message
+            expectedErrorReturns["ETGMLaunchGroupsModal-f1"].message
           );
         }
       );
 
-      test('Run verifyProps(): If this.props.data is an object, do not throw error "ETGMCreateNewGroupModal-f1"', () => {
+      test('Run verifyProps(): If this.props.data is an object, do not throw error "ETGMLaunchGroupsModal-f1"', () => {
         const presetProps = {
           data: {},
         };
@@ -235,13 +208,13 @@ describe("Test <FooterContents /> component behaviour at mount", () => {
         componentInstance = testComponent.instance();
 
         expect(() => componentInstance.verifyProps()).not.toThrowError(
-          expectedErrorReturns["ETGMCreateNewGroupModal-f1"].message
+          expectedErrorReturns["ETGMLaunchGroupsModal-f1"].message
         );
       });
     });
 
     describe("Try out different this.props.onConfirm values", () => {
-      test('Run verifyProps(): If this.props.onConfirm is missing, throw error "ETGMCreateNewGroupModal-f2"', () => {
+      test('Run verifyProps(): If this.props.onConfirm is missing, throw error "ETGMLaunchGroupsModal-f2"', () => {
         const presetProps = {
           data: {},
         };
@@ -250,12 +223,12 @@ describe("Test <FooterContents /> component behaviour at mount", () => {
         });
         componentInstance = testComponent.instance();
         expect(() => componentInstance.verifyProps()).toThrowError(
-          expectedErrorReturns["ETGMCreateNewGroupModal-f2"].message
+          expectedErrorReturns["ETGMLaunchGroupsModal-f2"].message
         );
       });
 
       test.each(various_nonFunctions)(
-        'Run verifyProps(): If this.props.onConfirm = %p (not afunction), throw error "ETGMCreateNewGroupModal-f2"',
+        'Run verifyProps(): If this.props.onConfirm = %p (not afunction), throw error "ETGMLaunchGroupsModal-f2"',
         (val) => {
           const presetProps = {
             data: {},
@@ -267,12 +240,12 @@ describe("Test <FooterContents /> component behaviour at mount", () => {
           componentInstance = testComponent.instance();
 
           expect(() => componentInstance.verifyProps()).toThrowError(
-            expectedErrorReturns["ETGMCreateNewGroupModal-f2"].message
+            expectedErrorReturns["ETGMLaunchGroupsModal-f2"].message
           );
         }
       );
 
-      test('Run verifyProps(): If this.props.onConfirm is a function, do not throw error "ETGMCreateNewGroupModal-f2"', () => {
+      test('Run verifyProps(): If this.props.onConfirm is a function, do not throw error "ETGMLaunchGroupsModal-f2"', () => {
         const presetProps = {
           data: {},
           onConfirm: () => {},
@@ -283,13 +256,13 @@ describe("Test <FooterContents /> component behaviour at mount", () => {
         componentInstance = testComponent.instance();
 
         expect(() => componentInstance.verifyProps()).not.toThrowError(
-          expectedErrorReturns["ETGMCreateNewGroupModal-f2"].message
+          expectedErrorReturns["ETGMLaunchGroupsModal-f2"].message
         );
       });
     });
 
     describe("Try out different this.props.onDismiss values", () => {
-      test('Run verifyProps(): If this.props.onDismiss is missing, throw error "ETGMCreateNewGroupModal-f3"', () => {
+      test('Run verifyProps(): If this.props.onDismiss is missing, throw error "ETGMLaunchGroupsModal-f3"', () => {
         const presetProps = {
           data: {},
           onConfirm: () => {},
@@ -299,12 +272,12 @@ describe("Test <FooterContents /> component behaviour at mount", () => {
         });
         componentInstance = testComponent.instance();
         expect(() => componentInstance.verifyProps()).toThrowError(
-          expectedErrorReturns["ETGMCreateNewGroupModal-f3"].message
+          expectedErrorReturns["ETGMLaunchGroupsModal-f3"].message
         );
       });
 
       test.each(various_nonFunctions)(
-        'Run verifyProps(): If this.props.onDismiss = %p (not afunction), throw error "ETGMCreateNewGroupModal-f3"',
+        'Run verifyProps(): If this.props.onDismiss = %p (not afunction), throw error "ETGMLaunchGroupsModal-f3"',
         (val) => {
           const presetProps = {
             data: {},
@@ -317,12 +290,12 @@ describe("Test <FooterContents /> component behaviour at mount", () => {
           componentInstance = testComponent.instance();
 
           expect(() => componentInstance.verifyProps()).toThrowError(
-            expectedErrorReturns["ETGMCreateNewGroupModal-f3"].message
+            expectedErrorReturns["ETGMLaunchGroupsModal-f3"].message
           );
         }
       );
 
-      test('Run verifyProps(): If this.props.onDismiss is a function, do not throw error "ETGMCreateNewGroupModal-f3"', () => {
+      test('Run verifyProps(): If this.props.onDismiss is a function, do not throw error "ETGMLaunchGroupsModal-f3"', () => {
         const presetProps = {
           data: {},
           onConfirm: () => {},
@@ -334,13 +307,13 @@ describe("Test <FooterContents /> component behaviour at mount", () => {
         componentInstance = testComponent.instance();
 
         expect(() => componentInstance.verifyProps()).not.toThrowError(
-          expectedErrorReturns["ETGMCreateNewGroupModal-f3"].message
+          expectedErrorReturns["ETGMLaunchGroupsModal-f3"].message
         );
       });
     });
 
     describe("Try out different this.props.data.params values (given that data is an object", () => {
-      test('Run verifyProps(): If this.props.data.params is missing, throw error "ETGMCreateNewGroupModal-f6"', () => {
+      test('Run verifyProps(): If this.props.data.params is missing, throw error "ETGMLaunchGroupsModal-f6"', () => {
         const presetProps = {
           onConfirm: () => {},
           onDismiss: () => {},
@@ -352,15 +325,15 @@ describe("Test <FooterContents /> component behaviour at mount", () => {
         componentInstance = testComponent.instance();
 
         expect(() => componentInstance.verifyProps()).toThrowError(
-          expectedErrorReturns["ETGMCreateNewGroupModal-f6"].message
+          expectedErrorReturns["ETGMLaunchGroupsModal-f6"].message
         );
         expect(() => componentInstance.verifyProps()).toThrowError(
-          expectedErrorReturns["ETGMCreateNewGroupModal-f6"].message
+          expectedErrorReturns["ETGMLaunchGroupsModal-f6"].message
         );
       });
 
       test.each(various_nonObjects)(
-        'Run verifyProps(): If this.props.data.params = %p (not an object), throw error "ETGMCreateNewGroupModal-f6"',
+        'Run verifyProps(): If this.props.data.params = %p (not an object), throw error "ETGMLaunchGroupsModal-f6"',
         (val) => {
           const presetProps = {
             onConfirm: () => {},
@@ -375,12 +348,12 @@ describe("Test <FooterContents /> component behaviour at mount", () => {
           componentInstance = testComponent.instance();
 
           expect(() => componentInstance.verifyProps()).toThrowError(
-            expectedErrorReturns["ETGMCreateNewGroupModal-f6"].message
+            expectedErrorReturns["ETGMLaunchGroupsModal-f6"].message
           );
         }
       );
 
-      test('Run verifyProps(): If this.props.data.params is an object, do not throw error "ETGMCreateNewGroupModal-f6"', () => {
+      test('Run verifyProps(): If this.props.data.params is an object, do not throw error "ETGMLaunchGroupsModal-f6"', () => {
         const presetProps = {
           onConfirm: () => {},
           onDismiss: () => {},
@@ -394,7 +367,7 @@ describe("Test <FooterContents /> component behaviour at mount", () => {
         componentInstance = testComponent.instance();
 
         expect(() => componentInstance.verifyProps()).not.toThrowError(
-          expectedErrorReturns["ETGMCreateNewGroupModal-f6"].message
+          expectedErrorReturns["ETGMLaunchGroupsModal-f6"].message
         );
       });
     });

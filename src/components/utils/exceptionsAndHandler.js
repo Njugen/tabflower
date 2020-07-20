@@ -462,6 +462,42 @@ export const ValidatorError = (code) => {
     case "ETGMLaunchGroupsModal-114":
       message = "The onChange key in props needs to be a function";
       break;
+    case "ETGMLaunchGroupsModal-f1":
+      message = 'The "data" props is missing or not an object';
+      break;
+    case "ETGMLaunchGroupsModal-f2":
+      message = 'The "onConfirm" props is missing or not a function';
+      break;
+    case "ETGMLaunchGroupsModal-f3":
+      message = 'The "onDismiss" props is missing or not a function';
+      break;
+    case "ETGMLaunchGroupsModal-f4":
+      message =
+        "The required parameters were not provided to the data props of this modal. The attempt to add/modify a tab group is neglected.";
+      break;
+    case "ETGMLaunchGroupsModal-f5":
+      message =
+        "The data props section is missing or not an object when attempting to add/modify a tab group. The attempt to add/modify a tab group is neglected.";
+      break;
+    case "ETGMLaunchGroupsModal-f6":
+      message =
+        'The "params" key in the data props is missing or not an object';
+      break;
+    case "ETGMLaunchGroupsModal-h1":
+      message = 'The "data" props is missing or not an object';
+      break;
+    case "ETGMLaunchGroupsModal-h2":
+      message =
+        'The "params" key in this.props.data is missing or not an object';
+      break;
+    case "ETGMLaunchGroupsModal-h3":
+      message =
+        'The "groupName" in this.props.data.params has to be either undefined or a string. All other datatypes are invalid.';
+      break;
+    case "ETGMLaunchGroupsModal-h4":
+      message =
+        'The "type" in this.props.data.params has to be either undefined or a string. All other datatypes are invalid.';
+      break;
     // COTMRemoveTabModal
     case "COTMRemoveTabModal-101":
       message =
