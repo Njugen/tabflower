@@ -574,6 +574,18 @@ export const ValidatorError = (code) => {
       message =
         "No information about the targetted tab could be retrieved, therefore the tab cannot be closed at this point.";
       break;
+    case "COTMRemoveTabModal-106":
+      message =
+        "The data parameter in renderBodyContents() of COTMRemoveTabModal, needs to be an object";
+      break;
+    case "COTMRemoveTabModal-107":
+      message =
+        "The data parameter in renderHeaderContents() of COTMRemoveTabModal, needs to be an object";
+      break;
+    case "COTMRemoveTabModal-108":
+      message =
+        "The data parameter in renderFooterContents() of COTMRemoveTabModal, needs to be an object";
+      break;
     // COTMRemoveWindowModal
     case "COTMRemoveWindowModal-101":
       message =

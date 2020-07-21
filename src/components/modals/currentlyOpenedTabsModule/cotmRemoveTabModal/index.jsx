@@ -21,23 +21,21 @@ class COTMRemoveTabModal extends Modal {
     const { isObject, isNumber, isString } = validator;
     const { data } = this.props;
 
-    if (isObject(data) && isObject(data.params)) {
-      const { tabInfo } = data.params;
-
-      if (isObject(tabInfo)) {
-        if (!isNumber(tabInfo.id)) {
-          throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-101");
-        }
-
-        if (!isString(tabInfo.title)) {
-          throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-104");
-        }
-      } else {
-        throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-102");
-      }
-    } else {
+    if (!isObject(data) || (isObject(data) && !isObject(data.params)))
       throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-105");
-    }
+
+    const { tabInfo } = data.params;
+
+    if (!isObject(tabInfo))
+      throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-102");
+
+    const { id, title } = tabInfo;
+
+    if (!isNumber(id))
+      throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-101");
+
+    if (!isString(title))
+      throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-104");
   };
 
   /*
@@ -51,19 +49,14 @@ class COTMRemoveTabModal extends Modal {
       const { isObject } = validator;
       const { data } = this.props;
 
-      if (isObject(data) && isObject(data.params)) {
-        const { tabInfo } = data.params;
-
-        if (isObject(tabInfo)) {
-          const data = tabInfo;
-
-          this.setState({ data });
-        } else {
-          throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-102");
-        }
-      } else {
+      if (!isObject(data) || (isObject(data) && !isObject(data.params)))
         throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-105");
-      }
+      const { tabInfo } = data.params;
+
+      if (!isObject(tabInfo))
+        throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-102");
+
+      this.setState({ data: tabInfo });
     } catch (err) {
       ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
@@ -83,25 +76,41 @@ class COTMRemoveTabModal extends Modal {
     try {
       const { isFunction } = validator;
 
-      if (isFunction(callback)) {
-        this.clearModalData(callback(this.state));
-      } else {
+      if (!isFunction(callback))
         throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-103");
-      }
+
+      this.clearModalData(callback(this.state));
     } catch (err) {
       ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
   renderBodyContents = (data) => {
+    const { isObject } = validator;
+
+    if (!isObject(data)) {
+      throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-106");
+    }
+
     return <BodyContents data={data} />;
   };
 
   renderHeaderContents = (data) => {
+    const { isObject } = validator;
+
+    if (!isObject(data)) {
+      throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-107");
+    }
+
     return <HeaderContents data={data} />;
   };
 
   renderFooterContents = (data) => {
+    const { isObject } = validator;
+
+    if (!isObject(data)) {
+      throw ExceptionsHandler.ValidatorError("COTMRemoveTabModal-108");
+    }
     return (
       <FooterContents
         data={data}
