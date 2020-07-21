@@ -10,10 +10,10 @@ export default class BodyContents extends Component {
     const { isObject, isFunction } = validator;
 
     if (!isObject(data))
-      throw ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-113");
+      throw ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-b1");
 
     if (!isFunction(onChange))
-      throw ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-114");
+      throw ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-b2");
   };
 
   getWindowCollection = () => {

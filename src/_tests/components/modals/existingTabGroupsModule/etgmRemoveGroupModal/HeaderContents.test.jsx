@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow } from "enzyme";
-import HeaderContents from "./../../../../../components/modals/existingTabGroupsModule/etgmLaunchGroupModal/HeaderContents.jsx";
+import HeaderContents from "./../../../../../components/modals/existingTabGroupsModule/etgmRemoveGroupModal/HeaderContents.jsx";
 import * as ExceptionsHandler from "./../../../../../components/utils/exceptionsAndHandler";
 
 const predefinedComponent = (props, options) => {
@@ -24,43 +24,43 @@ let componentInstance;
 
 describe("Test <HeaderContents /> component behaviour at mount", () => {
   const actualErrorReturns = {
-    "ETGMLaunchGroupsModal-h1": ExceptionsHandler.ValidatorError(
-      "ETGMLaunchGroupsModal-h1"
+    "ETGMRemoveGroupsModal-h1": ExceptionsHandler.ValidatorError(
+      "ETGMRemoveGroupsModal-h1"
     ),
-    "ETGMLaunchGroupsModal-h2": ExceptionsHandler.ValidatorError(
-      "ETGMLaunchGroupsModal-h2"
+    "ETGMRemoveGroupsModal-h2": ExceptionsHandler.ValidatorError(
+      "ETGMRemoveGroupsModal-h2"
     ),
-    "ETGMLaunchGroupsModal-h3": ExceptionsHandler.ValidatorError(
-      "ETGMLaunchGroupsModal-h3"
+    "ETGMRemoveGroupsModal-h3": ExceptionsHandler.ValidatorError(
+      "ETGMRemoveGroupsModal-h3"
     ),
-    "ETGMLaunchGroupsModal-h4": ExceptionsHandler.ValidatorError(
-      "ETGMLaunchGroupsModal-h4"
+    "ETGMRemoveGroupsModal-h4": ExceptionsHandler.ValidatorError(
+      "ETGMRemoveGroupsModal-h4"
     ),
   };
 
   const expectedErrorReturns = {
-    "ETGMLaunchGroupsModal-h1": {
+    "ETGMRemoveGroupsModal-h1": {
       name: "ValidatorError",
       message: 'The "data" props is missing or not an object',
-      code: "ETGMLaunchGroupsModal-h1",
+      code: "ETGMRemoveGroupsModal-h1",
     },
-    "ETGMLaunchGroupsModal-h2": {
+    "ETGMRemoveGroupsModal-h2": {
       name: "ValidatorError",
       message:
         'The "params" key in this.props.data is missing or not an object',
-      code: "ETGMLaunchGroupsModal-h2",
+      code: "ETGMRemoveGroupsModal-h2",
     },
-    "ETGMLaunchGroupsModal-h3": {
+    "ETGMRemoveGroupsModal-h3": {
       name: "ValidatorError",
       message:
         'The "groupName" in this.props.data.params has to be either undefined or a string. All other datatypes are invalid.',
-      code: "ETGMLaunchGroupsModal-h3",
+      code: "ETGMRemoveGroupsModal-h3",
     },
-    "ETGMLaunchGroupsModal-h4": {
+    "ETGMRemoveGroupsModal-h4": {
       name: "ValidatorError",
       message:
         'The "type" in this.props.data.params has to be either undefined or a string. All other datatypes are invalid.',
-      code: "ETGMLaunchGroupsModal-h4",
+      code: "ETGMRemoveGroupsModal-h4",
     },
   };
 
@@ -176,7 +176,7 @@ describe("Test <HeaderContents /> component behaviour at mount", () => {
   ];
 
   describe("Test determineTitle()", () => {
-    const defaultTitle = "Confirm launch of this tab group";
+    const defaultTitle = 'Confirm removal of "unknown" tab group';
 
     test("Run determineTitle(): If the this.props.data is missing, then return the string expected in this test", () => {
       const presetProps = {};
@@ -216,7 +216,7 @@ describe("Test <HeaderContents /> component behaviour at mount", () => {
     });
 
     test.each(various_nonObjects)(
-      "Run determineTitle(): If the this.props.data.params = %p, then return the string expected in this test",
+      "Run determineTitle(): If the this.props.data.params = %p (not an object), then return the string expected in this test",
       (val) => {
         const presetProps = {
           data: {
@@ -232,12 +232,13 @@ describe("Test <HeaderContents /> component behaviour at mount", () => {
       }
     );
 
-    test("Run determineTitle(): If the this.props.data.groupName exists, then return the string expected in this test", () => {
+    test("Run determineTitle(): If groupId is a string, and the this.props.data.groupName exists and has a length > 0, then return the string expected in this test", () => {
       const groupName = "Dummy Group Name";
 
       const presetProps = {
         data: {
           params: {
+            groupId: "ABCDEF",
             groupName: groupName,
           },
         },
@@ -248,21 +249,90 @@ describe("Test <HeaderContents /> component behaviour at mount", () => {
       componentInstance = testComponent.instance();
 
       expect(componentInstance.determineTitle()).toBe(
-        'Confirm launch of tab group "' + groupName + '"'
+        'Confirm removal of the "' + groupName + '" tab group'
       );
     });
+
+    test("Run determineTitle(): If groupId is a string, and the this.props.data.groupName exists and has a length === 0, then return the string expected in this test", () => {
+      const groupName = "";
+
+      const presetProps = {
+        data: {
+          params: {
+            groupId: "ABCDEF",
+            groupName: groupName,
+          },
+        },
+      };
+      testComponent = predefinedComponent(presetProps, {
+        disableLifecycleMethods: true,
+      });
+      componentInstance = testComponent.instance();
+
+      expect(componentInstance.determineTitle()).toBe(
+        'Confirm removal of the "unknown" tab group'
+      );
+    });
+
+    test.each(various_nonString)(
+      "Run determineTitle(): If groupId is a string, and the this.props.data.groupName = %p (not a string), then return the string expected in this test",
+      (val) => {
+        const groupName = val;
+
+        const presetProps = {
+          data: {
+            params: {
+              groupId: "ABCDEF",
+              groupName: groupName,
+            },
+          },
+        };
+        testComponent = predefinedComponent(presetProps, {
+          disableLifecycleMethods: true,
+        });
+        componentInstance = testComponent.instance();
+
+        expect(componentInstance.determineTitle()).toBe(
+          'Confirm removal of the "unknown" tab group'
+        );
+      }
+    );
+
+    test.each(various_nonString)(
+      "Run determineTitle(): If groupId is not a string, then return the string expected in this test regardless of whether groupName is valid or not",
+      (val) => {
+        const groupName = "a string";
+
+        const presetProps = {
+          data: {
+            params: {
+              groupId: val,
+              groupName: groupName,
+            },
+          },
+        };
+        testComponent = predefinedComponent(presetProps, {
+          disableLifecycleMethods: true,
+        });
+        componentInstance = testComponent.instance();
+
+        expect(componentInstance.determineTitle()).toBe(
+          "Confirm Removal of All Tabs"
+        );
+      }
+    );
   });
 
   describe("Test verifyProps()", () => {
     describe("Try out different this.props.data values", () => {
-      test('Run verifyProps(): If this.props.data is missing, throw error "ETGMLaunchGroupsModal-h1"', () => {
+      test('Run verifyProps(): If this.props.data is missing, throw error "ETGMRemoveGroupsModal-h1"', () => {
         expect(() => componentInstance.verifyProps()).toThrowError(
-          expectedErrorReturns["ETGMLaunchGroupsModal-h1"].message
+          expectedErrorReturns["ETGMRemoveGroupsModal-h1"].message
         );
       });
 
       test.each(various_nonObjects)(
-        'Run verifyProps(): If this.props.data = %p (not an object), throw error "ETGMLaunchGroupsModal-h1"',
+        'Run verifyProps(): If this.props.data = %p (not an object), throw error "ETGMRemoveGroupsModal-h1"',
         (val) => {
           const presetProps = {
             data: val,
@@ -273,12 +343,12 @@ describe("Test <HeaderContents /> component behaviour at mount", () => {
           componentInstance = testComponent.instance();
 
           expect(() => componentInstance.verifyProps()).toThrowError(
-            expectedErrorReturns["ETGMLaunchGroupsModal-h1"].message
+            expectedErrorReturns["ETGMRemoveGroupsModal-h1"].message
           );
         }
       );
 
-      test('Run verifyProps(): If this.props.data is an object, do not throw error "ETGMLaunchGroupsModal-h1"', () => {
+      test('Run verifyProps(): If this.props.data is an object, do not throw error "ETGMRemoveGroupsModal-h1"', () => {
         const presetProps = {
           data: {},
         };
@@ -288,14 +358,14 @@ describe("Test <HeaderContents /> component behaviour at mount", () => {
         componentInstance = testComponent.instance();
 
         expect(() => componentInstance.verifyProps()).not.toThrowError(
-          expectedErrorReturns["ETGMLaunchGroupsModal-h1"].message
+          expectedErrorReturns["ETGMRemoveGroupsModal-h1"].message
         );
       });
     });
 
     describe("Try out different values of the keys inside this.props.data.", () => {
       describe("Try out different this.props.data.params values", () => {
-        test('Run verifyProps(): If this.props.data.params is missing, throw error "ETGMLaunchGroupsModal-h2"', () => {
+        test('Run verifyProps(): If this.props.data.params is missing, throw error "ETGMRemoveGroupsModal-h2"', () => {
           const presetProps = {
             data: {},
           };
@@ -307,12 +377,12 @@ describe("Test <HeaderContents /> component behaviour at mount", () => {
           componentInstance = testComponent.instance();
 
           expect(() => componentInstance.verifyProps()).toThrowError(
-            expectedErrorReturns["ETGMLaunchGroupsModal-h2"].message
+            expectedErrorReturns["ETGMRemoveGroupsModal-h2"].message
           );
         });
 
         test.each(various_nonObjects)(
-          'Run verifyProps(): If this.props.data.params = %p (not an object), throw error "ETGMLaunchGroupsModal-h2"',
+          'Run verifyProps(): If this.props.data.params = %p (not an object), throw error "ETGMRemoveGroupsModal-h2"',
           (val) => {
             const presetProps = {
               data: {
@@ -325,12 +395,12 @@ describe("Test <HeaderContents /> component behaviour at mount", () => {
             componentInstance = testComponent.instance();
 
             expect(() => componentInstance.verifyProps()).toThrowError(
-              expectedErrorReturns["ETGMLaunchGroupsModal-h2"].message
+              expectedErrorReturns["ETGMRemoveGroupsModal-h2"].message
             );
           }
         );
 
-        test('Run verifyProps(): If this.props.data.params is an object, do not throw error "ETGMLaunchGroupsModal-h2"', () => {
+        test('Run verifyProps(): If this.props.data.params is an object, do not throw error "ETGMRemoveGroupsModal-h2"', () => {
           const presetProps = {
             data: {
               params: {},
@@ -342,14 +412,14 @@ describe("Test <HeaderContents /> component behaviour at mount", () => {
           componentInstance = testComponent.instance();
 
           expect(() => componentInstance.verifyProps()).not.toThrowError(
-            expectedErrorReturns["ETGMLaunchGroupsModal-h2"].message
+            expectedErrorReturns["ETGMRemoveGroupsModal-h2"].message
           );
         });
       });
 
       describe("Try out different keys inside of the this.props.data.params object", () => {
         describe('Try out different this.props.data.params.groupName (in the following called "groupName") values', () => {
-          test('Run verifyProps(): If "groupName" is missing, do not throw error "ETGMLaunchGroupsModal-h3"', () => {
+          test('Run verifyProps(): If "groupName" is missing, do not throw error "ETGMRemoveGroupsModal-h3"', () => {
             const presetProps = {
               data: {
                 params: {},
@@ -361,11 +431,11 @@ describe("Test <HeaderContents /> component behaviour at mount", () => {
             componentInstance = testComponent.instance();
 
             expect(() => componentInstance.verifyProps()).not.toThrowError(
-              expectedErrorReturns["ETGMLaunchGroupsModal-h3"].message
+              expectedErrorReturns["ETGMRemoveGroupsModal-h3"].message
             );
           });
 
-          test('Run verifyProps(): If "groupName" is a string, do not throw error "ETGMLaunchGroupsModal-h3"', () => {
+          test('Run verifyProps(): If "groupName" is a string, do not throw error "ETGMRemoveGroupsModal-h3"', () => {
             const presetProps = {
               data: {
                 params: {
@@ -379,12 +449,12 @@ describe("Test <HeaderContents /> component behaviour at mount", () => {
             componentInstance = testComponent.instance();
 
             expect(() => componentInstance.verifyProps()).not.toThrowError(
-              expectedErrorReturns["ETGMLaunchGroupsModal-h3"].message
+              expectedErrorReturns["ETGMRemoveGroupsModal-h3"].message
             );
           });
 
           test.each(various_nonString_nonUndefined)(
-            'Run verifyProps(): If "groupName" = %p (is neither a string nor undefined), throw error "ETGMLaunchGroupsModal-h3"',
+            'Run verifyProps(): If "groupName" = %p (is neither a string nor undefined), throw error "ETGMRemoveGroupsModal-h3"',
             (val) => {
               const presetProps = {
                 data: {
@@ -399,7 +469,7 @@ describe("Test <HeaderContents /> component behaviour at mount", () => {
               componentInstance = testComponent.instance();
 
               expect(() => componentInstance.verifyProps()).toThrowError(
-                expectedErrorReturns["ETGMLaunchGroupsModal-h3"].message
+                expectedErrorReturns["ETGMRemoveGroupsModal-h3"].message
               );
             }
           );

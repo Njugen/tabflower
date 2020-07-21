@@ -1,15 +1,27 @@
 import React, { Component, Fragment } from "react";
 import * as validator from "../../../utils/inputValidators";
+import { ValidatorError } from "./../../../utils/exceptionsAndHandler";
 
 export default class BodyContents extends Component {
+  verifyProps = () => {
+    const { data } = this.props;
+    const { isObject } = validator;
+
+    if (!isObject(data)) throw ValidatorError("ETGMRemoveGroupsModal-b1");
+
+    const { params } = data;
+
+    if (!isObject(params)) throw ValidatorError("ETGMRemoveGroupsModal-b2");
+  };
+
   render() {
     const { isObject } = validator;
     const { data } = this.props;
 
-    if (!isObject(data)) return "ETGMRemoveGroupsModal-105";
+    if (!isObject(data)) return "ETGMRemoveGroupsModal-b1";
     const { params } = data;
 
-    if (!isObject(params)) return "ETGMRemoveGroupsModal-104";
+    if (!isObject(params)) return "ETGMRemoveGroupsModal-b2";
     const { groupId, groupName } = params;
 
     return (

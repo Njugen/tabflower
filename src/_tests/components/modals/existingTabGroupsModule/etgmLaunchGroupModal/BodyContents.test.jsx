@@ -25,24 +25,24 @@ let componentInstance;
 //jest.mock("./__mocks__/fetch");
 
 const actualErrorReturns = {
-  "ETGMLaunchGroupsModal-113": ExceptionsHandler.ValidatorError(
-    "ETGMLaunchGroupsModal-113"
+  "ETGMLaunchGroupsModal-b1": ExceptionsHandler.ValidatorError(
+    "ETGMLaunchGroupsModal-b1"
   ),
-  "ETGMLaunchGroupsModal-114": ExceptionsHandler.ValidatorError(
-    "ETGMLaunchGroupsModal-114"
+  "ETGMLaunchGroupsModal-b2": ExceptionsHandler.ValidatorError(
+    "ETGMLaunchGroupsModal-b2"
   ),
 };
 
 const expectedErrorReturns = {
-  "ETGMLaunchGroupsModal-113": {
+  "ETGMLaunchGroupsModal-b1": {
     name: "ValidatorError",
     message: "The data key in props needs to be an object",
-    code: "ETGMLaunchGroupsModal-113",
+    code: "ETGMLaunchGroupsModal-b1",
   },
-  "ETGMLaunchGroupsModal-114": {
+  "ETGMLaunchGroupsModal-b2": {
     name: "ValidatorError",
     message: "The onChange key in props needs to be a function",
-    code: "ETGMLaunchGroupsModal-114",
+    code: "ETGMLaunchGroupsModal-b2",
   },
 };
 
@@ -159,7 +159,7 @@ const various_nonNumber = [
 describe("Test <BodyContents /> component behaviour at mount", () => {
   describe("Test verifyProps()", () => {
     describe("Examine function behaviour based on the value of this.props.data", () => {
-      test('Run verifyProps(): If this.props.data is missing, throw an error "ETGMLaunchGroupsModal-113"', () => {
+      test('Run verifyProps(): If this.props.data is missing, throw an error "ETGMLaunchGroupsModal-b1"', () => {
         const presetProps = {};
         testComponent = predefinedComponent(presetProps, {
           disableLifecycleMethods: true,
@@ -167,12 +167,12 @@ describe("Test <BodyContents /> component behaviour at mount", () => {
         componentInstance = testComponent.instance();
 
         expect(() => componentInstance.verifyProps()).toThrowError(
-          ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-113").message
+          ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-b1").message
         );
       });
 
       test.each(various_nonObjects)(
-        'Run verifyProps(): If this.props.data = %p (is not an object), throw an error "ETGMLaunchGroupsModal-113"',
+        'Run verifyProps(): If this.props.data = %p (is not an object), throw an error "ETGMLaunchGroupsModal-b1"',
         (val) => {
           const presetProps = {
             data: val,
@@ -183,13 +183,12 @@ describe("Test <BodyContents /> component behaviour at mount", () => {
           componentInstance = testComponent.instance();
 
           expect(() => componentInstance.verifyProps()).toThrowError(
-            ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-113")
-              .message
+            ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-b1").message
           );
         }
       );
 
-      test('Run verifyProps(): If this.props.data = {}, do not throw error "ETGMLaunchGroupsModal-113"', () => {
+      test('Run verifyProps(): If this.props.data = {}, do not throw error "ETGMLaunchGroupsModal-b1"', () => {
         const presetProps = {
           data: {},
         };
@@ -199,13 +198,13 @@ describe("Test <BodyContents /> component behaviour at mount", () => {
         componentInstance = testComponent.instance();
 
         expect(() => componentInstance.verifyProps()).not.toThrowError(
-          ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-113").message
+          ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-b1").message
         );
       });
     });
 
     describe("Examine function behaviour based on the value of this.props.onChange", () => {
-      test('Run verifyProps(): If this.props.onChange is missing, throw an error "ETGMLaunchGroupsModal-114"', () => {
+      test('Run verifyProps(): If this.props.onChange is missing, throw an error "ETGMLaunchGroupsModal-b2"', () => {
         const presetProps = {
           data: {},
         };
@@ -215,12 +214,12 @@ describe("Test <BodyContents /> component behaviour at mount", () => {
         componentInstance = testComponent.instance();
 
         expect(() => componentInstance.verifyProps()).toThrowError(
-          ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-114").message
+          ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-b2").message
         );
       });
 
       test.each(various_nonFunctions)(
-        'Run verifyProps(): If this.props.onChange = %p (is not a function), throw an error "ETGMLaunchGroupsModal-114"',
+        'Run verifyProps(): If this.props.onChange = %p (is not a function), throw an error "ETGMLaunchGroupsModal-b2"',
         (val) => {
           const presetProps = {
             data: {},
@@ -232,13 +231,12 @@ describe("Test <BodyContents /> component behaviour at mount", () => {
           componentInstance = testComponent.instance();
 
           expect(() => componentInstance.verifyProps()).toThrowError(
-            ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-114")
-              .message
+            ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-b2").message
           );
         }
       );
 
-      test('Run verifyProps(): If this.props.onChange is a function, do not throw error "ETGMLaunchGroupsModal-114"', () => {
+      test('Run verifyProps(): If this.props.onChange is a function, do not throw error "ETGMLaunchGroupsModal-b2"', () => {
         const presetProps = {
           data: {},
           onChange: () => {},
@@ -249,7 +247,7 @@ describe("Test <BodyContents /> component behaviour at mount", () => {
         componentInstance = testComponent.instance();
 
         expect(() => componentInstance.verifyProps()).not.toThrowError(
-          ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-114").message
+          ExceptionsHandler.ValidatorError("ETGMLaunchGroupsModal-b2").message
         );
       });
     });

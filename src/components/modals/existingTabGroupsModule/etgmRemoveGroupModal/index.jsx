@@ -14,34 +14,32 @@ class ETGMRemoveGroupsModal extends Modal {
         */
     const { isString, isUndefined, isObject } = validator;
     const { data } = this.props;
-    console.log("EEEEO", data);
-    if (isObject(data)) {
-      const { params } = data;
 
-      if (isObject(params)) {
-        const { groupId, groupName, removeAll } = this.props.data.params;
+    if (!isObject(data))
+      throw ExceptionsHandler.ValidatorError("ETGMRemoveGroupsModal-105");
 
-        if (
-          isUndefined(removeAll) ||
-          (!isUndefined(removeAll) && removeAll === false)
-        ) {
-          // If the "removeAll" variable is not provided or is false, the task will be to delete a specific tab group
-          // In this case, groupId and groupName need to be provided also.
-          if (!isString(groupId) || isUndefined(groupId)) {
-            throw ExceptionsHandler.ValidatorError("ETGMRemoveGroupsModal-102");
-          }
-          if (!isString(groupName) || isUndefined(groupName)) {
-            throw ExceptionsHandler.ValidatorError("ETGMRemoveGroupsModal-103");
-          }
-        } else {
-          // If this variable is provided and true, the task will be to delete all tab groups.
-          // groupId and groupName will be ignored
-        }
-      } else {
-        throw ExceptionsHandler.ValidatorError("ETGMRemoveGroupsModal-104");
+    const { params } = data;
+
+    if (!isObject(params))
+      throw ExceptionsHandler.ValidatorError("ETGMRemoveGroupsModal-104");
+
+    const { groupId, groupName, removeAll } = params;
+
+    if (
+      isUndefined(removeAll) ||
+      (!isUndefined(removeAll) && removeAll === false)
+    ) {
+      // If the "removeAll" variable is not provided or is false, the task will be to delete a specific tab group
+      // In this case, groupId and groupName need to be provided also.
+      if (!isString(groupId) || isUndefined(groupId)) {
+        throw ExceptionsHandler.ValidatorError("ETGMRemoveGroupsModal-102");
+      }
+      if (!isString(groupName) || isUndefined(groupName)) {
+        throw ExceptionsHandler.ValidatorError("ETGMRemoveGroupsModal-103");
       }
     } else {
-      throw ExceptionsHandler.ValidatorError("ETGMRemoveGroupsModal-105");
+      // If this variable is provided and true, the task will be to delete all tab groups.
+      // groupId and groupName will be ignored
     }
   };
 
@@ -60,35 +58,47 @@ class ETGMRemoveGroupsModal extends Modal {
       const { isFunction, isObject } = validator;
       const { data } = this.props;
 
-      if (isObject(data)) {
-        const { params } = this.props.data;
-
-        if (isObject(params)) {
-          if (isFunction(callback)) {
-            this.clearModalData(callback(this.props.data.params));
-          } else {
-            throw ExceptionsHandler.ValidatorError("ETGMRemoveGroupsModal-101");
-          }
-        } else {
-          throw ExceptionsHandler.ValidatorError("ETGMRemoveGroupsModal-104");
-        }
-      } else {
+      if (!isObject(data))
         throw ExceptionsHandler.ValidatorError("ETGMRemoveGroupsModal-105");
-      }
+
+      const { params } = this.props.data;
+
+      if (!isObject(params))
+        throw ExceptionsHandler.ValidatorError("ETGMRemoveGroupsModal-104");
+
+      if (!isFunction(callback))
+        throw ExceptionsHandler.ValidatorError("ETGMRemoveGroupsModal-101");
+
+      this.clearModalData(callback(this.props.data.params));
     } catch (err) {
       ExceptionsHandler.ErrorHandler(err, this.sendToErrorOverlay);
     }
   };
 
   renderBodyContents = (data) => {
+    const { isObject } = validator;
+
+    if (!isObject(data))
+      throw ExceptionsHandler.ValidatorError("ETGMRemoveGroupsModal-106");
+
     return <BodyContents data={data} />;
   };
 
   renderHeaderContents = (data) => {
+    const { isObject } = validator;
+
+    if (!isObject(data))
+      throw ExceptionsHandler.ValidatorError("ETGMRemoveGroupsModal-107");
+
     return <HeaderContents data={data} />;
   };
 
   renderFooterContents = (data) => {
+    const { isObject } = validator;
+
+    if (!isObject(data))
+      throw ExceptionsHandler.ValidatorError("ETGMRemoveGroupsModal-108");
+
     return (
       <FooterContents
         data={data}
