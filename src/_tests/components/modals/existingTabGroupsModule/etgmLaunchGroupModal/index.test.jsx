@@ -120,19 +120,19 @@ describe("Test <ETGMLaunchGroupsModal /> component behaviour at mount", () => {
     "ETGMLaunchGroupsModal-110": {
       name: "ValidatorError",
       message:
-        "The data parameter in renderBodyContents() of ETGMCreateNewGroupModal, needs to be an object",
+        "The data parameter in renderBodyContents() of ETGMLaunchGroupsModal, needs to be an object",
       code: "ETGMLaunchGroupsModal-110",
     },
     "ETGMLaunchGroupsModal-111": {
       name: "ValidatorError",
       message:
-        "The data parameter in renderHeaderContents() of ETGMCreateNewGroupModal, needs to be an object",
+        "The data parameter in renderHeaderContents() of ETGMLaunchGroupsModal, needs to be an object",
       code: "ETGMLaunchGroupsModal-111",
     },
     "ETGMLaunchGroupsModal-112": {
       name: "ValidatorError",
       message:
-        "The data parameter in renderFooterContents() of ETGMCreateNewGroupModal, needs to be an object",
+        "The data parameter in renderFooterContents() of ETGMLaunchGroupsModal, needs to be an object",
       code: "ETGMLaunchGroupsModal-112",
     },
   };

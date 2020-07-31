@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
 import { shallow, mount, render } from 'enzyme';
-import Module from './../../../../components/utils/moduleon/module';
+import Module from './../../../../components/modules/module/index.jsx';
 import * as ExceptionsHandler from './../../../../components/utils/exceptionsAndHandler';
 import * as validator from './../../../../components/utils/inputValidators';
 //require("../../../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
-
+ 
 const predefinedComponent = (props, options) => {
     props = props || {};
 
@@ -18,11 +18,11 @@ const presetProps = {
     onDrop: "",
     onDragStart: "",
     onRaiseToModal: "",
-};
+}; 
 
 let testComponent;
 let componentInstance;
-
+ 
 describe("Test <Module /> component behaviour at mount", () => {
     
 

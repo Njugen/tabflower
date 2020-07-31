@@ -1,8 +1,8 @@
 import React, { Fragment } from "react";
 import { shallow, mount, render } from "enzyme";
-import App from "./../App";
-import * as ExceptionsHandler from "./../components/utils/exceptionsAndHandler";
-import * as validator from "./../components/utils/inputValidators";
+import App from "./..pp";
+import * as ExceptionsHandler from "../components/utils/exceptionsAndHandler";
+import * as validator from "../components/utils/inputValidators";
 import ViewFooter from "./../components/views/components/viewFooter";
 import ErrorBoundary from "./../components/utils/errorBoundary";
 import MainNavBar from "./../components/sidebars/mainNavBar/mainNavBar";

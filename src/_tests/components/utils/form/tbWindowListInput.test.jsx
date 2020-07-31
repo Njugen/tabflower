@@ -1,21 +1,18 @@
-import React, { Fragment } from "react";
-import { shallow, mount, render } from "enzyme";
-import ETGMCreateNewGroupModal from "./../../../../../components/modals/existingTabGroupsModule/etgmCreateOrEditGroupModal";
-import * as ExceptionsHandler from "./../../../../../components/utils/exceptionsAndHandler";
-import * as validator from "./../../../../../components/utils/inputValidators";
+import React from "react";
+import { shallow } from "enzyme";
+import TBWindowListInput from "./../../../../components/utils/form/tbWindowListInput";
+import * as ExceptionsHandler from "./../../../../components/utils/exceptionsAndHandler";
 
 const predefinedComponent = (props, options) => {
   props = props || {};
 
-  const component = shallow(<ETGMCreateNewGroupModal {...props} />, options);
+  const component = shallow(<TBWindowListInput {...props} />, options);
   component.instance().render = jest.fn();
   return component;
 };
 
 let presetProps = {
-  data: {},
-  onRaiseToErrorOverlay: "",
-  onDismiss: "",
+  type: "existing-group",
 };
 
 let testComponent;
@@ -23,13 +20,28 @@ let componentInstance;
 
 //jest.mock("./__mocks__/fetch");
 
-describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => {
+describe("Test <TBWindowListInput /> component behaviour at mount", () => {
   const actualErrorReturns = {
     "ETGMCreateNewGroupModal-101": ExceptionsHandler.ValidatorError(
       "ETGMCreateNewGroupModal-101"
     ),
     "ETGMCreateNewGroupModal-102": ExceptionsHandler.ValidatorError(
       "ETGMCreateNewGroupModal-102"
+    ),
+    "ETGMCreateNewGroupModal-103": ExceptionsHandler.ValidatorError(
+      "ETGMCreateNewGroupModal-103"
+    ),
+    "ETGMCreateNewGroupModal-104": ExceptionsHandler.ValidatorError(
+      "ETGMCreateNewGroupModal-104"
+    ),
+    "ETGMCreateNewGroupModal-105": ExceptionsHandler.ValidatorError(
+      "ETGMCreateNewGroupModal-105"
+    ),
+    "ETGMCreateNewGroupModal-106": ExceptionsHandler.ValidatorError(
+      "ETGMCreateNewGroupModal-106"
+    ),
+    "ETGMCreateNewGroupModal-111": ExceptionsHandler.ValidatorError(
+      "ETGMCreateNewGroupModal-111"
     ),
     "ETGMCreateNewGroupModal-115": ExceptionsHandler.ValidatorError(
       "ETGMCreateNewGroupModal-115"
@@ -111,6 +123,32 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
         "A tab group id must be a string. The requested tab group could not be retrieved.",
       code: "ETGMCreateNewGroupModal-102",
     },
+    "ETGMCreateNewGroupModal-103": {
+      name: "ValidatorError",
+      message: "The URL could not be found",
+      code: "ETGMCreateNewGroupModal-103",
+    },
+    "ETGMCreateNewGroupModal-104": {
+      name: "ValidatorError",
+      message: "The URL to be loaded needs to be a string",
+      code: "ETGMCreateNewGroupModal-104",
+    },
+    "ETGMCreateNewGroupModal-105": {
+      name: "ValidatorError",
+      message: "The success parameter needs to be a function for callback",
+      code: "ETGMCreateNewGroupModal-105",
+    },
+    "ETGMCreateNewGroupModal-106": {
+      name: "ValidatorError",
+      message: "The fail parameter needs to be a function for callback",
+      code: "ETGMCreateNewGroupModal-106",
+    },
+    "ETGMCreateNewGroupModal-111": {
+      name: "ValidatorError",
+      message:
+        "The windowIndex parameter in the deleteWindow function needs to be an integer 0 or higher",
+      code: "ETGMCreateNewGroupModal-111",
+    },
     "ETGMCreateNewGroupModal-115": {
       name: "ValidatorError",
       message:
@@ -138,7 +176,7 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
     "ETGMCreateNewGroupModal-119": {
       name: "ValidatorError",
       message:
-        'The "windowAndTabs" parameter needs to be an object in this.props.data.params, containing information about all windows and tabs in a tab group. If there is no such information available, this parameter should be an empty object. As a result of this error, tab groups cannot be added nor edited at this time.',
+        'The "windowCollection" parameter needs to be an object in this.props.data.params, containing information about all windows and tabs in a tab group. If there is no such information available, this parameter should be an empty object. As a result of this error, tab groups cannot be added nor edited at this time.',
       code: "ETGMCreateNewGroupModal-119",
     },
     "ETGMCreateNewGroupModal-120": {
@@ -244,7 +282,7 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
     jest.clearAllMocks();
     jest.useRealTimers();
 
-    const presetProps = {};
+    const presetProps = { type: "existing-group" };
     testComponent = predefinedComponent(presetProps, {
       disableLifecycleMethods: true,
     });
@@ -537,8 +575,19 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
       );
 
       describe("Examine the situations where inputUrl is a string", () => {
-        test('Run addNewWindow("https://google.com"), if "tabGroupDetails" is missing in component state: throw the error "ETGMCreateNewGroupModal-125"', () => {
+        test('Run addNewWindow("https://google.com"), if "windowCollection" is missing in component props: throw the error "ETGMCreateNewGroupModal-125"', () => {
           componentInstance.loadUrl = jest.fn();
+
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+            },
+            {
+              disableLifecycleMethods: true,
+            }
+          );
+          componentInstance = testComponent.instance();
 
           const url = "https://google.com";
           componentInstance.addNewWindow(url);
@@ -547,13 +596,26 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
           );
         });
 
-        test.each(various_nonObjects)(
-          'Run addNewWindow("https://google.com"), if "tabGroupDetails" = %p (is not an object) in component state: throw the error "ETGMCreateNewGroupModal-125"',
+        test.each(various_nonArrays)(
+          'Run addNewWindow("https://google.com"), if "windowCollection" = %p (is not an array) in component props: throw the error "ETGMCreateNewGroupModal-125"',
           (val) => {
             componentInstance.loadUrl = jest.fn();
 
             const url = "https://google.com";
-            componentInstance.state.tabGroupDetails = val;
+            const windowCollection = val;
+
+            testComponent = predefinedComponent(
+              {
+                ...presetProps,
+                onModifyList: jest.fn(),
+                windowCollection,
+              },
+              {
+                disableLifecycleMethods: true,
+              }
+            );
+            componentInstance = testComponent.instance();
+
             componentInstance.addNewWindow(url);
             expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith(
               "ETGMCreateNewGroupModal-125"
@@ -561,11 +623,24 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
           }
         );
 
-        test('Run addNewWindow("https://google.com"), if "tabGroupDetails" is an object in component state: call this.loadUrl("https://google.com", ANYTHING, ANYTHING)', () => {
+        test('Run addNewWindow("https://google.com"), if "windowCollection" is an array: call this.loadUrl("https://google.com", ANYTHING, ANYTHING)', () => {
           componentInstance.loadUrl = jest.fn();
 
           const url = "https://google.com";
-          componentInstance.state.tabGroupDetails = {};
+          const windowCollection = [];
+
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+              windowCollection,
+            },
+            {
+              disableLifecycleMethods: true,
+            }
+          );
+          componentInstance = testComponent.instance();
+          componentInstance.loadUrl = jest.fn();
           componentInstance.addNewWindow(url);
 
           expect(componentInstance.loadUrl).toHaveBeenCalledWith(
@@ -575,19 +650,30 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
           );
         });
 
-        test('Run addNewWindow("https://google.com"), while "tabGroupDetails" is an empty object in component state: if this.loadUrl(ANY STRING, success, fail) triggers its success callback then this.saveToState(payload) should be triggered with test specified payload', () => {
+        test('Run addNewWindow("https://google.com"), while "windowCollection" is an empty array in component props: if this.loadUrl(ANY STRING, success, fail) triggers its success callback then this.onModifyList(payload) should be triggered with test specified payload', () => {
           /*
                         To note:
 
                         While tabGroupDetails is an empty object, only the new window will used as a parameter when calling
-                        saveToState().
+                        onModifyList().
                     */
           componentInstance.loadUrl = jest.fn();
 
           const url = "https://google.com";
 
-          componentInstance.state.tabGroupDetails = {};
-          componentInstance.saveToState = jest.fn();
+          const windowCollection = [];
+
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+              windowCollection,
+            },
+            {
+              disableLifecycleMethods: true,
+            }
+          );
+          componentInstance = testComponent.instance();
 
           const responseText =
             "A text string acting as responseText for this test";
@@ -596,8 +682,8 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
             success(responseText);
           });
           componentInstance.addNewWindow(url);
-          expect(componentInstance.saveToState).toHaveBeenCalledWith(
-            "windowAndTabs",
+          expect(componentInstance.props.onModifyList).toHaveBeenCalledWith(
+            "windowCollection",
             [
               {
                 tabs: [
@@ -613,25 +699,35 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
           );
         });
 
-        test('Run addNewWindow("https://google.com"), while "tabGroupDetails" is an object (which also consists of a filled "windowAndTabs" key) in component state: if this.loadUrl(ANY STRING, success, fail) triggers its success callback then this.saveToState(payload) should be triggered with test specified payload', () => {
+        test('Run addNewWindow("https://google.com"), while "windowCollection" is a filled array in component props: if this.loadUrl(ANY STRING, success, fail) triggers its success callback then this.onModifyList(payload) should be triggered with test specified payload', () => {
           /*
                         To note:
 
-                        While tabGroupDetails.windowAndTabs exists as a filled array (each item object in that array represents a window), 
-                        it will be combined with the new window before being used as a parameter when calling saveToState()
+                        While tabGroupDetails.windowCollection exists as a filled array (each item object in that array represents a window), 
+                        it will be combined with the new window before being used as a parameter when calling onModifyList()
                     */
           componentInstance.loadUrl = jest.fn();
 
           const url = "https://google.com";
 
-          componentInstance.state.tabGroupDetails = {
-            windowAndTabs: [
-              { name: "window 1" },
-              { name: "window 2" },
-              { name: "window 3" },
-            ],
-          };
-          componentInstance.saveToState = jest.fn();
+          const windowCollection = [
+            { name: "window 1" },
+            { name: "window 2" },
+            { name: "window 3" },
+          ];
+
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+              windowCollection,
+            },
+            {
+              disableLifecycleMethods: true,
+            }
+          );
+
+          componentInstance = testComponent.instance();
 
           const responseText =
             "A text string acting as responseText for this test";
@@ -640,10 +736,10 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
             success(responseText);
           });
           componentInstance.addNewWindow(url);
-          expect(componentInstance.saveToState).toHaveBeenCalledWith(
-            "windowAndTabs",
+          expect(componentInstance.props.onModifyList).toHaveBeenCalledWith(
+            "windowCollection",
             [
-              ...componentInstance.state.tabGroupDetails.windowAndTabs,
+              ...windowCollection,
               {
                 tabs: [
                   {
@@ -658,20 +754,31 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
           );
         });
 
-        test('Run addNewWindow("https://google.com"), while "tabGroupDetails" is an empty object in component state: if this.loadUrl(ANY STRING, success, fail) triggers its fail callback then this.saveToState(payload) should be triggered with test specified payload', () => {
+        test('Run addNewWindow("https://google.com"), while "windowCollection" is an empty array: if this.loadUrl(ANY STRING, success, fail) triggers its fail callback then this.onModifyList(payload) should be triggered with test specified payload', () => {
           componentInstance.loadUrl = jest.fn();
 
           const url = "https://google.com";
 
-          componentInstance.state.tabGroupDetails = {};
-          componentInstance.saveToState = jest.fn();
+          const windowCollection = [];
+
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+              windowCollection,
+            },
+            {
+              disableLifecycleMethods: true,
+            }
+          );
+          componentInstance = testComponent.instance();
 
           componentInstance.loadUrl = jest.fn((inputUrl, success, fail) => {
             fail();
           });
           componentInstance.addNewWindow(url);
-          expect(componentInstance.saveToState).toHaveBeenCalledWith(
-            "windowAndTabs",
+          expect(componentInstance.props.onModifyList).toHaveBeenCalledWith(
+            "windowCollection",
             [
               {
                 tabs: [
@@ -687,25 +794,34 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
           );
         });
 
-        test('Run addNewWindow("https://google.com"), while "tabGroupDetails" is an object (which also consists of a filled "windowAndTabs" key) in component state: if this.loadUrl(ANY STRING, success, fail) triggers its fail callback then this.saveToState(payload) should be triggered with test specified payload', () => {
+        test('Run addNewWindow("https://google.com"), while "windowCollection" is a filled array in component props: if this.loadUrl(ANY STRING, success, fail) triggers its fail callback then this.onModifyList(payload) should be triggered with test specified payload', () => {
           /*
                         To note:
 
-                        While tabGroupDetails.windowAndTabs exists as a filled array (each item object in that array represents a window), 
-                        it will be combined with the new window before being used as a parameter when calling saveToState()
+                        While tabGroupDetails.windowCollection exists as a filled array (each item object in that array represents a window), 
+                        it will be combined with the new window before being used as a parameter when calling onModifyList()
                     */
           componentInstance.loadUrl = jest.fn();
 
           const url = "https://google.com";
 
-          componentInstance.state.tabGroupDetails = {
-            windowAndTabs: [
-              { name: "window 1" },
-              { name: "window 2" },
-              { name: "window 3" },
-            ],
-          };
-          componentInstance.saveToState = jest.fn();
+          const windowCollection = [
+            { name: "window 1" },
+            { name: "window 2" },
+            { name: "window 3" },
+          ];
+
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+              windowCollection,
+            },
+            {
+              disableLifecycleMethods: true,
+            }
+          );
+          componentInstance = testComponent.instance();
 
           const responseText =
             "A text string acting as responseText for this test";
@@ -714,10 +830,10 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
             fail(responseText);
           });
           componentInstance.addNewWindow(url);
-          expect(componentInstance.saveToState).toHaveBeenCalledWith(
-            "windowAndTabs",
+          expect(componentInstance.props.onModifyList).toHaveBeenCalledWith(
+            "windowCollection",
             [
-              ...componentInstance.state.tabGroupDetails.windowAndTabs,
+              ...windowCollection,
               {
                 tabs: [
                   {
@@ -776,23 +892,49 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
       );
 
       describe("Examine the situations where inputUrl is a string and index is a number (index = 0 in this test section)", () => {
-        test('Run addNewTab("https://google.com", 0), if "tabGroupDetails" is missing in component state: throw the error "ETGMCreateNewGroupModal-125"', () => {
+        test('Run addNewTab("https://google.com", 0), if "windowcollection" is not an array in props: throw the error "ETGMCreateNewGroupModal-125"', () => {
           componentInstance.loadUrl = jest.fn();
 
           const url = "https://google.com";
+          const windowCollection = "";
+
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+              windowCollection,
+            },
+            {
+              disableLifecycleMethods: true,
+            }
+          );
+          componentInstance = testComponent.instance();
+
           componentInstance.addNewTab(url, 0);
           expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith(
             "ETGMCreateNewGroupModal-125"
           );
         });
 
-        test.each(various_nonObjects)(
-          'Run addNewTab("https://google.com", 0), if "tabGroupDetails" = %p (is not an object) in component state: throw the error "ETGMCreateNewGroupModal-125"',
+        test.each(various_nonArrays)(
+          'Run addNewTab("https://google.com", 0), if "tabGroupDetails" = %p (is not an array) in component state: throw the error "ETGMCreateNewGroupModal-125"',
           (val) => {
             componentInstance.loadUrl = jest.fn();
 
             const url = "https://google.com";
-            componentInstance.state.tabGroupDetails = val;
+            const windowCollection = val;
+
+            testComponent = predefinedComponent(
+              {
+                ...presetProps,
+                onModifyList: jest.fn(),
+                windowCollection,
+              },
+              {
+                disableLifecycleMethods: true,
+              }
+            );
+            componentInstance = testComponent.instance();
             componentInstance.addNewTab(url, 0);
             expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith(
               "ETGMCreateNewGroupModal-125"
@@ -800,11 +942,25 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
           }
         );
 
-        test('Run addNewTab("https://google.com", 0), if "tabGroupDetails" is an empty object in component state: throw an error "ETGMCreateNewGroupModal-129"', () => {
+        test('Run addNewTab("https://google.com", 0), while "windowCollection" key in props is an empty array:: throw an error "ETGMCreateNewGroupModal-129"', () => {
           componentInstance.loadUrl = jest.fn();
 
           const url = "https://google.com";
-          componentInstance.state.tabGroupDetails = {};
+
+          const windowCollection = [];
+
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+              windowCollection,
+            },
+            {
+              disableLifecycleMethods: true,
+            }
+          );
+          componentInstance = testComponent.instance();
+
           componentInstance.addNewTab(url, 0);
 
           expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith(
@@ -813,12 +969,24 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
           //expect(componentInstance.loadUrl).toHaveBeenCalledWith(url, expect.anything(), expect.anything());
         });
 
-        test('Run addNewTab("https://google.com", 0), while "tabGroupDetails" is an empty object in component state: throw an error "ETGMCreateNewGroupModal-129"', () => {
+        test('Run addNewTab("https://google.com", 0), while "windowCollection" key in props is an empty array: throw an error "ETGMCreateNewGroupModal-129"', () => {
           componentInstance.loadUrl = jest.fn();
 
           const url = "https://google.com";
 
-          componentInstance.state.tabGroupDetails = {};
+          const windowCollection = [];
+
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+              windowCollection,
+            },
+            {
+              disableLifecycleMethods: true,
+            }
+          );
+          componentInstance = testComponent.instance();
 
           componentInstance.addNewTab(url, 0);
           expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith(
@@ -826,25 +994,34 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
           );
         });
 
-        test('Run addNewTab("https://google.com", 0), while "tabGroupDetails" is an object (which also consists of a filled "windowAndTabs" key) in component state: if this.loadUrl(ANY STRING, success, fail) triggers its success callback then this.saveToState(payload) should be triggered with test specified payload', () => {
+        test('Run addNewTab("https://google.com", 0), while "windowCollection" key in props is an array: if this.loadUrl(ANY STRING, success, fail) triggers its success callback then this.onModifyList(payload) should be triggered with test specified payload', () => {
           /*
                         To note:
 
-                        While tabGroupDetails.windowAndTabs exists as a filled array (each item object in that array represents a window), 
-                        it will be combined with the new window before being used as a parameter when calling saveToState()
+                        While tabGroupDetails.windowCollection exists as a filled array (each item object in that array represents a window), 
+                        it will be combined with the new window before being used as a parameter when calling onModifyList()
                     */
           componentInstance.loadUrl = jest.fn();
 
           const url = "https://google.com";
 
-          componentInstance.state.tabGroupDetails = {
-            windowAndTabs: [
-              { name: "window 1", tabs: [] },
-              { name: "window 2", tabs: [] },
-              { name: "window 3", tabs: [] },
-            ],
-          };
-          componentInstance.saveToState = jest.fn();
+          const windowCollection = [
+            { name: "window 1", tabs: [] },
+            { name: "window 2", tabs: [] },
+            { name: "window 3", tabs: [] },
+          ];
+
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+              windowCollection,
+            },
+            {
+              disableLifecycleMethods: true,
+            }
+          );
+          componentInstance = testComponent.instance();
 
           const responseText =
             "A text string acting as responseText for this test";
@@ -854,38 +1031,44 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
           });
           componentInstance.addNewTab(url, 0);
 
-          let parsedWindows = JSON.parse(
-            JSON.stringify(
-              componentInstance.state.tabGroupDetails.windowAndTabs
-            )
-          );
+          let parsedWindows = JSON.parse(JSON.stringify(windowCollection));
           parsedWindows[0].tabs.push({
             title: expect.anything(),
             favIconUrl: url + "/favicon.ico",
             url: url,
           });
 
-          expect(componentInstance.saveToState).toHaveBeenCalledWith(
-            "windowAndTabs",
+          expect(componentInstance.props.onModifyList).toHaveBeenCalledWith(
+            "windowCollection",
             parsedWindows,
             "tabGroupDetails"
           );
         });
 
-        test('Run addNewTab("https://google.com", 0), while "tabGroupDetails" is an object (which also consists of an empty "windowAndTabs" array key) in component state:  throw an error "ETGMCreateNewGroupModal-129"', () => {
+        test('Run addNewTab("https://google.com", 0), while "windowCollection" in props is an empty array:  throw an error "ETGMCreateNewGroupModal-129"', () => {
           /*
                         To note:
 
-                        While tabGroupDetails.windowAndTabs exists as a filled array (each item object in that array represents a window), 
-                        it will be combined with the new window before being used as a parameter when calling saveToState()
+                        While tabGroupDetails.windowCollection exists as a filled array (each item object in that array represents a window), 
+                        it will be combined with the new window before being used as a parameter when calling onModifyList()
                     */
           componentInstance.loadUrl = jest.fn();
 
           const url = "https://google.com";
 
-          componentInstance.state.tabGroupDetails = {
-            windowAndTabs: [],
-          };
+          const windowCollection = [];
+
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+              windowCollection,
+            },
+            {
+              disableLifecycleMethods: true,
+            }
+          );
+          componentInstance = testComponent.instance();
 
           componentInstance.addNewTab(url, 0);
 
@@ -895,36 +1078,59 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
         });
 
         test.each(various_nonArrays)(
-          'Run addNewTab("https://google.com", 0), while "tabGroupDetails" is an object (which also consists of a "windowAndTabs" key which is not an array) in component state:  throw an error "ETGMCreateNewGroupModal-129"',
+          'Run addNewTab("https://google.com", 0), while "windowCollection" in props is not an array: throw an error "ETGMCreateNewGroupModal-129"',
           (val) => {
             /*
                         To note:
 
-                        While tabGroupDetails.windowAndTabs exists as a filled array (each item object in that array represents a window), 
-                        it will be combined with the new window before being used as a parameter when calling saveToState()
+                        While tabGroupDetails.windowCollection exists as a filled array (each item object in that array represents a window), 
+                        it will be combined with the new window before being used as a parameter when calling onModifyList()
                     */
             componentInstance.loadUrl = jest.fn();
 
             const url = "https://google.com";
 
-            componentInstance.state.tabGroupDetails = {
-              windowAndTabs: val,
-            };
+            const windowCollection = val;
+
+            testComponent = predefinedComponent(
+              {
+                ...presetProps,
+                onModifyList: jest.fn(),
+                windowCollection,
+              },
+              {
+                disableLifecycleMethods: true,
+              }
+            );
+
+            componentInstance = testComponent.instance();
 
             componentInstance.addNewTab(url, 0);
 
             expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith(
-              "ETGMCreateNewGroupModal-129"
+              "ETGMCreateNewGroupModal-125"
             );
           }
         );
 
-        test('Run addNewTab("https://google.com", 0), while "tabGroupDetails" is an empty object (which also doesn\'t have windowAndTabs key) in component state: throw an error "ETGMCreateNewGroupModal-129"', () => {
+        test('Run addNewTab("https://google.com", 0), while "windowCollection" is an empty array in props: throw an error "ETGMCreateNewGroupModal-129"', () => {
           componentInstance.loadUrl = jest.fn();
 
           const url = "https://google.com";
 
-          componentInstance.state.tabGroupDetails = {};
+          const windowCollection = [];
+
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+              windowCollection,
+            },
+            {
+              disableLifecycleMethods: true,
+            }
+          );
+          componentInstance = testComponent.instance();
 
           componentInstance.addNewTab(url, 0);
           expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith(
@@ -932,25 +1138,33 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
           );
         });
 
-        test('Run addNewTab("https://google.com", 0), while "tabGroupDetails" is an object (which also consists of a filled "windowAndTabs" key) in component state: if this.loadUrl(ANY STRING, success, fail) triggers its fail callback then this.saveToState(payload) should be triggered with test specified payload', () => {
+        test('Run addNewTab("https://google.com", 0), while "windowCollection" array in props is filled: if this.loadUrl(ANY STRING, success, fail) triggers its fail callback then this.onModifyList(payload) should be triggered with test specified payload', () => {
           /*
                         To note:
 
-                        While tabGroupDetails.windowAndTabs exists as a filled array (each item object in that array represents a window), 
-                        it will be combined with the new window before being used as a parameter when calling saveToState()
+                        While tabGroupDetails.windowCollection exists as a filled array (each item object in that array represents a window), 
+                        it will be combined with the new window before being used as a parameter when calling onModifyList()
                     */
           componentInstance.loadUrl = jest.fn();
 
           const url = "https://google.com";
 
-          componentInstance.state.tabGroupDetails = {
-            windowAndTabs: [
-              { name: "window 1", tabs: [] },
-              { name: "window 2", tabs: [] },
-              { name: "window 3", tabs: [] },
-            ],
-          };
-          componentInstance.saveToState = jest.fn();
+          const windowCollection = [
+            { name: "window 1", tabs: [] },
+            { name: "window 2", tabs: [] },
+            { name: "window 3", tabs: [] },
+          ];
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+              windowCollection,
+            },
+            {
+              disableLifecycleMethods: true,
+            }
+          );
+          componentInstance = testComponent.instance();
 
           const responseText =
             "A text string acting as responseText for this test";
@@ -960,19 +1174,15 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
           });
           componentInstance.addNewTab(url, 0);
 
-          let parsedWindows = JSON.parse(
-            JSON.stringify(
-              componentInstance.state.tabGroupDetails.windowAndTabs
-            )
-          );
+          let parsedWindows = JSON.parse(JSON.stringify(windowCollection));
           parsedWindows[0].tabs.push({
             title: url,
             favIconUrl: url + "/favicon.ico",
             url: url,
           });
 
-          expect(componentInstance.saveToState).toHaveBeenCalledWith(
-            "windowAndTabs",
+          expect(componentInstance.props.onModifyList).toHaveBeenCalledWith(
+            "windowCollection",
             parsedWindows,
             "tabGroupDetails"
           );
@@ -1058,10 +1268,17 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
 
     describe("Examine various function scenarios using valid combinations of windowIndex and tabIndex", () => {
       describe("Examine the function, when windowIndex = 0", () => {
-        test('Run deleteTab(0, 0), when windowAndTabs array in component state is not filled: throw an error "ETGMCreateNewGroupModal-130"', () => {
-          componentInstance.state.tabGroupDetails = {
-            windowAndTabs: [],
-          };
+        test('Run deleteTab(0, 0), when windowCollection array in component state is not filled: throw an error "ETGMCreateNewGroupModal-130"', () => {
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              windowCollection: [],
+            },
+            {
+              disableLifecycleMethods: true,
+            }
+          );
+          componentInstance = testComponent.instance();
 
           componentInstance.deleteTab(0, 0);
 
@@ -1070,148 +1287,166 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
           );
         });
 
-        test("Run deleteTab(0, 0), when windowAndTabs array in component state is filled (targetted window has no tabs): call this.saveToState() with parameters conditioned in this this test", () => {
+        test("Run deleteTab(0, 0), when windowCollection array in component state is filled (targetted window has no tabs): call this.onModifyList() with parameters conditioned in this this test", () => {
           /*
                         Checking test:
                         1. A tab is targetted and closed based on windowIndex and tabIndex
                         2. If the targetted window does not have any more tabs after the targetted tab being closed, shut the window down
-                        3. Check that saveToState is called with correctly manufactured parameters
+                        3. Check that onModifyList is called with correctly manufactured parameters
                     */
 
           const windowIndex = 0;
           const tabIndex = 0;
 
-          componentInstance.state.tabGroupDetails = {
-            windowAndTabs: [
-              { name: "window 1", tabs: [] },
-              { name: "window 2", tabs: [{ name: "tab 1" }] },
-              { name: "window 3", tabs: [{ name: "tab 1" }] },
-            ],
-          };
+          const windowCollection = [
+            { name: "window 1", tabs: [] },
+            { name: "window 2", tabs: [{ name: "tab 1" }] },
+            { name: "window 3", tabs: [{ name: "tab 1" }] },
+          ];
 
-          let windows = JSON.stringify(
-            componentInstance.state.tabGroupDetails.windowAndTabs.map(
-              (value) => value
-            )
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+              windowCollection,
+            },
+            {
+              disableLifecycleMethods: true,
+            }
           );
+          componentInstance = testComponent.instance();
+
+          let windows = JSON.stringify(windowCollection.map((value) => value));
           let testWindows = JSON.parse(windows);
 
-          componentInstance.saveToState = jest.fn();
           componentInstance.deleteTab(windowIndex, tabIndex);
 
           testWindows[windowIndex].tabs.splice(tabIndex, 1);
 
           testWindows.splice(windowIndex, 1);
 
-          expect(componentInstance.saveToState).toHaveBeenCalledWith(
-            "windowAndTabs",
+          expect(componentInstance.props.onModifyList).toHaveBeenCalledWith(
+            "windowCollection",
             testWindows,
             "tabGroupDetails"
           );
         });
 
-        test("Run deleteTab(0, 0), when windowAndTabs array in component state is filled (targetted window has one tab): call this.saveToState() with parameters conditioned in this this test", () => {
-          /*
-                        Checking test:
-                        1. A tab is targetted and closed based on windowIndex and tabIndex
-                        2. If the targetted window does not have any more tabs after the targetted tab being closed, shut the window down
-                        3. Check that saveToState is called with correctly manufactured parameters
-                    */
-
+        test("Run deleteTab(0, 0), when windowCollection array in component state is filled (targetted window has one tab): call this.onModifyList() with parameters conditioned in this this test", () => {
           const windowIndex = 0;
           const tabIndex = 0;
 
-          componentInstance.state.tabGroupDetails = {
-            windowAndTabs: [
-              { name: "window 1", tabs: [{ name: "tab 1" }] },
-              { name: "window 2", tabs: [{ name: "tab 1" }] },
-              { name: "window 3", tabs: [{ name: "tab 1" }] },
-            ],
-          };
+          const windowCollection = [
+            { name: "window 1", tabs: [] },
+            { name: "window 2", tabs: [{ name: "tab 1" }] },
+            { name: "window 3", tabs: [{ name: "tab 1" }] },
+          ];
 
-          let windows = JSON.stringify(
-            componentInstance.state.tabGroupDetails.windowAndTabs.map(
-              (value) => value
-            )
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+              windowCollection,
+            },
+            {
+              disableLifecycleMethods: true,
+            }
           );
+          componentInstance = testComponent.instance();
+
+          let windows = JSON.stringify(windowCollection.map((value) => value));
           let testWindows = JSON.parse(windows);
 
-          componentInstance.saveToState = jest.fn();
           componentInstance.deleteTab(windowIndex, tabIndex);
 
           testWindows[windowIndex].tabs.splice(tabIndex, 1);
 
           testWindows.splice(windowIndex, 1);
 
-          expect(componentInstance.saveToState).toHaveBeenCalledWith(
-            "windowAndTabs",
+          expect(componentInstance.props.onModifyList).toHaveBeenCalledWith(
+            "windowCollection",
             testWindows,
             "tabGroupDetails"
           );
         });
 
-        test("Run deleteTab(0, 0), when windowAndTabs array in component state is filled (targetted window has multiple tabs): call this.saveToState() with parameters conditioned in this test", () => {
+        test("Run deleteTab(0, 0), when windowCollection array in component state is filled (targetted window has multiple tabs): call this.onModifyList() with parameters conditioned in this test", () => {
           /*
                         Checking test:
                         1. A tab is targetted and closed based on windowIndex and tabIndex
                         2. If the targetted window still has tabs after the targetted tab being closed, do not splice any windows
-                        3. Check that saveToState is called with correctly manufactured parameters
+                        3. Check that onModifyList is called with correctly manufactured parameters
                     */
 
           const windowIndex = 0;
           const tabIndex = 0;
 
-          componentInstance.state.tabGroupDetails = {
-            windowAndTabs: [
-              {
-                name: "window 1",
-                tabs: [{ name: "tab 1" }, { name: "tab 2" }, { name: "tab 3" }],
-              },
-              { name: "window 2", tabs: [{ name: "tab 1" }] },
-              { name: "window 3", tabs: [{ name: "tab 1" }] },
-            ],
-          };
+          const windowCollection = [
+            {
+              name: "window 1",
+              tabs: [{ name: "tab 1" }, { name: "tab 2" }, { name: "tab 3" }],
+            },
+            { name: "window 2", tabs: [{ name: "tab 1" }] },
+            { name: "window 3", tabs: [{ name: "tab 1" }] },
+          ];
 
-          let windows = JSON.stringify(
-            componentInstance.state.tabGroupDetails.windowAndTabs.map(
-              (value) => value
-            )
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+              windowCollection,
+            },
+            {
+              disableLifecycleMethods: true,
+            }
           );
+          componentInstance = testComponent.instance();
+
+          let windows = JSON.stringify(windowCollection.map((value) => value));
           let testWindows = JSON.parse(windows);
-          componentInstance.saveToState = jest.fn();
 
           componentInstance.deleteTab(windowIndex, tabIndex);
 
           testWindows[windowIndex].tabs.splice(tabIndex, 1);
 
-          expect(componentInstance.saveToState).toHaveBeenCalledWith(
-            "windowAndTabs",
+          expect(componentInstance.props.onModifyList).toHaveBeenCalledWith(
+            "windowCollection",
             testWindows,
             "tabGroupDetails"
           );
         });
 
-        test('Run deleteTab(20, 0), when windowAndTabs array in component state is filled: throw error "ETGMCreateNewGroupModal-131" because the targetted window does not exist', () => {
+        test('Run deleteTab(20, 0), when windowCollection array in component state is filled: throw error "ETGMCreateNewGroupModal-131" because the targetted window does not exist', () => {
           /*
                         Checking test:
                         1. A tab is targetted and closed based on windowIndex and tabIndex
                         2. If the targetted window still has tabs after the targetted tab being closed, do not splice any windows
-                        3. Check that saveToState is called with correctly manufactured parameters
+                        3. Check that onModifyList is called with correctly manufactured parameters
                     */
 
           const windowIndex = 20;
           const tabIndex = 0;
 
-          componentInstance.state.tabGroupDetails = {
-            windowAndTabs: [
-              {
-                name: "window 1",
-                tabs: [{ name: "tab 1" }, { name: "tab 2" }, { name: "tab 3" }],
-              },
-              { name: "window 2", tabs: [{ name: "tab 1" }] },
-              { name: "window 3", tabs: [{ name: "tab 1" }] },
-            ],
-          };
+          const windowCollection = [
+            {
+              name: "window 1",
+              tabs: [{ name: "tab 1" }, { name: "tab 2" }, { name: "tab 3" }],
+            },
+            { name: "window 2", tabs: [{ name: "tab 1" }] },
+            { name: "window 3", tabs: [{ name: "tab 1" }] },
+          ];
+
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+              windowCollection,
+            },
+            {
+              disableLifecycleMethods: true,
+            }
+          );
+          componentInstance = testComponent.instance();
 
           componentInstance.deleteTab(windowIndex, tabIndex);
 
@@ -1220,38 +1455,43 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
           );
         });
 
-        test("Run deleteTab(0, 20), when windowAndTabs array in component state is filled (targetted window has multiple tabs): call this.saveToState() with parameters conditioned in this test", () => {
+        test("Run deleteTab(0, 20), when windowCollection array in component state is filled (targetted window has multiple tabs): call this.onModifyList() with parameters conditioned in this test", () => {
           /*
                         Checking test:
-                        1. A tab is targetted, but it does not exist. Save all the existing windowAndTabs to state unmodified
+                        1. A tab is targetted, but it does not exist. Save all the existing windowCollection to state unmodified
                     */
 
           const windowIndex = 0;
           const tabIndex = 20;
 
-          componentInstance.state.tabGroupDetails = {
-            windowAndTabs: [
-              {
-                name: "window 1",
-                tabs: [{ name: "tab 1" }, { name: "tab 2" }, { name: "tab 3" }],
-              },
-              { name: "window 2", tabs: [{ name: "tab 1" }] },
-              { name: "window 3", tabs: [{ name: "tab 1" }] },
-            ],
-          };
+          const windowCollection = [
+            {
+              name: "window 1",
+              tabs: [{ name: "tab 1" }, { name: "tab 2" }, { name: "tab 3" }],
+            },
+            { name: "window 2", tabs: [{ name: "tab 1" }] },
+            { name: "window 3", tabs: [{ name: "tab 1" }] },
+          ];
 
-          let windows = JSON.stringify(
-            componentInstance.state.tabGroupDetails.windowAndTabs.map(
-              (value) => value
-            )
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+              windowCollection,
+            },
+            {
+              disableLifecycleMethods: true,
+            }
           );
+          componentInstance = testComponent.instance();
+
+          let windows = JSON.stringify(windowCollection.map((value) => value));
           let testWindows = JSON.parse(windows);
-          componentInstance.saveToState = jest.fn();
 
           componentInstance.deleteTab(windowIndex, tabIndex);
 
-          expect(componentInstance.saveToState).toHaveBeenCalledWith(
-            "windowAndTabs",
+          expect(componentInstance.props.onModifyList).toHaveBeenCalledWith(
+            "windowCollection",
             testWindows,
             "tabGroupDetails"
           );
@@ -1259,10 +1499,20 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
       });
 
       describe("Examine the function, when windowIndex = 1", () => {
-        test('Run deleteTab(1, 0), when windowAndTabs array in component state is not filled: throw an error "ETGMCreateNewGroupModal-130"', () => {
-          componentInstance.state.tabGroupDetails = {
-            windowAndTabs: [],
-          };
+        test('Run deleteTab(1, 0), when windowCollection array in component state is not filled: throw an error "ETGMCreateNewGroupModal-130"', () => {
+          const windowCollection = [];
+
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+              windowCollection,
+            },
+            {
+              disableLifecycleMethods: true,
+            }
+          );
+          componentInstance = testComponent.instance();
 
           componentInstance.deleteTab(1, 0);
 
@@ -1271,148 +1521,172 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
           );
         });
 
-        test("Run deleteTab(1, 0), when windowAndTabs array in component state is filled (targetted window has no tabs): call this.saveToState() with parameters conditioned in this this test", () => {
+        test("Run deleteTab(1, 0), when windowCollection array in component state is filled (targetted window has no tabs): call this.onModifyList() with parameters conditioned in this this test", () => {
           /*
                         Checking test:
                         1. A tab is targetted and closed based on windowIndex and tabIndex
                         2. If the targetted window does not have any more tabs after the targetted tab being closed, shut the window down
-                        3. Check that saveToState is called with correctly manufactured parameters
+                        3. Check that onModifyList is called with correctly manufactured parameters
                     */
 
           const windowIndex = 1;
           const tabIndex = 0;
 
-          componentInstance.state.tabGroupDetails = {
-            windowAndTabs: [
-              { name: "window 1", tabs: [{ name: "tab 1" }] },
-              { name: "window 2", tabs: [] },
-              { name: "window 3", tabs: [{ name: "tab 1" }] },
-            ],
-          };
-
-          let windows = JSON.stringify(
-            componentInstance.state.tabGroupDetails.windowAndTabs.map(
-              (value) => value
-            )
+          const windowCollection = [
+            { name: "window 1", tabs: [{ name: "tab 1" }] },
+            { name: "window 2", tabs: [] },
+            { name: "window 3", tabs: [{ name: "tab 1" }] },
+          ];
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+              windowCollection,
+            },
+            {
+              disableLifecycleMethods: true,
+            }
           );
+          componentInstance = testComponent.instance();
+
+          let windows = JSON.stringify(windowCollection.map((value) => value));
           let testWindows = JSON.parse(windows);
 
-          componentInstance.saveToState = jest.fn();
           componentInstance.deleteTab(windowIndex, tabIndex);
 
           testWindows[windowIndex].tabs.splice(tabIndex, 1);
 
           testWindows.splice(windowIndex, 1);
 
-          expect(componentInstance.saveToState).toHaveBeenCalledWith(
-            "windowAndTabs",
+          expect(componentInstance.props.onModifyList).toHaveBeenCalledWith(
+            "windowCollection",
             testWindows,
             "tabGroupDetails"
           );
         });
 
-        test("Run deleteTab(1, 0), when windowAndTabs array in component state is filled (targetted window has one tab): call this.saveToState() with parameters conditioned in this this test", () => {
+        test("Run deleteTab(1, 0), when windowCollection array in component state is filled (targetted window has one tab): call this.onModifyList() with parameters conditioned in this this test", () => {
           /*
-                        Checking test:
-                        1. A tab is targetted and closed based on windowIndex and tabIndex
-                        2. If the targetted window does not have any more tabs after the targetted tab being closed, shut the window down
-                        3. Check that saveToState is called with correctly manufactured parameters
-                    */
+              Checking test:
+              1. A tab is targetted and closed based on windowIndex and tabIndex
+              2. If the targetted window does not have any more tabs after the targetted tab being closed, shut the window down
+              3. Check that onModifyList is called with correctly manufactured parameters
+          */
 
           const windowIndex = 1;
           const tabIndex = 0;
 
-          componentInstance.state.tabGroupDetails = {
-            windowAndTabs: [
-              { name: "window 1", tabs: [{ name: "tab 1" }] },
-              { name: "window 2", tabs: [{ name: "tab 1" }] },
-              { name: "window 3", tabs: [{ name: "tab 1" }] },
-            ],
-          };
+          const windowCollection = [
+            { name: "window 1", tabs: [{ name: "tab 1" }] },
+            { name: "window 2", tabs: [{ name: "tab 1" }] },
+            { name: "window 3", tabs: [{ name: "tab 1" }] },
+          ];
 
-          let windows = JSON.stringify(
-            componentInstance.state.tabGroupDetails.windowAndTabs.map(
-              (value) => value
-            )
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+              windowCollection,
+            },
+            {
+              disableLifecycleMethods: true,
+            }
           );
+          componentInstance = testComponent.instance();
+
+          let windows = JSON.stringify(windowCollection.map((value) => value));
           let testWindows = JSON.parse(windows);
 
-          componentInstance.saveToState = jest.fn();
           componentInstance.deleteTab(windowIndex, tabIndex);
 
           testWindows[windowIndex].tabs.splice(tabIndex, 1);
 
           testWindows.splice(windowIndex, 1);
 
-          expect(componentInstance.saveToState).toHaveBeenCalledWith(
-            "windowAndTabs",
+          expect(componentInstance.props.onModifyList).toHaveBeenCalledWith(
+            "windowCollection",
             testWindows,
             "tabGroupDetails"
           );
         });
 
-        test("Run deleteTab(1, 0), when windowAndTabs array in component state is filled (targetted window has multiple tabs): call this.saveToState() with parameters conditioned in this test", () => {
+        test("Run deleteTab(1, 0), when windowCollection array in component state is filled (targetted window has multiple tabs): call this.onModifyList() with parameters conditioned in this test", () => {
           /*
                         Checking test:
                         1. A tab is targetted and closed based on windowIndex and tabIndex
                         2. If the targetted window still has tabs after the targetted tab being closed, do not splice any windows
-                        3. Check that saveToState is called with correctly manufactured parameters
+                        3. Check that onModifyList is called with correctly manufactured parameters
                     */
 
           const windowIndex = 1;
           const tabIndex = 0;
 
-          componentInstance.state.tabGroupDetails = {
-            windowAndTabs: [
-              { name: "window 2", tabs: [{ name: "tab 1" }] },
-              {
-                name: "window 1",
-                tabs: [{ name: "tab 1" }, { name: "tab 2" }, { name: "tab 3" }],
-              },
-              { name: "window 3", tabs: [{ name: "tab 1" }] },
-            ],
-          };
+          const windowCollection = [
+            { name: "window 2", tabs: [{ name: "tab 1" }] },
+            {
+              name: "window 1",
+              tabs: [{ name: "tab 1" }, { name: "tab 2" }, { name: "tab 3" }],
+            },
+            { name: "window 3", tabs: [{ name: "tab 1" }] },
+          ];
 
-          let windows = JSON.stringify(
-            componentInstance.state.tabGroupDetails.windowAndTabs.map(
-              (value) => value
-            )
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+              windowCollection,
+            },
+            {
+              disableLifecycleMethods: true,
+            }
           );
+          componentInstance = testComponent.instance();
+
+          let windows = JSON.stringify(windowCollection.map((value) => value));
           let testWindows = JSON.parse(windows);
-          componentInstance.saveToState = jest.fn();
 
           componentInstance.deleteTab(windowIndex, tabIndex);
 
           testWindows[windowIndex].tabs.splice(tabIndex, 1);
 
-          expect(componentInstance.saveToState).toHaveBeenCalledWith(
-            "windowAndTabs",
+          expect(componentInstance.props.onModifyList).toHaveBeenCalledWith(
+            "windowCollection",
             testWindows,
             "tabGroupDetails"
           );
         });
 
-        test('Run deleteTab(20, 0), when windowAndTabs array in component state is filled: throw error "ETGMCreateNewGroupModal-131" because the targetted window does not exist', () => {
+        test('Run deleteTab(20, 0), when windowCollection array in component state is filled: throw error "ETGMCreateNewGroupModal-131" because the targetted window does not exist', () => {
           /*
-                        Checking test:
-                        1. A tab is targetted and closed based on windowIndex and tabIndex
-                        2. If the targetted window still has tabs after the targetted tab being closed, do not splice any windows
-                        3. Check that saveToState is called with correctly manufactured parameters
-                    */
+              Checking test:
+              1. A tab is targetted and closed based on windowIndex and tabIndex
+              2. If the targetted window still has tabs after the targetted tab being closed, do not splice any windows
+              3. Check that onModifyList is called with correctly manufactured parameters
+          */
 
           const windowIndex = 20;
           const tabIndex = 0;
 
-          componentInstance.state.tabGroupDetails = {
-            windowAndTabs: [
-              { name: "window 2", tabs: [{ name: "tab 1" }] },
-              {
-                name: "window 1",
-                tabs: [{ name: "tab 1" }, { name: "tab 2" }, { name: "tab 3" }],
-              },
-              { name: "window 3", tabs: [{ name: "tab 1" }] },
-            ],
-          };
+          const windowCollection = [
+            { name: "window 2", tabs: [{ name: "tab 1" }] },
+            {
+              name: "window 1",
+              tabs: [{ name: "tab 1" }, { name: "tab 2" }, { name: "tab 3" }],
+            },
+            { name: "window 3", tabs: [{ name: "tab 1" }] },
+          ];
+
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+              windowCollection,
+            },
+            {
+              disableLifecycleMethods: true,
+            }
+          );
+          componentInstance = testComponent.instance();
 
           componentInstance.deleteTab(windowIndex, tabIndex);
 
@@ -1421,38 +1695,43 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
           );
         });
 
-        test("Run deleteTab(1, 20), when windowAndTabs array in component state is filled (targetted window has multiple tabs): call this.saveToState() with parameters conditioned in this test", () => {
+        test("Run deleteTab(1, 20), when windowCollection array in component state is filled (targetted window has multiple tabs): call this.onModifyList() with parameters conditioned in this test", () => {
           /*
                         Checking test:
-                        1. A tab is targetted, but it does not exist. Save all the existing windowAndTabs to state unmodified
+                        1. A tab is targetted, but it does not exist. Save all the existing windowCollection to state unmodified
                     */
 
           const windowIndex = 1;
           const tabIndex = 20;
 
-          componentInstance.state.tabGroupDetails = {
-            windowAndTabs: [
-              {
-                name: "window 1",
-                tabs: [{ name: "tab 1" }, { name: "tab 2" }, { name: "tab 3" }],
-              },
-              { name: "window 2", tabs: [{ name: "tab 1" }] },
-              { name: "window 3", tabs: [{ name: "tab 1" }] },
-            ],
-          };
+          const windowCollection = [
+            {
+              name: "window 1",
+              tabs: [{ name: "tab 1" }, { name: "tab 2" }, { name: "tab 3" }],
+            },
+            { name: "window 2", tabs: [{ name: "tab 1" }] },
+            { name: "window 3", tabs: [{ name: "tab 1" }] },
+          ];
 
-          let windows = JSON.stringify(
-            componentInstance.state.tabGroupDetails.windowAndTabs.map(
-              (value) => value
-            )
+          testComponent = predefinedComponent(
+            {
+              ...presetProps,
+              onModifyList: jest.fn(),
+              windowCollection,
+            },
+            {
+              disableLifecycleMethods: true,
+            }
           );
+          componentInstance = testComponent.instance();
+
+          let windows = JSON.stringify(windowCollection.map((value) => value));
           let testWindows = JSON.parse(windows);
-          componentInstance.saveToState = jest.fn();
 
           componentInstance.deleteTab(windowIndex, tabIndex);
 
-          expect(componentInstance.saveToState).toHaveBeenCalledWith(
-            "windowAndTabs",
+          expect(componentInstance.props.onModifyList).toHaveBeenCalledWith(
+            "windowCollection",
             testWindows,
             "tabGroupDetails"
           );
@@ -1498,10 +1777,21 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
         );
       });
 
-      test('Run deleteWindow(0): Throw an error "ETGMCreateNewGroupModal-133", if there are no windows stored in windowAndTabs in component state', () => {
-        componentInstance.state.tabGroupDetails = {
-          windowAndTabs: [],
-        };
+      test('Run deleteWindow(0): Throw an error "ETGMCreateNewGroupModal-133", if there are no windows stored in windowCollection in component state', () => {
+        const windowCollection = [];
+
+        testComponent = predefinedComponent(
+          {
+            ...presetProps,
+            onModifyList: jest.fn(),
+            windowCollection,
+          },
+          {
+            disableLifecycleMethods: true,
+          }
+        );
+        componentInstance = testComponent.instance();
+
         componentInstance.deleteWindow(0);
 
         expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith(
@@ -1509,14 +1799,25 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
         );
       });
 
-      test('Run deleteWindow(20): Throw an error "ETGMCreateNewGroupModal-134", if the targetted window does not exist in windowAndTabs section of component state', () => {
-        componentInstance.state.tabGroupDetails = {
-          windowAndTabs: [
-            { name: "window 1", tabs: [{ name: "tab 1" }] },
-            { name: "window 2", tabs: [{ name: "tab 1" }] },
-            { name: "window 3", tabs: [{ name: "tab 1" }] },
-          ],
-        };
+      test('Run deleteWindow(20): Throw an error "ETGMCreateNewGroupModal-134", if the targetted window does not exist in windowCollection section of component state', () => {
+        const windowCollection = [
+          { name: "window 1", tabs: [{ name: "tab 1" }] },
+          { name: "window 2", tabs: [{ name: "tab 1" }] },
+          { name: "window 3", tabs: [{ name: "tab 1" }] },
+        ];
+
+        testComponent = predefinedComponent(
+          {
+            ...presetProps,
+            onModifyList: jest.fn(),
+            windowCollection,
+          },
+          {
+            disableLifecycleMethods: true,
+          }
+        );
+        componentInstance = testComponent.instance();
+
         componentInstance.deleteWindow(20);
 
         expect(ExceptionsHandler.ValidatorError).toHaveBeenCalledWith(
@@ -1524,348 +1825,72 @@ describe("Test <ETGMCreateNewGroupModal /> component behaviour at mount", () => 
         );
       });
 
-      test("Run deleteWindow(0): call this.saveToState() with parameters conditioned in this test ", () => {
+      test("Run deleteWindow(0): call this.onModifyList() with parameters conditioned in this test ", () => {
         const windowIndex = 0;
 
-        componentInstance.state.tabGroupDetails = {
-          windowAndTabs: [
-            { name: "window 1", tabs: [{ name: "tab 1" }] },
-            { name: "window 2", tabs: [{ name: "tab 1" }] },
-            { name: "window 3", tabs: [{ name: "tab 1" }] },
-          ],
-        };
+        const windowCollection = [
+          { name: "window 1", tabs: [{ name: "tab 1" }] },
+          { name: "window 2", tabs: [{ name: "tab 1" }] },
+          { name: "window 3", tabs: [{ name: "tab 1" }] },
+        ];
 
-        let testWindows = componentInstance.state.tabGroupDetails.windowAndTabs.map(
-          (value) => value
+        testComponent = predefinedComponent(
+          {
+            ...presetProps,
+            onModifyList: jest.fn(),
+            windowCollection,
+          },
+          {
+            disableLifecycleMethods: true,
+          }
         );
+        componentInstance = testComponent.instance();
 
-        componentInstance.saveToState = jest.fn();
+        let testWindows = windowCollection.map((value) => value);
+
         componentInstance.deleteWindow(windowIndex);
 
         testWindows.splice(windowIndex, 1);
 
-        expect(componentInstance.saveToState).toHaveBeenCalledWith(
-          "windowAndTabs",
+        expect(componentInstance.props.onModifyList).toHaveBeenCalledWith(
+          "windowCollection",
           testWindows,
           "tabGroupDetails"
         );
       });
 
-      test("Run deleteWindow(1): call this.saveToState() with parameters conditioned in this test ", () => {
+      test("Run deleteWindow(1): call this.onModifyList() with parameters conditioned in this test ", () => {
         const windowIndex = 1;
 
-        componentInstance.state.tabGroupDetails = {
-          windowAndTabs: [
-            { name: "window 1", tabs: [{ name: "tab 1" }] },
-            { name: "window 2", tabs: [{ name: "tab 1" }] },
-            { name: "window 3", tabs: [{ name: "tab 1" }] },
-          ],
-        };
+        const windowCollection = [
+          { name: "window 1", tabs: [{ name: "tab 1" }] },
+          { name: "window 2", tabs: [{ name: "tab 1" }] },
+          { name: "window 3", tabs: [{ name: "tab 1" }] },
+        ];
 
-        let testWindows = componentInstance.state.tabGroupDetails.windowAndTabs.map(
-          (value) => value
+        testComponent = predefinedComponent(
+          {
+            ...presetProps,
+            onModifyList: jest.fn(),
+            windowCollection,
+          },
+          {
+            disableLifecycleMethods: true,
+          }
         );
+        componentInstance = testComponent.instance();
 
-        componentInstance.saveToState = jest.fn();
+        let testWindows = windowCollection.map((value) => value);
+
         componentInstance.deleteWindow(windowIndex);
 
         testWindows.splice(windowIndex, 1);
 
-        expect(componentInstance.saveToState).toHaveBeenCalledWith(
-          "windowAndTabs",
+        expect(componentInstance.props.onModifyList).toHaveBeenCalledWith(
+          "windowCollection",
           testWindows,
           "tabGroupDetails"
         );
-      });
-    });
-  });
-
-  describe("Test renderWindowsAndTabsSection(windowAndTabs, type, warning)", () => {
-    describe("Examine the function as unit test", () => {
-      test.each(various_nonArrays)(
-        'Run renderWindowsAndTabsSection(%p, ANYTHING, ANYTHING): throw an error "ETGMCreateNewGroupModal-121", because "windowAndTabs" is not an array',
-        (val) => {
-          expect(() => {
-            const presetProps = {
-              data: {
-                params: {
-                  type: "currently-opened",
-                },
-              },
-            };
-            testComponent = predefinedComponent(presetProps, {
-              disableLifecycleMethods: true,
-            });
-            componentInstance = testComponent.instance();
-
-            componentInstance.renderWindowsAndTabsSection(
-              val,
-              expect.anything(),
-              expect.anything()
-            );
-          }).toThrow(
-            ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-121")
-          );
-        }
-      );
-
-      test('Run renderWindowsAndTabsSection([], ANYTHING, ANYTHING): do not throw an error "ETGMCreateNewGroupModal-121", because windowAndTabs is an array', () => {
-        expect(() => {
-          const presetProps = {
-            data: {
-              params: {
-                type: "currently-opened",
-              },
-            },
-          };
-          testComponent = predefinedComponent(presetProps, {
-            disableLifecycleMethods: true,
-          });
-          componentInstance = testComponent.instance();
-
-          componentInstance.renderWindowsAndTabsSection(
-            [],
-            expect.anything(),
-            expect.anything()
-          );
-        }).not.toThrow(
-          ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-121")
-        );
-      });
-
-      test.each(various_nonString)(
-        'Run renderWindowsAndTabsSection([], %p, ANYTHING): throw an error "ETGMCreateNewGroupModal-112", because "type" is not a string',
-        (val) => {
-          expect(() => {
-            const presetProps = {
-              data: {
-                params: {
-                  type: val,
-                },
-              },
-            };
-            testComponent = predefinedComponent(presetProps, {
-              disableLifecycleMethods: true,
-            });
-            componentInstance = testComponent.instance();
-
-            componentInstance.renderWindowsAndTabsSection(
-              [],
-              presetProps.data.params.type,
-              expect.anything()
-            );
-          }).toThrow(
-            ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-112")
-          );
-        }
-      );
-
-      test('Run renderWindowsAndTabsSection([], undefined, ANYTHING): throw an error "ETGMCreateNewGroupModal-112", because "type" is explicitly missing as parameter', () => {
-        expect(() => {
-          const presetProps = {
-            data: {
-              params: {},
-            },
-          };
-          testComponent = predefinedComponent(presetProps, {
-            disableLifecycleMethods: true,
-          });
-          componentInstance = testComponent.instance();
-
-          componentInstance.renderWindowsAndTabsSection(
-            [],
-            presetProps.data.params.type,
-            expect.anything()
-          );
-        }).toThrow(
-          ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-112")
-        );
-      });
-
-      test('Run renderWindowsAndTabsSection([], "currently-opened", ANYTHING): do not throw an error "ETGMCreateNewGroupModal-113", because "type" is one of the three valid strings', () => {
-        expect(() => {
-          const presetProps = {
-            data: {
-              params: {
-                type: "currently-opened",
-              },
-            },
-          };
-          testComponent = predefinedComponent(presetProps, {
-            disableLifecycleMethods: true,
-          });
-          componentInstance = testComponent.instance();
-
-          componentInstance.renderWindowsAndTabsSection(
-            [],
-            presetProps.data.params.type,
-            expect.anything()
-          );
-        }).not.toThrow(
-          ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-113")
-        );
-      });
-
-      test('Run renderWindowsAndTabsSection([], "existing-group", ANYTHING): do not throw an error "ETGMCreateNewGroupModal-113", because "type" is one of the three valid strings', () => {
-        expect(() => {
-          const presetProps = {
-            data: {
-              params: {
-                type: "existing-group",
-              },
-            },
-          };
-          testComponent = predefinedComponent(presetProps, {
-            disableLifecycleMethods: true,
-          });
-          componentInstance = testComponent.instance();
-
-          componentInstance.renderWindowsAndTabsSection(
-            [],
-            presetProps.data.params.type,
-            expect.anything()
-          );
-        }).not.toThrow(
-          ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-113")
-        );
-      });
-
-      test('Run renderWindowsAndTabsSection([], "new-group", ANYTHING): do not throw an error "ETGMCreateNewGroupModal-113", because "type" is one of the three valid strings', () => {
-        expect(() => {
-          const presetProps = {
-            data: {
-              params: {
-                type: "new-group",
-              },
-            },
-          };
-          testComponent = predefinedComponent(presetProps, {
-            disableLifecycleMethods: true,
-          });
-          componentInstance = testComponent.instance();
-
-          componentInstance.renderWindowsAndTabsSection(
-            [],
-            presetProps.data.params.type,
-            expect.anything()
-          );
-        }).not.toThrow(
-          ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-113")
-        );
-      });
-
-      test('Run renderWindowsAndTabsSection([], "donald duck", ANYTHING): throw an error "ETGMCreateNewGroupModal-113", because "type" is NOT either one of the three valid strings', () => {
-        expect(() => {
-          const presetProps = {
-            data: {
-              params: {
-                type: "donald duck",
-              },
-            },
-          };
-          testComponent = predefinedComponent(presetProps, {
-            disableLifecycleMethods: true,
-          });
-          componentInstance = testComponent.instance();
-
-          componentInstance.renderWindowsAndTabsSection(
-            [],
-            presetProps.data.params.type,
-            expect.anything()
-          );
-        }).toThrow(
-          ExceptionsHandler.ValidatorError("ETGMCreateNewGroupModal-113")
-        );
-      });
-
-      test('Run renderWindowsAndTabsSection([], "new-group", ANYTHING): The function should not return undefined', () => {
-        const presetProps = {
-          data: {
-            params: {
-              type: "new-group",
-            },
-          },
-        };
-        testComponent = predefinedComponent(presetProps, {
-          disableLifecycleMethods: true,
-        });
-        componentInstance = testComponent.instance();
-
-        expect(
-          componentInstance.renderWindowsAndTabsSection(
-            [],
-            presetProps.data.params.type,
-            expect.anything()
-          )
-        ).not.toBeUndefined();
-      });
-    });
-
-    describe("Examine the function as a snapshot of return statement (snapshot test):", () => {
-      test('Run renderWindowsAndTabsSection([], "new-group", ANYTHING): The returned function should match this test snapshot', () => {
-        const presetProps = {
-          data: {
-            params: {
-              type: "new-group",
-            },
-          },
-        };
-        testComponent = predefinedComponent(presetProps, {
-          disableLifecycleMethods: true,
-        });
-        componentInstance = testComponent.instance();
-
-        expect(
-          componentInstance.renderWindowsAndTabsSection(
-            [],
-            presetProps.data.params.type,
-            expect.anything()
-          )
-        ).toMatchSnapshot();
-      });
-
-      test('Run renderWindowsAndTabsSection([], "existing-group", ANYTHING): The returned function should match this test snapshot', () => {
-        const presetProps = {
-          data: {
-            params: {
-              type: "existing-group",
-            },
-          },
-        };
-        testComponent = predefinedComponent(presetProps, {
-          disableLifecycleMethods: true,
-        });
-        componentInstance = testComponent.instance();
-
-        expect(
-          componentInstance.renderWindowsAndTabsSection(
-            [],
-            presetProps.data.params.type,
-            expect.anything()
-          )
-        ).toMatchSnapshot();
-      });
-
-      test('Run renderWindowsAndTabsSection([], "currently-opened", ANYTHING): The returned function should match this test snapshot', () => {
-        const presetProps = {
-          data: {
-            params: {
-              type: "currently-opened",
-            },
-          },
-        };
-        testComponent = predefinedComponent(presetProps, {
-          disableLifecycleMethods: true,
-        });
-        componentInstance = testComponent.instance();
-
-        expect(
-          componentInstance.renderWindowsAndTabsSection(
-            [],
-            presetProps.data.params.type,
-            expect.anything()
-          )
-        ).toMatchSnapshot();
       });
     });
   });
