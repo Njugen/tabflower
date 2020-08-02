@@ -132,7 +132,7 @@ describe("Test functions in <App />", () => {
     componentInstance = testComponent.instance();
 
     componentInstance.setState = jest.fn();
-
+    //t
     ExceptionsHandler.ValidatorError = jest.fn();
     ExceptionsHandler.ValidatorError.mockImplementation((errCode) => {
       return actualErrorReturns[errCode];
